@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      timeout: 90m
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      pool-name: db2rest-platform-hikari-pool
