@@ -29,6 +29,9 @@ As the name suggests, DB2Rest turns your database into a REST API.
     
 [ ] Purge (Delete) 
 
+    - [X] Delete with column filter.
+    - [X] Safe delete.
+
 
 ### MySQL (Planned)
 

@@ -63,21 +63,7 @@ public final class SchemaService {
         tableList = new ArrayList<>();
 
         for (final Schema schema : catalog.getSchemas()) {
-            System.out.println(schema);
-            for (final Table table : catalog.getTables(schema)) {
-                System.out.print("o--> " + table);
-                if (table instanceof View) {
-                    System.out.println(" (VIEW)");
-                } else {
-                    System.out.println();
-                }
-
-                for (final Column column : table.getColumns()) {
-                    System.out.printf("     o--> %s (%s)%n", column, column.getType());
-                }
-
-                tableList.add(table);
-            }
+            tableList.addAll(catalog.getTables(schema));
         }
     }
 

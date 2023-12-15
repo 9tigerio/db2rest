@@ -53,6 +53,12 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>com.github.gavlyukovskiy</groupId>
+            <artifactId>datasource-proxy-spring-boot-starter</artifactId>
+            <version>1.9.1</version>
+        </dependency>
+
 
         <dependency>
             <groupId>cz.jirutka.rsql</groupId>

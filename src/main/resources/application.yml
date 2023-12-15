@@ -15,3 +15,12 @@ spring:
     hikari:
       maximum-pool-size: 10
       pool-name: db2rest-platform-hikari-pool
+
+
+db2rest:
+  allowUnsafeDelete : false
+
+
+logging:
+  level:
+    org.springframework.web : DEBUG

@@ -4,3 +4,7 @@ spring:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+
+
+db2rest:
+  allowUnsafeDelete : ${ALLOW_UNSAFE_DELETE:false}
