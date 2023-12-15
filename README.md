@@ -9,19 +9,22 @@ As the name suggests, DB2Rest turns your database into a REST API.
 ### Postgresql (In progress)
 
 [ ] Save Record (Create) - In progress
+
     - [X] Single record
     - [ ] Bulk records.
 
 [ ] Query (Read)   - In progress
+
     - [X] Row Filtering
         Supported with rSQL.
     - [X] Column Filtering
     - [ ] Renaming Columns
-    - [ ] Resource Embedding
+    - [ ] Joins
 
-[ ] Edit (Update)   - In progress
+[ ] Edit (Update)  - Completed
+
     - [X] Patch
-    - [ ] Patch with row filtering
+    - [X] Patch with row filtering
      
     
 [ ] Purge (Delete) 
