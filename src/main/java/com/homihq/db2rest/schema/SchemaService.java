@@ -15,6 +15,7 @@ import us.fatehi.utility.datasource.DatabaseConnectionSources;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 
 @Component
@@ -24,8 +25,15 @@ public final class SchemaService {
 
     private final DataSource dataSource;
 
-    @Getter
+
     private List<Table> tableList;
+
+
+    public Optional<Table> getTableByName(String name) {
+        return tableList.stream().filter( t ->
+                name.equals(t.getName())
+        ).findFirst();
+    }
     @PostConstruct
     public void load()  {
 

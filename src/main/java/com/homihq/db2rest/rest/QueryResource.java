@@ -1,6 +1,7 @@
-package com.homihq.db2rest;
+package com.homihq.db2rest.rest;
 
 
+import com.homihq.db2rest.rest.service.QueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +22,8 @@ public class QueryResource {
 
     @GetMapping("/{tableName}")
     public Object find(@PathVariable String tableName,
-        @RequestParam(name = "select", required = false, defaultValue = "") String select) {
+        @RequestParam(name = "select", required = false, defaultValue = "") String select,
+        @RequestParam(name = "rSql", required = false, defaultValue = "") String rSql) {
 
         List<String> columns = List.of();
 
@@ -29,7 +31,7 @@ public class QueryResource {
             columns = List.of(select.split(","));
         }
 
-        return queryService.find(tableName, columns);
+        return queryService.find(tableName, columns, rSql);
     }
 
 }

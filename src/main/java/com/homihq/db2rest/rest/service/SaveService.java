@@ -1,4 +1,4 @@
-package com.homihq.db2rest;
+package com.homihq.db2rest.rest.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
