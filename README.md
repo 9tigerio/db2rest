@@ -1,2 +1,6 @@
-[] Vertical Filtering
-[] Renaming Columns
+[X] - Vertical Filtering
+
+[ ] - Renaming Columns
+
+[ ] - Resource Embedding
+

@@ -18,8 +18,17 @@ public class QueryService {
     @Transactional(readOnly = true)
     public Object find(String tableName, List<String> columns) {
 
-        String sql = "SELECT * from " + tableName;
+        String sql = "SELECT " + getColumns(columns) + " FROM " + tableName;
+
+        log.info("sql - {}", sql);
 
         return jdbcTemplate.queryForList(sql);
+    }
+
+    private String getColumns(List<String> columns) {
+
+        if(columns.isEmpty()) return " * ";
+
+        return String.join(" , ", columns);
     }
 }

@@ -3,8 +3,10 @@ package com.homihq.db2rest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,9 +20,16 @@ public class QueryResource {
 
 
     @GetMapping("/{tableName}")
-    public Object find(@PathVariable String tableName) {
+    public Object find(@PathVariable String tableName,
+        @RequestParam(name = "select", required = false, defaultValue = "") String select) {
 
-        return queryService.find(tableName, List.of());
+        List<String> columns = List.of();
+
+        if(StringUtils.isNotBlank(select)) {
+            columns = List.of(select.split(","));
+        }
+
+        return queryService.find(tableName, columns);
     }
 
 }
