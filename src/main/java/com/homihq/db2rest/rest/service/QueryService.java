@@ -14,7 +14,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class QueryService {
-
     private final JdbcTemplate jdbcTemplate;
     private final FilterBuilderService filterBuilderService;
     @Transactional(readOnly = true)
