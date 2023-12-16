@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.service;
 
+import com.homihq.db2rest.rest.handler.SelectColumnBuilder;
 import com.homihq.db2rest.rsql.FilterBuilderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,17 +15,23 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class QueryService {
+    public static final String SELECT = "SELECT ";
+    public static final String FROM = " FROM ";
+    public static final String WHERE = "WHERE";
+
+
     private final JdbcTemplate jdbcTemplate;
     private final FilterBuilderService filterBuilderService;
+    private final SelectColumnBuilder selectColumnBuilder;
     @Transactional(readOnly = true)
     public Object find(String tableName, List<String> columns, String rSql) {
 
-        String sql = "SELECT " + getColumns(columns) + " FROM " + tableName;
+        String sql = SELECT + getColumns(tableName, columns) + FROM + tableName;
 
         log.info("rSQL - {}", rSql);
 
         if(StringUtils.isNotBlank(rSql)) {
-            sql = sql + " WHERE " + filterBuilderService.getWhereClause(tableName , rSql);
+            sql = sql + " " + WHERE + " " + filterBuilderService.getWhereClause(tableName , rSql);
         }
 
         log.info("sql - {}", sql);
@@ -32,10 +39,9 @@ public class QueryService {
         return jdbcTemplate.queryForList(sql);
     }
 
-    private String getColumns(List<String> columns) {
+    private String getColumns(String tableName, List<String> columns) {
 
-        if(columns.isEmpty()) return " * ";
+        return selectColumnBuilder.build(tableName, columns).getSelect();
 
-        return String.join(" , ", columns);
     }
 }

@@ -18,7 +18,7 @@ As the name suggests, DB2Rest turns your database into a REST API.
     - [X] Row Filtering
         Supported with rSQL.
     - [X] Column Filtering
-    - [ ] Renaming Columns
+    - [X] Rename Columns
     - [ ] Joins
 
 [ ] Edit (Update)  - Completed
