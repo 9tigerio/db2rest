@@ -1,5 +1,5 @@
 # DB2Rest
-As the name suggests, DB2Rest turns your database into a REST API. 
+As the name suggests, get REST API over your database in minutes! 
 
 ## Benefits
     - Coming soon
