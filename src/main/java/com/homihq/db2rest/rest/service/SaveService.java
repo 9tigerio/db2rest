@@ -17,12 +17,16 @@ public class SaveService {
 
     @Transactional
     public void save(String tableName, Map<String,Object> data) {
-        String sql = "INSERT INTO " + tableName +
-                " ( " + getColumns(data) + " ) VALUES (" + getPlaceholders(data) + " ) ";
+        String sql = createSql(tableName, data);
 
         log.info("sql - {}", sql);
 
         jdbcTemplate.update(sql, getValues(data));
+    }
+
+    public String createSql(String tableName, Map<String,Object> data) {
+        return "INSERT INTO " + tableName +
+                " ( " + getColumns(data) + " ) VALUES (" + getPlaceholders(data) + " ) ";
     }
 
     private Object[] getValues(Map<String, Object> data) {
@@ -44,5 +48,12 @@ public class SaveService {
 
     }
 
+    @Transactional
+    public void saveBulk(String tableName, boolean batch, List<Map<String, Object>> data) {
+        //TODO - Apply batch param
+        for(Map<String,Object> d : data) {
+            save(tableName, d);
+        }
 
+    }
 }

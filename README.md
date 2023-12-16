@@ -1,5 +1,5 @@
 # DB2Rest
-As the name suggests, get REST API over your database in minutes! 
+Instant REST API over your existing or new database in minutes. 
 
 ## Benefits
     - Coming soon
@@ -11,7 +11,8 @@ As the name suggests, get REST API over your database in minutes!
 [ ] Save Record (Create) - In progress
 
     - [X] Single record
-    - [ ] Bulk records.
+    - [X] Bulk records - JSON 
+        - [] Support batch insert 
 
 [ ] Query (Read)   - In progress
 

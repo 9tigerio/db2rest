@@ -23,4 +23,4 @@ db2rest:
 
 logging:
   level:
-    org.springframework.web : INFO
+    org.springframework.web : DEBUG
