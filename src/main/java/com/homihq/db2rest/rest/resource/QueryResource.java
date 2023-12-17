@@ -33,4 +33,18 @@ public class QueryResource {
         return queryService.find(tableName, select, embed, rSql);
     }
 
+    @GetMapping("/{tableName}/{keys}/{joinTable}")
+    public Object findByJoinTable(@PathVariable String tableName,
+                                  @PathVariable String keys,
+                                  @PathVariable String joinTable,
+                       @RequestParam(name = "select", required = false, defaultValue = "") String select,
+                       @RequestParam(name = "rSql", required = false, defaultValue = "") String rSql) {
+
+        log.info("tableName - {}", tableName);
+        log.info("keys - {}", keys);
+        log.info("joinTable - {}", joinTable);
+
+        return queryService.findByJoinTable(tableName, keys, joinTable,select, rSql);
+    }
+
 }
