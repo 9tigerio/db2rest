@@ -21,7 +21,7 @@ Instant REST API over your existing or new database in minutes.
     - [X] Column Filtering
     - [X] Rename Columns
     - [ ] Joins
-    - [X] Pagination
+    - [ ] Pagination
 
 [ ] Edit (Update)  - Completed
 

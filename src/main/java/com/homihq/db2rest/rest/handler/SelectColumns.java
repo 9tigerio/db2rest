@@ -18,4 +18,18 @@ public record SelectColumns(List<SelectColumn> selectColumnList) {
         }
 
     }
+
+    public String getTables(String rootTable) {
+        if(selectColumnList.isEmpty()) {
+            return " " + rootTable + " ";
+        }
+        else{
+
+            List<String> tables =
+                    selectColumnList.stream().map(i -> i.tableName() + " " + i.tableAlias()).toList()
+                            .stream().distinct().toList();
+
+            return String.join(" , ", tables);
+        }
+    }
 }

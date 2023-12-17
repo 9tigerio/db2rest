@@ -2,15 +2,15 @@ package com.homihq.db2rest.rest.handler;
 
 import org.apache.commons.lang3.StringUtils;
 
-public record SelectColumn(String tableName, String columnName, String columnAlias) {
+public record SelectColumn(String tableName, String tableAlias, String columnName, String columnAlias, boolean root) {
 
     public String getCol() {
 
         if(StringUtils.isBlank(columnAlias)) {
-            return columnName;
+            return tableAlias + "." + columnName;
         }
         else{
-            return columnName + " as " + "\""+ columnAlias + "\"";
+            return tableAlias + "." + columnName + " as " + "\""+ columnAlias + "\"";
         }
     }
 }
