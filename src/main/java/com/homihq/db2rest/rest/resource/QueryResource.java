@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest;
+package com.homihq.db2rest.rest.resource;
 
 
 import com.homihq.db2rest.rest.service.QueryService;
@@ -23,15 +23,14 @@ public class QueryResource {
     @GetMapping("/{tableName}")
     public Object find(@PathVariable String tableName,
         @RequestParam(name = "select", required = false, defaultValue = "") String select,
+        @RequestParam(name = "embed", required = false, defaultValue = "") String embed,
         @RequestParam(name = "rSql", required = false, defaultValue = "") String rSql) {
 
-        List<String> columns = List.of();
+        log.info("select - {}", select);
+        log.info("embed - {}", embed);
+        log.info("rSql - {}", rSql);
 
-        if(StringUtils.isNotBlank(select)) {
-            columns = List.of(select.split(","));
-        }
-
-        return queryService.find(tableName, columns, rSql);
+        return queryService.find(tableName, select, embed, rSql);
     }
 
 }

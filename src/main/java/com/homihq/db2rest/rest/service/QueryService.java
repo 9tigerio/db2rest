@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -25,30 +26,41 @@ public class QueryService {
     private final FilterBuilderService filterBuilderService;
     private final SelectColumnBuilder selectColumnBuilder;
     @Transactional(readOnly = true)
-    public Object find(String tableName, List<String> columns, String rSql) {
+    public Object find(String tableName, String select, String embed, String rSql) {
 
-        SelectColumns selectColumns = selectColumnBuilder.build(tableName, columns);
+        List<String> columns = List.of();
 
-        String sql = SELECT + selectColumns.getSelect() + FROM + selectColumns.getTables(tableName);
+        if(StringUtils.isNotBlank(select)) {
+            columns = List.of(select.split(","));
+        }
 
-        log.info("rSQL - {}", rSql);
-        try {
+        SelectColumns selectColumns = selectColumnBuilder.build(tableName, tableName, columns, true);
+
+        SelectColumns embedColumns = null;
+
+        if(StringUtils.isNotBlank(embed)) {
+            List<String> embeddedTables = List.of(embed.split(";"));
+            embedColumns = selectColumnBuilder.buildEmbeded(embeddedTables);
+        }
+
+
+        String sql = SELECT + selectColumns.getSelect();
+
+        sql = Objects.nonNull(embedColumns) ?  sql + " , " + embedColumns.getSelect() : sql;
+
+        sql = sql + FROM + selectColumns.getTables(tableName) ;
+
+        sql = Objects.nonNull(embedColumns) ?  sql + " , " + embedColumns.getTables(null) : sql;
+
+
         if(StringUtils.isNotBlank(rSql)) {
             sql = sql + " " + WHERE + " " + filterBuilderService.getWhereClause(tableName , rSql);
         }
 
         log.info("sql - {}", sql);
 
+        return jdbcTemplate.queryForList(sql);
 
-
-            return jdbcTemplate.queryForList(sql);
-
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
 
