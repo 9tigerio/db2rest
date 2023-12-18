@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -25,31 +26,27 @@ public class QueryService {
     private final FilterBuilderService filterBuilderService;
     private final SelectColumnBuilder selectColumnBuilder;
     @Transactional(readOnly = true)
-    public Object find(String tableName, List<String> columns, String rSql) {
+    public Object find(String tableName, String select, String rSql) {
 
-        SelectColumns selectColumns = selectColumnBuilder.build(tableName, columns);
+        List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
 
-        String sql = SELECT + selectColumns.getSelect() + FROM + selectColumns.getTables(tableName);
+        SelectColumns selectColumns = selectColumnBuilder.build(tableName, tableName, columns, true);
 
-        log.info("rSQL - {}", rSql);
-        try {
+        String sql = SELECT + selectColumns.getSelect() + FROM + selectColumns.getTables(tableName) ;
+
+
         if(StringUtils.isNotBlank(rSql)) {
             sql = sql + " " + WHERE + " " + filterBuilderService.getWhereClause(tableName , rSql);
         }
 
         log.info("sql - {}", sql);
 
+        return jdbcTemplate.queryForList(sql);
 
-
-            return jdbcTemplate.queryForList(sql);
-
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
 
+    public Object findByJoinTable(String tableName, String keys, String joinTable, String select, String rSql) {
+        return null;
+    }
 }
