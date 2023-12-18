@@ -1,4 +1,4 @@
-# Filter v2 Design
+# Filter Design V2
 
 
 ## Introduction
@@ -70,3 +70,21 @@ Dates
 ```ruby
 {"date_of_birth": {"$ne": {"$date":"1981-11-17T08:00:00Z"}}}
 ```
+
+
+**LESS THAN operator ($lt)**
+(Supports dates and numbers only)
+
+Numbers
+
+```ruby
+{"budget": {"$lt": 100000000} }
+```
+
+Dates
+
+```ruby
+{"date_of_release": {"$lt": {"$date":"1999-12-17T08:00:00Z"}}}
+```
+
+
