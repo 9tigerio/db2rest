@@ -170,34 +170,32 @@ Dates
 
 Strings
 
-{
-"ENAME": {"$between": ["A","C"]}
-}
+```ruby
+{"first_name": {"$between": ["A","C"]}}
+```
 
-Null Ranges ($lte equivalent)
+**Null Ranges ($lte equivalent)**
 (Supported by numbers and dates only)
 
-{
-"SALARY": {"$between": [null,2000]}
-}
+```ruby
+{"budget": {"$between": [null,2000]}}
+```
 
 Null Ranges ($gte equivalent)
 (Supported by numbers and dates only)
 
-{
-"SALARY": {"$between": [1000,null]}
-}
-
+```ruby
+{"budget": {"$between": [1000,null]}}
+```
 
 #### NULL operator ($null)
 
-{
-"ENAME": {"$null": null}
-}
+```ruby
+{"first_name": {"$null": null}}
+```
 
 #### NOT NULL operator ($notnull)
 
-{
-"ENAME": {"$notnull": null}
-}
- 
+```ruby
+{"first_name": {"$notnull": null}}
+```
