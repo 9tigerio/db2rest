@@ -51,3 +51,22 @@ https://db2rest.com/actors?q={"date_of_birth": {"$date": "1981-11-17T08:00:00Z"}
 ```
 
 
+**NOT EQUALS operator ($ne)**
+
+Number
+
+```ruby
+{"budget": {"$ne": 1000000}}
+```
+
+String
+
+```ruby
+{"last_name": {"$ne":"De Niro"}}
+```
+
+Dates
+
+```ruby
+{"date_of_birth": {"$ne": {"$date":"1981-11-17T08:00:00Z"}}}
+```
