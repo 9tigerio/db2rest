@@ -132,45 +132,41 @@ Dates
 {"date_of_birth": {"$gte": {"$date":"1999-12-17T08:00:00Z"}} }
 ```
 
-In string operator ($instr)
+**In string operator ($instr)**
 (Supports strings only)
 
-{
-"ENAME": {"$instr":"MC"}
-}
-
+```ruby
+{"first_name": {"$instr":"MC"}}
+```
 
 Not in string operator ($ninstr)
 (Supports strings only)
 
-{
-"ENAME": {"$ninstr":"MC"}
-}
-
+```ruby
+{"first_name": {"$ninstr":"MC"}}
+```
 
 
 #### LIKE operator ($like)
 (Supports strings. Eescape character not supported to try to match expressions with _ or % characters.)
 
-{
-"ENAME": {"$like":"AX%"}
-}
-
+```ruby
+{"first_name": {"$like":"AX%"}}
+```
 
 #### BETWEEN operator ($between)
 (Supports string, dates, and numbers)
 
 Numbers
 
-{
-"SALARY": {"$between": [1000,2000]}
-}
-
+```ruby
+{"budget": {"$between": [1000,2000]}}
+```
 Dates
 
-{
-"SALARY": {"$between": [{"$date":"1989-12-17T08:00:00Z"},{"$date":"1999-12-17T08:00:00Z"}]}
-}
+```ruby
+{"release_date": {"$between": [{"$date":"1989-12-17T08:00:00Z"},{"$date":"1999-12-17T08:00:00Z"}]}}
+```
 
 Strings
 
