@@ -87,4 +87,121 @@ Dates
 {"date_of_release": {"$lt": {"$date":"1999-12-17T08:00:00Z"}}}
 ```
 
+**LESS THAN OR EQUALS operator ($lte)**
+(Supports dates and numbers only)
 
+Numbers
+
+```ruby
+{"budget": {"$lte": 100000000}}
+```
+
+Dates
+
+```ruby
+{ "date_of_birth": {"$lte": {"$date":"1999-12-17T08:00:00Z"}} }
+```
+
+**GREATER THAN operator ($gt)**
+(Supports dates and numbers only)
+
+Numbers
+
+```ruby
+{ "budget": {"$gt": 10000} }
+```
+
+Dates
+
+```ruby
+{ "date_of_birth": {"$gt": {"$date":"1999-12-17T08:00:00Z"}} }
+```
+
+**GREATER THAN OR EQUALS operator ($gte)**
+(Supports dates and numbers only)
+
+Numbers
+
+```ruby
+{"budget": {"$gte": 10000}}
+```
+
+Dates
+
+```ruby
+{"date_of_birth": {"$gte": {"$date":"1999-12-17T08:00:00Z"}} }
+```
+
+In string operator ($instr)
+(Supports strings only)
+
+{
+"ENAME": {"$instr":"MC"}
+}
+
+
+Not in string operator ($ninstr)
+(Supports strings only)
+
+{
+"ENAME": {"$ninstr":"MC"}
+}
+
+
+
+#### LIKE operator ($like)
+(Supports strings. Eescape character not supported to try to match expressions with _ or % characters.)
+
+{
+"ENAME": {"$like":"AX%"}
+}
+
+
+#### BETWEEN operator ($between)
+(Supports string, dates, and numbers)
+
+Numbers
+
+{
+"SALARY": {"$between": [1000,2000]}
+}
+
+Dates
+
+{
+"SALARY": {"$between": [{"$date":"1989-12-17T08:00:00Z"},{"$date":"1999-12-17T08:00:00Z"}]}
+}
+
+Strings
+
+{
+"ENAME": {"$between": ["A","C"]}
+}
+
+Null Ranges ($lte equivalent)
+(Supported by numbers and dates only)
+
+{
+"SALARY": {"$between": [null,2000]}
+}
+
+Null Ranges ($gte equivalent)
+(Supported by numbers and dates only)
+
+{
+"SALARY": {"$between": [1000,null]}
+}
+
+
+#### NULL operator ($null)
+
+{
+"ENAME": {"$null": null}
+}
+
+#### NOT NULL operator ($notnull)
+
+{
+"ENAME": {"$notnull": null}
+}
+ 
