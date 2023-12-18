@@ -22,5 +22,33 @@ https://db2rest.com/actors?q={"first_name":"Robert"}
 
 ## QueryObject Grammer
 
+**EQUALS operator ($eq)**
+
+(Implicit and explicit equality supported._
+
+Implicit (Support String and Dates too)
+
+```ruby
+https://db2rest.com/actors?q={"year": 1999}
+```
+
+Explicit
+
+{
+"SALARY": {"$eq": 1000}
+}
+
+Strings
+
+{
+"ENAME": {"$eq":"SMITH"}
+}
+
+Dates
+
+{
+"HIREDATE": {"$date": "1981-11-17T08:00:00Z"}
+}
+ 
 
 
