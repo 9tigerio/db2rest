@@ -24,7 +24,7 @@ https://db2rest.com/actors?q={"first_name":"Robert"}
 
 **EQUALS operator ($eq)**
 
-(Implicit and explicit equality supported._
+(Implicit and explicit equality supported.)
 
 Implicit (Support String and Dates too)
 
@@ -34,21 +34,20 @@ https://db2rest.com/actors?q={"year": 1999}
 
 Explicit
 
-{
-"SALARY": {"$eq": 1000}
-}
+```ruby
+https://db2rest.com/actors?q={"year": {"$eq": 1000} }
+```
 
 Strings
 
-{
-"ENAME": {"$eq":"SMITH"}
-}
+```ruby
+https://db2rest.com/actors?q={"first_name": {"$eq": "Robert"} }
+```
 
 Dates
 
-{
-"HIREDATE": {"$date": "1981-11-17T08:00:00Z"}
-}
- 
+```ruby
+https://db2rest.com/actors?q={"date_of_birth": {"$date": "1981-11-17T08:00:00Z"} }
+```
 
 
