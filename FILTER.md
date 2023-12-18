@@ -199,3 +199,76 @@ Null Ranges ($gte equivalent)
 ```ruby
 {"first_name": {"$notnull": null}}
 ```
+
+
+#### AND operator ($and)
+(Supports all operators, including $and and $or)
+
+Column context delegation
+(Operators inside $and will use the closest context defined in the JSON tree.)
+
+```ruby
+{"budget": {"$and": [{"$gt": 1000},{"$lt":4000}]}}
+```
+
+Column context override
+(Example: salary greater than 1000 and name like S%)
+
+```ruby
+{
+"SALARY": {"$and": [{"$gt": 1000},{"ENAME": {"$like":"S%"}} ] }
+}
+```
+
+Implicit and in columns
+
+```ruby
+{"budget": [{"$gt": 1000},{"$lt":4000}]}
+```
+
+High order AND
+(All first columns and or high order operators -- $and and $ors -- defined at the first level of the JSON will be joined and an implicit AND)
+(Example: Salary greater than 1000 and name starts with S or T)
+
+```ruby
+{   "budget": {"$gt": 1000},"first_name": {"$or": [{"$like":"S%"}, {"$like":"T%"}]}}
+```
+
+Invalid expression (operators $lt and $gt lack column context)
+
+```ruby
+{"$and": [{"$lt": 5000},{"$gt": 1000}]}
+```
+
+Valid alternatives for the previous invalid expression
+
+```ruby
+{"$and": [{"budget": {"$lt": 5000}}, {"budget": {"$gt": 1000}}]}
+```
+
+```ruby
+{"budget": [{"$lt": 5000},{"$gt": 1000}]}
+```
+
+```ruby
+{"budget": {"$and": [{"$lt": 5000},{"$gt": 1000}]}}
+```
+
+#### OR operator ($or)
+(Supports all operators including $and and $or)
+
+Column context delegation
+(Operators inside $or will use the closest context defined in the JSON tree)
+
+```ruby
+{"budget": {"$or": [{"$eq":"SMITH"},{"$eq":"KING"}]} }
+```
+
+Column context override
+(Example: name starts with S or salary greater than 1000)
+
+```ruby
+{
+"budget": {"$or": [{"$gt": 1000},{"last_name": {"$like":"S%"}} ] }
+}
+```
