@@ -1,36 +1,61 @@
 package com.homihq.db2rest.rsql.parser;
 
-import com.homihq.db2rest.rsql.operators.handler.OperatorHandler;
-import com.homihq.db2rest.rsql.operators.handler.RSQLOperatorHandlers;
 import com.homihq.db2rest.rsql.operators.handler.jooq.JooqOperatorHandler;
 import com.homihq.db2rest.rsql.operators.handler.jooq.JooqRSQLOperatorHandlers;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
-import org.jooq.Query;
 import schemacrawler.schema.Column;
 import schemacrawler.schema.Table;
 
+import java.util.List;
+import java.util.function.BinaryOperator;
+
+import static org.jooq.impl.DSL.noCondition;
+
 @Slf4j
 @RequiredArgsConstructor
-public class JOOQRSQLVisitor implements RSQLVisitor<Condition, Void> {
+public class JooqRSQLVisitor implements RSQLVisitor<Condition, Void> {
 
     private final Table table;
-    private final Query query;
 
+
+    private static final Condition NO_CONDITION = noCondition();
 
     @Override
     public Condition visit(AndNode andNode, Void unused) {
         System.out.println("and node - {}" + andNode);
-        return null;
+
+        List<Condition> sqlConditions = getSQLConditions(andNode.getChildren());
+        return joinSQLConditions(sqlConditions, Condition::and);
+
     }
 
     @Override
     public Condition visit(OrNode orNode, Void unused) {
-        System.out.println("or node - {}" + orNode);
-        return null;
+        List<Condition> sqlConditions = getSQLConditions(orNode.getChildren());
+        return joinSQLConditions(sqlConditions, Condition::or);
     }
+
+    private List<Condition> getSQLConditions(List<Node> children) {
+        return children
+                .stream()
+                .map(node -> node.accept(this))
+                .toList();
+    }
+
+    public Condition joinSQLConditions(
+            List<Condition> conditions, BinaryOperator<Condition> conditionalOperator) {
+        if (conditions.stream().allMatch(NO_CONDITION::equals)) {
+            return NO_CONDITION;
+        }
+        return conditions
+                .stream()
+                .reduce(NO_CONDITION, conditionalOperator);
+    }
+
+
 
     @Override
     public Condition visit(ComparisonNode comparisonNode, Void unused) {

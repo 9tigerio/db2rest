@@ -1,13 +1,16 @@
 package com.homihq.db2rest.rsql;
 
 import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
-import com.homihq.db2rest.rsql.parser.JOOQRSQLVisitor;
+import com.homihq.db2rest.rsql.parser.JooqRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaService;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.Condition;
 import org.jooq.Query;
+import org.jooq.Record;
+import org.jooq.SelectJoinStep;
 import org.springframework.stereotype.Service;
 import schemacrawler.schema.Table;
 
@@ -28,13 +31,24 @@ public class FilterBuilderService {
 
     }
 
-    public void getWhereClause(Query query, String tableName, String rSql) {
+    public void getWhereClause(SelectJoinStep<Record> selectFromStep, String tableName, String rSql) {
         Table table = schemaService.getTableByName(tableName).orElseThrow();
 
         Node rootNode = new RSQLParser().parse(rSql);
-        Object o =
-                rootNode.accept(new JOOQRSQLVisitor(table, query));
 
-        log.info("o -> {}", o);
+        log.info("root node - {}", rootNode);
+
+
+        Condition condition =
+                rootNode.accept(new JooqRSQLVisitor(table));
+
+        log.info("condition -> {}", condition);
+
+        selectFromStep.where(condition);
+
+
+        log.info("where -> {}", selectFromStep);
+
+
     }
 }

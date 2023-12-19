@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,7 @@ public class QueryService {
 
         if(columns.isEmpty()) {
             query = dslContext.select(field(  ".*" )).from(tableName);
+            log.info("JOOQ SQL - {}", query.getSQL());
         }
         else{
             SelectColumns selectColumns = selectColumnBuilder.build(tableName, tableName, columns, true);
@@ -46,17 +48,16 @@ public class QueryService {
             List<Field<Object>> fields = selectColumns.selectColumnList()
                     .stream().map(sc -> field(  sc.getCol()))
                     .toList();
-            query = dslContext.select(fields).from(tableName);
+            SelectJoinStep<Record> selectFromStep = dslContext.select(fields).from(tableName);
+
+            this.filterBuilderService.getWhereClause(selectFromStep, tableName, rSql);
+
 
         }
 
-        log.info("JOOQ SQL - {}", query.getSQL());
-        try {
-            //this.filterBuilderService.getWhereClause(query, tableName, rSql);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
+
+
 
         return null;
 
