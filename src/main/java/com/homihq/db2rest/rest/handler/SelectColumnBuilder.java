@@ -1,6 +1,5 @@
 package com.homihq.db2rest.rest.handler;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -35,44 +34,5 @@ public class SelectColumnBuilder {
     }
 
 
-    public SelectColumns buildEmbeded(List<String> joinTables) {
 
-        List<SelectColumn> joinTableColumns = new ArrayList<>();
-
-        for(String joinTable : joinTables) {
-            //handle table
-            String jt = joinTable.substring(0 , joinTable.indexOf("("));
-            String [] joinTableParts = jt.split(":");
-
-            String tableAlias = null;
-            String tableName;
-            if(joinTableParts.length > 1) {
-                tableAlias = joinTableParts[0];
-
-                tableName = joinTableParts[1];
-
-            }
-            else{
-                tableAlias = joinTableParts[0];
-                tableName = joinTableParts[0];
-            }
-
-            //Now handle columns
-
-            String joinTableCols = joinTable.substring(joinTable.indexOf("(")+1, joinTable.indexOf(")"));
-
-            if(StringUtils.isBlank(joinTableCols)) throw new RuntimeException("No column found for embedded tables.");
-
-
-            List<String> columns = List.of(joinTableCols.split(","));
-            SelectColumns selectColumns =
-            build(tableName, tableAlias, columns, false);
-
-            joinTableColumns.addAll(selectColumns.selectColumnList());
-        }
-
-
-        return new SelectColumns(joinTableColumns);
-
-    }
 }

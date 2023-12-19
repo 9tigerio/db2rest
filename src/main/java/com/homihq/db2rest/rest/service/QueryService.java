@@ -1,17 +1,20 @@
 package com.homihq.db2rest.rest.service;
 
+
 import com.homihq.db2rest.rest.handler.SelectColumnBuilder;
 import com.homihq.db2rest.rest.handler.SelectColumns;
 import com.homihq.db2rest.rsql.FilterBuilderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jooq.DSLContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Objects;
+
+import static org.jooq.impl.DSL.*;
+import org.jooq.*;
 
 @Service
 @Slf4j
@@ -25,6 +28,40 @@ public class QueryService {
     private final JdbcTemplate jdbcTemplate;
     private final FilterBuilderService filterBuilderService;
     private final SelectColumnBuilder selectColumnBuilder;
+
+    private final DSLContext dslContext;
+
+    @Transactional(readOnly = true)
+    public Object findJooq(String tableName, String select, String rSql) { // No join
+        List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
+
+        Query query;
+
+        if(columns.isEmpty()) {
+            query = dslContext.select(field(  ".*" )).from(tableName);
+        }
+        else{
+            SelectColumns selectColumns = selectColumnBuilder.build(tableName, tableName, columns, true);
+
+            List<Field<Object>> fields = selectColumns.selectColumnList()
+                    .stream().map(sc -> field(  sc.getCol()))
+                    .toList();
+            query = dslContext.select(fields).from(tableName);
+
+        }
+
+        log.info("JOOQ SQL - {}", query.getSQL());
+        try {
+            //this.filterBuilderService.getWhereClause(query, tableName, rSql);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
     @Transactional(readOnly = true)
     public Object find(String tableName, String select, String rSql) {
 
