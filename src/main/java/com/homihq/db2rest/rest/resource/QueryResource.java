@@ -26,8 +26,9 @@ public class QueryResource {
         @RequestParam(name = "rSql", required = false, defaultValue = "") String rSql) {
 
         log.info("select - {}", select);
-
         log.info("rSql - {}", rSql);
+
+        this.queryService.findJooq(tableName, select, rSql);
 
         return queryService.find(tableName, select, rSql);
     }
