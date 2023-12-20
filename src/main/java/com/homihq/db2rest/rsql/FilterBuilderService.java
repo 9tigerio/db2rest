@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rsql;
 
 import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
+import com.homihq.db2rest.rsql.operators.handler.jooq.JooqCustomRSQLOperators;
 import com.homihq.db2rest.rsql.parser.JooqRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaService;
 import cz.jirutka.rsql.parser.RSQLParser;
@@ -32,7 +33,7 @@ public class FilterBuilderService {
     public void getWhereClause(SelectJoinStep<Record> selectFromStep, String tableName, String rSql) {
         Table table = schemaService.getTableByName(tableName).orElseThrow();
 
-        Node rootNode = new RSQLParser().parse(rSql);
+        Node rootNode = new RSQLParser(JooqCustomRSQLOperators.customOperators()).parse(rSql);
 
         log.info("root node - {}", rootNode);
 
