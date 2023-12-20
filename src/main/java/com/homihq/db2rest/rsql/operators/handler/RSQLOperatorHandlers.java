@@ -16,8 +16,7 @@ public class RSQLOperatorHandlers {
 
 
 
-        OPERATOR_HANDLER_MAP.put(START_WITH.getSymbol(), new StartWithOperatorHandler());
-        OPERATOR_HANDLER_MAP.put(END_WITH.getSymbol(), new EndWithOperatorHandler());
+
 
     }
 
