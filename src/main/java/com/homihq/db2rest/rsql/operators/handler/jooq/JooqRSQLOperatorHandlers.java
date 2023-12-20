@@ -18,6 +18,7 @@ public class JooqRSQLOperatorHandlers {
         OPERATOR_HANDLER_MAP.put(LESS_THAN.getSymbol(), new JooqLessThanOperatorHandler());
         OPERATOR_HANDLER_MAP.put(LESS_THAN_OR_EQUAL.getSymbol(), new JooqLessThanEqualToOperatorHandler());
         OPERATOR_HANDLER_MAP.put(NOT_EQUAL.getSymbol(), new JooqNotEqualToOperatorHandler());
+        OPERATOR_HANDLER_MAP.put(LIKE.getSymbol(), new JooqLikeOperatorHandler());
     }
 
     public static JooqOperatorHandler getOperatorHandler(String symbol) {

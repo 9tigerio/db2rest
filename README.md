@@ -36,19 +36,21 @@ Instant REST API over your existing or new database in minutes.
 
 #### Supported Operators
 
-| Operator | Postgresql     | Description           | Supported |
-|----------|----------------|-----------------------|-----------|
-| ==       | =              | equals                | [X]       |
-| >        | >              | greater than          | [X]       |
-| =gt=     | >              | greater than          | [X]       |
-| >=       | >=             | greater than or equal | [X]       |
-| =gt=     | >              | greater than or equal | [X]       |
-| <        | <              | less than             | [X]       |
-| =lt=     | <              | less than             | [X]       |
-| <=       | <=             | less than or equal    | [X]       |
-| =le=     | <=             | less than or equal    | [X]       |
-| =in=     | <=             | in                    | [X]       |
-| =out=    | <=             | not in                | [X]       |
+| Operator | Postgresql | Description           | Supported |
+|----------|------------|-----------------------|-----------|
+| ==       | =          | equals                | [X]       |
+| >        | >          | greater than          | [X]       |
+| =gt=     | >          | greater than          | [X]       |
+| >=       | >=         | greater than or equal | [X]       |
+| =gt=     | >          | greater than or equal | [X]       |
+| <        | <          | less than             | [X]       |
+| =lt=     | <          | less than             | [X]       |
+| <=       | <=         | less than or equal    | [X]       |
+| =le=     | <=         | less than or equal    | [X]       |
+| =in=     | <=         | in                    | [X]       |
+| =out=    | <=         | not in                | [X]       |
+| =like=   | like       | like                  | [X]       |
+
 
 
 ### MySQL (Planned)
