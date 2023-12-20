@@ -50,8 +50,12 @@ public class QueryService {
                     .toList();
             SelectJoinStep<Record> selectFromStep = dslContext.select(fields).from(tableName);
 
-            this.filterBuilderService.getWhereClause(selectFromStep, tableName, rSql);
-
+            try {
+                this.filterBuilderService.getWhereClause(selectFromStep, tableName, rSql);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
 
         }
 

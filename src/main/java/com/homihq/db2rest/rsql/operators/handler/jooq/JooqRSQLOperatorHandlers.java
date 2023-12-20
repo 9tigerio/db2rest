@@ -1,7 +1,6 @@
 package com.homihq.db2rest.rsql.operators.handler.jooq;
 
 
-import com.homihq.db2rest.rsql.operators.handler.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +12,8 @@ public class JooqRSQLOperatorHandlers {
     private static final Map<String, JooqOperatorHandler> OPERATOR_HANDLER_MAP = new HashMap<>();
 
     static {
-        OPERATOR_HANDLER_MAP.put(EQUAL.getSymbol(), new EqualToJooqOperatorHandler());
-
+        OPERATOR_HANDLER_MAP.put(EQUAL.getSymbol(), new JooqEqualToOperatorHandler());
+        OPERATOR_HANDLER_MAP.put(GREATER_THAN.getSymbol(), new JooqGreaterThanOperatorHandler());
 
     }
 

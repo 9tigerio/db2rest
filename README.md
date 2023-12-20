@@ -34,6 +34,14 @@ Instant REST API over your existing or new database in minutes.
     - [X] Delete with row filter.
     - [X] Safe delete.
 
+#### Supported Operators
+
+| Operator | Postgresql | Description  |
+|----------|------------|--------------|
+| ==       | =          | equals       |
+| >        | >          | greater than |
+| =gt=     | >          | greater than |
+
 
 ### MySQL (Planned)
 
