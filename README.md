@@ -36,13 +36,18 @@ Instant REST API over your existing or new database in minutes.
 
 #### Supported Operators
 
-| Operator | Postgresql | Description           |
-|----------|------------|-----------------------|
-| ==       | =          | equals                |
-| >        | >          | greater than          |
-| =gt=     | >          | greater than          |
-| >=       | >=         | greater than or equal |
-| =gt=     | >          | greater than or equal |
+| Operator | Postgresql | Description           | Supported |
+|----------|------------|-----------------------|-----------|
+| ==       | =          | equals                | [X]       |
+| >        | >          | greater than          | [X]       |
+| =gt=     | >          | greater than          | [X]       |
+| >=       | >=         | greater than or equal | [X]       |
+| =gt=     | >          | greater than or equal | [X]       |
+| <        | <          | less than             | [X]       |
+| =lt=     | <          | less than             | [X]       |
+| <=       | <=         | less than or equal    | [X]       |
+| =le=     | <=         | less than or equal    | [X]       |
+
 
 
 ### MySQL (Planned)
