@@ -1,13 +1,13 @@
-package com.homihq.db2rest.rsql.operators.handler.jooq;
+package com.homihq.db2rest.rsql.operators.handler;
 
-import com.homihq.db2rest.rsql.operators.handler.OperatorHandler;
+import com.homihq.db2rest.rsql.operators.OperatorHandler;
 import org.jooq.Condition;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.val;
 
 
-public class JooqNotEqualToOperatorHandler implements JooqOperatorHandler {
+public class NotEqualToOperatorHandler implements OperatorHandler {
 
    private static final String OPERATOR = " != ";
 

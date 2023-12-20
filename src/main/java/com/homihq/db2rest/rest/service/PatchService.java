@@ -1,15 +1,19 @@
 package com.homihq.db2rest.rest.service;
 
-import com.homihq.db2rest.rsql.FilterBuilderService;
+import com.homihq.db2rest.rest.filter.FilterBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.jooq.DSLContext;
+import org.jooq.UpdateConditionStep;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import org.jooq.Record;
+import static org.jooq.impl.DSL.table;
 
 @Service
 @Slf4j
@@ -17,32 +21,21 @@ import java.util.stream.Collectors;
 public class PatchService {
 
     private final JdbcTemplate jdbcTemplate;
-    private final FilterBuilderService filterBuilderService;
+    private final FilterBuilder filterBuilder;
+    private final DSLContext dslContext;
 
     @Transactional
-    public void patch(String tableName, Map<String,Object> data, String rSql) {
-        String sql = "UPDATE " + tableName +
-                " SET " + getUpdatedColumns(data) ;
+    public int patch(String tableName, Map<String,Object> data, String rSql) {
+        UpdateConditionStep<Record> updateConditionStep = dslContext.update(table(tableName))
+                .set(data) //TODO - fix data types
+                .where(filterBuilder.create(tableName , rSql));
 
-        if(StringUtils.isNotBlank(rSql)) {
-            sql = sql + " WHERE " + filterBuilderService.getWhereClause(tableName , rSql);
-        }
+        String sql = updateConditionStep.getSQL();
+        List<Object> bindValues = updateConditionStep.getBindValues();
+        log.info("SQL - {}", sql); // TODO make it conditional
+        log.info("Bind variables - {}", bindValues);
 
-        log.info("sql - {}", sql);
-        jdbcTemplate.update(sql , getValues(data)); //TODO use PSTMT ??
-
-
-
+        return jdbcTemplate.update(sql , bindValues);
     }
 
-    private Object[] getValues(Map<String, Object> data) {
-        return  data.values().toArray();
-    }
-
-    private String getUpdatedColumns(Map<String, Object> data) {
-        return data.keySet().stream()
-                .map(key -> key + " = ? " )
-                .collect(Collectors.joining(", ", "", ""));
-
-    }
 }

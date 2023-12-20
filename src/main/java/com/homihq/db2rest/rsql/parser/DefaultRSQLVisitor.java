@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rsql.parser;
 
-import com.homihq.db2rest.rsql.operators.handler.jooq.JooqOperatorHandler;
-import com.homihq.db2rest.rsql.operators.handler.jooq.JooqRSQLOperatorHandlers;
+import com.homihq.db2rest.rsql.operators.OperatorHandler;
+import com.homihq.db2rest.rsql.operators.RSQLOperatorHandlers;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import static org.jooq.impl.DSL.noCondition;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JooqRSQLVisitor implements RSQLVisitor<Condition, Void> {
+public class DefaultRSQLVisitor implements RSQLVisitor<Condition, Void> {
 
     private final Table table;
 
@@ -70,7 +70,7 @@ public class JooqRSQLVisitor implements RSQLVisitor<Condition, Void> {
 
         String queryColumnName = column.getName();
 
-        JooqOperatorHandler operatorHandler = JooqRSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
+        OperatorHandler operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
         if (operatorHandler == null) {
             throw new IllegalArgumentException(String.format("Operator '%s' is invalid", op.getSymbol()));
         }

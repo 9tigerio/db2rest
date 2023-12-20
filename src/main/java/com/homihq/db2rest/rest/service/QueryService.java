@@ -1,17 +1,17 @@
 package com.homihq.db2rest.rest.service;
 
-
+import com.homihq.db2rest.rest.filter.FilterBuilder;
 import com.homihq.db2rest.rest.handler.SelectColumnBuilder;
 import com.homihq.db2rest.rest.handler.SelectColumns;
-import com.homihq.db2rest.rsql.FilterBuilderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
-import org.jooq.Record;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 import java.util.List;
 
 import static org.jooq.impl.DSL.*;
@@ -21,26 +21,25 @@ import org.jooq.*;
 @Slf4j
 @RequiredArgsConstructor
 public class QueryService {
-    public static final String SELECT = "SELECT ";
-    public static final String FROM = " FROM ";
-    public static final String WHERE = "WHERE";
-
 
     private final JdbcTemplate jdbcTemplate;
-    private final FilterBuilderService filterBuilderService;
     private final SelectColumnBuilder selectColumnBuilder;
-
+    private final FilterBuilder filterBuilder;
     private final DSLContext dslContext;
 
+
     @Transactional(readOnly = true)
-    public Object findJooq(String tableName, String select, String rSql) { // No join
-        List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
+    public List<Object> findAll(String tableName, String cols, String filter) {
 
+        // No join
+        List<String> columns = StringUtils.isBlank(cols) ?  List.of() : List.of(cols.split(","));
         Query query;
-
         if(columns.isEmpty()) {
-            query = dslContext.select(field(  ".*" )).from(tableName);
-            log.info("JOOQ SQL - {}", query.getSQL());
+
+            Condition whereCondition =
+                    filterBuilder.create(tableName, filter);
+            query = dslContext.selectFrom(tableName).where(whereCondition);
+
         }
         else{
             SelectColumns selectColumns = selectColumnBuilder.build(tableName, tableName, columns, true);
@@ -48,45 +47,19 @@ public class QueryService {
             List<Field<Object>> fields = selectColumns.selectColumnList()
                     .stream().map(sc -> field(  sc.getCol()))
                     .toList();
-            SelectJoinStep<Record> selectFromStep = dslContext.select(fields).from(tableName);
 
-            try {
+            Condition whereCondition = filterBuilder.create(tableName, filter);
 
-                this.filterBuilderService.getWhereClause(selectFromStep, tableName, rSql);
-
-                log.info("JOOQ SQL - {}", selectFromStep.getSQL());
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
+            query = dslContext.select(fields).from(tableName).where(whereCondition);
 
         }
 
+        String sql = query.getSQL();
+        List<Object> bindValues = query.getBindValues();
+        log.info("SQL - {}", sql); // TODO make it conditional
+        log.info("Bind variables - {}", bindValues);
 
-
-
-
-        return null;
-
-    }
-
-    @Transactional(readOnly = true)
-    public Object find(String tableName, String select, String rSql) {
-
-        List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
-
-        SelectColumns selectColumns = selectColumnBuilder.build(tableName, tableName, columns, true);
-
-        String sql = SELECT + selectColumns.getSelect() + FROM + selectColumns.getTables(tableName) ;
-
-
-        if(StringUtils.isNotBlank(rSql)) {
-            sql = sql + " " + WHERE + " " + filterBuilderService.getWhereClause(tableName , rSql);
-        }
-
-        log.info("sql - {}", sql);
-
-        return jdbcTemplate.queryForList(sql);
+        return Collections.singletonList(jdbcTemplate.queryForList(sql, bindValues));
 
     }
 

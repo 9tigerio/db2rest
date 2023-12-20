@@ -2,14 +2,19 @@ package com.homihq.db2rest.rest.service;
 
 import com.homihq.db2rest.Db2RestConfigProperties;
 import com.homihq.db2rest.error.DeleteOpNotAllowedException;
-import com.homihq.db2rest.rsql.FilterBuilderService;
+import com.homihq.db2rest.rest.filter.FilterBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import static org.jooq.impl.DSL.*;
+import org.jooq.*;
 
+import java.util.List;
 
 @Service
 @Slf4j
@@ -17,26 +22,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeleteService {
 
     private final JdbcTemplate jdbcTemplate;
-    private final FilterBuilderService filterBuilderService;
-
+    private final FilterBuilder filterBuilder;
+    private final DSLContext dslContext;
     private final Db2RestConfigProperties db2RestConfigProperties;
 
     @Transactional
-    public void delete(String tableName, String rSql) {
-        String sql = "DELETE FROM " + tableName ;
+    public void delete(String tableName, String filter) {
 
-        if(StringUtils.isBlank(rSql) && !db2RestConfigProperties.isAllowUnsafeDelete()) {
+        if(StringUtils.isBlank(filter) && !db2RestConfigProperties.isAllowUnsafeDelete()) {
             throw new DeleteOpNotAllowedException(false);
         }
         else{
-            sql = sql + " WHERE " + filterBuilderService.getWhereClause(tableName , rSql);
+            DeleteUsingStep<Record> deleteUsingStep =
+                    dslContext.deleteFrom(table(tableName));
+
+            Condition whereCondition =
+                    filterBuilder.create(tableName, filter);
+
+            DeleteConditionStep<Record> deleteConditionStep = deleteUsingStep.where(whereCondition);
+
+            String sql = deleteConditionStep.getSQL();
+            List<Object> bindValues = deleteConditionStep.getBindValues();
+            log.info("SQL - {}", sql); // TODO make it conditional
+            log.info("Bind variables - {}", bindValues);
+
+            jdbcTemplate.queryForList(sql, bindValues);
         }
-
-
-        log.info("sql - {}", sql);
-        jdbcTemplate.update(sql); //TODO use PSTMT ??
-
-
 
     }
 }
