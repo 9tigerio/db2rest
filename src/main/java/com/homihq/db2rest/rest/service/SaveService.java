@@ -2,11 +2,18 @@ package com.homihq.db2rest.rest.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.InsertValuesStepN;
+import org.jooq.impl.DSL;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+
+import org.jooq.Record;
+import static org.jooq.impl.DSL.table;
 
 @Service
 @Slf4j
@@ -14,37 +21,30 @@ import java.util.*;
 public class SaveService {
 
     private final JdbcTemplate jdbcTemplate;
+    private final DSLContext dslContext;
 
     @Transactional
     public void save(String tableName, Map<String,Object> data) {
-        String sql = createSql(tableName, data);
+        InsertValuesStepN<Record> insertValuesStepN =
+        dslContext.insertInto(table(tableName)).columns(getColumns(data))
+                .values(getValues(data));
 
-        log.info("sql - {}", sql);
+        String sql = insertValuesStepN.getSQL();
+        List<Object> bindValues = insertValuesStepN.getBindValues();
+        log.info("SQL - {}", sql); // TODO make it conditional
+        log.info("Bind variables - {}", bindValues);
 
-        jdbcTemplate.update(sql, getValues(data));
+        jdbcTemplate.update(sql , bindValues);
     }
 
-    public String createSql(String tableName, Map<String,Object> data) {
-        return "INSERT INTO " + tableName +
-                " ( " + getColumns(data) + " ) VALUES (" + getPlaceholders(data) + " ) ";
-    }
 
     private Object[] getValues(Map<String, Object> data) {
         return  data.values().toArray();
     }
 
-    private String getPlaceholders(Map<String, Object> data) {
-
-        List<String> positional = Collections.nCopies(data.keySet().size(), "?");
-
-        return String.join(" , " , positional);
-    }
-
-    private String getColumns(Map<String, Object> data) {
-        Set<String> keys = data.keySet();
-
-
-        return String.join(" , " , keys);
+    private List<Field<Object>> getColumns(Map<String, Object> data) {
+        return
+        data.keySet().stream().map(DSL::field).toList();
 
     }
 

@@ -1,4 +1,4 @@
-package com.homihq.db2rest.error;
+package com.homihq.db2rest.exception;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;

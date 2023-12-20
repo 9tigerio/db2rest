@@ -1,4 +1,4 @@
-package com.homihq.db2rest;
+package com.homihq.db2rest.config;
 
 import lombok.Getter;
 import lombok.Setter;

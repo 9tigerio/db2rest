@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.service;
 
-import com.homihq.db2rest.Db2RestConfigProperties;
-import com.homihq.db2rest.error.DeleteOpNotAllowedException;
+import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.exception.DeleteOpNotAllowedException;
 import com.homihq.db2rest.rest.filter.FilterBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

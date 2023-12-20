@@ -1,4 +1,4 @@
-package com.homihq.db2rest.error;
+package com.homihq.db2rest.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
