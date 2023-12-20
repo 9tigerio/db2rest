@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class NotInOperatorHandler implements OperatorHandler {
 
    private static final String OPERATOR = " not in ";
