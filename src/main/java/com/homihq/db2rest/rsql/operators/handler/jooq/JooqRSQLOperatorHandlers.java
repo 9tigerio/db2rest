@@ -2,9 +2,6 @@ package com.homihq.db2rest.rsql.operators.handler.jooq;
 
 
 
-import com.homihq.db2rest.rsql.operators.handler.LessThanEqualToOperatorHandler;
-import com.homihq.db2rest.rsql.operators.handler.NotEqualToOperatorHandler;
-
 import java.util.HashMap;
 import java.util.Map;
 
