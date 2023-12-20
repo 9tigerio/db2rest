@@ -51,7 +51,10 @@ public class QueryService {
             SelectJoinStep<Record> selectFromStep = dslContext.select(fields).from(tableName);
 
             try {
+
                 this.filterBuilderService.getWhereClause(selectFromStep, tableName, rSql);
+
+                log.info("JOOQ SQL - {}", selectFromStep.getSQL());
             }
             catch(Exception e) {
                 e.printStackTrace();

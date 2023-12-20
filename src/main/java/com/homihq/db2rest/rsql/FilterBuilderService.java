@@ -7,10 +7,8 @@ import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.Condition;
-import org.jooq.Query;
+import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.SelectJoinStep;
 import org.springframework.stereotype.Service;
 import schemacrawler.schema.Table;
 
@@ -44,10 +42,9 @@ public class FilterBuilderService {
 
         log.info("condition -> {}", condition);
 
+
         selectFromStep.where(condition);
 
-
-        log.info("where -> {}", selectFromStep);
 
 
     }

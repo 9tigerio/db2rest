@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rsql.operators.handler;
 
+@Deprecated
 public class GreaterThanOperatorHandler implements OperatorHandler {
 
    private static final String OPERATOR = " > ";
