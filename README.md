@@ -47,7 +47,7 @@ Instant REST API over your existing or new database in minutes.
 | =lt=     | <          | less than             | [X]       |
 | <=       | <=         | less than or equal    | [X]       |
 | =le=     | <=         | less than or equal    | [X]       |
-
+| !=       | <=         | not equal             | [X]       |
 
 
 ### MySQL (Planned)
