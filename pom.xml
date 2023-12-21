@@ -18,41 +18,6 @@
     </properties>
     <dependencies>
 
-        <dependency>
-            <groupId>us.fatehi</groupId>
-            <artifactId>schemacrawler</artifactId>
-            <version>16.20.6</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-nop</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-
-        <dependency>
-            <groupId>us.fatehi</groupId>
-            <artifactId>schemacrawler-postgresql</artifactId>
-            <version>16.20.6</version>
-
-            <exclusions>
-                <exclusion>
-                    <groupId>us.fatehi</groupId>
-                    <artifactId>schemacrawler</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-nop</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

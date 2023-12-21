@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.Condition;
 import org.springframework.stereotype.Component;
-import schemacrawler.schema.Table;
 
 import static org.jooq.impl.DSL.noCondition;
 
@@ -22,7 +21,7 @@ public class FilterBuilder {
     private final SchemaService schemaService;
 
     public Condition create(String tableName, String rSql) {
-        Table table = schemaService.getTableByName(tableName).orElseThrow(() -> new RuntimeException("Unknown table - " + tableName));
+
 
         if(StringUtils.isNotBlank(rSql)) {
 
@@ -30,7 +29,7 @@ public class FilterBuilder {
 
             log.info("root node - {}", rootNode);
 
-            return rootNode.accept(new DefaultRSQLVisitor(table));
+            return rootNode.accept(new DefaultRSQLVisitor(schemaService , tableName));
 
         }
 

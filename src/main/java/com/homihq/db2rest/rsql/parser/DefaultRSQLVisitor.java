@@ -2,12 +2,14 @@ package com.homihq.db2rest.rsql.parser;
 
 import com.homihq.db2rest.rsql.operators.OperatorHandler;
 import com.homihq.db2rest.rsql.operators.RSQLOperatorHandlers;
+import com.homihq.db2rest.schema.SchemaService;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
-import schemacrawler.schema.Column;
-import schemacrawler.schema.Table;
+import org.jooq.Field;
+
+
 
 import java.util.List;
 import java.util.function.BinaryOperator;
@@ -18,7 +20,8 @@ import static org.jooq.impl.DSL.noCondition;
 @RequiredArgsConstructor
 public class DefaultRSQLVisitor implements RSQLVisitor<Condition, Void> {
 
-    private final Table table;
+    private final SchemaService schemaService;
+    private final String tableName;
 
 
     private static final Condition NO_CONDITION = noCondition();
@@ -60,13 +63,16 @@ public class DefaultRSQLVisitor implements RSQLVisitor<Condition, Void> {
     @Override
     public Condition visit(ComparisonNode comparisonNode, Void unused) {
         ComparisonOperator op = comparisonNode.getOperator();
+        String columnName = comparisonNode.getSelector();
+        Field<?> column = schemaService.getByTableNameAndColumnName(tableName , columnName)
+                .orElseThrow(() -> new RuntimeException("Column not found"));
 
-        Column column =
-                getColumn(comparisonNode.getSelector());
 
         log.info("column - {}", column);
 
-        Class type = column.getType().getTypeMappedClass();
+        Class type = column.getType();
+
+        log.info("type - {}", type);
 
         String queryColumnName = column.getName();
 
@@ -83,11 +89,4 @@ public class DefaultRSQLVisitor implements RSQLVisitor<Condition, Void> {
         }
     }
 
-    private Column getColumn(String colName) {
-        log.info("Column name - {}", colName);
-        return
-                table.getColumns().stream().filter(column ->
-                                column.getName().equals(colName))
-                        .findFirst().orElseThrow();
-    }
 }
