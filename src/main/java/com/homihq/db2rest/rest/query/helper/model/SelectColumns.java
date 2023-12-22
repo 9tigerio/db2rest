@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.handler;
+package com.homihq.db2rest.rest.query.helper.model;
 
 import java.util.List;
 

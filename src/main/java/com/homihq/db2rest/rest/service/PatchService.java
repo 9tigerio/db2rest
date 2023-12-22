@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.service;
 
-import com.homihq.db2rest.rest.filter.FilterBuilder;
+import com.homihq.db2rest.rest.query.helper.WhereBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
@@ -21,14 +21,14 @@ import static org.jooq.impl.DSL.table;
 public class PatchService {
 
     private final JdbcTemplate jdbcTemplate;
-    private final FilterBuilder filterBuilder;
+    private final WhereBuilder whereBuilder;
     private final DSLContext dslContext;
 
     @Transactional
     public int patch(String tableName, Map<String,Object> data, String rSql) {
         UpdateConditionStep<Record> updateConditionStep = dslContext.update(table(tableName))
                 .set(data) //TODO - fix data types
-                .where(filterBuilder.create(tableName , rSql));
+                .where(whereBuilder.create(tableName , rSql));
 
         String sql = updateConditionStep.getSQL();
         List<Object> bindValues = updateConditionStep.getBindValues();

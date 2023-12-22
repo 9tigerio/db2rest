@@ -8,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.Record;
+import org.jooq.Table;
 
 
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BinaryOperator;
 
@@ -21,8 +23,9 @@ import static org.jooq.impl.DSL.noCondition;
 public class DefaultRSQLVisitor implements RSQLVisitor<Condition, Void> {
 
     private final SchemaService schemaService;
+    @Deprecated
     private final String tableName;
-
+    private final Table<Record> table;
 
     private static final Condition NO_CONDITION = noCondition();
 
@@ -64,17 +67,16 @@ public class DefaultRSQLVisitor implements RSQLVisitor<Condition, Void> {
     public Condition visit(ComparisonNode comparisonNode, Void unused) {
         ComparisonOperator op = comparisonNode.getOperator();
         String columnName = comparisonNode.getSelector();
-        Field<?> column = schemaService.getByTableNameAndColumnName(tableName , columnName)
-                .orElseThrow(() -> new RuntimeException("Column not found"));
+        Field<?> column = Arrays.stream(table.fields())
+                    .filter(field -> columnName.equals(field.getName()))
+                .findFirst().orElseThrow(() ->  new RuntimeException("Column not found"));
 
-
-        log.info("column - {}", column);
 
         Class type = column.getType();
 
-        log.info("type - {}", type);
+        log.debug("Data type - {}", type);
 
-        String queryColumnName = column.getName();
+        String queryColumnName = column.getQualifiedName().quotedName().toString();
 
         OperatorHandler operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
         if (operatorHandler == null) {

@@ -8,14 +8,11 @@ import static org.jooq.impl.DSL.val;
 
 public class LessThanOperatorHandler implements OperatorHandler {
 
-   private static final String OPERATOR = " < ";
-
     @Override
     public Condition handle(String columnName, String value, Class type) {
-        // return columnName + OPERATOR + parseValue(value, type);
 
         return
-                field(columnName).lt(val(value));
+                field(columnName).lt(val(parseValue(value,type)));
     }
 
 }

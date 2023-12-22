@@ -2,7 +2,7 @@ package com.homihq.db2rest.rest.service;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.DeleteOpNotAllowedException;
-import com.homihq.db2rest.rest.filter.FilterBuilder;
+import com.homihq.db2rest.rest.query.helper.WhereBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +22,7 @@ import java.util.List;
 public class DeleteService {
 
     private final JdbcTemplate jdbcTemplate;
-    private final FilterBuilder filterBuilder;
+    private final WhereBuilder whereBuilder;
     private final DSLContext dslContext;
     private final Db2RestConfigProperties db2RestConfigProperties;
 
@@ -37,7 +37,7 @@ public class DeleteService {
                     dslContext.deleteFrom(table(tableName));
 
             Condition whereCondition =
-                    filterBuilder.create(tableName, filter);
+                    whereBuilder.create(tableName, filter);
 
             DeleteConditionStep<Record> deleteConditionStep = deleteUsingStep.where(whereCondition);
 
