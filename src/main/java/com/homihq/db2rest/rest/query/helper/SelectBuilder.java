@@ -1,5 +1,7 @@
-package com.homihq.db2rest.rest.handler;
+package com.homihq.db2rest.rest.query.helper;
 
+import com.homihq.db2rest.rest.query.helper.model.SelectColumn;
+import com.homihq.db2rest.rest.query.helper.model.SelectColumns;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -7,7 +9,7 @@ import java.util.List;
 
 
 @Component
-public class SelectColumnBuilder {
+public class SelectBuilder {
 
     public SelectColumns build(String tableName, String tableNameAlias, List<String> columnNames, boolean root) {
         List<SelectColumn> selectColumnList = new ArrayList<>();

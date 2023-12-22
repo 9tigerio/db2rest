@@ -14,16 +14,21 @@ Instant REST API over your existing or new database in minutes.
     - [X] Bulk records - JSON 
         - [] Support batch insert 
 
-[ ] Query (Read)   - In progress
+[*] Query (Read)  - In progress
 
     - [X] Row Filtering
         Supported with rSQL.
-    - [X] Column Filtering
-    - [X] Rename Columns
-    - [ ] Joins
+    - [X] Column Selection
+    - [X] Rename Columns / Alias
+    - [X] Join
     - [ ] Pagination
+    - [ ] Sorting
+    - [ ] Group By
+    - [ ] Count
+    - [ ] Join column filter
 
-[ ] Edit (Update)  - Completed
+
+[ ] Edit (Update) 
 
     - [X] Patch
     - [X] Patch with row filtering
@@ -33,6 +38,12 @@ Instant REST API over your existing or new database in minutes.
 
     - [X] Delete with row filter.
     - [X] Safe delete.
+
+[*] Transactions (In progress)
+
+[ ] Multi-tenancy
+
+[ ] Schema
 
 #### Supported Operators
 

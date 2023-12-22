@@ -21,6 +21,7 @@ db2rest:
   allowUnsafeDelete : false
 
 
+
 logging:
   level:
     org.springframework.web : INFO

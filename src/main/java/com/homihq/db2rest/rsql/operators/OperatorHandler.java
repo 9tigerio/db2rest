@@ -12,14 +12,16 @@ public interface OperatorHandler {
         return handle(columnName, value.get(0), type);
     }
 
-    default String parseValue(String value, Class type) {
+    default Object parseValue(String value, Class type) {
 
         if (String.class == type) {
-            return "'" + value + "'";
+            return value;
         }
         else if (Boolean.class == type || boolean.class == type) {
-            Boolean aBoolean = Boolean.valueOf(value);
-            return aBoolean ? "1" : "0";
+            return Boolean.valueOf(value);
+        }
+        else if (Integer.class == type || int.class == type) {
+            return Integer.valueOf(value);
         }
         else {
             return value;

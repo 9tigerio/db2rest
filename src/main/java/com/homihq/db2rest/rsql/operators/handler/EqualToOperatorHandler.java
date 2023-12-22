@@ -7,11 +7,10 @@ import static org.jooq.impl.DSL.*;
 
 public class EqualToOperatorHandler implements OperatorHandler {
 
-    private static final String OPERATOR = " = ";
     @Override
     public Condition handle(String columnName, String value, Class type) {
         return
-        field(columnName).eq(val(value));
+        field(columnName).eq(val(parseValue(value,type)));
 
 
     }
