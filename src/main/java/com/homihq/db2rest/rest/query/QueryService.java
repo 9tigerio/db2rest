@@ -61,9 +61,7 @@ public class QueryService {
 
     private Query createQuery(String schemaName, String tableName, String select, String filter, String joinTable) {
 
-        if(!db2RestConfigProperties.isValidSchema(schemaName)) {
-            throw new RuntimeException("Invalid schema name");
-        }
+        db2RestConfigProperties.verifySchema(schemaName);
 
         List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
 
