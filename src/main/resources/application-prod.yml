@@ -8,3 +8,4 @@ spring:
 
 db2rest:
   allowUnsafeDelete : ${ALLOW_UNSAFE_DELETE:false}
+  schemas: ${DB_SCHEMAS}

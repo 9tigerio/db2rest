@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.query;
 
+import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.rest.query.helper.WhereBuilder;
 import com.homihq.db2rest.rest.query.helper.SelectBuilder;
 import com.homihq.db2rest.rest.query.helper.model.SelectColumns;
@@ -28,11 +29,30 @@ public class QueryService {
     private final WhereBuilder whereBuilder;
     private final DSLContext dslContext;
     private final SchemaService schemaService;
+    private final Db2RestConfigProperties db2RestConfigProperties;
+
+    public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter, String joinTable) {
+
+        if(!db2RestConfigProperties.isValidSchema(schemaName)) {
+            throw new RuntimeException("Invalid schema name");
+        }
+
+        Query query = createQuery(schemaName, tableName,select,filter, joinTable);
+
+        String sql = query.getSQL();
+        List<Object> bindValues = query.getBindValues();
+
+        log.info("SQL - {}", sql);
+        log.info("Bind variables - {}", bindValues);
+
+
+        return jdbcTemplate.queryForList(sql, bindValues.toArray());
+    }
 
     @Transactional(readOnly = true)
-    public Object findAll(String tableName, String select, String filter) {
+    public Object findAll(String schemaName, String tableName, String select, String filter) {
 
-        Query query = createQuery(tableName,select,filter, null);
+        Query query = createQuery(schemaName, tableName,select,filter, null);
 
         String sql = query.getSQL();
         List<Object> bindValues = query.getBindValues();
@@ -43,45 +63,41 @@ public class QueryService {
 
     }
 
-    private Query createQuery(String tableName, String select, String filter, String joinTable) {
+    private Query createQuery(String schemaName, String tableName, String select, String filter, String joinTable) {
         List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
+
+        Table<?> table =
+                schemaService.getTableByNameAndSchema(schemaName, tableName)
+                        .orElseThrow(() -> new RuntimeException("Table not found"));
 
         if(columns.isEmpty()) {
 
-            SelectJoinStep<Record> selectJoinStep =
-             dslContext.select(asterisk())
-                    .from(tableName);
+            SelectJoinStep<Record> selectJoinStep = dslContext.select(asterisk()).from(table);
 
             if(StringUtils.isNotBlank(joinTable)) {
+                Table<?> jTable =
+                        schemaService.getTableByNameAndSchema(schemaName, joinTable)
+                                .orElseThrow(() -> new RuntimeException("Table not found"));
                 createJoin(tableName, joinTable, selectJoinStep);
-                createJoinCondition(tableName, joinTable);
-
             }
 
-            Condition whereCondition =
-                    whereBuilder.create(tableName, filter);
+            Condition whereCondition = whereBuilder.create(tableName, filter);
 
-
-            return selectJoinStep
-                    .where(whereCondition);
+            return selectJoinStep.where(whereCondition);
 
         }
         else{
-            SelectColumns selectColumns = selectBuilder.build(tableName, tableName, columns, true);
-            List<Field<Object>> fields = selectColumns.selectColumnList()
-                    .stream().map(sc -> field(  sc.getCol()))
-                    .toList();
+            List<Field<?>> fields =  selectBuilder.build(schemaName, table,  tableName, columns);
 
-            SelectJoinStep<Record> selectJoinStep =
-                    dslContext.select(fields).from(tableName);
+            SelectJoinStep<Record> selectJoinStep = dslContext.select(fields).from(table);
 
             if(StringUtils.isNotBlank(joinTable)) {
                 createJoin(tableName, joinTable, selectJoinStep);
 
             }
             Condition whereCondition = whereBuilder.create(tableName, filter);
-            return selectJoinStep
-                    .where(whereCondition);
+
+            return selectJoinStep.where(whereCondition);
 
         }
     }
@@ -95,17 +111,5 @@ public class QueryService {
     }
 
 
-    public Object findAllByJoinTable(String tableName, String select, String filter, String joinTable) {
 
-        Query query = createQuery(tableName,select,filter, joinTable);
-
-        String sql = query.getSQL();
-        List<Object> bindValues = query.getBindValues();
-
-        log.info("SQL - {}", sql);
-        log.info("Bind variables - {}", bindValues);
-
-
-        return jdbcTemplate.queryForList(sql, bindValues.toArray());
-    }
 }

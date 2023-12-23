@@ -1,8 +1,10 @@
 package com.homihq.db2rest.schema;
 
+import com.homihq.db2rest.config.Db2RestConfigProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jooq.*;
 import org.jooq.Record;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ public final class SchemaService {
 
 
     private final DSLContext dslContext;
+    private final Db2RestConfigProperties db2RestConfigProperties;
 
     private List<Table<?>> tables;
 
@@ -25,12 +28,28 @@ public final class SchemaService {
         ).findFirst();
     }
 
+    public Optional<Table<?>> getTableByNameAndSchema(String schemaName , String tableName) {
+
+        return tables.stream()
+                .filter( t ->
+                        StringUtils.equalsIgnoreCase(tableName, t.getName())
+                 && StringUtils.equalsIgnoreCase(schemaName, t.getSchema().getName())
+        ).findFirst();
+    }
+
 
     @PostConstruct
     public void load() {
         //TODO add a property to cache or not as this can be lot of data in memory , on demand caching
         //may be better
-         tables = dslContext.meta().getTables();
+        String [] schemas = this.db2RestConfigProperties.getSchemas();
+
+         tables = dslContext.meta().getTables().stream()
+                 .filter(t -> StringUtils.equalsAnyIgnoreCase(
+                         t.getSchema().getName(), schemas))
+                 .toList();
+
+         log.info("Tables ->> {}", tables);
     }
 
 

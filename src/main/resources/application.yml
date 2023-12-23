@@ -19,7 +19,7 @@ spring:
 
 db2rest:
   allowUnsafeDelete : false
-
+  schemas: ${DB_SCHEMAS}
 
 
 logging:
