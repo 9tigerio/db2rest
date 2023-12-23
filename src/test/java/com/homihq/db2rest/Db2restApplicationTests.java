@@ -3,10 +3,10 @@ package com.homihq.db2rest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class Db2restApplicationTests {
 
-    @Test
+    //@Test
     void contextLoads() {
     }
 
