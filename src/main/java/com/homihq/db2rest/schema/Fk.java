@@ -9,7 +9,7 @@ public class Fk {
     String name;
 
 
-    List<FkField> fieldList;
+    List<FkFields> fieldList;
 
 
 }

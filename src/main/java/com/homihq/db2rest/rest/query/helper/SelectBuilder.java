@@ -1,6 +1,5 @@
 package com.homihq.db2rest.rest.query.helper;
 
-import com.homihq.db2rest.rest.query.helper.model.SelectColumn;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.Field;
@@ -19,7 +18,7 @@ import static org.jooq.impl.DSL.field;
 @Slf4j
 public class SelectBuilder {
 
-    public List<Field<?>> build(String schemaName, Table<?> table, String tableName , List<String> columnNames) {
+    public List<Field<?>> build( Table<?> table, List<String> columnNames) {
 
         List<Field<?>> fields = new ArrayList<>();
 
@@ -37,16 +36,11 @@ public class SelectBuilder {
                 alias = "";
             }
 
-            log.info("Col Name - {}. Alias - {}", colName, alias);
             Field<?> f =
             Arrays.stream(table.fields()).filter(field -> StringUtils.equalsIgnoreCase(colName, field.getName()))
                     .findFirst().orElseThrow(() -> new RuntimeException("Column not found"));
 
-
             if(StringUtils.isNotBlank(alias)) {
-                log.info("Adding alias - {}", alias);
-
-                log.info("field - {}", field(f.getQualifiedName(), f.getType()).as(alias));
 
                 fields.add(field(f.getQualifiedName(), f.getType()).as(alias));
             }

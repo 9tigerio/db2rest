@@ -7,12 +7,7 @@ import org.jooq.Record;
 
 
 @Data
-public class FkField {
-    String columnName;
-    String tableName;
-
-    String referenceTableName;
-    String referenceColumnName;
+public class FkFields {
 
     Field<Record> fkField;
     Field<Record> fkRefField;

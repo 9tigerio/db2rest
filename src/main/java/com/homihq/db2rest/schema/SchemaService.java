@@ -52,7 +52,50 @@ public final class SchemaService {
          log.info("Tables ->> {}", tables);
     }
 
+    public Condition createJoin2(Table<?> table, Table<?> jTable) {
 
+        List<Fk> fkList = new ArrayList<>();
+
+        for(ForeignKey<?, ?> fk : table.getReferencesTo(jTable)) {
+            List<FkFields> fieldList = new ArrayList<>();
+            for (Field<?> fkField : fk.getFields()) {
+                FkFields field = new FkFields();
+                field.setFkField((Field<Record>) fkField);
+                fieldList.add(field);
+            }
+
+            int counter = 0;
+            for (Field<?> fkField : fk.getKey().getFields()) {
+                FkFields field = fieldList.get(counter);
+                field.setFkRefField((Field<Record>) fkField);
+                counter++;
+            }
+
+            Fk foreignKey = new Fk();
+            foreignKey.setName(fk.getName());
+            foreignKey.setFieldList(fieldList);
+            fkList.add(foreignKey);
+        }
+
+
+        Condition condition = null;
+
+        for(Fk fk : fkList) {
+            for(FkFields fkFields : fk.fieldList) {
+                if(Objects.isNull(condition)) {
+                    condition = fkFields.getCondition();
+                }
+                else{
+                    condition.and(fkFields.getCondition());
+                }
+            }
+        }
+
+        return condition;
+    }
+
+
+    /*
     public Condition createJoin(String tableName,  String joinTable) {
 
         Table<?> table =
@@ -65,9 +108,9 @@ public final class SchemaService {
         List<Fk> fkList = new ArrayList<>();
 
         for(ForeignKey<?, ?> fk : table.getReferencesTo(jTable)) {
-            List<FkField> fieldList = new ArrayList<>();
+            List<FkFields> fieldList = new ArrayList<>();
             for (Field<?> fkField : fk.getFields()) {
-                FkField field = new FkField();
+                FkFields field = new FkFields();
                 field.setTableName(tableName);
                 field.setColumnName(fkField.getName());
                 field.setFkField((Field<Record>) fkField);
@@ -76,7 +119,7 @@ public final class SchemaService {
 
             int counter = 0;
             for (Field<?> fkField : fk.getKey().getFields()) {
-                FkField field = fieldList.get(counter);
+                FkFields field = fieldList.get(counter);
                 field.setReferenceTableName(joinTable);
                 field.setReferenceColumnName(fkField.getName());
                 field.setFkRefField((Field<Record>) fkField);
@@ -93,18 +136,18 @@ public final class SchemaService {
         Condition condition = null;
 
         for(Fk fk : fkList) {
-            for(FkField fkField : fk.fieldList) {
+            for(FkFields fkFields : fk.fieldList) {
                 if(Objects.isNull(condition)) {
-                    condition = fkField.getCondition();
+                    condition = fkFields.getCondition();
                 }
                 else{
-                    condition.and(fkField.getCondition());
+                    condition.and(fkFields.getCondition());
                 }
             }
         }
 
         return condition;
     }
-
+    */
 
 }

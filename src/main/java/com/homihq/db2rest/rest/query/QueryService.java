@@ -78,7 +78,7 @@ public class QueryService {
                 Table<?> jTable =
                         schemaService.getTableByNameAndSchema(schemaName, joinTable)
                                 .orElseThrow(() -> new RuntimeException("Table not found"));
-                createJoin(tableName, joinTable, selectJoinStep);
+                createJoin(table, jTable, selectJoinStep);
             }
 
             Condition whereCondition = whereBuilder.create(tableName, filter);
@@ -87,12 +87,16 @@ public class QueryService {
 
         }
         else{
-            List<Field<?>> fields =  selectBuilder.build(schemaName, table,  tableName, columns);
+            List<Field<?>> fields =  selectBuilder.build(table, columns);
 
             SelectJoinStep<Record> selectJoinStep = dslContext.select(fields).from(table);
 
+            Table<?> jTable =
+                    schemaService.getTableByNameAndSchema(schemaName, joinTable)
+                            .orElseThrow(() -> new RuntimeException("Table not found"));
+
             if(StringUtils.isNotBlank(joinTable)) {
-                createJoin(tableName, joinTable, selectJoinStep);
+                createJoin(table, jTable, selectJoinStep);
 
             }
             Condition whereCondition = whereBuilder.create(tableName, filter);
@@ -102,12 +106,12 @@ public class QueryService {
         }
     }
 
-    private void createJoin(String tableName, String joinTable, SelectJoinStep<Record> selectJoinStep) {
-        selectJoinStep.innerJoin(joinTable).on(createJoinCondition(tableName, joinTable));
+    private void createJoin(Table<?> table, Table<?> jTable, SelectJoinStep<Record> selectJoinStep) {
+        selectJoinStep.innerJoin(jTable).on(createJoinCondition(table, jTable));
     }
 
-    private Condition createJoinCondition(String tableName, String joinTable) {
-        return schemaService.createJoin(tableName, joinTable);
+    private Condition createJoinCondition(Table<?> table, Table<?> jTable) {
+        return schemaService.createJoin2(table, jTable);
     }
 
 
