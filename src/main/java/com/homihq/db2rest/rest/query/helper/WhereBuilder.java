@@ -30,7 +30,20 @@ public class WhereBuilder {
 
             Node rootNode = new RSQLParser(CustomRSQLOperators.customOperators()).parse(rSql);
 
-            return rootNode.accept(new DefaultRSQLVisitor(schemaService , tableName, (Table<Record>) table));
+            return rootNode.accept(new DefaultRSQLVisitor(schemaService , tableName, table));
+
+        }
+
+        return noCondition();
+    }
+
+    public Condition create(Table<?> table, String tableName, String filter) {
+
+        if(StringUtils.isNotBlank(filter)) {
+
+            Node rootNode = new RSQLParser(CustomRSQLOperators.customOperators()).parse(filter);
+
+            return rootNode.accept(new DefaultRSQLVisitor(schemaService , tableName, table));
 
         }
 

@@ -25,7 +25,7 @@ public class DefaultRSQLVisitor implements RSQLVisitor<Condition, Void> {
     private final SchemaService schemaService;
     @Deprecated
     private final String tableName;
-    private final Table<Record> table;
+    private final Table<?> table;
 
     private static final Condition NO_CONDITION = noCondition();
 

@@ -1,10 +1,8 @@
-package com.homihq.db2rest.rest.resource;
+package com.homihq.db2rest.rest.delete;
 
 
-import com.homihq.db2rest.rest.service.DeleteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 

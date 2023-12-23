@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.service;
+package com.homihq.db2rest.rest.delete;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.DeleteOpNotAllowedException;
