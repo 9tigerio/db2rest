@@ -1,6 +1,7 @@
 package com.homihq.db2rest.schema;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.exception.InvalidTableException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +29,13 @@ public final class SchemaService {
         ).findFirst();
     }
 
-    public Optional<Table<?>> getTableByNameAndSchema(String schemaName , String tableName) {
+    public Table<?> getTableByNameAndSchema(String schemaName , String tableName) {
 
         return tables.stream()
                 .filter( t ->
                         StringUtils.equalsIgnoreCase(tableName, t.getName())
                  && StringUtils.equalsIgnoreCase(schemaName, t.getSchema().getName())
-        ).findFirst();
+        ).findFirst().orElseThrow(() -> new InvalidTableException(schemaName + "." + tableName));
     }
 
 

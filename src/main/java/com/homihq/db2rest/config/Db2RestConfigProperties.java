@@ -29,15 +29,12 @@ public class Db2RestConfigProperties {
     }
 
     public void verifySchema(String schemaName) {
+
         if(!multiTenancy.isEnabled() && !schemas.contains(schemaName)) {
             throw new IndexOutOfBoundsException(schemaName);
         }
     }
 
-    public boolean isValidSchema(String schemaName) {
-
-        return schemas.contains(schemaName);
-    }
 
 
 }

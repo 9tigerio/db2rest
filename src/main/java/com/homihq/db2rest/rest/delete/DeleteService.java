@@ -8,11 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
-import org.jooq.Record;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import static org.jooq.impl.DSL.*;
 import org.jooq.*;
 
 import java.util.List;
@@ -38,10 +36,7 @@ public class DeleteService {
 
             db2RestConfigProperties.verifySchema(schemaName);
 
-            Table<?> table =
-                    schemaService.getTableByNameAndSchema(schemaName, tableName)
-                            .orElseThrow(() -> new RuntimeException("Table not found"));
-
+            Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
 
             DeleteUsingStep<?> deleteUsingStep =
                     dslContext.deleteFrom(table);

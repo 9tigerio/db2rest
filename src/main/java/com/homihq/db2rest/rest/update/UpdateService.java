@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -30,13 +29,10 @@ public class UpdateService {
     public void update(String schemaName, String tableName, Map<String,Object> data, String filter) {
         db2RestConfigProperties.verifySchema(schemaName);
 
-        Table<?> table =
-                schemaService.getTableByNameAndSchema(schemaName, tableName)
-                        .orElseThrow(() -> new RuntimeException("Table not found"));
-
+        Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
 
         UpdateConditionStep<?> updateConditionStep = dslContext.update(table)
-                .set(data) //TODO - fix data types
+                .set(data)
                 .where(whereBuilder.create(table , tableName,  filter));
 
         String sql = updateConditionStep.getSQL();

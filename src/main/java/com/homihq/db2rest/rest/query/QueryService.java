@@ -32,7 +32,6 @@ public class QueryService {
 
     public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter, String joinTable) {
 
-
         Query query = createQuery(schemaName, tableName,select,filter, joinTable);
 
         String sql = query.getSQL();
@@ -40,7 +39,6 @@ public class QueryService {
 
         log.info("SQL - {}", sql);
         log.info("Bind variables - {}", bindValues);
-
 
         return jdbcTemplate.queryForList(sql, bindValues.toArray());
     }
@@ -65,9 +63,8 @@ public class QueryService {
 
         List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
 
-        Table<?> table =
-                schemaService.getTableByNameAndSchema(schemaName, tableName)
-                        .orElseThrow(() -> new RuntimeException("Table not found"));
+        Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
+
         SelectJoinStep<Record> selectJoinStep;
         if(columns.isEmpty()) {
             selectJoinStep = dslContext.select(asterisk()).from(table);
@@ -80,9 +77,7 @@ public class QueryService {
         }
 
         if(StringUtils.isNotBlank(joinTable)) {
-            Table<?> jTable =
-                    schemaService.getTableByNameAndSchema(schemaName, joinTable)
-                            .orElseThrow(() -> new RuntimeException("Table not found"));
+            Table<?> jTable = schemaService.getTableByNameAndSchema(schemaName, joinTable);
             createJoin(table, jTable, selectJoinStep);
         }
 

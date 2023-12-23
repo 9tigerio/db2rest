@@ -22,8 +22,8 @@ db2rest:
   allowSafeDelete : false
   schemas: ${DB_SCHEMAS}
   multiTenancy:
-    enabled: true
-    mode: SCHEMA
+    enabled: ${MULTI_TENANCY_ENABLED}
+    mode: ${MULTI_TENANCY_MODE}
 
 
 logging:

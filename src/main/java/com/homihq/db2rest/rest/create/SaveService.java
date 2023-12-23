@@ -61,9 +61,7 @@ public class SaveService {
     private InsertValuesStepN<?> createInsertSQL(String schemaName, String tableName, Map<String, Object> data) {
         db2RestConfigProperties.verifySchema(schemaName);
 
-        Table<?> table =
-                schemaService.getTableByNameAndSchema(schemaName, tableName)
-                        .orElseThrow(() -> new RuntimeException("Table not found"));
+        Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
 
         return dslContext.insertInto(table).columns(getColumns(data))
                 .values(getValues(data));
