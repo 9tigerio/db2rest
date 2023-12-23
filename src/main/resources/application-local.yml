@@ -7,5 +7,5 @@ spring:
 
 
 db2rest:
-  allowUnsafeDelete : ${ALLOW_UNSAFE_DELETE:false}
+  allowSafeDelete : ${ALLOW_UNSAFE_DELETE:true}
   schemas: ${DB_SCHEMAS}

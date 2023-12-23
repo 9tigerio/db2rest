@@ -15,7 +15,7 @@ import java.util.List;
 @Validated
 public class Db2RestConfigProperties {
 
-    private boolean allowUnsafeDelete;
+    private boolean allowSafeDelete;
 
     private List<String> schemas; //TODO validate
 

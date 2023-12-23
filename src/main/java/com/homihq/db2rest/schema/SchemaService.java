@@ -95,59 +95,5 @@ public final class SchemaService {
     }
 
 
-    /*
-    public Condition createJoin(String tableName,  String joinTable) {
-
-        Table<?> table =
-        getTableByName(tableName)
-                .orElseThrow(() -> new RuntimeException("Table - " + tableName + " not found"));
-
-        Table<?> jTable = getTableByName(joinTable)
-                .orElseThrow(() -> new RuntimeException("Table - " + tableName + " not found"));
-
-        List<Fk> fkList = new ArrayList<>();
-
-        for(ForeignKey<?, ?> fk : table.getReferencesTo(jTable)) {
-            List<FkFields> fieldList = new ArrayList<>();
-            for (Field<?> fkField : fk.getFields()) {
-                FkFields field = new FkFields();
-                field.setTableName(tableName);
-                field.setColumnName(fkField.getName());
-                field.setFkField((Field<Record>) fkField);
-                fieldList.add(field);
-            }
-
-            int counter = 0;
-            for (Field<?> fkField : fk.getKey().getFields()) {
-                FkFields field = fieldList.get(counter);
-                field.setReferenceTableName(joinTable);
-                field.setReferenceColumnName(fkField.getName());
-                field.setFkRefField((Field<Record>) fkField);
-                counter++;
-            }
-
-            Fk foreignKey = new Fk();
-            foreignKey.setName(fk.getName());
-            foreignKey.setFieldList(fieldList);
-            fkList.add(foreignKey);
-        }
-
-
-        Condition condition = null;
-
-        for(Fk fk : fkList) {
-            for(FkFields fkFields : fk.fieldList) {
-                if(Objects.isNull(condition)) {
-                    condition = fkFields.getCondition();
-                }
-                else{
-                    condition.and(fkFields.getCondition());
-                }
-            }
-        }
-
-        return condition;
-    }
-    */
 
 }

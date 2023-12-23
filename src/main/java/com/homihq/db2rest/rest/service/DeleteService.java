@@ -29,7 +29,7 @@ public class DeleteService {
     @Transactional
     public void delete(String tableName, String filter) {
 
-        if(StringUtils.isBlank(filter) && !db2RestConfigProperties.isAllowUnsafeDelete()) {
+        if(StringUtils.isBlank(filter) && db2RestConfigProperties.isAllowSafeDelete()) {
             throw new DeleteOpNotAllowedException(false);
         }
         else{

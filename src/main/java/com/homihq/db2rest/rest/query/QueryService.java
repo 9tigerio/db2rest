@@ -3,7 +3,6 @@ package com.homihq.db2rest.rest.query;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.rest.query.helper.WhereBuilder;
 import com.homihq.db2rest.rest.query.helper.SelectBuilder;
-import com.homihq.db2rest.rest.query.helper.model.SelectColumns;
 import com.homihq.db2rest.schema.SchemaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +32,6 @@ public class QueryService {
 
     public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter, String joinTable) {
 
-        if(!db2RestConfigProperties.isValidSchema(schemaName)) {
-            throw new RuntimeException("Invalid schema name");
-        }
 
         Query query = createQuery(schemaName, tableName,select,filter, joinTable);
 
@@ -59,51 +55,42 @@ public class QueryService {
         log.info("SQL - {}", sql);
         log.info("Bind variables - {}", bindValues);
 
-        return jdbcTemplate.queryForList(sql, bindValues);
+        return jdbcTemplate.queryForList(sql, bindValues.toArray());
 
     }
 
     private Query createQuery(String schemaName, String tableName, String select, String filter, String joinTable) {
+
+        if(!db2RestConfigProperties.isValidSchema(schemaName)) {
+            throw new RuntimeException("Invalid schema name");
+        }
+
         List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
 
         Table<?> table =
                 schemaService.getTableByNameAndSchema(schemaName, tableName)
                         .orElseThrow(() -> new RuntimeException("Table not found"));
-
+        SelectJoinStep<Record> selectJoinStep;
         if(columns.isEmpty()) {
-
-            SelectJoinStep<Record> selectJoinStep = dslContext.select(asterisk()).from(table);
-
-            if(StringUtils.isNotBlank(joinTable)) {
-                Table<?> jTable =
-                        schemaService.getTableByNameAndSchema(schemaName, joinTable)
-                                .orElseThrow(() -> new RuntimeException("Table not found"));
-                createJoin(table, jTable, selectJoinStep);
-            }
-
-            Condition whereCondition = whereBuilder.create(tableName, filter);
-
-            return selectJoinStep.where(whereCondition);
-
+            selectJoinStep = dslContext.select(asterisk()).from(table);
         }
         else{
             List<Field<?>> fields =  selectBuilder.build(table, columns);
 
-            SelectJoinStep<Record> selectJoinStep = dslContext.select(fields).from(table);
+            selectJoinStep = dslContext.select(fields).from(table);
 
+        }
+
+        if(StringUtils.isNotBlank(joinTable)) {
             Table<?> jTable =
                     schemaService.getTableByNameAndSchema(schemaName, joinTable)
                             .orElseThrow(() -> new RuntimeException("Table not found"));
-
-            if(StringUtils.isNotBlank(joinTable)) {
-                createJoin(table, jTable, selectJoinStep);
-
-            }
-            Condition whereCondition = whereBuilder.create(tableName, filter);
-
-            return selectJoinStep.where(whereCondition);
-
+            createJoin(table, jTable, selectJoinStep);
         }
+
+        Condition whereCondition = whereBuilder.create(tableName, filter);
+
+        return selectJoinStep.where(whereCondition);
     }
 
     private void createJoin(Table<?> table, Table<?> jTable, SelectJoinStep<Record> selectJoinStep) {

@@ -43,7 +43,7 @@ Instant REST API over your existing or new database in minutes.
 
 [ ] Multi-tenancy
 
-[ ] Schema
+[*] Schema (In progress)
 
 #### Supported Operators
 

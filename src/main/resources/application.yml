@@ -15,10 +15,11 @@ spring:
     hikari:
       maximum-pool-size: 10
       pool-name: db2rest-platform-hikari-pool
-
+      data-source-properties:
+        reWriteBatchedInserts: true
 
 db2rest:
-  allowUnsafeDelete : false
+  allowSafeDelete : false
   schemas: ${DB_SCHEMAS}
 
 

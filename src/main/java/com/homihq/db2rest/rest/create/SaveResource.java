@@ -1,9 +1,8 @@
-package com.homihq.db2rest.rest.resource;
+package com.homihq.db2rest.rest.create;
 
-import com.homihq.db2rest.rest.service.SaveService;
+import com.homihq.db2rest.rest.create.SaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,16 +16,18 @@ public class SaveResource {
     private final SaveService saveService;
     @PostMapping ("/{tableName}")
     public void save(@PathVariable String tableName,
+                     @RequestHeader(name = "Content-Profile") String schemaName,
                      @RequestBody Map<String,Object> data) {
 
-        saveService.save(tableName, data);
+        saveService.save(schemaName, tableName, data);
     }
 
     @PostMapping ( "/{tableName}/bulk")
     public void saveBulk(@PathVariable String tableName,
+                      @RequestHeader(name = "Content-Profile") String schemaName,
                      @RequestParam(name = "batch", defaultValue = "false") boolean batch,
                      @RequestBody List<Map<String,Object>> data) {
         log.info("data -> {}", data);
-        saveService.saveBulk(tableName,batch, data);
+        saveService.saveBulk(schemaName, tableName,batch, data);
     }
 }
