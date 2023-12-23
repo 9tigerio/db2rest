@@ -8,15 +8,15 @@ Instant REST API over your existing or new database in minutes.
 
 ### Postgresql (In progress)
 
-[ ] Save Record (Create) - In progress
+[ ] Save Record (Create) -  [Completed]
 
     - [X] Single record
     - [X] Bulk records - JSON 
-        - [X] Support batch insert 
+
 
 [*] Query (Read)  - In progress
 
-    - [X] Row Filtering with rSQL.
+    - [X] Row Filtering with rSQL DSL.
     - [X] Column Selection
     - [X] Rename Columns / Alias
     - [X] Join
@@ -27,24 +27,30 @@ Instant REST API over your existing or new database in minutes.
     - [ ] Join column filter
 
 
-[ ] Edit (Update) 
+[X] Edit - [Completed]
 
     - [X] Patch
     - [X] Patch with row filtering
      
     
-[ ] Purge (Delete) 
+[X] Purge (Delete) - [Completed]
 
     - [X] Delete with row filter.
     - [X] Safe delete.
 
-[*] Transactions (In progress)
+[X] Transactions - [Completed]
 
-[ ] Multi-tenancy
+[*] Multi-tenancy (In progress)
+    - [ ] tenant_id column
+    - [X] Schema per tenant
+    - [ ] Database per tenant
 
-[*] Schema (In progress)
+[X] Schema Support - [Completed]
 
 [ ] JSON Column / Data support
+
+
+[ ] TSID Support
 
 #### Supported Operators
 
