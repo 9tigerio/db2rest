@@ -8,7 +8,7 @@
         <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
+    <groupId>com.github</groupId>
     <artifactId>db2rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>db2rest</name>
