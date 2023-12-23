@@ -36,9 +36,7 @@ public class DeleteService {
         }
         else{
 
-            if(!db2RestConfigProperties.isValidSchema(schemaName)) {
-                throw new RuntimeException("Invalid schema name");
-            }
+            db2RestConfigProperties.verifySchema(schemaName);
 
             Table<?> table =
                     schemaService.getTableByNameAndSchema(schemaName, tableName)

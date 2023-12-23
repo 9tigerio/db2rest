@@ -35,19 +35,6 @@ public class SaveService {
         jdbcTemplate.update(sql , bindValues.toArray());
     }
 
-    private InsertValuesStepN<?> createInsertSQL(String schemaName, String tableName, Map<String, Object> data) {
-        if(!db2RestConfigProperties.isValidSchema(schemaName)) {
-            throw new RuntimeException("Invalid schema name");
-        }
-
-        Table<?> table =
-                schemaService.getTableByNameAndSchema(schemaName, tableName)
-                        .orElseThrow(() -> new RuntimeException("Table not found"));
-
-        return dslContext.insertInto(table).columns(getColumns(data))
-                .values(getValues(data));
-    }
-
     @Transactional
     public void saveBulk(String schemaName, String tableName, List<Map<String, Object>> dataList) {
 
@@ -69,6 +56,17 @@ public class SaveService {
 
         jdbcTemplate.batchUpdate(sql, batchData);
 
+    }
+
+    private InsertValuesStepN<?> createInsertSQL(String schemaName, String tableName, Map<String, Object> data) {
+        db2RestConfigProperties.verifySchema(schemaName);
+
+        Table<?> table =
+                schemaService.getTableByNameAndSchema(schemaName, tableName)
+                        .orElseThrow(() -> new RuntimeException("Table not found"));
+
+        return dslContext.insertInto(table).columns(getColumns(data))
+                .values(getValues(data));
     }
 
 

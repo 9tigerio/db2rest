@@ -19,6 +19,8 @@ public class Db2RestConfigProperties {
 
     private List<String> schemas; //TODO validate
 
+    private MultiTenancy multiTenancy;
+
     public String [] getSchemas() {
         String[] schemaList = new String[schemas.size()];
         schemas.toArray(schemaList);
@@ -26,7 +28,16 @@ public class Db2RestConfigProperties {
         return schemaList;
     }
 
+    public void verifySchema(String schemaName) {
+        if(!multiTenancy.isEnabled() && !schemas.contains(schemaName)) {
+            throw new IndexOutOfBoundsException(schemaName);
+        }
+    }
+
     public boolean isValidSchema(String schemaName) {
+
         return schemas.contains(schemaName);
     }
+
+
 }

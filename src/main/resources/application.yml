@@ -21,6 +21,9 @@ spring:
 db2rest:
   allowSafeDelete : false
   schemas: ${DB_SCHEMAS}
+  multiTenancy:
+    enabled: true
+    mode: SCHEMA
 
 
 logging:
