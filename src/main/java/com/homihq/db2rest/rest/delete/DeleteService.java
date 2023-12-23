@@ -3,6 +3,7 @@ package com.homihq.db2rest.rest.delete;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.DeleteOpNotAllowedException;
 import com.homihq.db2rest.rest.query.helper.WhereBuilder;
+import com.homihq.db2rest.schema.SchemaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -25,28 +26,40 @@ public class DeleteService {
     private final WhereBuilder whereBuilder;
     private final DSLContext dslContext;
     private final Db2RestConfigProperties db2RestConfigProperties;
+    private final SchemaService schemaService;
 
     @Transactional
-    public void delete(String tableName, String filter) {
+    public void delete(String schemaName, String tableName, String filter) {
 
         if(StringUtils.isBlank(filter) && db2RestConfigProperties.isAllowSafeDelete()) {
             throw new DeleteOpNotAllowedException(false);
         }
         else{
-            DeleteUsingStep<Record> deleteUsingStep =
-                    dslContext.deleteFrom(table(tableName));
+
+            if(!db2RestConfigProperties.isValidSchema(schemaName)) {
+                throw new RuntimeException("Invalid schema name");
+            }
+
+            Table<?> table =
+                    schemaService.getTableByNameAndSchema(schemaName, tableName)
+                            .orElseThrow(() -> new RuntimeException("Table not found"));
+
+
+            DeleteUsingStep<?> deleteUsingStep =
+                    dslContext.deleteFrom(table);
 
             Condition whereCondition =
-                    whereBuilder.create(tableName, filter);
+                    whereBuilder.create(table, tableName, filter);
 
-            DeleteConditionStep<Record> deleteConditionStep = deleteUsingStep.where(whereCondition);
+            DeleteConditionStep<?> deleteConditionStep = deleteUsingStep.where(whereCondition);
 
             String sql = deleteConditionStep.getSQL();
             List<Object> bindValues = deleteConditionStep.getBindValues();
-            log.info("SQL - {}", sql); // TODO make it conditional
+
+            log.info("SQL - {}", sql);
             log.info("Bind variables - {}", bindValues);
 
-            jdbcTemplate.queryForList(sql, bindValues);
+            jdbcTemplate.update(sql , bindValues.toArray());
         }
 
     }

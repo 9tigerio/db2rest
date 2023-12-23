@@ -14,9 +14,10 @@ public class DeleteResource {
     private final DeleteService deleteService;
 
     @DeleteMapping("/{tableName}")
-    public void delete(@PathVariable String tableName
-            ,@RequestParam(name = "rSql", required = false, defaultValue = "") String rSql) {
+    public void delete(@PathVariable String tableName,
+                       @RequestHeader(name = "Content-Profile") String schemaName,
+            @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
-        deleteService.delete(tableName, rSql);
+        deleteService.delete(schemaName, tableName, filter);
     }
 }
