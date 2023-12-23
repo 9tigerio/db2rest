@@ -44,14 +44,12 @@ public class SaveService {
                 schemaService.getTableByNameAndSchema(schemaName, tableName)
                         .orElseThrow(() -> new RuntimeException("Table not found"));
 
-        InsertValuesStepN<?> insertValuesStepN =
-        dslContext.insertInto(table).columns(getColumns(data))
+        return dslContext.insertInto(table).columns(getColumns(data))
                 .values(getValues(data));
-        return insertValuesStepN;
     }
 
     @Transactional
-    public void saveBulk(String schemaName, String tableName, boolean batch, List<Map<String, Object>> dataList) {
+    public void saveBulk(String schemaName, String tableName, List<Map<String, Object>> dataList) {
 
         if(Objects.isNull(dataList) || dataList.isEmpty()) throw new RuntimeException("No data provided");
 

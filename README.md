@@ -12,12 +12,11 @@ Instant REST API over your existing or new database in minutes.
 
     - [X] Single record
     - [X] Bulk records - JSON 
-        - [] Support batch insert 
+        - [X] Support batch insert 
 
 [*] Query (Read)  - In progress
 
-    - [X] Row Filtering
-        Supported with rSQL.
+    - [X] Row Filtering with rSQL.
     - [X] Column Selection
     - [X] Rename Columns / Alias
     - [X] Join
@@ -44,6 +43,8 @@ Instant REST API over your existing or new database in minutes.
 [ ] Multi-tenancy
 
 [*] Schema (In progress)
+
+[ ] JSON Column / Data support
 
 #### Supported Operators
 

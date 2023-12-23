@@ -14,7 +14,7 @@ public class LikeOperatorHandler implements OperatorHandler {
     public Condition handle(String columnName, String value, Class type) {
         //return columnName + OPERATOR + "'%" + value + "%'";
         return
-                field(columnName)
+                field(columnName, type)
                         .like(value);
     }
 

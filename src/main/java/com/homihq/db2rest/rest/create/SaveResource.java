@@ -25,9 +25,8 @@ public class SaveResource {
     @PostMapping ( "/{tableName}/bulk")
     public void saveBulk(@PathVariable String tableName,
                       @RequestHeader(name = "Content-Profile") String schemaName,
-                     @RequestParam(name = "batch", defaultValue = "false") boolean batch,
                      @RequestBody List<Map<String,Object>> data) {
         log.info("data -> {}", data);
-        saveService.saveBulk(schemaName, tableName,batch, data);
+        saveService.saveBulk(schemaName, tableName,data);
     }
 }
