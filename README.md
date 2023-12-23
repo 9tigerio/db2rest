@@ -41,6 +41,7 @@ Instant REST API over your existing or new database in minutes.
 **[X] Transactions - [Completed]**
 
 **[*] Multi-tenancy (In progress)**
+
     - [ ] tenant_id column
     - [X] Schema per tenant
     - [ ] Database per tenant
