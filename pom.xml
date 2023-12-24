@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest</artifactId>
-    <version>0.0.3-RC4</version>
+    <version>0.0.3-RC5</version>
     <name>db2rest</name>
     <description>db2rest</description>
     <properties>

@@ -33,6 +33,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - name: Get Version
+        uses: ./
+        id: getVersion
+
+      - name: Print the version
+        run: echo "The version we just got is ${{ steps.getVersion.outputs.version }}"
+
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
