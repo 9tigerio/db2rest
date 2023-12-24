@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <name>db2rest</name>
     <description>db2rest</description>
     <properties>
@@ -119,7 +119,7 @@
     </dependencies>
 
     <build>
-        <finalName>db2restApp</finalName>
+        <finalName>db2rest</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
