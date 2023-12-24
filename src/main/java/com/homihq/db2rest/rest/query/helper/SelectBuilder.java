@@ -62,7 +62,6 @@ public class SelectBuilder {
                 fields.add(field(f.getQualifiedName(), f.getType()));
             }
 
-
         }
     }
 
