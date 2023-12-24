@@ -11,9 +11,9 @@ public class QueryResource {
 
     private final QueryService queryService;
 
-
+    /*
     @GetMapping("/{tableName}")
-    public Object find(@PathVariable String tableName,
+    public Object findAll(@PathVariable String tableName,
                        @RequestHeader(name = "Accept-Profile") String schemaName,
         @RequestParam(name = "select", required = false, defaultValue = "") String select,
         @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
@@ -21,14 +21,18 @@ public class QueryResource {
         return queryService.findAll(schemaName, tableName, select, filter);
     }
 
-    @GetMapping("/{tableName}/{joinTable}")
+     */
+
+    @GetMapping("/{tableName}")
     public Object findByJoinTable(@PathVariable String tableName,
-                                  @PathVariable String joinTable,
                                   @RequestHeader(name = "Accept-Profile") String schemaName,
+                                  @RequestParam(name = "join", required = false, defaultValue = "") String join,
                        @RequestParam(name = "select", required = false, defaultValue = "") String select,
                        @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
-        return queryService.findAllByJoinTable(schemaName, tableName,select, filter, joinTable);
+        log.info("join - {}", join);
+
+        return queryService.findAllByJoinTable(schemaName, tableName,select, filter, join);
     }
 
 

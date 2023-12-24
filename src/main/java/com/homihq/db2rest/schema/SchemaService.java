@@ -53,7 +53,7 @@ public final class SchemaService {
          log.info("Tables ->> {}", tables);
     }
 
-    public Condition createJoin2(Table<?> table, Table<?> jTable) {
+    public Condition createJoin(Table<?> table, Table<?> jTable) {
 
         List<Fk> fkList = new ArrayList<>();
 
