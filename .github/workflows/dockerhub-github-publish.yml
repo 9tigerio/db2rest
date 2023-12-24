@@ -21,35 +21,16 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '21'
-        distribution: 'liberica'
+        distribution: 'temurin'
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Maven
-      run: ./mvnw -B package -Dmaven.test.skip=true --file pom.xml
+      run: mvn -B package -Dmaven.test.skip=true --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
-    - name: Get Maven Project Version
-      uses: ./
-      id: getVersion
 
-    - name: Print the version
-      run: echo "The version we just got is ${{ steps.getVersion.outputs.version }}"
-
-    - name: Login to DockerHub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Build and push Docker images
-      uses: docker/build-push-action@v3.2.0
-      with:
-        context: ./
-        file: ./Dockerfile
-        push: true
-        tags: kdhrubo/db2rest:v${{github.run_number}}, kdhrubo/db2rest:latest
