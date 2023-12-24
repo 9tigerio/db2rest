@@ -11,4 +11,4 @@ WORKDIR /opt/app
 COPY ${JAR_FILE} db2rest.jar
 
 # java -jar /opt/app/db2rest.jar
-ENTRYPOINT ["java","-jar","db2rest"]
+ENTRYPOINT ["java","-jar","db2rest.jar"]
