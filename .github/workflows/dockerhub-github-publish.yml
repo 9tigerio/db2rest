@@ -29,7 +29,7 @@ jobs:
       run: ./mvnw -B package -Dmaven.test.skip=true --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: ./mvnw deploy -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
