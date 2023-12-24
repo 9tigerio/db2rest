@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.query.helper;
 
+import com.homihq.db2rest.rest.query.model.JoinTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.Field;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.jooq.impl.DSL.field;
 
@@ -18,9 +20,21 @@ import static org.jooq.impl.DSL.field;
 @Slf4j
 public class SelectBuilder {
 
-    public List<Field<?>> build( Table<?> table, List<String> columnNames) {
+    public List<Field<?>> build(Table<?> table, List<String> columnNames, Table<?> jTable, JoinTable jt) {
 
         List<Field<?>> fields = new ArrayList<>();
+
+        addFieldsByTable(table, columnNames, fields);
+
+        if(Objects.nonNull(jt.columns()) &&
+                !jt.columns().isEmpty()) {
+            addFieldsByTable(jTable, jt.columns(), fields);
+        }
+
+        return fields;
+    }
+
+    private void addFieldsByTable(Table<?> table, List<String> columnNames, List<Field<?>> fields) {
 
         for(String columnName : columnNames) {
             String [] parts = columnName.split(":");
@@ -50,10 +64,7 @@ public class SelectBuilder {
 
 
         }
-
-        return fields;
     }
-
 
 
 }

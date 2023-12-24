@@ -11,17 +11,6 @@ public class QueryResource {
 
     private final QueryService queryService;
 
-    /*
-    @GetMapping("/{tableName}")
-    public Object findAll(@PathVariable String tableName,
-                       @RequestHeader(name = "Accept-Profile") String schemaName,
-        @RequestParam(name = "select", required = false, defaultValue = "") String select,
-        @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
-
-        return queryService.findAll(schemaName, tableName, select, filter);
-    }
-
-     */
 
     @GetMapping("/{tableName}")
     public Object findByJoinTable(@PathVariable String tableName,

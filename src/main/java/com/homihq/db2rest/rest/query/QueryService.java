@@ -12,7 +12,6 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,29 +51,31 @@ public class QueryService {
 
         List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
 
-        List<JoinTable> joinTableList =
+        JoinTable jt =
                 getJoinTableDetails(joinTable);
 
-        log.info("joinTableList - {}" , joinTableList);
+        log.info("JoinTable - {}" , jt);
 
         Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
+        Table<?> jTable = null;
+        if(Objects.nonNull(jt)) {
+            jTable = schemaService.getTableByNameAndSchema(schemaName, jt.name());
+
+        }
 
         SelectJoinStep<Record> selectJoinStep;
+
         if(columns.isEmpty()) {
             selectJoinStep = dslContext.select(asterisk()).from(table);
         }
         else{
-            List<Field<?>> fields =  selectBuilder.build(table, columns);
+            List<Field<?>> fields =  selectBuilder.build(table, columns, jTable, jt);
             selectJoinStep = dslContext.select(fields).from(table);
         }
 
-        if(!joinTableList.isEmpty()) {
+        if(Objects.nonNull(jTable)) {
+            createJoin(table, jTable, selectJoinStep);
 
-            for (JoinTable jt : joinTableList) {
-
-                Table<?> jTable = schemaService.getTableByNameAndSchema(schemaName, jt.name());
-                createJoin(table, jTable, selectJoinStep);
-            }
         }
 
         Condition whereCondition = whereBuilder.create(tableName, filter);
@@ -82,67 +83,58 @@ public class QueryService {
         return selectJoinStep.where(whereCondition);
     }
 
-    private List<JoinTable> getJoinTableDetails(String joinTable) {
-        List<JoinTable> joinTableList = new ArrayList<>();
+    private JoinTable getJoinTableDetails(String joinTable) {
 
         if(StringUtils.isNotBlank(joinTable)) {
             //get fields of join table
-            String [] joinTables = joinTable.split(";");
 
-            if(joinTables.length > 1) throw new RuntimeException("Only 2 tables are allowed");
+            //joinTableList
+            String tName = joinTable.substring(0, joinTable.indexOf("[") );
+            String parts = joinTable.substring(joinTable.indexOf("[") + 1 , joinTable.indexOf("]"));
 
+            log.info("tName - {}", tName);
+            log.info("parts - {}", parts);
 
-            for(String jt : joinTables) {
-                log.info("jt - {}", jt);
-                //joinTableList
-                String tName = jt.substring(0, jt.indexOf("[") );
-                String parts = jt.substring(jt.indexOf("[") + 1 , jt.indexOf("]"));
+            String select;
+            String filter = null;
+            List<String> jtCols = null;
 
-                log.info("tName - {}", tName);
-                log.info("parts - {}", parts);
+            if(StringUtils.isNotBlank(parts)) {
+                //get select & filter
+                String [] innerParts = parts.split("\\|");
 
-                String select;
-                String filter = null;
-                List<String> jtCols = null;
+                if(innerParts.length == 2) {
+                    select = innerParts[0];
+                    filter = innerParts[1];
 
-                if(StringUtils.isNotBlank(parts)) {
-                    //get select & filter
-                    String [] innerParts = parts.split("\\|");
-
-                    if(innerParts.length == 2) {
-                        select = innerParts[0];
-                        filter = innerParts[1];
-
-                    }
-                    else{
-                        select = innerParts[0];
-
-                    }
-
-                    log.info("select - {}", select);
-                    log.info("filter - {}", filter);
-
-                    if(StringUtils.isNotBlank(select)) {
-                        select = select.replace("select=", "");
-                        jtCols = List.of(select.split(","));
-                    }
-
-                    if(StringUtils.isNotBlank(filter)) {
-                        filter = filter.replace("filter=", "");
-
-                    }
-
-                    joinTableList.add(new JoinTable(tName, jtCols, filter));
                 }
                 else{
-                    joinTableList.add(new JoinTable(tName, jtCols, filter));
+                    select = innerParts[0];
+
                 }
 
+                log.info("select - {}", select);
+                log.info("filter - {}", filter);
 
+                if(StringUtils.isNotBlank(select)) {
+                    select = select.replace("select=", "");
+                    jtCols = List.of(select.split(","));
+                }
+
+                if(StringUtils.isNotBlank(filter)) {
+                    filter = filter.replace("filter=", "");
+
+                }
+
+                return new JoinTable(tName, jtCols, filter);
             }
+
+            return new JoinTable(tName, jtCols, filter);
+
         }
 
-        return joinTableList;
+        return null;
+
     }
 
     private void createJoin(Table<?> table, Table<?> jTable, SelectJoinStep<Record> selectJoinStep) {
