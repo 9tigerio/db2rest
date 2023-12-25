@@ -240,17 +240,22 @@ The GET query above does not fetch the join table fields. The join table fields 
 
 ```Shell
 curl --request GET \
-  --url 'http://localhost:8080/film?select=select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[select=language_id:langId,name]' \
+  --url 'http://localhost:8080/film?select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[select=language_id:langId,name]' \
   --header 'Accept-Profile: sakila' \
   --header 'User-Agent: insomnia/8.4.5'
 ```
 **HTTPie**
 
 ```Shell
-http GET 'http://localhost:8080/film?select=select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[select=language_id:langId,name]' \
+http GET 'http://localhost:8080/film?select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[select=language_id:langId,name]' \
   Accept-Profile:sakila \
   User-Agent:insomnia/8.4.5
 ```
+
+
+**7. Get all Films Released in the year 2006 in English**
+
+TODO
 
 
 # HTTP Headers
