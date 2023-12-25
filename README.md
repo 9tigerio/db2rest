@@ -524,20 +524,20 @@ print(data.decode("utf-8"))
 3. **Get all Actors with Row Filter**
 
 This will retrieve all the rows with specified columns or all columns from the database. However this will also filter out rows based on the filtering criterias specified in the *filter* request
-parameter. The filter uses RSQL - REST SQL format. 
+parameter. The filter uses RSQL - REST SQL format. The query below retrieves 2 columns 'first_name', 'last_name' from 'actor' table if the 'first_name' is 'PENELOPE'.
 
 **cURL**
 
 ```Shell
 curl --request GET \
-  --url 'http://localhost:8080/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22' \
+  --url 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE' \
   --header 'Accept-Profile: sakila' \
   --header 'User-Agent: insomnia/8.4.5'
 ```
 **HTTPie**
 
 ```Shell
-http GET 'http://localhost:8080/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22' \
+http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE' \
   Accept-Profile:sakila \
   User-Agent:insomnia/8.4.5
 ```
@@ -555,7 +555,7 @@ import (
 
 func main() {
 
-	url := "http://localhost:8080/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22"
+	url := "http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE"
 
 	req, _ := http.NewRequest("GET", url, nil)
 
@@ -576,7 +576,7 @@ func main() {
 **C#**
 
 ```csharp
-var client = new RestClient("http://localhost:8080/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22");
+var client = new RestClient("http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE");
 var request = new RestRequest(Method.GET);
 request.AddHeader("User-Agent", "insomnia/8.4.5");
 request.AddHeader("Accept-Profile", "sakila");
@@ -586,7 +586,7 @@ IRestResponse response = client.Execute(request);
 **Java**
 
 ```java
-HttpResponse<String> response = Unirest.get("http://localhost:8080/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22")
+HttpResponse<String> response = Unirest.get("http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE")
   .header("User-Agent", "insomnia/8.4.5")
   .header("Accept-Profile", "sakila")
   .asString();
@@ -606,7 +606,7 @@ xhr.addEventListener("readystatechange", function () {
   }
 });
 
-xhr.open("GET", "http://localhost:8080/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22");
+xhr.open("GET", "http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE");
 xhr.setRequestHeader("User-Agent", "insomnia/8.4.5");
 xhr.setRequestHeader("Accept-Profile", "sakila");
 
@@ -619,7 +619,7 @@ xhr.send(data);
 val client = OkHttpClient()
 
 val request = Request.Builder()
-  .url("http://localhost:8080/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22")
+  .url("http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE")
   .get()
   .addHeader("User-Agent", "insomnia/8.4.5")
   .addHeader("Accept-Profile", "sakila")
@@ -638,7 +638,7 @@ const options = {
   "method": "GET",
   "hostname": "localhost",
   "port": "8080",
-  "path": "/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22",
+  "path": "/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE",
   "headers": {
     "User-Agent": "insomnia/8.4.5",
     "Accept-Profile": "sakila",
@@ -672,7 +672,7 @@ $curl = curl_init();
 
 curl_setopt_array($curl, [
   CURLOPT_PORT => "8080",
-  CURLOPT_URL => "http://localhost:8080/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22",
+  CURLOPT_URL => "http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,
@@ -711,7 +711,7 @@ headers = {
     'Accept-Profile': "sakila"
     }
 
-conn.request("GET", "/actor?select=actor_id%2Cfirst_name%2Clast_name&filter=first_name%3D%3D%22PENELOPE%22", payload, headers)
+conn.request("GET", "/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"", payload, headers)
 
 res = conn.getresponse()
 data = res.read()
@@ -746,5 +746,6 @@ TODO
 12. Data Privacy.
 13. TSID Support.
 14. Data transformation.
+15. Automated Integration Test with Testcontainers.
 
 
