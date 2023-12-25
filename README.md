@@ -122,7 +122,7 @@ TODO
 
 # Examples 
 
-1. **Get all Actors**
+**1. Get all Actors**
    
 This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
 
@@ -320,7 +320,7 @@ print(data.decode("utf-8"))
 
 ```
 
-2. **Get all Actors with Column Filter**
+**2. Get all Actors with Column Filter**
    
 This will retrieve all the rows but *only the speficied columns* from the database. Avoid if the table has large number of rows, use pagination instead.
 
@@ -521,7 +521,7 @@ print(data.decode("utf-8"))
 
 
 
-3. **Get all Actors with Row Filter**
+**3. Get all Actors with Row Filter**
 
 This will retrieve all the rows with specified columns or all columns from the database. However this will also filter out rows based on the filtering criterias specified in the *filter* request
 parameter. The filter uses RSQL - REST SQL format. The query below retrieves 2 columns 'first_name', 'last_name' from 'actor' table if the 'first_name' is 'PENELOPE'. 
@@ -720,6 +720,206 @@ print(data.decode("utf-8"))
 
 ``` 
 
+**4. Get all Actors with Column Alias**
+   
+This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
+This query shows how to change column name in the response JSON using Alias. 
+
+**cURL**
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
+**GO**
+
+```GO
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"io/ioutil"
+)
+
+func main() {
+
+	url := "http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName"
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("User-Agent", "insomnia/8.4.5")
+	req.Header.Add("Accept-Profile", "sakila")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	fmt.Println(res)
+	fmt.Println(string(body))
+
+}
+```
+
+**C#**
+
+```csharp
+var client = new RestClient("http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName");
+var request = new RestRequest(Method.GET);
+request.AddHeader("User-Agent", "insomnia/8.4.5");
+request.AddHeader("Accept-Profile", "sakila");
+IRestResponse response = client.Execute(request);
+```
+
+**Java**
+
+```java
+HttpResponse<String> response = Unirest.get("http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName")
+  .header("User-Agent", "insomnia/8.4.5")
+  .header("Accept-Profile", "sakila")
+  .asString();
+```
+**Javascript**
+
+```javascript
+const data = null;
+
+const xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === this.DONE) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("GET", "http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName");
+xhr.setRequestHeader("User-Agent", "insomnia/8.4.5");
+xhr.setRequestHeader("Accept-Profile", "sakila");
+
+xhr.send(data);
+```
+
+**Kotlin**
+
+```java
+val client = OkHttpClient()
+
+val request = Request.Builder()
+  .url("http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName")
+  .get()
+  .addHeader("User-Agent", "insomnia/8.4.5")
+  .addHeader("Accept-Profile", "sakila")
+  .build()
+
+val response = client.newCall(request).execute()
+```
+
+**Nodejs**
+
+
+```javascript
+const http = require("http");
+
+const options = {
+  "method": "GET",
+  "hostname": "localhost",
+  "port": "8080",
+  "path": "/actor?select=actor_id:id,first_name:firstName,last_name:lastName",
+  "headers": {
+    "User-Agent": "insomnia/8.4.5",
+    "Accept-Profile": "sakila",
+    "Content-Length": "0"
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.end();
+
+```
+
+**PHP**
+
+```php
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_PORT => "8080",
+  CURLOPT_URL => "http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "GET",
+  CURLOPT_POSTFIELDS => "",
+  CURLOPT_HTTPHEADER => [
+    "Accept-Profile: sakila",
+    "User-Agent: insomnia/8.4.5"
+  ],
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+  echo $response;
+}
+```
+
+**Python**
+
+```python
+import http.client
+
+conn = http.client.HTTPConnection("localhost:8080")
+
+payload = ""
+
+headers = {
+    'User-Agent': "insomnia/8.4.5",
+    'Accept-Profile': "sakila"
+    }
+
+conn.request("GET", "/actor?select=actor_id:id,first_name:firstName,last_name:lastName", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+
+```
+
+
 
 # HTTP Headers
 
@@ -728,7 +928,7 @@ In case multiple schemas have been configured for use (with - DB_SCHEMAS paramet
 
 # RSQL 
 
-RSQL is a query language for parametrized filtering of entries in RESTful APIs. It’s based on [FIQL](https://datatracker.ietf.org/doc/html/draft-nottingham-atompub-fiql-00 "Feed Item Query Language") FIQL (Feed Item Query Language) – an URI-friendly syntax for expressing filters across the entries in an Atom Feed. FIQL is great for use in URI; there are no unsafe characters, so URL encoding is not required. On the other side, FIQL’s syntax is not very intuitive and URL encoding isn’t always that big deal, so RSQL also provides a friendlier syntax for logical operators and some of the comparison operators.
+RSQL is a query language for parametrized filtering of entries in RESTful APIs. It’s based on [FIQL](https://datatracker.ietf.org/doc/html/draft-nottingham-atompub-fiql-00 "Feed Item Query Language") (Feed Item Query Language) – an URI-friendly syntax for expressing filters across the entries in an Atom Feed. FIQL is great for use in URI; there are no unsafe characters, so URL encoding is not required. On the other side, FIQL’s syntax is not very intuitive and URL encoding isn’t always that big deal, so RSQL also provides a friendlier syntax for logical operators and some of the comparison operators.
 
 For example, you can query your resource like this: /movies?query=name=="Kill Bill";year=gt=2003 or /movies?query=director.lastName==Nolan and year>=2000. See examples below.
 
