@@ -10,6 +10,10 @@ You can now focus on building business logic and beautiful user interfaces at sp
 ![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
 
 
+The diagram above shows an application architecture with DB2Rest. DB2Rest provides secure access to the database as REST API within seconds of installation/deployment. 
+The business logic can be written in your favorite technology frameworks for Java, PHP, Node, .NET or using any serverless framework. The business logic layer uses the database access layer (DBAL) provided
+by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low code/node code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
+
 ## Benefits
     - Accelerate applicaton development
     - Unlock databases
@@ -18,8 +22,13 @@ You can now focus on building business logic and beautiful user interfaces at sp
 
 # Installation 
 
-    - Without Docker 
-    - With Docker
+## On Premise / On Virtual Machines (VM) 
+
+TODO 
+
+## With Docker
+
+TODO
 
 ## Configuration Parameters
 
@@ -35,10 +44,12 @@ You can now focus on building business logic and beautiful user interfaces at sp
 | 7.    | MULTI_TENANCY_MODE    | Multi-tenancy mode                                      | <ul><li>TENANT_ID (not supported) </li><li>SCHEMA (supported)</li><li>DB (not supported)</li></ul>      |
 
 
-## Supported Databases
+# Supported Databases
 
 - **PostgreSQL**
 - **MySQL**
+
+# Supported Operations
 
 **Save Record (Create)**
 
@@ -135,4 +146,5 @@ In case multiple schemas have been configured for use (with - DB_SCHEMAS paramet
 12. Data Privacy.
 13. TSID Support.
 14. Data transformation.
+
 
