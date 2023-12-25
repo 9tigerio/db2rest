@@ -210,6 +210,47 @@ http GET 'http://localhost:8080/actor?select=actor_id:id,first_name:firstName,la
   User-Agent:insomnia/8.4.5
 ```
 
+**5. Get all Films Released in the year 2006 along with Language**
+
+This will retrieve all the rows for the films released in 2006 along with its language for audio. 
+DB2Rest is smart and detects the inner join relation between 'film' and 'language'.
+
+**cURL**
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/film?select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[]' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/film?select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[]' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
+*Note the square brackets are mandatory for join table.*
+
+
+**6. Get all Films Released in the year 2006 along by Film Language with Join table fields**
+
+The GET query above does not fetch the join table fields. The join table fields can be retrieved in the same way as the root table fields as shown below. 
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/film?select=select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[select=language_id:langId,name]' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/film?select=select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[select=language_id:langId,name]' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
 
 
 # HTTP Headers
@@ -257,5 +298,9 @@ Examples of RSQL expressions in both FIQL-like and alternative notation:
 13. TSID Support.
 14. Data transformation.
 15. Automated Integration Test with Testcontainers.
-
+16. Count query support
+17. Exists query support
+18. Multi-table Join - with one to many
+19. Outer Join
+20. Cross Join
 
