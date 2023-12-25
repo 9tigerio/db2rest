@@ -10,7 +10,6 @@ You can now focus on building business logic and beautiful user interfaces at sp
 ![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
 
 
-
 ## Benefits
     - Accelerate applicaton development
     - Unlock databases
@@ -38,7 +37,8 @@ You can now focus on building business logic and beautiful user interfaces at sp
 
 ## Supported Databases
 
-### Postgresql (In progress)
+- **PostgreSQL**
+- **MySQL**
 
 **Save Record (Create)**
 
@@ -80,9 +80,10 @@ You can now focus on building business logic and beautiful user interfaces at sp
 
     - [ ] Tenant Id column
     - [x] Schema per tenant
-    - [x] Database per tenant
+    - [ ] Database per tenant
 
 **Schema Support**
+
     - [x] Multiple schema support
 
 
@@ -105,90 +106,17 @@ You can now focus on building business logic and beautiful user interfaces at sp
 | =startWith= | like          | start with ex - Joy%    | [X]       |
 | =endWith=   | like          | start with ex - %Ful    | [X]       |
 
-### MySQL (In Progress)
 
-**Save Record (Create)**
-
-    - [x] Single record
-    - [x] Bulk records - JSON 
-
-
-**Query (Read)**
-
-    - [x] Row Filtering with rSQL DSL.
-    - [x] Column Selection
-    - [x] Rename Columns / Alias
-    - [x] Join
-    - [x] Pagination
-    - [x] Sorting
-    - [x] Group By
-    - [x] Count
-    - [x] Join column filter
-
-***Examples***
+### Examples ###
 
 - GET All (https://<db2rest-url>/actor) : This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
 - GET All with column filter: (https://<db2rest-url>/actor?select=actor_id,first_name,last_name) This will retrieve all the rows and ~only the speficied columns~ from the database. Avoid if the table has large number of rows, use pagination instead.
 - GET All with row filter: 
 
 
-***Headers***
+### Headers ###
 
 In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specificy the schema to use with the HTTP HEADER - ~Accept-Profile~. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
-
-**Edit**
-
-    - [x] Patch
-    - [x] Patch with row filtering
-
-
-**Purge (Delete)**
-
-    - [x] Delete with row filter.
-    - [x] Safe delete.
-
-**Transactions**
-
-    - [x] Readonly for Select
-    - [x] Supported for Save, Edit, Purge 
-
-**Multi-tenancy**
-
-    - [ ] Tenant Id column
-    - [x] Schema per tenant
-    - [x] Database per tenant
-
-**Schema Support**
-    - [x] Multiple schema support
-
-
-
-#### Supported Operators
-
-| Operator    | Postgresql    | Description             | Supported |
-|-------------|---------------|-------------------------|-----------|
-| ==          | =             | equals                  | [X]       |
-| >           | >             | greater than            | [X]       |
-| =gt=        | >             | greater than            | [X]       |
-| >=          | >=            | greater than or equal   | [X]       |
-| =gt=        | >             | greater than or equal   | [X]       |
-| <           | <             | less than               | [X]       |
-| =lt=        | <             | less than               | [X]       |
-| <=          | <=            | less than or equal      | [X]       |
-| =le=        | <=            | less than or equal      | [X]       |
-| =in=        | <=            | in                      | [X]       |
-| =out=       | <=            | not in                  | [X]       |
-| =like=      | like          | like                    | [X]       |
-| =startWith= | like          | start with ex - Joy%    | [X]       |
-| =endWith=   | like          | start with ex - %Ful    | [X]       |
-
-### SQL Server 
-
-### Oracle 
-
-
-### Mongodb
-
 
 
 # Roadmap
@@ -206,4 +134,5 @@ In case multiple schemas have been configured for use (with - DB_SCHEMAS paramet
 11. Data access control. 
 12. Data Privacy.
 13. TSID Support.
+14. Data transformation.
 
