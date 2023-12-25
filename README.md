@@ -1,7 +1,7 @@
 # DB2Rest
 
 DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
-your existing or new databases. You can connect to most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build REST API in minutes without any coding.
+your existing or new databases. You can connect to most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build REST API in minutes without writing any code.
 You can now focus on building business logic and beautiful user interfaces at speed. 
  
 
@@ -18,6 +18,7 @@ by DB2Rest to query and modify data. The user experience layer can be developed 
     - Accelerate applicaton development
     - Unlock databases
 
+TODO - Add more details
 
 
 # Installation 
@@ -120,7 +121,135 @@ TODO
 
 ### Examples ###
 
-- GET All (https://<db2rest-url>/actor) : This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
+1. Get all Actors
+   
+This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
+
+```curl
+curl --request GET \
+  --url http://localhost:8080/actor \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+
+
+```HTTPie
+http GET http://localhost:8080/actor \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"io/ioutil"
+)
+
+func main() {
+
+	url := "http://localhost:8080/actor"
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("User-Agent", "insomnia/8.4.5")
+	req.Header.Add("Accept-Profile", "sakila")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	fmt.Println(res)
+	fmt.Println(string(body))
+
+}
+```
+
+```csharp
+var client = new RestClient("http://localhost:8080/actor");
+var request = new RestRequest(Method.GET);
+request.AddHeader("User-Agent", "insomnia/8.4.5");
+request.AddHeader("Accept-Profile", "sakila");
+IRestResponse response = client.Execute(request);
+```
+
+```java
+HttpResponse<String> response = Unirest.get("http://localhost:8080/actor")
+  .header("User-Agent", "insomnia/8.4.5")
+  .header("Accept-Profile", "sakila")
+  .asString();
+```
+
+
+```javascript
+const data = null;
+
+const xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === this.DONE) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("GET", "http://localhost:8080/actor");
+xhr.setRequestHeader("User-Agent", "insomnia/8.4.5");
+xhr.setRequestHeader("Accept-Profile", "sakila");
+
+xhr.send(data);
+```
+
+```kotlin
+val client = OkHttpClient()
+
+val request = Request.Builder()
+  .url("http://localhost:8080/actor")
+  .get()
+  .addHeader("User-Agent", "insomnia/8.4.5")
+  .addHeader("Accept-Profile", "sakila")
+  .build()
+
+val response = client.newCall(request).execute()
+```
+
+```nodejs
+const http = require("http");
+
+const options = {
+  "method": "GET",
+  "hostname": "localhost",
+  "port": "8080",
+  "path": "/actor",
+  "headers": {
+    "User-Agent": "insomnia/8.4.5",
+    "Accept-Profile": "sakila",
+    "Content-Length": "0"
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.end();
+
+```
+
+
+- GET All (https://<db2rest-url>/actor) : 
 - GET All with column filter: (https://<db2rest-url>/actor?select=actor_id,first_name,last_name) This will retrieve all the rows and ~only the speficied columns~ from the database. Avoid if the table has large number of rows, use pagination instead.
 - GET All with row filter: 
 
