@@ -524,7 +524,7 @@ print(data.decode("utf-8"))
 3. **Get all Actors with Row Filter**
 
 This will retrieve all the rows with specified columns or all columns from the database. However this will also filter out rows based on the filtering criterias specified in the *filter* request
-parameter. The filter uses RSQL - REST SQL format. The query below retrieves 2 columns 'first_name', 'last_name' from 'actor' table if the 'first_name' is 'PENELOPE'.
+parameter. The filter uses RSQL - REST SQL format. The query below retrieves 2 columns 'first_name', 'last_name' from 'actor' table if the 'first_name' is 'PENELOPE'. 
 
 **cURL**
 
@@ -728,7 +728,26 @@ In case multiple schemas have been configured for use (with - DB_SCHEMAS paramet
 
 # RSQL 
 
-TODO 
+RSQL is a query language for parametrized filtering of entries in RESTful APIs. It’s based on [FIQL](https://datatracker.ietf.org/doc/html/draft-nottingham-atompub-fiql-00 "Feed Item Query Language") FIQL (Feed Item Query Language) – an URI-friendly syntax for expressing filters across the entries in an Atom Feed. FIQL is great for use in URI; there are no unsafe characters, so URL encoding is not required. On the other side, FIQL’s syntax is not very intuitive and URL encoding isn’t always that big deal, so RSQL also provides a friendlier syntax for logical operators and some of the comparison operators.
+
+For example, you can query your resource like this: /movies?query=name=="Kill Bill";year=gt=2003 or /movies?query=director.lastName==Nolan and year>=2000. See examples below.
+
+
+## Examples
+
+Examples of RSQL expressions in both FIQL-like and alternative notation: 
+
+```
+- name=="Kill Bill";year=gt=2003
+- name=="Kill Bill" and year>2003
+- genres=in=(sci-fi,action);(director=='Christopher Nolan',actor==*Bale);year=ge=2000
+- genres=in=(sci-fi,action) and (director=='Christopher Nolan' or actor==*Bale) and year>=2000
+- director.lastName==Nolan;year=ge=2000;year=lt=2010
+- director.lastName==Nolan and year>=2000 and year<2010
+- genres=in=(sci-fi,action);genres=out=(romance,animated,horror),director==Que*Tarantino
+- genres=in=(sci-fi,action) and genres=out=(romance,animated,horror) or director==Que*Tarantino
+
+```
 
 # Roadmap
 
