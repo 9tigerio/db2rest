@@ -1,13 +1,19 @@
 # DB2Rest
-Instant REST API over your existing or new database in minutes. No code data access layer to build new applications at speed or unlock value of existing data. 
+
+DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
+your existing or new databases. You can connect to most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build REST API in minutes without any coding.
+You can now focus on building business logic and beautiful user interfaces at speed. 
+ 
 
 # How it works?
 
 ![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
 
 
+
 ## Benefits
-    - Coming soon
+    - Accelerate applicaton development
+    - Unlock databases
 
 
 
@@ -70,19 +76,15 @@ Instant REST API over your existing or new database in minutes. No code data acc
     - [x] Readonly for Select
     - [x] Supported for Save, Edit, Purge 
 
-
 **Multi-tenancy**
 
     - [ ] Tenant Id column
     - [x] Schema per tenant
-    - [ ] Database per tenant
+    - [x] Database per tenant
 
-**[X] Schema Support - [Completed]**
+**Schema Support**
+    - [x] Multiple schema support
 
-**[ ] JSON Column / Data support**
-
-
-**[ ] TSID Support**
 
 #### Supported Operators
 
@@ -147,18 +149,19 @@ In case multiple schemas have been configured for use (with - DB_SCHEMAS paramet
 
 **Transactions**
 
+    - [x] Readonly for Select
+    - [x] Supported for Save, Edit, Purge 
+
 **Multi-tenancy**
 
-    - [ ] Tentant Id column
+    - [ ] Tenant Id column
     - [x] Schema per tenant
-    - [ ] Database per tenant
+    - [x] Database per tenant
 
 **Schema Support**
+    - [x] Multiple schema support
 
-**[ ] JSON Column / Data support**
 
-
-**[ ] TSID Support**
 
 #### Supported Operators
 
@@ -197,6 +200,10 @@ In case multiple schemas have been configured for use (with - DB_SCHEMAS paramet
 5. JSON data type support.
 6. Stored procedure, stored function calls. 
 7. Support for tenant id column for multi-tenancy. 
-8. Twitter Handle
-9. New expanded Documentation Website with Docusaurus
+8. Twitter Handle.
+9. New expanded Documentation Website with Docusaurus,
+10. Support custom query. 
+11. Data access control. 
+12. Data Privacy.
+13. TSID Support.
 
