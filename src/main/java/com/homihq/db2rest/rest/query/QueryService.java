@@ -51,14 +51,14 @@ public class QueryService {
 
         List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
 
-        JoinTable jt =
-                getJoinTableDetails(joinTable);
+        JoinTable jt = getJoinTableDetails(joinTable);
 
         log.info("JoinTable - {}" , jt);
 
         Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
         Table<?> jTable = null;
-        if(Objects.nonNull(jt)) {
+        if(Objects.nonNull(jt) ) {
+
             jTable = schemaService.getTableByNameAndSchema(schemaName, jt.name());
 
         }

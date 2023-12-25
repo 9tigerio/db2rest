@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rsql.parser;
 
+import com.homihq.db2rest.exception.InvalidColumnException;
 import com.homihq.db2rest.rsql.operators.OperatorHandler;
 import com.homihq.db2rest.rsql.operators.RSQLOperatorHandlers;
 import com.homihq.db2rest.schema.SchemaService;
@@ -69,14 +70,12 @@ public class DefaultRSQLVisitor implements RSQLVisitor<Condition, Void> {
         String columnName = comparisonNode.getSelector();
         Field<?> column = Arrays.stream(table.fields())
                     .filter(field -> columnName.equals(field.getName()))
-                .findFirst().orElseThrow(() ->  new RuntimeException("Column not found"));
-
+                .findFirst().orElseThrow(() ->  new InvalidColumnException(tableName,
+                        columnName));
 
         Class type = column.getType();
 
-        log.debug("Data type - {}", type);
-
-        String queryColumnName = column.getQualifiedName().quotedName().toString();
+        String queryColumnName = column.getQualifiedName().unquotedName().toString();
 
         OperatorHandler operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
         if (operatorHandler == null) {

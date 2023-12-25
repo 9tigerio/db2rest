@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.query.helper;
 
+import com.homihq.db2rest.exception.InvalidColumnException;
 import com.homihq.db2rest.rest.query.model.JoinTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +27,8 @@ public class SelectBuilder {
 
         addFieldsByTable(table, columnNames, fields);
 
-        if(Objects.nonNull(jt.columns()) &&
+        if(Objects.nonNull(jt) &&
+                Objects.nonNull(jt.columns()) &&
                 !jt.columns().isEmpty()) {
             addFieldsByTable(jTable, jt.columns(), fields);
         }
@@ -52,7 +54,7 @@ public class SelectBuilder {
 
             Field<?> f =
             Arrays.stream(table.fields()).filter(field -> StringUtils.equalsIgnoreCase(colName, field.getName()))
-                    .findFirst().orElseThrow(() -> new RuntimeException("Column not found"));
+                    .findFirst().orElseThrow(() -> new InvalidColumnException(table.getName() , colName));
 
             if(StringUtils.isNotBlank(alias)) {
 

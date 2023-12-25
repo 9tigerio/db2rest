@@ -1,25 +1,71 @@
 # DB2Rest
-Instant REST API over your existing or new database in minutes. 
+
+DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
+your existing or new databases. You can connect to most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build REST API in minutes without writing any code.
+You can now focus on building business logic and beautiful user interfaces at speed. 
+ 
+
+# How it works?
+
+![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
+
+
+The diagram above shows an application architecture with DB2Rest. DB2Rest provides secure access to the database as REST API within seconds of installation/deployment. 
+The business logic can be written in your favorite technology frameworks for Java, PHP, Node, .NET or using any serverless framework. The business logic layer uses the database access layer (DBAL) provided
+by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low code/node code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
 
 ## Benefits
-    - Coming soon
+    - Accelerate applicaton development
+    - Unlock databases
+    - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip
 
-## Supported Databases
-
-### Postgresql (In progress)
-
-**[X] Save Record (Create) -  [Completed]**
-
-    - [X] Single record
-    - [X] Bulk records - JSON 
+TODO - Add more details
 
 
-**[*] Query (Read)  - In progress**
+# Installation 
 
-    - [X] Row Filtering with rSQL DSL.
-    - [X] Column Selection
-    - [X] Rename Columns / Alias
-    - [X] Join
+## On Premise / On Virtual Machines (VM) 
+
+TODO 
+
+## With Docker
+
+TODO
+
+## Configuration Parameters
+
+
+| Sl#   | Parameter Name        | Description                                             | Allowed Values/Examples                                                                                                                                   |
+|-------|-----------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1.    | ALLOW_UNSAFE_DELETE   | Allow deletion of table rows without a filter criteria. | <ul><li>true</li><li>false (default)</li></ul>                                                                                                            |
+| 2.    | DB_URL                | Database connection URL in JDBC format.                 | <ul><li>jdbc:mysql://<DB_SERVER_HOST>:<DB_PORT>/<DB_NAME> (MySQL)</li><li>jdbc:postgresql://<DB_SERVER_HOST>:<DB_PORT>/<DB_NAME> (PostgreSQL)</li></ul>   |
+| 3.    | DB_USER               | Database user name                                      | -                                                                                                                                                         |
+| 4.    | DB_PASSWORD           | Database password                                       | -                                                                                                                                                         |
+| 5.    | DB_SCHEMAS            | A comma separated list of allowed schemas               | e.g - SAKILA,WORLD                                                                                                                                        |
+| 6.    | MULTI_TENANCY_ENABLED | Run in multi tenancy mode. DB_SCHEMAS will be ignored if multi-tenancy is ON| <ul><li>true</li><li>false (default)</li></ul>                                                                                        |
+| 7.    | MULTI_TENANCY_MODE    | Multi-tenancy mode                                      | <ul><li>TENANT_ID (not supported) </li><li>SCHEMA (supported)</li><li>DB (not supported)</li></ul>      |
+
+
+# Supported Databases
+
+- **PostgreSQL**
+- **MySQL**
+
+# Supported Operations
+
+**Save Record (Create)**
+
+    - [x] Single record.
+    - [x] Bulk records.
+
+
+**Query (Read)**
+
+    - [x] Row Filtering with rSQL DSL.
+    - [x] Column Selection
+    - [x] Rename Columns / Alias
+    - [x] Join - Inner
+    - [x] Include Join Columns
     - [ ] Pagination
     - [ ] Sorting
     - [ ] Group By
@@ -27,33 +73,34 @@ Instant REST API over your existing or new database in minutes.
     - [ ] Join column filter
 
 
-**[X] Edit - [Completed]**
+**Edit**
 
-    - [X] Patch
-    - [X] Patch with row filtering
+    - [x] Patch
+    - [x] Patch with row filtering
 
 
-**[X] Purge (Delete) - [Completed]**
+**Purge (Delete)**
 
-    - [X] Delete with row filter.
-    - [X] Safe delete.
+    - [x] Delete with row filter.
+    - [x] Safe delete.
 
-**[X] Transactions - [Completed]**
+**Transactions**
 
-**[*] Multi-tenancy (In progress)**
+    - [x] Readonly for Select
+    - [x] Supported for Save, Edit, Purge 
 
-    - [ ] tenant_id column
-    - [X] Schema per tenant
+**Multi-tenancy**
+
+    - [ ] Tenant Id column
+    - [x] Schema per tenant
     - [ ] Database per tenant
 
-**[X] Schema Support - [Completed]**
+**Schema Support**
 
-**[ ] JSON Column / Data support**
+    - [x] Multiple schema support
 
 
-**[ ] TSID Support**
-
-#### Supported Operators
+# Supported Operators
 
 | Operator    | Postgresql    | Description             | Supported |
 |-------------|---------------|-------------------------|-----------|
@@ -72,16 +119,193 @@ Instant REST API over your existing or new database in minutes.
 | =startWith= | like          | start with ex - Joy%    | [X]       |
 | =endWith=   | like          | start with ex - %Ful    | [X]       |
 
-### MySQL (Planned)
 
-### SQL Server 
+# Examples 
 
-### Oracle 
+**1. Get all Actors**
+   
+This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
+
+**cURL**
+
+```Shell
+curl --request GET \
+  --url http://localhost:8080/actor \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET http://localhost:8080/actor \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
 
 
-### Mongodb
+
+**2. Get all Actors with Column Filter**
+   
+This will retrieve all the rows but *only the speficied columns* from the database. Avoid if the table has large number of rows, use pagination instead.
+
+**cURL**
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/actor?select=actor_id,first_name,last_name' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
 
 
 
+**3. Get all Actors with Row Filter**
 
+This will retrieve all the rows with specified columns or all columns from the database. However this will also filter out rows based on the filtering criterias specified in the *filter* request
+parameter. The filter uses RSQL - REST SQL format. The query below retrieves 2 columns 'first_name', 'last_name' from 'actor' table if the 'first_name' is 'PENELOPE'. 
+
+**cURL**
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name==PENELOPE' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
+
+
+**4. Get all Actors with Column Alias**
+   
+This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
+This query shows how to change column name in the response JSON using Alias. 
+
+**cURL**
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/actor?select=actor_id:id,first_name:firstName,last_name:lastName' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
+**5. Get all Films Released in the year 2006 along with Language**
+
+This will retrieve all the rows for the films released in 2006 along with its language for audio. 
+DB2Rest is smart and detects the inner join relation between 'film' and 'language'.
+
+**cURL**
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/film?select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[]' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/film?select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[]' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
+*Note the square brackets are mandatory for join table.*
+
+
+**6. Get all Films Released in the year 2006 along by Film Language with Join table fields**
+
+The GET query above does not fetch the join table fields. The join table fields can be retrieved in the same way as the root table fields as shown below. 
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/film?select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[select=language_id:langId,name]' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/film?select=film_id:id,title,description,release_year:yearOfRelease&filter=release_year==2006&join=language[select=language_id:langId,name]' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
+
+**7. Get all Films Released in the year 2006 in English**
+
+TODO
+
+
+# HTTP Headers
+
+In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specificy the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
+
+
+# RSQL 
+
+RSQL is a query language for parametrized filtering of entries in RESTful APIs. It’s based on [FIQL](https://datatracker.ietf.org/doc/html/draft-nottingham-atompub-fiql-00 "Feed Item Query Language") (Feed Item Query Language) – an URI-friendly syntax for expressing filters across the entries in an Atom Feed. FIQL is great for use in URI; there are no unsafe characters, so URL encoding is not required. On the other side, FIQL’s syntax is not very intuitive and URL encoding isn’t always that big deal, so RSQL also provides a friendlier syntax for logical operators and some of the comparison operators.
+
+For example, you can query your resource like this: /movies?query=name=="Kill Bill";year=gt=2003 or /movies?query=director.lastName==Nolan and year>=2000. See examples below.
+
+
+## Examples
+
+Examples of RSQL expressions in both FIQL-like and alternative notation: 
+
+```
+- name=="Kill Bill";year=gt=2003
+- name=="Kill Bill" and year>2003
+- genres=in=(sci-fi,action);(director=='Christopher Nolan',actor==*Bale);year=ge=2000
+- genres=in=(sci-fi,action) and (director=='Christopher Nolan' or actor==*Bale) and year>=2000
+- director.lastName==Nolan;year=ge=2000;year=lt=2010
+- director.lastName==Nolan and year>=2000 and year<2010
+- genres=in=(sci-fi,action);genres=out=(romance,animated,horror),director==Que*Tarantino
+- genres=in=(sci-fi,action) and genres=out=(romance,animated,horror) or director==Que*Tarantino
+
+```
+
+# Roadmap
+
+1. Support for Oracle.
+2. Support for SQL Server.
+3. Support for MongoDB.
+4. Change data capture (CDC) with Webhooks to notify of database changes.
+5. JSON data type support.
+6. Stored procedure, stored function calls. 
+7. Support for tenant id column for multi-tenancy. 
+8. Twitter Handle.
+9. New expanded Documentation Website with Docusaurus,
+10. Support custom query. 
+11. Data access control. 
+12. Data Privacy.
+13. TSID Support.
+14. Data transformation.
+15. Automated Integration Test with Testcontainers.
+16. Count query support
+17. Exists query support
+18. Multi-table Join - with one to many
+19. Outer Join
+20. Cross Join
 

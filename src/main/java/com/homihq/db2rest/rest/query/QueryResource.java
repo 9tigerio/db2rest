@@ -20,6 +20,9 @@ public class QueryResource {
                        @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
         log.info("join - {}", join);
+        log.info("schemaName - {}", schemaName);
+        log.info("select - {}", select);
+        log.info("filter - {}", filter);
 
         return queryService.findAllByJoinTable(schemaName, tableName,select, filter, join);
     }
