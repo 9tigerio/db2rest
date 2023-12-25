@@ -1,8 +1,15 @@
 # DB2Rest
 Instant REST API over your existing or new database in minutes. No code data access layer to build new applications at speed or unlock value of existing data. 
 
+# How it works?
+
+![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
+
+
 ## Benefits
     - Coming soon
+
+
 
 # Installation 
 
@@ -98,45 +105,55 @@ Instant REST API over your existing or new database in minutes. No code data acc
 
 ### MySQL (In Progress)
 
-**[X] Save Record (Create) -  [Completed]**
+**Save Record (Create)**
 
-    - [X] Single record
-    - [X] Bulk records - JSON 
-
-
-**[*] Query (Read)  - In progress**
-
-    - [X] Row Filtering with rSQL DSL.
-    - [X] Column Selection
-    - [X] Rename Columns / Alias
-    - [X] Join
-    - [ ] Pagination
-    - [ ] Sorting
-    - [ ] Group By
-    - [ ] Count
-    - [ ] Join column filter
+    - [x] Single record
+    - [x] Bulk records - JSON 
 
 
-**[X] Edit - [Completed]**
+**Query (Read)**
 
-    - [X] Patch
-    - [X] Patch with row filtering
+    - [x] Row Filtering with rSQL DSL.
+    - [x] Column Selection
+    - [x] Rename Columns / Alias
+    - [x] Join
+    - [x] Pagination
+    - [x] Sorting
+    - [x] Group By
+    - [x] Count
+    - [x] Join column filter
+
+***Examples***
+
+- GET All (https://<db2rest-url>/actor) : This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
+- GET All with column filter: (https://<db2rest-url>/actor?select=actor_id,first_name,last_name) This will retrieve all the rows and ~only the speficied columns~ from the database. Avoid if the table has large number of rows, use pagination instead.
+- GET All with row filter: 
 
 
-**[X] Purge (Delete) - [Completed]**
+***Headers***
 
-    - [X] Delete with row filter.
-    - [X] Safe delete.
+In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specificy the schema to use with the HTTP HEADER - ~Accept-Profile~. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
 
-**[X] Transactions - [Completed]**
+**Edit**
 
-**[*] Multi-tenancy (In progress)**
+    - [x] Patch
+    - [x] Patch with row filtering
 
-    - [ ] tenant_id column
-    - [X] Schema per tenant
+
+**Purge (Delete)**
+
+    - [x] Delete with row filter.
+    - [x] Safe delete.
+
+**Transactions**
+
+**Multi-tenancy**
+
+    - [ ] Tentant Id column
+    - [x] Schema per tenant
     - [ ] Database per tenant
 
-**[X] Schema Support - [Completed]**
+**Schema Support**
 
 **[ ] JSON Column / Data support**
 
@@ -171,5 +188,15 @@ Instant REST API over your existing or new database in minutes. No code data acc
 
 
 
+# Roadmap
 
+1. Support for Oracle.
+2. Support for SQL Server.
+3. Support for MongoDB.
+4. Change data capture (CDC) with Webhooks to notify of database changes.
+5. JSON data type support.
+6. Stored procedure, stored function calls. 
+7. Support for tenant id column for multi-tenancy. 
+8. Twitter Handle
+9. New expanded Documentation Website with Docusaurus
 
