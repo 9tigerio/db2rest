@@ -125,21 +125,25 @@ TODO
    
 This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
 
-```curl
+**cURL**
+
+```Shell
 curl --request GET \
   --url http://localhost:8080/actor \
   --header 'Accept-Profile: sakila' \
   --header 'User-Agent: insomnia/8.4.5'
 ```
+**HTTPie**
 
-
-```HTTPie
+```Shell
 http GET http://localhost:8080/actor \
   Accept-Profile:sakila \
   User-Agent:insomnia/8.4.5
 ```
 
-```go
+**GO**
+
+```GO
 package main
 
 import (
@@ -168,6 +172,8 @@ func main() {
 }
 ```
 
+**C#**
+
 ```csharp
 var client = new RestClient("http://localhost:8080/actor");
 var request = new RestRequest(Method.GET);
@@ -176,13 +182,15 @@ request.AddHeader("Accept-Profile", "sakila");
 IRestResponse response = client.Execute(request);
 ```
 
+**Java**
+
 ```java
 HttpResponse<String> response = Unirest.get("http://localhost:8080/actor")
   .header("User-Agent", "insomnia/8.4.5")
   .header("Accept-Profile", "sakila")
   .asString();
 ```
-
+**Javascript**
 
 ```javascript
 const data = null;
@@ -203,7 +211,9 @@ xhr.setRequestHeader("Accept-Profile", "sakila");
 xhr.send(data);
 ```
 
-```kotlin
+**Kotlin**
+
+```java
 val client = OkHttpClient()
 
 val request = Request.Builder()
@@ -216,7 +226,10 @@ val request = Request.Builder()
 val response = client.newCall(request).execute()
 ```
 
-```nodejs
+**Nodejs**
+
+
+```javascript
 const http = require("http");
 
 const options = {
