@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,9 +32,9 @@ public class QueryService {
     private final SchemaService schemaService;
     private final Db2RestConfigProperties db2RestConfigProperties;
 
-    public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter, String joinTable) {
+    public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter, String joinTable, Pageable pageable) {
 
-        Query query = createQuery(schemaName, tableName,select,filter, joinTable);
+        Query query = createQuery(schemaName, tableName,select,filter, joinTable, pageable);
 
         String sql = query.getSQL();
         List<Object> bindValues = query.getBindValues();
@@ -45,7 +45,7 @@ public class QueryService {
         return jdbcTemplate.queryForList(sql, bindValues.toArray());
     }
 
-    private Query createQuery(String schemaName, String tableName, String select, String filter, String joinTable) {
+    private Query createQuery(String schemaName, String tableName, String select, String filter, String joinTable, Pageable pageable) {
 
         db2RestConfigProperties.verifySchema(schemaName);
 
@@ -75,12 +75,18 @@ public class QueryService {
 
         if(Objects.nonNull(jTable)) {
             createJoin(table, jTable, selectJoinStep);
-
         }
 
         Condition whereCondition = whereBuilder.create(tableName, filter);
 
-        return selectJoinStep.where(whereCondition);
+        SelectConditionStep<?> selectConditionStep = selectJoinStep.where(whereCondition);
+
+        if(pageable.isPaged()) {
+
+            return selectConditionStep.limit(pageable.getPageSize()).offset(pageable.getOffset());
+        }
+
+        return selectConditionStep;
     }
 
     private JoinTable getJoinTableDetails(String joinTable) {
