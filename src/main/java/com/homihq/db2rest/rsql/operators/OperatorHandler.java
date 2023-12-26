@@ -1,6 +1,8 @@
 package com.homihq.db2rest.rsql.operators;
 
 import org.jooq.Condition;
+import org.jooq.types.UNumber;
+import org.jooq.types.UShort;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public interface OperatorHandler {
         else if (Integer.class == type || int.class == type) {
             return Integer.valueOf(value);
         }
+
         else {
             return value;
         }

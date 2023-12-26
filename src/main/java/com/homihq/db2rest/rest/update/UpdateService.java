@@ -5,15 +5,17 @@ import com.homihq.db2rest.rest.query.helper.WhereBuilder;
 import com.homihq.db2rest.schema.SchemaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.DSLContext;
-import org.jooq.Table;
-import org.jooq.UpdateConditionStep;
+import org.apache.commons.lang3.StringUtils;
+import org.jooq.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static org.jooq.impl.DSL.field;
 
 @Service
 @Slf4j
@@ -31,12 +33,28 @@ public class UpdateService {
 
         Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
 
-        UpdateConditionStep<?> updateConditionStep = dslContext.update(table)
-                .set(data)
-                .where(whereBuilder.create(table , tableName,  filter));
+        UpdateSetFirstStep<?> updateSetFirstStep = dslContext.update(table);
 
-        String sql = updateConditionStep.getSQL();
-        List<Object> bindValues = updateConditionStep.getBindValues();
+        UpdateSetMoreStep<?> updateSetMoreStep = null;
+
+        for(String key : data.keySet()) {
+            updateSetMoreStep = updateSetFirstStep.set(field(key) , data.get(key));
+        }
+
+        UpdateConditionStep<?> updateConditionStep;
+        String sql;
+        List<Object> bindValues;
+        if(StringUtils.isNotBlank(filter)) {
+            updateConditionStep = updateSetMoreStep.where(whereBuilder.create(table , tableName,  filter));
+            sql = updateConditionStep.getSQL();
+            bindValues = updateConditionStep.getBindValues();
+        }
+        else{
+            sql = updateSetMoreStep.getSQL();
+            bindValues = updateSetMoreStep.getBindValues();
+        }
+
+
         log.info("SQL - {}", sql); // TODO make it conditional
         log.info("Bind variables - {}", bindValues);
 
