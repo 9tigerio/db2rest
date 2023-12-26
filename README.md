@@ -534,10 +534,23 @@ http DELETE http://localhost:8080/film \
 }
 ```
 
+**Error**
+```
+{
+"type": "https://github.com/kdhrubo/db2rest/delete-bad-request",
+"title": "Delete Operation Not allowed",
+"status": 400,
+"detail": "Invalid delete operation , safe set to true",
+"instance": "/film",
+"errorCategory": "Delete-Error",
+"timestamp": "2023-12-26T08:19:43.232283Z"
+}
+```
+
 
 **13. Offset pagination**
 
-This GET operation will fetch results of the query in chunks of pages - 2 records at a time. 
+This GET operation will fetch results of the query in chunks of pages - 2 records at a time.
 
 ```Shell
 curl --request GET \
@@ -551,19 +564,6 @@ curl --request GET \
 http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2' \
   Accept-Profile:sakila \
   User-Agent:insomnia/8.4.5
-```
-
-**Error**
-```
-{
-"type": "https://github.com/kdhrubo/db2rest/delete-bad-request",
-"title": "Delete Operation Not allowed",
-"status": 400,
-"detail": "Invalid delete operation , safe set to true",
-"instance": "/film",
-"errorCategory": "Delete-Error",
-"timestamp": "2023-12-26T08:19:43.232283Z"
-}
 ```
 
 # HTTP Headers
