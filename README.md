@@ -49,7 +49,7 @@ to install OpenJDK 21.
 Now that you have successfully downloaded, installed and verified Java 21, the next step is to get DB2Rest. DB2Rest is shipped
 as a single executable Java Archive or jar file So its super easy to get up and running under a minute. 
 
-In order to download the latest edition of DB2Rest click [here](https://pub-d494e6f63184463298f75f4d77bde7cb.r2.dev/db2rest-0.0.4.jar "here").
+In order to download the latest edition(v-0.0.6) of DB2Rest click [here](https://pub-d494e6f63184463298f75f4d77bde7cb.r2.dev/db2rest-0.0.6.jar "here").
 
 ### 3. Run DB2Rest.
 
