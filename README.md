@@ -106,7 +106,7 @@ Coming soon.
     - [x] Rename Columns / Alias
     - [x] Join - Inner
     - [x] Include Join Columns
-    - [ ] Pagination
+    - [x] Pagination - Limit & Offset
     - [ ] Sorting
     - [ ] Group By
     - [ ] Count
@@ -534,6 +534,38 @@ http DELETE http://localhost:8080/film \
 }
 ```
 
+
+**13. Offset pagination**
+
+This GET operation will fetch results of the query in chunks of pages - 2 records at a time. 
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
+**Error**
+```
+{
+"type": "https://github.com/kdhrubo/db2rest/delete-bad-request",
+"title": "Delete Operation Not allowed",
+"status": 400,
+"detail": "Invalid delete operation , safe set to true",
+"instance": "/film",
+"errorCategory": "Delete-Error",
+"timestamp": "2023-12-26T08:19:43.232283Z"
+}
+```
+
 # HTTP Headers
 
 In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specificy the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
@@ -588,4 +620,6 @@ Examples of RSQL expressions in both FIQL-like and alternative notation:
 22. Support - Rate Limiting. 
 23. Audit columns handling
 24. Version column handling
+25. ~Offset & limit pagination~
+25. SEEK method for pagination
 
