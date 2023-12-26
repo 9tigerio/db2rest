@@ -16,7 +16,6 @@ You can now focus on building business logic and beautiful user interfaces at sp
 ![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
 
 
-
 The diagram above shows an application architecture with DB2Rest. DB2Rest provides secure access to the database as REST API within seconds of installation/deployment. 
 The business logic can be written in your favorite technology frameworks for Java, PHP, Node, .NET or using any serverless framework. The business logic layer uses the database access layer (DBAL) provided
 by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low code/node code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
@@ -437,6 +436,37 @@ echo '[
 ```
 
 
+**8. Update record with filter **
+
+This PATCH operation updates the film with id = 1001 which was inserted earlier. Filter is optional. In this case it will update all the rows in the table. Hence, use PATCH update with care. 
+
+```Shell
+curl --request PATCH \
+  --url 'http://localhost:8080/film?filter=film_id%3D%3D1001' \
+  --header 'Content-Profile: sakila' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/8.4.5' \
+  --data '{
+	
+	"rental_rate" : 1.99,
+	"length" : 92
+	
+}'
+```
+**HTTPie**
+
+```Shell
+echo '{
+	
+	"rental_rate" : 1.99,
+	"length" : 92
+	
+}' |  \
+  http PATCH 'http://localhost:8080/film?filter=film_id%3D%3D1001' \
+  Content-Profile:sakila \
+  Content-Type:application/json \
+  User-Agent:insomnia/8.4.5
+```
 
 
 # HTTP Headers
