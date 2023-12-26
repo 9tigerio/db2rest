@@ -19,11 +19,11 @@ spring:
         reWriteBatchedInserts: true
 
 db2rest:
-  allowSafeDelete : false
+  allowSafeDelete : true
   schemas: ${DB_SCHEMAS}
   multiTenancy:
-    enabled: ${MULTI_TENANCY_ENABLED}
-    mode: ${MULTI_TENANCY_MODE}
+    enabled: ${MULTI_TENANCY_ENABLED:false}
+    mode: ${MULTI_TENANCY_MODE:'NONE'}
 
 
 logging:

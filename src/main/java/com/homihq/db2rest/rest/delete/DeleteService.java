@@ -30,7 +30,7 @@ public class DeleteService {
     public void delete(String schemaName, String tableName, String filter) {
 
         if(StringUtils.isBlank(filter) && db2RestConfigProperties.isAllowSafeDelete()) {
-            throw new DeleteOpNotAllowedException(false);
+            throw new DeleteOpNotAllowedException(true);
         }
         else{
 

@@ -10,8 +10,8 @@ import java.time.Instant;
 public class DeleteOpNotAllowedException extends ErrorResponseException {
 
 
-    public DeleteOpNotAllowedException(boolean unsafe) {
-        super(HttpStatus.BAD_REQUEST, asProblemDetail("Invalid delete operation , unsafe set to " + unsafe), null);
+    public DeleteOpNotAllowedException(boolean safe) {
+        super(HttpStatus.BAD_REQUEST, asProblemDetail("Invalid delete operation , safe set to " + safe), null);
     }
 
     private static ProblemDetail asProblemDetail(String message) {

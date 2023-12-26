@@ -75,15 +75,15 @@ Coming soon.
 ## Configuration Parameters
 
 
-| Sl#   | Parameter Name        | Description                                             | Allowed Values/Examples                                                                                                                                   |
-|-------|-----------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1.    | ALLOW_UNSAFE_DELETE   | Allow deletion of table rows without a filter criteria. | <ul><li>true</li><li>false (default)</li></ul>                                                                                                            |
-| 2.    | DB_URL                | Database connection URL in JDBC format.                 | <ul><li>jdbc:mysql://<DB_SERVER_HOST>:<DB_PORT>/<DB_NAME> (MySQL)</li><li>jdbc:postgresql://<DB_SERVER_HOST>:<DB_PORT>/<DB_NAME> (PostgreSQL)</li></ul>   |
-| 3.    | DB_USER               | Database user name                                      | -                                                                                                                                                         |
-| 4.    | DB_PASSWORD           | Database password                                       | -                                                                                                                                                         |
-| 5.    | DB_SCHEMAS            | A comma separated list of allowed schemas               | e.g - SAKILA,WORLD                                                                                                                                        |
-| 6.    | MULTI_TENANCY_ENABLED | Run in multi tenancy mode. DB_SCHEMAS will be ignored if multi-tenancy is ON| <ul><li>true</li><li>false (default)</li></ul>                                                                                        |
-| 7.    | MULTI_TENANCY_MODE    | Multi-tenancy mode                                      | <ul><li>TENANT_ID (not supported) </li><li>SCHEMA (supported)</li><li>DB (not supported)</li></ul>      |
+| Sl#   | Parameter Name      | Description                                             | Allowed Values/Examples                                                                                                                                 |
+|-------|---------------------|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1.    | ALLOW_SAFE_DELETE   | Allow deletion of table rows without a filter criteria. | <ul><li>true(default)</li><li>false</li></ul>                                                                                                           |
+| 2.    | DB_URL              | Database connection URL in JDBC format.                 | <ul><li>jdbc:mysql://<DB_SERVER_HOST>:<DB_PORT>/<DB_NAME> (MySQL)</li><li>jdbc:postgresql://<DB_SERVER_HOST>:<DB_PORT>/<DB_NAME> (PostgreSQL)</li></ul> |
+| 3.    | DB_USER             | Database user name                                      | -                                                                                                                                                       |
+| 4.    | DB_PASSWORD         | Database password                                       | -                                                                                                                                                       |
+| 5.    | DB_SCHEMAS          | A comma separated list of allowed schemas               | e.g - SAKILA,WORLD                                                                                                                                      |
+| 6.    | MULTI_TENANCY_ENABLED | Run in multi tenancy mode. DB_SCHEMAS will be ignored if multi-tenancy is ON| <ul><li>true</li><li>false (default)</li></ul>                                                                                                          |
+| 7.    | MULTI_TENANCY_MODE  | Multi-tenancy mode                                      | <ul><li>TENANT_ID (not supported) </li><li>SCHEMA (supported)</li><li>DB (not supported)</li><li>NONE(default)</li></ul>                                |
 
 
 # Supported Databases
@@ -348,7 +348,7 @@ echo '{
   User-Agent:insomnia/8.4.5
 ```
 
-**8. Insert Multiple Records**
+**9. Insert Multiple Records**
 
 This POST request inserts multiple records in the 'film' table. The records are batched before sending to the database
 thus is very fast. If you have too many records, suggest sending data in chunks of 10-20 records for optimal results. 
@@ -435,10 +435,9 @@ echo '[
   Content-Type:application/json
 ```
 
+**10. Update record with filter**
 
-**8. Update record with filter **
-
-This PATCH operation updates the film with id = 1001 which was inserted earlier. Filter is optional. In this case it will update all the rows in the table. Hence, use PATCH update with care. 
+This PATCH operation updates the film with id = 1001 which was inserted earlier. Filter is optional. In this case it will update all the rows in the table. Hence, use PATCH update with care.
 
 ```Shell
 curl --request PATCH \
@@ -468,6 +467,72 @@ echo '{
   User-Agent:insomnia/8.4.5
 ```
 
+
+**11. Delete All Rows**
+
+This DELETE operation tries to delete all records in the table. However, if the parameter - 'ALLOW_SAFE_DELETE' is set to 'true', then this operation will fail with an error.
+
+```Shell
+curl --request DELETE \
+  --url http://localhost:8080/film \
+  --header 'Content-Profile: sakila' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http DELETE http://localhost:8080/film \
+  Content-Profile:sakila \
+  Content-Type:application/json \
+  User-Agent:insomnia/8.4.5
+```
+
+**Error**
+```
+{
+"type": "https://github.com/kdhrubo/db2rest/delete-bad-request",
+"title": "Delete Operation Not allowed",
+"status": 400,
+"detail": "Invalid delete operation , safe set to true",
+"instance": "/film",
+"errorCategory": "Delete-Error",
+"timestamp": "2023-12-26T08:19:43.232283Z"
+}
+```
+
+**12. Delete Rows with Filter**
+
+This DELETE operation will delete records in a table that match the filter criteria. The parameter - 'ALLOW_SAFE_DELETE' has no impact if filter is specified in the request.
+
+```Shell
+curl --request DELETE \
+  --url http://localhost:8080/film \
+  --header 'Content-Profile: sakila' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http DELETE http://localhost:8080/film \
+  Content-Profile:sakila \
+  Content-Type:application/json \
+  User-Agent:insomnia/8.4.5
+```
+
+**Error**
+```
+{
+"type": "https://github.com/kdhrubo/db2rest/delete-bad-request",
+"title": "Delete Operation Not allowed",
+"status": 400,
+"detail": "Invalid delete operation , safe set to true",
+"instance": "/film",
+"errorCategory": "Delete-Error",
+"timestamp": "2023-12-26T08:19:43.232283Z"
+}
+```
 
 # HTTP Headers
 
@@ -521,4 +586,6 @@ Examples of RSQL expressions in both FIQL-like and alternative notation:
 20. Cross Join
 21. Support - DB Sharding
 22. Support - Rate Limiting. 
+23. Audit columns handling
+24. Version column handling
 
