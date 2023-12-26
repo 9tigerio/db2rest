@@ -3,11 +3,18 @@
 DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
 your existing or new databases. You can connect to most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build REST API in minutes without writing any code.
 You can now focus on building business logic and beautiful user interfaces at speed. 
- 
+
+
+
+![GitHub issues](https://img.shields.io/github/issues/kdhrubo/db2rest)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/w/kdhrubo/db2rest)
+![GitHub top language](https://img.shields.io/github/languages/top/kdhrubo/db2rest)
+
 
 # How it works?
 
 ![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
+
 
 
 The diagram above shows an application architecture with DB2Rest. DB2Rest provides secure access to the database as REST API within seconds of installation/deployment. 
@@ -290,6 +297,146 @@ http GET 'http://localhost:8080/film?select=film_id:id,title,description,release
 **7. Get all Films Released in the year 2006 in English**
 
 TODO
+
+
+**8. Insert a Single Record**
+
+This POST request inserts a single record in the 'film' table. Note that a null value is correctly handled by the DB2Rest engine. 
+
+```Shell
+curl --request POST \
+  --url http://localhost:8080/film \
+  --header 'Content-Profile: sakila' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/8.4.5' \
+  --data '{
+	
+	"title" : "Dunki",
+	"description" : "Film about illegal immigration" ,
+	"release_year" : 2023, 
+	"language_id" : 1, 
+	"original_language_id" : null, 
+	"rental_duration" : 6, 
+	"rental_rate" : 0.99 , 
+	"length" : 150, 
+	"replacement_cost" : 20.99 , 
+	"rating" : "PG-13" , 
+	"special_features" : "Commentaries"
+	
+}'
+```
+**HTTPie**
+
+```Shell
+echo '{
+	
+	"title" : "Dunki",
+	"description" : "Film about illegal immigration" ,
+	"release_year" : 2023, 
+	"language_id" : 1, 
+	"original_language_id" : null, 
+	"rental_duration" : 6, 
+	"rental_rate" : 0.99 , 
+	"length" : 150, 
+	"replacement_cost" : 20.99 , 
+	"rating" : "PG-13" , 
+	"special_features" : "Commentaries"
+	
+}' |  \
+  http POST http://localhost:8080/film \
+  Content-Profile:sakila \
+  Content-Type:application/json \
+  User-Agent:insomnia/8.4.5
+```
+
+**8. Insert Multiple Records**
+
+This POST request inserts multiple records in the 'film' table. The records are batched before sending to the database
+thus is very fast. If you have too many records, suggest sending data in chunks of 10-20 records for optimal results. 
+
+```Shell
+curl --request POST \
+  --url http://localhost:8080/film/bulk \
+  --header 'Content-Profile: sakila' \
+  --header 'Content-Type: application/json' \
+  --data '[
+		{
+
+			"title" : "Jawan",
+			"description" : "Social issues solved by ex military officer" ,
+			"release_year" : 2023, 
+			"language_id" : 1, 
+			"original_language_id" : null, 
+			"rental_duration" : 6, 
+			"rental_rate" : 0.99 , 
+			"length" : 150, 
+			"replacement_cost" : 20.99 , 
+			"rating" : "PG-13" , 
+			"special_features" : "Commentaries"
+
+		},
+	
+	{
+
+			"title" : "Pathan",
+			"description" : "Story of a spy" ,
+			"release_year" : 2023, 
+			"language_id" : 1, 
+			"original_language_id" : null, 
+			"rental_duration" : 6, 
+			"rental_rate" : 0.99 , 
+			"length" : 150, 
+			"replacement_cost" : 20.99 , 
+			"rating" : "PG-13" , 
+			"special_features" : "Commentaries"
+
+		}
+
+]'
+```
+**HTTPie**
+
+```Shell
+echo '[
+		{
+
+			"title" : "Jawan",
+			"description" : "Social issues solved by ex military officer" ,
+			"release_year" : 2023, 
+			"language_id" : 1, 
+			"original_language_id" : null, 
+			"rental_duration" : 6, 
+			"rental_rate" : 0.99 , 
+			"length" : 150, 
+			"replacement_cost" : 20.99 , 
+			"rating" : "PG-13" , 
+			"special_features" : "Commentaries"
+
+		},
+	
+	{
+
+			"title" : "Pathan",
+			"description" : "Story of a spy" ,
+			"release_year" : 2023, 
+			"language_id" : 1, 
+			"original_language_id" : null, 
+			"rental_duration" : 6, 
+			"rental_rate" : 0.99 , 
+			"length" : 150, 
+			"replacement_cost" : 20.99 , 
+			"rating" : "PG-13" , 
+			"special_features" : "Commentaries"
+
+		}
+
+]' |  \
+  http POST http://localhost:8080/film/bulk \
+  Content-Profile:sakila \
+  Content-Type:application/json
+```
+
+
 
 
 # HTTP Headers
