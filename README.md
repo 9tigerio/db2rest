@@ -49,20 +49,22 @@ to install OpenJDK 21.
 Now that you have successfully downloaded, installed and verified Java 21, the next step is to get DB2Rest. DB2Rest is shipped
 as a single executable Java Archive or jar file So its super easy to get up and running under a minute. 
 
-In order to download the latest edition(v-0.0.6) of DB2Rest click [here](https://pub-d494e6f63184463298f75f4d77bde7cb.r2.dev/db2rest-0.0.8.jar "here").
+In order to download the latest edition(v-0.0.8) of DB2Rest click [here](https://pub-d494e6f63184463298f75f4d77bde7cb.r2.dev/db2rest-0.0.8.jar "here").
 
 ### 3. Run DB2Rest.
 
 DB2Rest is just 60Mb and is immediately runnable. Fire up a terminal and execute the command below:
 
 ```Shell
-$ java -DALLOW_UNSAFE_DELETE=false -DDB_PASSWORD=[DATABASE_PASSWORD] -DDB_SCHEMAS=[COMMA_SEPARATED_LIST_OF_DB_SCHEMAS] -DDB_URL=jdbc:mysql://localhost:3306/sakila -DDB_USER=[DATABASE_USER] -DMULTI_TENANCY_ENABLED=false -DMULTI_TENANCY_MODE=SCHEMA -Dspring.profiles.active=local -jar db2rest-0.0.4.jar
+$ java  -DDB_PASSWORD=[DATABASE_PASSWORD] -DDB_SCHEMAS=[COMMA_SEPARATED_LIST_OF_DB_SCHEMAS] -DDB_URL=[JDBC_URL] -DDB_USER=[DATABASE_USER]  -Dspring.profiles.active=local -jar db2rest-0.0.8.jar
 ``` 
 
 Replace the values for the following:
-- DATABASE_PASSWORD
-- COMMA_SEPARATED_LIST_OF_DB_SCHEMAS
-- DATABASE_USER
+
+- DATABASE_PASSWORD - database user password
+- COMMA_SEPARATED_LIST_OF_DB_SCHEMAS - e.g : sakila,world
+- JDBC_URL - e.g :  jdbc:mysql://localhost:3306/sakila (MySQL)
+- DATABASE_USER - database user name.
 
 The above example is for connecting to MySQL database. 
 
