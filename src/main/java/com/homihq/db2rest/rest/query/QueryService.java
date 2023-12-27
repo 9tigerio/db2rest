@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,7 @@ public class QueryService {
 
         JoinTable jt = getJoinTableDetails(joinTable);
 
-        log.info("JoinTable - {}" , jt);
+        log.debug("JoinTable - {}" , jt);
 
         Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
         Table<?> jTable = null;
@@ -73,6 +74,8 @@ public class QueryService {
             selectJoinStep = dslContext.select(fields).from(table);
         }
 
+        addOrderBy(selectJoinStep, pageable);
+
         if(Objects.nonNull(jTable)) {
             createJoin(table, jTable, selectJoinStep);
         }
@@ -87,6 +90,23 @@ public class QueryService {
         }
 
         return selectConditionStep;
+    }
+
+    private void addOrderBy(SelectJoinStep<Record> selectJoinStep, Pageable pageable) {
+        log.info("pageable - {}", pageable);
+
+        log.info("pageable.getSort().isSorted() - {}", pageable.getSort().isSorted());
+
+        if(pageable.getSort().isSorted()) {
+            Sort sort = pageable.getSort();
+            log.info("sort - {}", sort);
+
+            sort.forEach(i -> selectJoinStep
+                    .orderBy(field(i.getProperty()).sort(
+                            i.getDirection().isAscending() ? SortOrder.ASC : SortOrder.DESC))
+                    );
+
+        }
     }
 
     private JoinTable getJoinTableDetails(String joinTable) {
