@@ -109,7 +109,7 @@ Coming soon.
     - [x] Join - Inner
     - [x] Include Join Columns
     - [x] Pagination - Limit & Offset
-    - [ ] Sorting
+    - [X] Sort / Order by
     - [ ] Group By
     - [ ] Count
     - [ ] Join column filter
@@ -160,6 +160,21 @@ Coming soon.
 | =like=      | like          | like                    | [X]       |
 | =startWith= | like          | start with ex - Joy%    | [X]       |
 | =endWith=   | like          | start with ex - %Ful    | [X]       |
+
+
+# Request parameters for Pagination
+
+| Parameter Name | Description                                               | 
+|----------------|-----------------------------------------------------------|
+| page           | Page you want to retrieve, 0 indexed and defaults to 0.   | 
+| size           | Size of the page you want to retrieve, defaults to 20.    | 
+
+# Request parameters for Sorting
+
+| Parameter Name | Description                                               | 
+|----------------|-----------------------------------------------------------|
+| sort           | Properties that should be sorted by in the format property,property(,ASC|DESC). Default sort direction is ascending. Use multiple sort parameters if you want to switch directions, e.g. ?sort=firstname&sort=lastname,asc.  | 
+
 
 
 # Examples 
@@ -568,9 +583,28 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
   User-Agent:insomnia/8.4.5
 ```
 
+
+**13. Offset pagination & Sorting**
+
+This GET operation will fetch results of the query in chunks of pages - 2 records at a time and sorted.
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2&sort=actor_id&sort=first_name,DESC' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2&sort=actor_id&sort=first_name,DESC' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
 # HTTP Headers
 
-In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specificy the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
+In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specify the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
 
 
 # RSQL 
@@ -624,4 +658,14 @@ Examples of RSQL expressions in both FIQL-like and alternative notation:
 24. Version column handling
 25. ~Offset & limit pagination~
 25. SEEK method for pagination
+26. Caching - Redis support (Requested on Redit)
+27. Open API specification 3.x generation
+28. Aggregate function
+29. mTLS/Certificate auth
+30. JWT support
+31. JWKS support 
+32. API Key support - unkey.dev or custom
+33. Aggregate functions
+34. Open policy agent support
+35. OSO support
 

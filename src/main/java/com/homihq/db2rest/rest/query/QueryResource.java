@@ -26,20 +26,19 @@ public class QueryResource {
                                   Sort sort,
                                   Pageable pageable, HttpServletRequest httpServletRequest) {
 
-        log.info("join - {}", join);
-        log.info("schemaName - {}", schemaName);
-        log.info("select - {}", select);
-        log.info("filter - {}", filter);
-        log.info("pageable - {}", pageable);
+        log.debug("join - {}", join);
+        log.debug("schemaName - {}", schemaName);
+        log.debug("select - {}", select);
+        log.debug("filter - {}", filter);
+        log.debug("pageable - {}", pageable);
 
-        log.info("sort - {}", sort);
-        log.info("pageable 1 - {}", pageable.isPaged());
+
         if( getIntParameter(httpServletRequest, "page", -1) == -1 &&
                 getIntParameter(httpServletRequest, "size", -1) == -1) {
             pageable = Pageable.unpaged(sort);
         }
 
-        log.info("pageable 2 - {}", pageable.isPaged());
+
         return queryService.findAllByJoinTable(schemaName, tableName,select, filter, join, pageable);
     }
 
