@@ -659,7 +659,13 @@ Examples of RSQL expressions in both FIQL-like and alternative notation:
 25. ~Offset & limit pagination~
 25. SEEK method for pagination
 26. Caching - Redis support (Requested on Redit)
-27. Open API specification 3.x
+27. Open API specification 3.x generation
 28. Aggregate function
 29. mTLS/Certificate auth
+30. JWT support
+31. JWKS support 
+32. API Key support - unkey.dev or custom
+33. Aggregate functions
+34. Open policy agent support
+35. OSO support
 
