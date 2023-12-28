@@ -668,4 +668,9 @@ Examples of RSQL expressions in both FIQL-like and alternative notation:
 33. Aggregate functions
 34. Open policy agent support
 35. OSO support
+36. Integration with AWS KMA
+37. Observability - Data dog
+38. HTTP 2 support
+39. Support for Grafana & Prometheus
+40. Configuration Docs - AWS RDS Postgres, Aurora Postgres , DB User role
 
