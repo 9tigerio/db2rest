@@ -583,9 +583,28 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
   User-Agent:insomnia/8.4.5
 ```
 
+
+**13. Offset pagination & Sorting**
+
+This GET operation will fetch results of the query in chunks of pages - 2 records at a time and sorted.
+
+```Shell
+curl --request GET \
+  --url 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2&sort=actor_id&sort=first_name,DESC' \
+  --header 'Accept-Profile: sakila' \
+  --header 'User-Agent: insomnia/8.4.5'
+```
+**HTTPie**
+
+```Shell
+http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2&sort=actor_id&sort=first_name,DESC' \
+  Accept-Profile:sakila \
+  User-Agent:insomnia/8.4.5
+```
+
 # HTTP Headers
 
-In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specificy the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
+In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specify the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
 
 
 # RSQL 
