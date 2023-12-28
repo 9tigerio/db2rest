@@ -109,7 +109,7 @@ Coming soon.
     - [x] Join - Inner
     - [x] Include Join Columns
     - [x] Pagination - Limit & Offset
-    - [ ] Sorting
+    - [X] Sort / Order by
     - [ ] Group By
     - [ ] Count
     - [ ] Join column filter
@@ -160,6 +160,21 @@ Coming soon.
 | =like=      | like          | like                    | [X]       |
 | =startWith= | like          | start with ex - Joy%    | [X]       |
 | =endWith=   | like          | start with ex - %Ful    | [X]       |
+
+
+# Request parameters for Pagination
+
+| Parameter Name | Description                                               | 
+|----------------|-----------------------------------------------------------|
+| page           | Page you want to retrieve, 0 indexed and defaults to 0.   | 
+| size           | Size of the page you want to retrieve, defaults to 20.    | 
+
+# Request parameters for Sorting
+
+| Parameter Name | Description                                               | 
+|----------------|-----------------------------------------------------------|
+| sort           | Properties that should be sorted by in the format property,property(,ASC|DESC). Default sort direction is ascending. Use multiple sort parameters if you want to switch directions, e.g. ?sort=firstname&sort=lastname,asc.  | 
+
 
 
 # Examples 
@@ -624,4 +639,8 @@ Examples of RSQL expressions in both FIQL-like and alternative notation:
 24. Version column handling
 25. ~Offset & limit pagination~
 25. SEEK method for pagination
+26. Caching - Redis support (Requested on Redit)
+27. Open API specification 3.x
+28. Aggregate function
+29. mTLS/Certificate auth
 
