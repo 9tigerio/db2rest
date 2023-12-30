@@ -29,3 +29,10 @@ db2rest:
 logging:
   level:
     org.springframework.web : INFO
+    schemacrawler:
+      schemacrawler: ERROR
+      crawl: ERROR
+    us:
+      fatehi:
+        utility:
+          scheduler: ERROR

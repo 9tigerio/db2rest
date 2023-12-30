@@ -28,16 +28,74 @@
     <dependencies>
 
 
+
+        <dependency>
+            <groupId>us.fatehi</groupId>
+            <artifactId>schemacrawler-mysql</artifactId>
+            <version>16.20.7</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>com.mysql</groupId>
+                    <artifactId>mysql-connector-j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-nop</artifactId>
+                </exclusion>
+
+            </exclusions>
+        </dependency>
+
+
+
+
+        <dependency>
+            <groupId>us.fatehi</groupId>
+            <artifactId>schemacrawler-postgresql</artifactId>
+            <version>16.20.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-nop</artifactId>
+                </exclusion>
+
+            </exclusions>
+        </dependency>
+
+
+
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
         </dependency>
 
-
+        <!-- TODO Remove -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jooq</artifactId>
+
+           <!-- Need to use JOOQ 3.19+ for explict join, path joins etc -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jooq</groupId>
+                    <artifactId>jooq</artifactId>
+                </exclusion>
+            </exclusions>
+
         </dependency>
+
+        <!-- TODO Remove -->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.19.1</version>
+        </dependency>
+
 
 
         <dependency>

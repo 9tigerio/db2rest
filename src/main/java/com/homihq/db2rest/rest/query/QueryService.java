@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.query;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.rest.query.helper.QueryBuilderContext;
 import com.homihq.db2rest.rest.query.helper.WhereBuilder;
 import com.homihq.db2rest.rest.query.helper.SelectBuilder;
 import com.homihq.db2rest.rest.query.model.JoinTable;
@@ -34,7 +35,15 @@ public class QueryService {
     private final Db2RestConfigProperties db2RestConfigProperties;
 
     public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter, String joinTable, Pageable pageable) {
+        QueryBuilderContext ctx = new QueryBuilderContext();
+        ctx.setSchemaName(schemaName);
+        ctx.setTableName(tableName);
+        ctx.setSelect(select);
+        ctx.setFilter(filter);
 
+        selectBuilder.build(ctx);
+
+        /*
         Query query = createQuery(schemaName, tableName,select,filter, joinTable, pageable);
 
         String sql = query.getSQL();
@@ -44,6 +53,10 @@ public class QueryService {
         log.info("Bind variables - {}", bindValues);
 
         return jdbcTemplate.queryForList(sql, bindValues.toArray());
+
+         */
+
+        return null;
     }
 
     private Query createQuery(String schemaName, String tableName, String select, String filter, String joinTable, Pageable pageable) {
