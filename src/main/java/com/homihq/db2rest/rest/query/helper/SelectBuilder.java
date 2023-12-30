@@ -15,14 +15,15 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.jooq.impl.DSL.*;
-
+import static com.homihq.db2rest.schema.NameUtil.*;
 
 @Component
 @Slf4j
-public class SelectBuilder {
+public class SelectBuilder implements SqlQueryPartBuilder{
+
+
 
     public void build(QueryBuilderContext context) {
-        List<String> columns = StringUtils.isBlank(context.select) ?  List.of() : List.of(context.select.split(";"));
 
         if(StringUtils.isBlank(context.select)) { // use asterix on root table
             context.buildAstrix();
@@ -44,6 +45,8 @@ public class SelectBuilder {
         //split to get all tables n columns
         String [] tabCols = select.split(";");
 
+        int counter = 0;
+
         //now check for embedded table and columns.
         for(String tabCol : tabCols) {
             RTable rTable;
@@ -53,21 +56,26 @@ public class SelectBuilder {
                 String joinTableName = tabCol.substring(0, tabCol.indexOf("("));
                 //look for columns
                 String colString = tabCol.substring(tabCol.indexOf("(")  + 1 , tabCol.indexOf(")"));
-                rTable = getTable(schema, joinTableName, colString);
+                rTable = getTable(schema, joinTableName, colString, counter);
             }
             else{
-                rTable = getTable(schema, rootTableName, tabCol);
+                rTable = getTable(schema, rootTableName, tabCol, counter);
 
             }
             tables.add(rTable);
+
+            counter++;
         }
+
+
         return tables;
     }
 
-    public RTable getTable(String schema, String tableName, String colStr) {
+    private RTable getTable(String schema, String tableName, String colStr, int counter) {
         RTable table = new RTable();
         table.setSchema(schema);
         table.setName(tableName);
+        table.setAlias(getAlias(counter, ""));
 
         List<RColumn> columnList = new ArrayList<>();
 
@@ -78,7 +86,6 @@ public class SelectBuilder {
             RColumn rColumn = new RColumn();
             rColumn.setTable(tableName);
             rColumn.setName(col);
-
             columnList.add(rColumn);
         }
 
@@ -87,6 +94,7 @@ public class SelectBuilder {
         return table;
     }
 
+    @Deprecated
     public List<Field<?>> build(Table<?> table, List<String> columnNames, Table<?> jTable, JoinTable jt) {
 
         List<Field<?>> fields = new ArrayList<>();
@@ -132,6 +140,8 @@ public class SelectBuilder {
 
         }
     }
+
+
 
 
 }

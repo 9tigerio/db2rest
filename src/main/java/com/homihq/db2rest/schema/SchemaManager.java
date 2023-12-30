@@ -1,11 +1,13 @@
 package com.homihq.db2rest.schema;
 
+import com.homihq.db2rest.exception.InvalidTableException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import schemacrawler.schema.Catalog;
+import schemacrawler.schema.ForeignKey;
 import schemacrawler.schema.Schema;
 import schemacrawler.schema.Table;
 import schemacrawler.schemacrawler.*;
@@ -22,6 +24,7 @@ import java.util.List;
 public final class SchemaManager {
 
   private List<Table> tables;
+
 
   private final DataSource dataSource;
 
@@ -78,5 +81,31 @@ public final class SchemaManager {
             .toList();
   }
 
+  public List<ForeignKey> getForeignKeysBetween(String schemaName, String rootTable, String childTable) {
+
+    //1. first locate table in the cache
+    Table table =
+    this.tables.stream()
+            .peek(table1 -> log.info("schema - {} , table - {}", table1.getSchema().getCatalogName(), table1.getName()))
+            .filter(t ->
+                    StringUtils.equalsIgnoreCase(t.getSchema().getCatalogName() , schemaName)
+                    &&
+                            StringUtils.equalsIgnoreCase(t.getName() , rootTable)
+                    ).findFirst().orElseThrow(() -> new InvalidTableException(schemaName + "." + rootTable));
+
+
+    List<ForeignKey> foreignKeys =
+    table.getImportedForeignKeys().stream().filter(fk ->
+            StringUtils.equalsIgnoreCase(fk.getSchema().getCatalogName() , schemaName)
+            &&
+                    StringUtils.equalsIgnoreCase(fk.getReferencedTable().getName() , childTable)
+    ).toList();
+
+    log.info("foreignKeys -> {}", foreignKeys);
+
+    // if foreign keys = null, look for join table option
+
+    return foreignKeys;
+  }
 
 }
