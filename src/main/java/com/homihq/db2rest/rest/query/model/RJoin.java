@@ -19,14 +19,8 @@ public class RJoin {
     public String getJoin() {
 
         return type + " JOIN " +  tableName + " " + alias +
-            " ON " + alias + "." +   right + " = " + rightTableAlias + "." + right;
+            " ON " + alias + "." +   right + " = " + rightTableAlias + "." + left;
     }
 
-    /*
-    private String process(String feelsLike, String temperature, String unit) {
-        return STR
-                . "Today's weather is \{ feelsLike }, with a temperature of \{ temperature } degrees \{ unit }" ;
-    }
 
-     */
 }

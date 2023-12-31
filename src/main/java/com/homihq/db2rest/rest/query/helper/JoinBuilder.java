@@ -39,37 +39,33 @@ public class JoinBuilder implements SqlQueryPartBuilder {
                 for(ForeignKey foreignKey : foreignKeys) {
 
                     for(ColumnReference columnReference : foreignKey.getColumnReferences()) {
-                        //log.info("fk - null : {}", columnReference.getForeignKeyColumn());
-                        //log.info("fk - null : {}", columnReference.getForeignKeyColumn().isNullable());
-                        //log.info("fk - null : {}", columnReference.getPrimaryKeyColumn());
-                        //log.info("fk - null : {}", columnReference.getPrimaryKeyColumn().isNullable());
-
-                        RJoin join = new RJoin();
-                        join.setSchemaName(context.getSchemaName());
-                        join.setTableName(columnReference.getPrimaryKeyColumn().getParent().getName());
-                        join.setAlias(getAlias(counter, "jt"));
-
-                        join.setType(columnReference.getForeignKeyColumn().isNullable()
-                            ? "LEFT" : "INNER");
-
-                        join.setLeft(columnReference.getPrimaryKeyColumn().getName());
-                        join.setRight(columnReference.getForeignKeyColumn().getName());
-
-                        join.setRightTable(root.getName());
-                        join.setRightTableAlias(root.getAlias());
-
-                        log.info("join --> {}", join);
-
+                        RJoin join = createJoin(context, columnReference, counter, root);
                         joins.add(join);
-
                         counter++;
-
                     }
                 }
             }
 
-            context.buildJoin(joins);
+            context.setRJoins(joins);
         }
 
+    }
+
+
+
+    private RJoin createJoin(QueryBuilderContext context, ColumnReference columnReference, int counter, RTable root) {
+        RJoin join = new RJoin();
+        join.setSchemaName(context.getSchemaName());
+        join.setTableName(columnReference.getPrimaryKeyColumn().getParent().getName());
+        join.setAlias(getAlias(counter, "jt"));
+
+        join.setType(columnReference.getForeignKeyColumn().isNullable() ? "LEFT" : "INNER");
+
+        join.setLeft(columnReference.getPrimaryKeyColumn().getName());
+        join.setRight(columnReference.getForeignKeyColumn().getName());
+
+        join.setRightTable(root.getName());
+        join.setRightTableAlias(root.getAlias());
+        return join;
     }
 }

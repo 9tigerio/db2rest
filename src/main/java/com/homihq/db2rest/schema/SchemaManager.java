@@ -59,7 +59,7 @@ public final class SchemaManager {
     for (final Schema schema : catalog.getSchemas()) {
 
       for (final Table table : catalog.getTables(schema)) {
-        log.info("Cache table/view info -> {}" , table);
+
         tableList.add(table);
 
       }
@@ -86,7 +86,6 @@ public final class SchemaManager {
     //1. first locate table in the cache
     Table table =
     this.tables.stream()
-            .peek(table1 -> log.info("schema - {} , table - {}", table1.getSchema().getCatalogName(), table1.getName()))
             .filter(t ->
                     StringUtils.equalsIgnoreCase(t.getSchema().getCatalogName() , schemaName)
                     &&
@@ -94,18 +93,13 @@ public final class SchemaManager {
                     ).findFirst().orElseThrow(() -> new InvalidTableException(schemaName + "." + rootTable));
 
 
-    List<ForeignKey> foreignKeys =
-    table.getImportedForeignKeys().stream().filter(fk ->
+      // if foreign keys = null, look for join table option
+
+    return table.getImportedForeignKeys().stream().filter(fk ->
             StringUtils.equalsIgnoreCase(fk.getSchema().getCatalogName() , schemaName)
             &&
                     StringUtils.equalsIgnoreCase(fk.getReferencedTable().getName() , childTable)
     ).toList();
-
-    log.info("foreignKeys -> {}", foreignKeys);
-
-    // if foreign keys = null, look for join table option
-
-    return foreignKeys;
   }
 
 }

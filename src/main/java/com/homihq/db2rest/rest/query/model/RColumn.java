@@ -6,6 +6,7 @@ import lombok.Data;
 public class RColumn {
 
     String table;
+    String tableAlias;
     String name;
     String alias;
 }

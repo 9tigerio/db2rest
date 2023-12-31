@@ -47,6 +47,9 @@ public class QueryService {
 
         selectBuilder.build(ctx);
         joinBuilder.build(ctx);
+        selectBuilder.postProcess(ctx);
+
+        ctx.buildSQL();
 
         /*
         Query query = createQuery(schemaName, tableName,select,filter, joinTable, pageable);
@@ -72,7 +75,6 @@ public class QueryService {
 
         JoinTable jt = getJoinTableDetails(joinTable);
 
-        log.debug("JoinTable - {}" , jt);
 
         Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
         Table<?> jTable = null;
