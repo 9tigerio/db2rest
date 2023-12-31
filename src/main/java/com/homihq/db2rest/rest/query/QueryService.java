@@ -32,6 +32,7 @@ public class QueryService {
     private final SelectBuilder selectBuilder;
     private final JoinBuilder joinBuilder;
 
+
     private final WhereBuilder whereBuilder;
     private final DSLContext dslContext;
     private final SchemaService schemaService;
@@ -48,6 +49,7 @@ public class QueryService {
         selectBuilder.build(ctx);
         joinBuilder.build(ctx);
         selectBuilder.postProcess(ctx);
+        whereBuilder.build(ctx);
 
         ctx.buildSQL();
 

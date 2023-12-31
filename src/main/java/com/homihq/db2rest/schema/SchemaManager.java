@@ -1,15 +1,13 @@
 package com.homihq.db2rest.schema;
 
+import com.homihq.db2rest.exception.InvalidColumnException;
 import com.homihq.db2rest.exception.InvalidTableException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import schemacrawler.schema.Catalog;
-import schemacrawler.schema.ForeignKey;
-import schemacrawler.schema.Schema;
-import schemacrawler.schema.Table;
+import schemacrawler.schema.*;
 import schemacrawler.schemacrawler.*;
 import schemacrawler.tools.utility.SchemaCrawlerUtility;
 import us.fatehi.utility.datasource.DatabaseConnectionSources;
@@ -17,6 +15,8 @@ import us.fatehi.utility.datasource.DatabaseConnectionSources;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +24,8 @@ import java.util.List;
 public final class SchemaManager {
 
   private List<Table> tables;
+
+  private Map<String, Table> tableMap = new ConcurrentHashMap<>();
 
 
   private final DataSource dataSource;
@@ -62,6 +64,13 @@ public final class SchemaManager {
 
         tableList.add(table);
 
+        String key = table.getSchema().getCatalogName() + "." + table.getName();
+
+        log.info("Key - {}", key);
+        log.info("Full name - {}", table.getFullName());
+
+        tableMap.put(key, table);
+
       }
     }
 
@@ -69,16 +78,14 @@ public final class SchemaManager {
 
   }
 
-  /**
-   * Returns a list because different schemas can have table with same name
-   * @param name
-   * @return
-   */
+  public Column getColumn(String schemaName, String tableName, String columnName) {
+    Table table = tableMap.get(schemaName + "." + tableName);
 
-  public List<Table> getAllTablesByName(String name) {
+    if(table == null) throw new InvalidTableException(tableName);
+
     return
-    this.tables.stream().filter(t -> StringUtils.equalsIgnoreCase(name, t.getName()))
-            .toList();
+    table.getColumns().stream().filter(c -> StringUtils.equalsIgnoreCase(columnName, c.getName()))
+            .findFirst().orElseThrow(() -> new InvalidColumnException(tableName, columnName));
   }
 
   public List<ForeignKey> getForeignKeysBetween(String schemaName, String rootTable, String childTable) {

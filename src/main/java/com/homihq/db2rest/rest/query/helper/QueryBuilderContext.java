@@ -85,4 +85,10 @@ public class QueryBuilderContext {
 
     }
 
+    public String getTableAlias(String tableName) {
+        return
+        this.getRTables().stream().filter(t -> StringUtils.equalsIgnoreCase(tableName, t.getName()))
+                .findFirst().orElseThrow()
+                .getAlias();
+    }
 }
