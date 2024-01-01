@@ -2,6 +2,7 @@ package com.homihq.db2rest.schema;
 
 import com.homihq.db2rest.exception.InvalidColumnException;
 import com.homihq.db2rest.exception.InvalidTableException;
+import com.homihq.db2rest.mybatis.DB2RTable;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public final class SchemaManager {
 
   private Map<String, Table> tableMap = new ConcurrentHashMap<>();
 
+  private Map<String, DB2RTable> db2RTableMap;
 
   private final DataSource dataSource;
 
