@@ -1,7 +1,10 @@
 package com.homihq.db2rest.rest.query.helper;
 
+import com.homihq.db2rest.rest.query.model.RCondition;
 import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
 import com.homihq.db2rest.rsql.parser.DefaultRSQLVisitor;
+import com.homihq.db2rest.rsql.v2.parser.DefaultRSQLVisitorV2;
+import com.homihq.db2rest.schema.SchemaManager;
 import com.homihq.db2rest.schema.SchemaService;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
@@ -9,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.Condition;
-import org.jooq.Record;
 import org.jooq.Table;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +20,12 @@ import static org.jooq.impl.DSL.noCondition;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class WhereBuilder {
+public class WhereBuilder implements SqlQueryPartBuilder{
 
     private final SchemaService schemaService;
+    private final SchemaManager schemaManager;
 
+    @Deprecated
     public Condition create(String tableName, String rSql) {
 
         if(StringUtils.isNotBlank(rSql)) {
@@ -37,6 +41,7 @@ public class WhereBuilder {
         return noCondition();
     }
 
+    @Deprecated
     public Condition create(Table<?> table, String tableName, String filter) {
 
         if(StringUtils.isNotBlank(filter)) {
@@ -48,5 +53,21 @@ public class WhereBuilder {
         }
 
         return noCondition();
+    }
+
+    @Override
+    public void build(QueryBuilderContext context) {
+        if(StringUtils.isNotBlank(context.filter)) {
+
+            log.info("-Creating where condition -");
+
+            Node rootNode = new RSQLParser(CustomRSQLOperators.customOperators()).parse(context.filter);
+
+            RCondition condition = rootNode.accept(new DefaultRSQLVisitorV2(schemaManager , context));
+
+            log.info("condition - {}", condition);
+
+        }
+
     }
 }

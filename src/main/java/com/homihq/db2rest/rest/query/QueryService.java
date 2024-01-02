@@ -1,6 +1,8 @@
 package com.homihq.db2rest.rest.query;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.rest.query.helper.JoinBuilder;
+import com.homihq.db2rest.rest.query.helper.QueryBuilderContext;
 import com.homihq.db2rest.rest.query.helper.WhereBuilder;
 import com.homihq.db2rest.rest.query.helper.SelectBuilder;
 import com.homihq.db2rest.rest.query.model.JoinTable;
@@ -28,13 +30,30 @@ public class QueryService {
 
     private final JdbcTemplate jdbcTemplate;
     private final SelectBuilder selectBuilder;
+    private final JoinBuilder joinBuilder;
+
+
     private final WhereBuilder whereBuilder;
     private final DSLContext dslContext;
     private final SchemaService schemaService;
     private final Db2RestConfigProperties db2RestConfigProperties;
 
-    public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter, String joinTable, Pageable pageable) {
+    public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter,
+                                    @Deprecated String joinTable, Pageable pageable) {
+        QueryBuilderContext ctx = new QueryBuilderContext();
+        ctx.setSchemaName(schemaName);
+        ctx.setTableName(tableName);
+        ctx.setSelect(select);
+        ctx.setFilter(filter);
 
+        selectBuilder.build(ctx);
+        joinBuilder.build(ctx);
+        selectBuilder.postProcess(ctx);
+        whereBuilder.build(ctx);
+
+        ctx.buildSQL();
+
+        /*
         Query query = createQuery(schemaName, tableName,select,filter, joinTable, pageable);
 
         String sql = query.getSQL();
@@ -44,6 +63,10 @@ public class QueryService {
         log.info("Bind variables - {}", bindValues);
 
         return jdbcTemplate.queryForList(sql, bindValues.toArray());
+
+         */
+
+        return null;
     }
 
     private Query createQuery(String schemaName, String tableName, String select, String filter, String joinTable, Pageable pageable) {
@@ -54,7 +77,6 @@ public class QueryService {
 
         JoinTable jt = getJoinTableDetails(joinTable);
 
-        log.debug("JoinTable - {}" , jt);
 
         Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
         Table<?> jTable = null;
