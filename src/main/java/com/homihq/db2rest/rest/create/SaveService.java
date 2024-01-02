@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.mybatis.dynamic.sql.SqlTable;
+import org.mybatis.dynamic.sql.insert.GeneralInsertDSL;
 import org.mybatis.dynamic.sql.insert.InsertDSL;
+import org.mybatis.dynamic.sql.insert.render.GeneralInsertStatementProvider;
 import org.mybatis.dynamic.sql.insert.render.InsertStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static org.mybatis.dynamic.sql.insert.GeneralInsertDSL.insertInto;
 import static org.mybatis.dynamic.sql.insert.InsertDSL.insert;
 
 
@@ -43,20 +46,35 @@ public class SaveService {
 
         SqlTable table = SqlTable.of(tableName);
 
+
         InsertDSL<Map<String, Object>> dsl = insert(data)
                 .into(table);
+
 
         for(String key : data.keySet()) {
             dsl.map(table.column(key)).toProperty(key);
         }
 
-        InsertStatementProvider<Map<String, Object>> provider = dsl.build().render(RenderingStrategies.MYBATIS3);
 
-        log.info("SQL - {}", provider.getInsertStatement());
-        log.info("SQL - row - {}", provider.getRow());
 
-        namedParameterJdbcTemplate.update(provider.getInsertStatement(), provider.getRow());
+        InsertStatementProvider<Map<String, Object>> provider = dsl.build().render(RenderingStrategies.SPRING_NAMED_PARAMETER);
 
+        GeneralInsertDSL generalInsertDSL = insertInto(table);
+
+        for(String key : data.keySet()) {
+            generalInsertDSL.set(table.column(key)).toValue(data.get(key));
+        }
+
+        GeneralInsertStatementProvider insertStatement =
+                generalInsertDSL.build().render(RenderingStrategies.SPRING_NAMED_PARAMETER);
+
+        log.info("SQL - {}", insertStatement.getInsertStatement());
+        log.info("SQL - row - {}", insertStatement.getParameters());
+
+        //namedParameterJdbcTemplate.update(provider.getInsertStatement(), provider.getRow());
+        int rows = namedParameterJdbcTemplate.update(insertStatement.getInsertStatement(), insertStatement.getParameters());
+
+        log.info("SQL - rows - {}", rows);
         return null;
     }
 
