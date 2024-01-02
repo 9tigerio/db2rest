@@ -1,24 +1,25 @@
 package com.homihq.db2rest.rest.create;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.schema.SchemaService;
+import com.homihq.db2rest.mybatis.DB2RestRenderingStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.*;
-import org.jooq.impl.DSL;
+
 import org.mybatis.dynamic.sql.SqlTable;
+import org.mybatis.dynamic.sql.insert.BatchInsertDSL;
 import org.mybatis.dynamic.sql.insert.GeneralInsertDSL;
+import org.mybatis.dynamic.sql.insert.render.BatchInsert;
 import org.mybatis.dynamic.sql.insert.render.GeneralInsertStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-
+import static org.mybatis.dynamic.sql.insert.BatchInsertDSL.insert;
 import static org.mybatis.dynamic.sql.insert.GeneralInsertDSL.insertInto;
-
 
 
 @Service
@@ -26,26 +27,13 @@ import static org.mybatis.dynamic.sql.insert.GeneralInsertDSL.insertInto;
 @RequiredArgsConstructor
 public class SaveService {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final DSLContext dslContext;
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final SchemaService schemaService;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    private final DB2RestRenderingStrategy db2RestRenderingStrategy = new DB2RestRenderingStrategy();
 
     @Transactional
     public void save(String schemaName, String tableName, Map<String,Object> data) {
-        GeneralInsertStatementProvider insertStatement = createInsertSQL2(schemaName, tableName, data);
-
-        log.info("SQL - {}", insertStatement.getInsertStatement());
-        log.info("SQL - row - {}", insertStatement.getParameters());
-
-        int rows = namedParameterJdbcTemplate.update(insertStatement.getInsertStatement(), insertStatement.getParameters());
-
-        log.info("Inserted - {} row(s)", rows);
-
-    }
-
-    private GeneralInsertStatementProvider createInsertSQL2(String schemaName, String tableName, Map<String, Object> data) {
         db2RestConfigProperties.verifySchema(schemaName);
 
         SqlTable table = SqlTable.of(tableName);
@@ -55,52 +43,48 @@ public class SaveService {
             generalInsertDSL.set(table.column(key)).toValue(data.get(key));
         }
 
-        return generalInsertDSL.build().render(RenderingStrategies.SPRING_NAMED_PARAMETER);
+
+        GeneralInsertStatementProvider insertStatement = generalInsertDSL.build().render(RenderingStrategies.SPRING_NAMED_PARAMETER);
+
+        log.debug("SQL - {}", insertStatement.getInsertStatement());
+        log.debug("SQL - row - {}", insertStatement.getParameters());
+
+        int rows = namedParameterJdbcTemplate.update(insertStatement.getInsertStatement(), insertStatement.getParameters());
+
+        log.debug("Inserted - {} row(s)", rows);
 
     }
 
     @Transactional
     public void saveBulk(String schemaName, String tableName, List<Map<String, Object>> dataList) {
-
         if(Objects.isNull(dataList) || dataList.isEmpty()) throw new RuntimeException("No data provided");
 
-        InsertValuesStepN<?> insertValuesStepN = createInsertSQL(schemaName, tableName, dataList.get(0));
+        SqlTable table = SqlTable.of(tableName);
 
-        String sql = insertValuesStepN.getSQL();
-        List<Object> bindValues = insertValuesStepN.getBindValues();
+        Map<String,Object> item = dataList.get(0);
 
-        log.info("SQL - {}", sql);
-        log.info("Bind variables - {}", bindValues);
+        BatchInsertDSL<Map<String, Object>> batchInsertDSL = insert(dataList)
+                .into(table);
 
-        List<Object[]> batchData = new ArrayList<>();
-
-        for(Map<String, Object> d : dataList) {
-            batchData.add(d.values().toArray());
+        for(String key : item.keySet()) {
+            batchInsertDSL.map(table.column(key)).toProperty(key);
         }
 
-        jdbcTemplate.batchUpdate(sql, batchData);
+        BatchInsert<Map<String,Object>> batchInsert =
+                batchInsertDSL
+                .build()
+                .render(db2RestRenderingStrategy);
 
+        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
+
+        log.debug("SQL -> {}", batchInsert.getInsertStatementSQL());
+        log.debug("batch -> {}", batch);
+
+        int[] updateCounts = namedParameterJdbcTemplate.batchUpdate(batchInsert.getInsertStatementSQL(), batch);
+
+        log.debug("Update counts - {}", updateCounts.length);
     }
 
-    private InsertValuesStepN<?> createInsertSQL(String schemaName, String tableName, Map<String, Object> data) {
-        db2RestConfigProperties.verifySchema(schemaName);
-
-        Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
-
-        return dslContext.insertInto(table).columns(getColumns(data))
-                .values(getValues(data));
-    }
-
-
-    private Object[] getValues(Map<String, Object> data) {
-        return  data.values().toArray();
-    }
-
-    private List<Field<Object>> getColumns(Map<String, Object> data) {
-        return
-        data.keySet().stream().map(DSL::field).toList();
-
-    }
 
 
 }

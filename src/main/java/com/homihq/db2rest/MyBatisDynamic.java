@@ -31,7 +31,7 @@ public class MyBatisDynamic implements CommandLineRunner {
                 .where(film.column("id"), isEqualTo(1))
                 .or(film.column("title"), isNotNull())
                 .build()
-                .render(RenderingStrategies.MYBATIS3);
+                .render(RenderingStrategies.SPRING_NAMED_PARAMETER);
 
         log.info("SELECT - {}", selectStatement.getSelectStatement());
 

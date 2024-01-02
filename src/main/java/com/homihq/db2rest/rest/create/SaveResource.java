@@ -1,6 +1,5 @@
 package com.homihq.db2rest.rest.create;
 
-import com.homihq.db2rest.rest.create.SaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +27,8 @@ public class SaveResource {
                       @RequestHeader(name = "Content-Profile") String schemaName,
                      @RequestBody List<Map<String,Object>> data) {
         log.info("data -> {}", data);
+
+
         saveService.saveBulk(schemaName, tableName,data);
     }
 }
