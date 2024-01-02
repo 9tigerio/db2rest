@@ -19,9 +19,8 @@ public class SaveResource {
                      @RequestHeader(name = "Content-Profile") String schemaName,
                      @RequestBody Map<String,Object> data) {
 
-        //saveService.save(schemaName, tableName, data);
 
-        saveService.save2(schemaName, tableName, data);
+        saveService.save(schemaName, tableName, data);
     }
 
     @PostMapping ( "/{tableName}/bulk")
