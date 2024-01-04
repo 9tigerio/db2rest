@@ -3,7 +3,7 @@ package com.homihq.db2rest.rest.query.helper;
 import com.homihq.db2rest.rest.query.model.RCondition;
 import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
 import com.homihq.db2rest.rsql.parser.DefaultRSQLVisitor;
-import com.homihq.db2rest.rsql.v2.parser.DefaultRSQLVisitorV2;
+import com.homihq.db2rest.rsql.v2.parser.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import com.homihq.db2rest.schema.SchemaService;
 import cz.jirutka.rsql.parser.RSQLParser;
@@ -63,9 +63,9 @@ public class WhereBuilder implements SqlQueryPartBuilder{
 
             Node rootNode = new RSQLParser(CustomRSQLOperators.customOperators()).parse(context.filter);
 
-            RCondition condition = rootNode.accept(new DefaultRSQLVisitorV2(schemaManager , context));
+            //RCondition condition = rootNode.accept(new BaseRSQLVisitor(schemaManager , context));
 
-            log.info("condition - {}", condition);
+            //log.info("condition - {}", condition);
 
         }
 

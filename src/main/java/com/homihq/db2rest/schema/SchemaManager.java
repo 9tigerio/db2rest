@@ -68,8 +68,8 @@ public final class SchemaManager {
 
         String key = table.getSchema().getCatalogName() + "." + table.getName();
 
-        log.info("Key - {}", key);
-        log.info("Full name - {}", table.getFullName());
+        //log.info("Key - {}", key);
+        //log.info("Full name - {}", table.getFullName());
 
         tableMap.put(key, table);
 
