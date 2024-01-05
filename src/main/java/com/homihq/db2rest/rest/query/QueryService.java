@@ -2,7 +2,7 @@ package com.homihq.db2rest.rest.query;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.rest.query.helper.JoinBuilder;
-import com.homihq.db2rest.rest.query.helper.QueryBuilderContext;
+import com.homihq.db2rest.rest.query.helper.QueryContext;
 import com.homihq.db2rest.rest.query.helper.WhereBuilder;
 import com.homihq.db2rest.rest.query.helper.SelectBuilder;
 import com.homihq.db2rest.rest.query.model.JoinTable;
@@ -18,7 +18,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 import static org.jooq.impl.DSL.*;
 import org.jooq.*;
@@ -40,15 +39,12 @@ public class QueryService {
 
     public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter,
                                     @Deprecated String joinTable, Pageable pageable) {
-        QueryBuilderContext ctx = new QueryBuilderContext();
-        ctx.setSchemaName(schemaName);
-        ctx.setTableName(tableName);
-        ctx.setSelect(select);
-        ctx.setFilter(filter);
+        QueryContext ctx = QueryContext.builder()
+            .schemaName(schemaName).tableName(tableName).select(select).filter(filter).build();
+
 
         selectBuilder.build(ctx);
         joinBuilder.build(ctx);
-        selectBuilder.postProcess(ctx);
         whereBuilder.build(ctx);
 
         ctx.buildSQL();
@@ -69,50 +65,6 @@ public class QueryService {
         return null;
     }
 
-    private Query createQuery(String schemaName, String tableName, String select, String filter, String joinTable, Pageable pageable) {
-
-        db2RestConfigProperties.verifySchema(schemaName);
-
-        List<String> columns = StringUtils.isBlank(select) ?  List.of() : List.of(select.split(","));
-
-        JoinTable jt = getJoinTableDetails(joinTable);
-
-
-        Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
-        Table<?> jTable = null;
-        if(Objects.nonNull(jt) ) {
-
-            jTable = schemaService.getTableByNameAndSchema(schemaName, jt.name());
-
-        }
-
-        SelectJoinStep<Record> selectJoinStep;
-
-        if(columns.isEmpty()) {
-            selectJoinStep = dslContext.select(asterisk()).from(table);
-        }
-        else{
-            List<Field<?>> fields =  selectBuilder.build(table, columns, jTable, jt);
-            selectJoinStep = dslContext.select(fields).from(table);
-        }
-
-        addOrderBy(selectJoinStep, pageable);
-
-        if(Objects.nonNull(jTable)) {
-            createJoin(table, jTable, selectJoinStep);
-        }
-
-        Condition whereCondition = whereBuilder.create(tableName, filter);
-
-        SelectConditionStep<?> selectConditionStep = selectJoinStep.where(whereCondition);
-
-        if(pageable.isPaged()) {
-
-            return selectConditionStep.limit(pageable.getPageSize()).offset(pageable.getOffset());
-        }
-
-        return selectConditionStep;
-    }
 
     private void addOrderBy(SelectJoinStep<Record> selectJoinStep, Pageable pageable) {
         log.info("pageable - {}", pageable);
@@ -185,13 +137,7 @@ public class QueryService {
 
     }
 
-    private void createJoin(Table<?> table, Table<?> jTable, SelectJoinStep<Record> selectJoinStep) {
-        selectJoinStep.innerJoin(jTable).on(createJoinCondition(table, jTable));
-    }
 
-    private Condition createJoinCondition(Table<?> table, Table<?> jTable) {
-        return schemaService.createJoin(table, jTable);
-    }
 
 
 

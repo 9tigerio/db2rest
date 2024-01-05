@@ -1,6 +1,5 @@
 package com.homihq.db2rest.rsql.v2.parser;
 
-import com.homihq.db2rest.rest.query.helper.QueryBuilderContext;
 import com.homihq.db2rest.rest.query.model.RCondition;
 import com.homihq.db2rest.rsql.v2.operators.Operator;
 import com.homihq.db2rest.rsql.v2.operators.RSQLOperatorHandlers;
@@ -8,8 +7,7 @@ import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.dynamic.sql.SqlTable;
-import schemacrawler.schema.Column;
+
 import java.util.List;
 import java.util.function.BinaryOperator;
 

@@ -22,7 +22,7 @@ public class JoinBuilder implements SqlQueryPartBuilder {
 
     private final SchemaManager schemaManager;
 
-    public void build(QueryBuilderContext context) {
+    public void build(QueryContext context) {
         List<RTable> rTableList = context.getRTables();
         List<RJoin> joins = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class JoinBuilder implements SqlQueryPartBuilder {
 
 
 
-    private RJoin createJoin(QueryBuilderContext context, ColumnReference columnReference, int counter, RTable root) {
+    private RJoin createJoin(QueryContext context, ColumnReference columnReference, int counter, RTable root) {
         RJoin join = new RJoin();
         join.setSchemaName(context.getSchemaName());
         join.setTableName(columnReference.getPrimaryKeyColumn().getParent().getName());

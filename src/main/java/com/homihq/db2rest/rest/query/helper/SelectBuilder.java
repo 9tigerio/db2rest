@@ -1,152 +1,55 @@
 package com.homihq.db2rest.rest.query.helper;
 
-import com.homihq.db2rest.exception.InvalidColumnException;
-import com.homihq.db2rest.rest.query.model.JoinTable;
-import com.homihq.db2rest.rest.query.model.RColumn;
-import com.homihq.db2rest.rest.query.model.RJoin;
-import com.homihq.db2rest.rest.query.model.RTable;
+import com.homihq.db2rest.mybatis.MyBatisTable;
+import com.homihq.db2rest.schema.SchemaManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.jooq.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-
-import static org.jooq.impl.DSL.*;
-import static com.homihq.db2rest.schema.NameUtil.*;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class SelectBuilder implements SqlQueryPartBuilder{
 
+    private final SchemaManager schemaManager;
 
-    public void build(QueryBuilderContext context) {
+    public void build(QueryContext context) {
+        //create tables and alias
+        List<MyBatisTable> tables = createTables(context);
 
-        if(StringUtils.isBlank(context.select)) { // use asterix on root table
-            context.setAstrix(true);
-        }
-        else{
-            List<RTable> tables =
-                    parseSelect(
-                    context.schemaName,
-                    context.getTableName(), context.select);
-
-            context.setRTables(tables);
-        }
+        context.setTables(tables);
 
     }
 
-    public void postProcess(QueryBuilderContext context) {
-        List<RColumn> columns =
-        context.getRTables().stream()
-                .flatMap(i -> i.getColumns().stream())
-                .toList();
+    private List<MyBatisTable> createTables(QueryContext context) {
+        List<MyBatisTable> tables = new ArrayList<>();
 
-
-        if(!context.isAstrix()) {
-            //check if any column in join table list
-
-            List<RColumn> columnList = new ArrayList<>();
-
-            List<String> exclusionTables =
-                    context.rJoins.stream().map(RJoin::getTableName)
-                            .distinct().toList();
-
-
-            // root table columns
-            for(RColumn rColumn : columns) {
-                for(String tName : exclusionTables) {
-                    if(!StringUtils.equalsIgnoreCase(rColumn.getTable(), tName)) {
-                        columnList.add(rColumn);
-                    }
-                }
-            }
-
-            for(RJoin join : context.rJoins) {
-
-                for(RColumn rColumn : columns) {
-
-                    if(StringUtils.equalsIgnoreCase(join.getTableName(), rColumn.getTable())) {
-                        RColumn rc = createColumn(join.getTableName(), join.getAlias(), rColumn.getName());
-                        columnList.add(rc);
-                    }
-                }
-
-            }
-
-
-            context.setRColumns(columnList);
-        }
-
-    }
-
-
-    private RTable createTable(String schema, String tableName,  String colStr, int counter) {
-        RTable table = new RTable();
-        table.setSchema(schema);
-        table.setName(tableName);
-        table.setAlias(getAlias(counter, ""));
-
-        List<RColumn> columnList = new ArrayList<>();
-
-        String[] cols = colStr.split(",");
-
-        for (String col : cols) {
-
-            RColumn rColumn = createColumn(tableName, table.getAlias() ,col);
-            columnList.add(rColumn);
-        }
-
-        table.setColumns(columnList);
-
-        return table;
-    }
-
-    private static RColumn createColumn(String tableName, String tableAlias,String colStr) {
-        RColumn rColumn = new RColumn();
-        rColumn.setTable(tableName);
-        rColumn.setTableAlias(tableAlias);
-
-        //check if there is column Alias
-        String [] c = colStr.split(":");
-
-        if(c.length == 2) {
-            rColumn.setName(c[0]);
-            rColumn.setAlias(c[1]);
-        }
-        else{ //no column alias
-            rColumn.setName(colStr);
-        }
-        return rColumn;
-    }
-
-    private List<RTable> parseSelect(String schema, String rootTableName, String select) {
-        List<RTable> tables = new ArrayList<>();
-
-        //split to get all tables n columns
-        String [] tabCols = select.split(";");
+        //split to get all fragments
+        String [] tabCols = context.select.split(";");
 
         int counter = 0;
 
-        //now check for embedded table and columns.
+        //process the fragments
         for(String tabCol : tabCols) {
-            RTable rTable;
+            MyBatisTable table;
+
             //check for presence of open '(' and close ')' brackets
+            //now check for embedded table and columns.
             if(tabCol.contains("(") && tabCol.contains(")")) { //join table
 
                 String joinTableName = tabCol.substring(0, tabCol.indexOf("("));
                 //look for columns
                 String colString = tabCol.substring(tabCol.indexOf("(")  + 1 , tabCol.indexOf(")"));
-                rTable = createTable(schema, joinTableName, colString, counter);
+                table = createTable(context.schemaName, joinTableName, colString, counter);
             }
-            else{
-                rTable = createTable(schema, rootTableName, tabCol, counter);
+            else{ //root table
+                table = createTable(context.schemaName, context.tableName, tabCol, counter);
 
             }
-            tables.add(rTable);
+            tables.add(table);
 
             counter++;
         }
@@ -155,54 +58,49 @@ public class SelectBuilder implements SqlQueryPartBuilder{
         return tables;
     }
 
-    @Deprecated
-    public List<Field<?>> build(Table<?> table, List<String> columnNames, Table<?> jTable, JoinTable jt) {
+    private MyBatisTable createTable(String schemaName, String tableName,  String colStr, int counter) {
 
-        List<Field<?>> fields = new ArrayList<>();
+        MyBatisTable table = schemaManager.findTable(schemaName, tableName, counter);
 
-        addFieldsByTable(table, columnNames, fields);
+        addColumns(table, colStr);
 
-        if(Objects.nonNull(jt) &&
-                Objects.nonNull(jt.columns()) &&
-                !jt.columns().isEmpty()) {
-            addFieldsByTable(jTable, jt.columns(), fields);
-        }
-
-        return fields;
+        return table;
     }
 
-    @Deprecated
-    private void addFieldsByTable(Table<?> table, List<String> columnNames, List<Field<?>> fields) {
+    private void addColumns(MyBatisTable table, String colStr) {
+        String[] cols = colStr.split(",");
 
-        for(String columnName : columnNames) {
-            String [] parts = columnName.split(":");
-            String alias;
-            String colName;
-            if(parts.length > 1) {
-                colName = parts[0];
-                alias = parts[1];
-
-            }
-            else{
-                colName = parts[0];
-                alias = "";
-            }
-
-            Field<?> f =
-            Arrays.stream(table.fields()).filter(field -> StringUtils.equalsIgnoreCase(colName, field.getName()))
-                    .findFirst().orElseThrow(() -> new InvalidColumnException(table.getName() , colName));
-
-            if(StringUtils.isNotBlank(alias)) {
-
-                fields.add(field(f.getQualifiedName(), f.getType()).as(alias));
-            }
-            else{
-                fields.add(field(f.getQualifiedName(), f.getType()));
-            }
-
+        if(cols.length == 1) { //no columns specified
+            //TODO - do it only for root table.
+            table.addAllColumns();
         }
+        else {
+            for (String col : cols) {
+                addColumn(table, col);
+            }
+        }
+
     }
 
+    private void addColumn(MyBatisTable table,String colStr) {
+        String colName;
+        String alias;
+
+        //check if there is column Alias
+        String [] c = colStr.split(":");
+
+        if(c.length == 2) {
+            colName = c[0];
+            alias = c[1];
+
+        }
+        else{ //no column alias
+            colName = c[0];
+            alias = colName;
+        }
+
+        table.addColumn(colName, alias);
+    }
 
 
 

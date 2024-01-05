@@ -1,24 +1,18 @@
 package com.homihq.db2rest;
 
-import com.homihq.db2rest.mybatis.DB2RTable;
-import com.homihq.db2rest.rest.query.model.RCondition;
 import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
-import com.homihq.db2rest.rsql.v2.parser.BaseRSQLVisitor;
 import com.homihq.db2rest.rsql.v2.parser.MyBatisFilterVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlCriterion;
 import org.mybatis.dynamic.sql.SqlTable;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.function.Supplier;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import static org.mybatis.dynamic.sql.select.SelectDSL.select;

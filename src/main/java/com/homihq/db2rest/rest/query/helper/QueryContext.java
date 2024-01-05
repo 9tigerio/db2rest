@@ -1,23 +1,33 @@
 package com.homihq.db2rest.rest.query.helper;
 
+import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rest.query.model.RColumn;
 import com.homihq.db2rest.rest.query.model.RJoin;
 import com.homihq.db2rest.rest.query.model.RTable;
-import lombok.Data;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.dynamic.sql.SqlTable;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.Map;
 
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-public class QueryBuilderContext {
+public class QueryContext {
 
     String schemaName;
     String tableName;
     String select;
     String filter;
-
-
     Pageable pageable;
+
+
+    SqlTable from;
+
+    List<MyBatisTable> tables;
 
     List<RTable> rTables;
     List<RJoin> rJoins;
@@ -26,6 +36,7 @@ public class QueryBuilderContext {
     private String qSelect; //Holds select col1, col2 or *
     private String qJoin;
 
+    @Deprecated
     private boolean astrix;
 
     public String getQualifiedTableName() {
@@ -85,10 +96,5 @@ public class QueryBuilderContext {
 
     }
 
-    public String getTableAlias(String tableName) {
-        return
-        this.getRTables().stream().filter(t -> StringUtils.equalsIgnoreCase(tableName, t.getName()))
-                .findFirst().orElseThrow()
-                .getAlias();
-    }
+
 }

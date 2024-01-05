@@ -1,9 +1,7 @@
 package com.homihq.db2rest.rest.query.helper;
 
-import com.homihq.db2rest.rest.query.model.RCondition;
 import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
 import com.homihq.db2rest.rsql.parser.DefaultRSQLVisitor;
-import com.homihq.db2rest.rsql.v2.parser.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import com.homihq.db2rest.schema.SchemaService;
 import cz.jirutka.rsql.parser.RSQLParser;
@@ -56,7 +54,7 @@ public class WhereBuilder implements SqlQueryPartBuilder{
     }
 
     @Override
-    public void build(QueryBuilderContext context) {
+    public void build(QueryContext context) {
         if(StringUtils.isNotBlank(context.filter)) {
 
             log.info("-Creating where condition -");
