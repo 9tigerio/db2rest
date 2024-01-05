@@ -6,10 +6,15 @@ import com.homihq.db2rest.rest.query.model.RJoin;
 import com.homihq.db2rest.rest.query.model.RTable;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.dynamic.sql.BasicColumn;
+import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlTable;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.render.RenderingStrategy;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
-import java.util.Map;
+
+import static org.mybatis.dynamic.sql.select.SelectDSL.select;
 
 
 @Builder
@@ -36,11 +41,14 @@ public class QueryContext {
     private String qSelect; //Holds select col1, col2 or *
     private String qJoin;
 
-    @Deprecated
-    private boolean astrix;
+    public String prepareSQL() {
 
-    public String getQualifiedTableName() {
-        return schemaName + "." + tableName;
+        List<BasicColumn> columns = tables.stream()
+                        .flatMap(t -> t.getSqlColumnList().stream())
+                .map(t -> (BasicColumn)t)
+                                .toList();
+        return select(columns).from(from).build().render(RenderingStrategies.SPRING_NAMED_PARAMETER).getSelectStatement();
+
     }
 
     public String getRootTable() {
@@ -51,11 +59,6 @@ public class QueryContext {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Root table not found."));
 
-    }
-
-    public void buildAstrix() {
-        this.qSelect = "SELECT " + this.tableName + ".*" + " FROM " + getQualifiedTableName();
-        System.out.println("qSelect -> " + qSelect);
     }
 
 

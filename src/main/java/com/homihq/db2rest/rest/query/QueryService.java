@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.mybatis.dynamic.sql.SqlTable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,15 +40,17 @@ public class QueryService {
 
     public Object findAllByJoinTable(String schemaName, String tableName, String select, String filter,
                                     @Deprecated String joinTable, Pageable pageable) {
-        QueryContext ctx = QueryContext.builder()
+        QueryContext ctx = QueryContext.builder().from(SqlTable.of(tableName))
             .schemaName(schemaName).tableName(tableName).select(select).filter(filter).build();
 
 
         selectBuilder.build(ctx);
-        joinBuilder.build(ctx);
-        whereBuilder.build(ctx);
+        //joinBuilder.build(ctx);
+       // whereBuilder.build(ctx);
 
-        ctx.buildSQL();
+        String sql = ctx.prepareSQL();
+
+        log.info("SQL - {}", sql);
 
         /*
         Query query = createQuery(schemaName, tableName,select,filter, joinTable, pageable);
