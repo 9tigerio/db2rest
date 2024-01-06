@@ -1,8 +1,8 @@
 # DB2Rest
 
 DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
-your existing or new databases. You can connect to most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build REST API in minutes without writing any code.
-You can now focus on building business logic and beautiful user interfaces at speed. 
+your existing or new databases. You can connect to the most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build a REST API in minutes without writing any code.
+You can now focus on building business logic and beautiful user interfaces at speed.
 
 
 
@@ -21,6 +21,7 @@ The business logic can be written in your favorite technology frameworks for Jav
 by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low code/node code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
 
 ## Benefits
+    - Without knowing SQL, you can write a simple URL query with parameters
     - Accelerate applicaton development
     - Unlock databases
     - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip
@@ -175,7 +176,25 @@ Coming soon.
 |----------------|-----------------------------------------------------------|
 | sort           | Properties that should be sorted by in the format property,property(,ASC|DESC). Default sort direction is ascending. Use multiple sort parameters if you want to switch directions, e.g. ?sort=firstname&sort=lastname,asc.  | 
 
+# RSQL 
 
+RSQL is a query language for parametrized filtering of entries in RESTful APIs. It’s based on [FIQL](https://datatracker.ietf.org/doc/html/draft-nottingham-atompub-fiql-00 "Feed Item Query Language") (Feed Item Query Language) – a URI-friendly syntax for expressing filters across the entries in an Atom Feed. FIQL is great for use in URI; there are no unsafe characters, so URL encoding is not required. On the other side, FIQL’s syntax is not very intuitive and URL encoding is not always a big deal, so RSQL also provides a friendlier syntax for logical operators and some of the comparison operators.
+
+For example, you can query your resource like this: `/movies?query=name=="Kill Bill";year=gt=2003` or `/movies?query=director.lastName==Nolan and year>=2000`. See examples below.
+
+RSQL expressions in both FIQL-like and alternative notation: 
+
+```
+- name=="Kill Bill";year=gt=2003
+- name=="Kill Bill" and year>2003
+- genres=in=(sci-fi,action);(director=='Christopher Nolan',actor==*Bale);year=ge=2000
+- genres=in=(sci-fi,action) and (director=='Christopher Nolan' or actor==*Bale) and year>=2000
+- director.lastName==Nolan;year=ge=2000;year=lt=2010
+- director.lastName==Nolan and year>=2000 and year<2010
+- genres=in=(sci-fi,action);genres=out=(romance,animated,horror),director==Que*Tarantino
+- genres=in=(sci-fi,action) and genres=out=(romance,animated,horror) or director==Que*Tarantino
+
+```
 
 # Examples 
 
@@ -222,7 +241,6 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name' \
 ```
 
 
-
 **3. Get all Actors with Row Filter**
 
 This will retrieve all the rows with specified columns or all columns from the database. However this will also filter out rows based on the filtering criterias specified in the *filter* request
@@ -245,7 +263,6 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 ```
 
 
-
 **4. Get all Actors with Column Alias**
    
 This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
@@ -266,6 +283,7 @@ http GET 'http://localhost:8080/actor?select=actor_id:id,first_name:firstName,la
   Accept-Profile:sakila \
   User-Agent:insomnia/8.4.5
 ```
+
 
 **5. Get all Films Released in the year 2006 along with Language**
 
@@ -365,6 +383,7 @@ echo '{
   User-Agent:insomnia/8.4.5
 ```
 
+
 **9. Insert Multiple Records**
 
 This POST request inserts multiple records in the 'film' table. The records are batched before sending to the database
@@ -452,6 +471,7 @@ echo '[
   Content-Type:application/json
 ```
 
+
 **10. Update record with filter**
 
 This PATCH operation updates the film with id = 1001 which was inserted earlier. Filter is optional. In this case it will update all the rows in the table. Hence, use PATCH update with care.
@@ -517,6 +537,7 @@ http DELETE http://localhost:8080/film \
 "timestamp": "2023-12-26T08:19:43.232283Z"
 }
 ```
+
 
 **12. Delete Rows with Filter**
 
@@ -584,7 +605,7 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 ```
 
 
-**13. Offset pagination & Sorting**
+**14. Sorting with Offset pagination**
 
 This GET operation will fetch results of the query in chunks of pages - 2 records at a time and sorted.
 
@@ -604,73 +625,48 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 
 # HTTP Headers
 
-In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specify the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set 
-
-
-# RSQL 
-
-RSQL is a query language for parametrized filtering of entries in RESTful APIs. It’s based on [FIQL](https://datatracker.ietf.org/doc/html/draft-nottingham-atompub-fiql-00 "Feed Item Query Language") (Feed Item Query Language) – an URI-friendly syntax for expressing filters across the entries in an Atom Feed. FIQL is great for use in URI; there are no unsafe characters, so URL encoding is not required. On the other side, FIQL’s syntax is not very intuitive and URL encoding isn’t always that big deal, so RSQL also provides a friendlier syntax for logical operators and some of the comparison operators.
-
-For example, you can query your resource like this: /movies?query=name=="Kill Bill";year=gt=2003 or /movies?query=director.lastName==Nolan and year>=2000. See examples below.
-
-
-## Examples
-
-Examples of RSQL expressions in both FIQL-like and alternative notation: 
-
-```
-- name=="Kill Bill";year=gt=2003
-- name=="Kill Bill" and year>2003
-- genres=in=(sci-fi,action);(director=='Christopher Nolan',actor==*Bale);year=ge=2000
-- genres=in=(sci-fi,action) and (director=='Christopher Nolan' or actor==*Bale) and year>=2000
-- director.lastName==Nolan;year=ge=2000;year=lt=2010
-- director.lastName==Nolan and year>=2000 and year<2010
-- genres=in=(sci-fi,action);genres=out=(romance,animated,horror),director==Que*Tarantino
-- genres=in=(sci-fi,action) and genres=out=(romance,animated,horror) or director==Que*Tarantino
-
-```
+(soon to be OPTIONAL see Issue [#80](https://github.com/kdhrubo/db2rest/issues/80) ) In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specify the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set.
 
 # Roadmap
 
-1. Support for Oracle.
-2. Support for SQL Server.
-3. Support for MongoDB.
-4. Change data capture (CDC) with Webhooks to notify of database changes.
-5. JSON data type support.
-6. Stored procedure, stored function calls. 
-7. Support for tenant id column for multi-tenancy. 
-8. Twitter Handle.
-9. New expanded Documentation Website with Docusaurus,
-10. Support custom query. 
-11. Data access control. 
-12. Data Privacy.
-13. TSID Support.
-14. Data transformation.
-15. Automated Integration Test with Testcontainers.
-16. Count query support
-17. Exists query support
+1. Support for Oracle
+2. Support for SQL Server
+3. Support for MongoDB
+4. Change data capture (CDC) with Webhooks to notify of database changes
+5. JSON data type support
+6. Stored procedure, stored function calls 
+7. Support for tenant id column for multi-tenancy 
+8. Twitter Handle
+9. New expanded Documentation Website with Docusaurus
+10. Custom query support
+11. Count query support
+12. Exists query support
+13. Data access control 
+14. Data Privacy
+15. TSID support (ENTERPRISE EDITION)
+16. Data transformation (some features possibly ENTERPRISE EDITION)
+17. Automated Integration Test with Testcontainers
 18. Multi-table Join - with one to many
 19. Outer Join
 20. Cross Join
 21. Support - DB Sharding
-22. Support - Rate Limiting. 
+22. Support - Rate Limiting
 23. Audit columns handling
 24. Version column handling
 25. ~Offset & limit pagination~
-25. SEEK method for pagination
-26. Caching - Redis support (Requested on Redit)
-27. Open API specification 3.x generation
-28. Aggregate function
-29. mTLS/Certificate auth
-30. JWT support
-31. JWKS support 
+26. SEEK method for pagination
+27. Caching - Redis support (Requested on Redit)
+28. Open API specification 3.x generation
+29. Aggregate function
+30. mTLS/Certificate auth
+31. JWT/JWKS support (ENTERPRISE EDITION)
 32. API Key support - unkey.dev or custom
 33. Aggregate functions
-34. Open policy agent support
-35. OSO support
+34. Open policy agent support (ENTERPRISE EDITION)
+35. OSO support (ENTERPRISE EDITION)
 36. Integration with AWS KMA
 37. Observability - Data dog
-38. HTTP 2 support
+38. HTTP2 support
 39. Support for Grafana & Prometheus
-40. Configuration Docs - AWS RDS Postgres, Aurora Postgres , DB User role
+40. Configuration Docs - AWS RDS Postgres, Aurora Postgres, DB User role
 
