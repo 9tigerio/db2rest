@@ -1,38 +1,42 @@
 package com.homihq.db2rest.rsql.v2.parser;
 
-import com.homihq.db2rest.rest.query.helper.QueryBuilderContext;
-import com.homihq.db2rest.rest.query.model.RCondition;
+import com.homihq.db2rest.rest.read.model.RCondition;
 import com.homihq.db2rest.rsql.v2.operators.Operator;
 import com.homihq.db2rest.rsql.v2.operators.RSQLOperatorHandlers;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import schemacrawler.schema.Column;
+
 import java.util.List;
 import java.util.function.BinaryOperator;
 
 
 @Slf4j
 @RequiredArgsConstructor
-public class DefaultRSQLVisitorV2 implements RSQLVisitor<RCondition, Void> {
+public class BaseRSQLVisitor implements RSQLVisitor<RCondition, Void> {
 
     private final SchemaManager schemaManager;
-    private final QueryBuilderContext context;
-
+    //private final QueryBuilderContext context;
+    private final String table;
+    private final String schema;
     private static final RCondition NO_CONDITION = RCondition.noCondition();
 
     @Override
     public RCondition visit(AndNode andNode, Void unused) {
-
+        log.info("AND");
         List<RCondition> sqlConditions = getSQLConditions(andNode.getChildren());
+        log.info("# sqlConditions -- {}", sqlConditions);
+
         return joinSQLConditions(sqlConditions, RCondition::and);
 
     }
 
     @Override
     public RCondition visit(OrNode orNode, Void unused) {
+        log.info("OR");
         List<RCondition> sqlConditions = getSQLConditions(orNode.getChildren());
+        log.info("sqlConditions -- {}", sqlConditions);
         return joinSQLConditions(sqlConditions, RCondition::or);
     }
 
@@ -58,7 +62,7 @@ public class DefaultRSQLVisitorV2 implements RSQLVisitor<RCondition, Void> {
     public RCondition visit(ComparisonNode comparisonNode, Void unused) {
         ComparisonOperator op = comparisonNode.getOperator();
         String columnName = comparisonNode.getSelector();
-        String tableName = context.getTableName();
+        String tableName = table;
         String [] tabCol = columnName.split("\\.");
 
         if(tabCol.length == 2) {
@@ -66,12 +70,13 @@ public class DefaultRSQLVisitorV2 implements RSQLVisitor<RCondition, Void> {
             columnName = tabCol[1];
         }
 
-        Column column = this.schemaManager.getColumn(context.getSchemaName(), tableName, columnName);
+        //Column column = this.schemaManager.getColumn(schema, tableName, columnName);
 
 
-        Class type = column.getColumnDataType().getTypeMappedClass();
+        //Class type = column.getColumnDataType().getTypeMappedClass();
+        Class type = String.class;
 
-        String queryColumnName = context.getTableAlias(tableName) + "." + columnName;
+        //String queryColumnName = context.getTableAlias(tableName) + "." + columnName;
 
         Operator operator = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
 
@@ -80,10 +85,10 @@ public class DefaultRSQLVisitorV2 implements RSQLVisitor<RCondition, Void> {
         }
 
         if (op.isMultiValue()) {
-            return operator.handle(queryColumnName, comparisonNode.getArguments(), type);
+            return operator.handle(columnName, comparisonNode.getArguments(), type);
         }
         else {
-            return operator.handle(queryColumnName, comparisonNode.getArguments().get(0), type);
+            return operator.handle(columnName, comparisonNode.getArguments().get(0), type);
         }
     }
 

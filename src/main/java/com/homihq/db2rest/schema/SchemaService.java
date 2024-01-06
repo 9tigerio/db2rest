@@ -15,6 +15,7 @@ import java.util.*;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 public final class SchemaService {
 
 

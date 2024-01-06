@@ -1,19 +1,16 @@
 package com.homihq.db2rest.rest.update;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.rest.query.helper.WhereBuilder;
+import com.homihq.db2rest.rest.read.helper.WhereBuilder;
 import com.homihq.db2rest.schema.SchemaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.jooq.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.jooq.impl.DSL.field;
 
@@ -31,6 +28,7 @@ public class UpdateService {
     public void update(String schemaName, String tableName, Map<String,Object> data, String filter) {
         db2RestConfigProperties.verifySchema(schemaName);
 
+        /*
         Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
 
         UpdateSetFirstStep<?> updateSetFirstStep = dslContext.update(table);
@@ -59,6 +57,8 @@ public class UpdateService {
         log.info("Bind variables - {}", bindValues);
 
         jdbcTemplate.update(sql , bindValues.toArray());
+
+         */
     }
 
 }
