@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.query.helper;
+package com.homihq.db2rest.rest.read.helper;
 
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.schema.SchemaManager;
@@ -16,13 +16,13 @@ public class SelectBuilder{
 
     private final SchemaManager schemaManager;
 
-    public void build(QueryContext context) {
+    public void build(ReadContext context) {
         context.setTables(createTables(context));
         context.createSelect();
 
     }
 
-    private List<MyBatisTable> createTables(QueryContext context) {
+    private List<MyBatisTable> createTables(ReadContext context) {
         List<MyBatisTable> tables = new ArrayList<>();
 
         //split to get all fragments

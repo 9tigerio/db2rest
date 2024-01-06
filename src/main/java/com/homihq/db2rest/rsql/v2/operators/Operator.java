@@ -1,7 +1,6 @@
 package com.homihq.db2rest.rsql.v2.operators;
 
-import com.homihq.db2rest.rest.query.model.RCondition;
-import org.jooq.Condition;
+import com.homihq.db2rest.rest.read.model.RCondition;
 
 import java.util.List;
 

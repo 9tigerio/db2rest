@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rsql.v2.operators.handler;
 
-import com.homihq.db2rest.rest.query.model.RCondition;
+import com.homihq.db2rest.rest.read.model.RCondition;
 import com.homihq.db2rest.rsql.v2.operators.Operator;
 
 import java.util.Arrays;

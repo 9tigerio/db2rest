@@ -1,10 +1,7 @@
-package com.homihq.db2rest.rest.query;
+package com.homihq.db2rest.rest.read;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.rest.query.helper.JoinBuilder;
-import com.homihq.db2rest.rest.query.helper.QueryContext;
-import com.homihq.db2rest.rest.query.helper.WhereBuilder;
-import com.homihq.db2rest.rest.query.helper.SelectBuilder;
+import com.homihq.db2rest.rest.read.helper.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,24 +18,29 @@ import org.jooq.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class QueryService {
+public class ReadService {
 
     private final JdbcTemplate jdbcTemplate;
     private final SelectBuilder selectBuilder;
     private final JoinBuilder joinBuilder;
     private final WhereBuilder whereBuilder;
+    private final LimitPaginationBuilder limitPaginationBuilder;
+    private final SortBuilder sortBuilder;
 
     private final Db2RestConfigProperties db2RestConfigProperties;
 
     public Object findAll(String schemaName, String tableName, String select, String filter,
-                                     Pageable pageable) {
-        QueryContext ctx = QueryContext.builder().from(SqlTable.of(tableName))
+                                     Pageable pageable, Sort sort) {
+        ReadContext ctx = ReadContext.builder().from(SqlTable.of(tableName))
+                .pageable(pageable).sort(sort)
             .schemaName(schemaName).tableName(tableName).select(select).filter(filter).build();
 
 
         selectBuilder.build(ctx);
         joinBuilder.build(ctx);
         whereBuilder.build(ctx);
+        limitPaginationBuilder.build(ctx);
+        sortBuilder.build(ctx);
 
         String sql = ctx.prepareSQL();
 

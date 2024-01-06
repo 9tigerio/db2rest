@@ -2,7 +2,7 @@ package com.homihq.db2rest.rest.delete;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.DeleteOpNotAllowedException;
-import com.homihq.db2rest.rest.query.helper.WhereBuilder;
+import com.homihq.db2rest.rest.read.helper.WhereBuilder;
 import com.homihq.db2rest.schema.SchemaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.jooq.*;
-
-import java.util.List;
 
 @Service
 @Slf4j

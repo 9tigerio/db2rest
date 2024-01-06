@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.query;
+package com.homihq.db2rest.rest.read;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class QueryResource {
+public class ReadController {
 
-    private final QueryService queryService;
+    private final ReadService readService;
 
     @GetMapping("/{tableName}")
     public Object findByJoinTable(@PathVariable String tableName,
@@ -37,7 +37,7 @@ public class QueryResource {
         }
 
 
-        return queryService.findAll(schemaName, tableName,select, filter, pageable);
+        return readService.findAll(schemaName, tableName,select, filter, pageable, sort);
     }
 
 

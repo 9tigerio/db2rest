@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import static org.mybatis.dynamic.sql.select.SelectDSL.select;
 
-@Component
+//@Component
 @Slf4j
 @RequiredArgsConstructor
 public class MyBatisDynamic implements CommandLineRunner {

@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.query.helper;
+package com.homihq.db2rest.rest.read.helper;
 
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.schema.SchemaManager;
@@ -18,7 +18,7 @@ public class JoinBuilder  {
 
     private final SchemaManager schemaManager;
 
-    public void build(QueryContext context) {
+    public void build(ReadContext context) {
         List<MyBatisTable> tableList = context.getTables();
 
         if(tableList.size() > 1) { //table join required

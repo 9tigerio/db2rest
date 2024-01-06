@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.query.helper;
+package com.homihq.db2rest.rest.read.helper;
 
 import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
 import com.homihq.db2rest.rsql.v2.parser.MyBatisFilterVisitor;
@@ -20,7 +20,7 @@ public class WhereBuilder{
 
     private final SchemaManager schemaManager;
 
-    public void build(QueryContext context) {
+    public void build(ReadContext context) {
         if(StringUtils.isNotBlank(context.filter)) {
 
             log.info("-Creating where condition -");
