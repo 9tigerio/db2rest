@@ -57,8 +57,8 @@ public final class SchemaManager {
         for (final Schema schema : catalog.getSchemas()) {
 
             for (final Table table : catalog.getTables(schema)) {
-
-                tableMap.put(table.getFullName(), table);
+                String fullName = table.getSchema().getCatalogName() + "." + table.getName();
+                tableMap.put(fullName, table);
 
             }
         }
@@ -66,7 +66,8 @@ public final class SchemaManager {
     }
 
     public Optional<Table> getTable(String schemaName, String tableName) {
-      Table table = tableMap.get(schemaName + "." + tableName);
+        //log.info("Get table - {}.{}", schemaName, tableName);
+        Table table = tableMap.get(schemaName + "." + tableName);
 
       return Optional.of(table);
     }

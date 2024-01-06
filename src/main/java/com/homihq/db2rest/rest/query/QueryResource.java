@@ -20,13 +20,11 @@ public class QueryResource {
     @GetMapping("/{tableName}")
     public Object findByJoinTable(@PathVariable String tableName,
                                   @RequestHeader(name = "Accept-Profile") String schemaName,
-                                  @RequestParam(name = "join", required = false, defaultValue = "") String join,
                                   @RequestParam(name = "select", required = false, defaultValue = "") String select,
                                   @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
                                   Sort sort,
                                   Pageable pageable, HttpServletRequest httpServletRequest) {
 
-        log.debug("join - {}", join);
         log.debug("schemaName - {}", schemaName);
         log.debug("select - {}", select);
         log.debug("filter - {}", filter);
@@ -39,7 +37,7 @@ public class QueryResource {
         }
 
 
-        return queryService.findAllByJoinTable(schemaName, tableName,select, filter, join, pageable);
+        return queryService.findAll(schemaName, tableName,select, filter, pageable);
     }
 
 

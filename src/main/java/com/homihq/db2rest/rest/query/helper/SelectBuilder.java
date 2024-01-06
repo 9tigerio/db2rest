@@ -12,15 +12,13 @@ import java.util.List;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class SelectBuilder implements SqlQueryPartBuilder{
+public class SelectBuilder{
 
     private final SchemaManager schemaManager;
 
     public void build(QueryContext context) {
-        //create tables and alias
-        List<MyBatisTable> tables = createTables(context);
-
-        context.setTables(tables);
+        context.setTables(createTables(context));
+        context.createSelect();
 
     }
 

@@ -41,10 +41,15 @@ public class DeleteService {
             DeleteUsingStep<?> deleteUsingStep =
                     dslContext.deleteFrom(table);
 
+            /*
             Condition whereCondition =
                     whereBuilder.create(table, tableName, filter);
 
+
+
             DeleteConditionStep<?> deleteConditionStep = deleteUsingStep.where(whereCondition);
+
+
 
             String sql = deleteConditionStep.getSQL();
             List<Object> bindValues = deleteConditionStep.getBindValues();
@@ -53,6 +58,9 @@ public class DeleteService {
             log.info("Bind variables - {}", bindValues);
 
             jdbcTemplate.update(sql , bindValues.toArray());
+
+
+             */
         }
 
     }

@@ -31,6 +31,7 @@ public class MyBatisDynamic implements CommandLineRunner {
                 film.column("id"), film.column("title"),
                 film.column("year_of_release"), film.column("duration"))
                 .from(film, "f")
+
                 .join(language, "lang").on(language.column("language_id"), equalTo(film.column("language_id")))
                 .where(film.column("id"), isEqualTo(1))
                 .or(film.column("title"), isNotNull())
@@ -52,10 +53,19 @@ public class MyBatisDynamic implements CommandLineRunner {
                 film.column("id"), film.column("title"),
                 film.column("year_of_release"), film.column("duration"))
                 .from(film, "f")
+
                 .join(language, "lang").on(language.column("language_id"), equalTo(film.column("language_id")));
 
         var a = selectStatement2.where(condition).build()
                 .render(RenderingStrategies.SPRING_NAMED_PARAMETER);
+
+
+        var selectStatement3 = select(
+                film.column("id"), film.column("title"),
+                film.column("year_of_release"), film.column("duration"))
+                .from(film, "f");
+
+
 
         log.info("condition - {}", condition);
         log.info("sql - {}", a.getSelectStatement());

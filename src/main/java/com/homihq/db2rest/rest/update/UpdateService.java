@@ -31,6 +31,7 @@ public class UpdateService {
     public void update(String schemaName, String tableName, Map<String,Object> data, String filter) {
         db2RestConfigProperties.verifySchema(schemaName);
 
+        /*
         Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
 
         UpdateSetFirstStep<?> updateSetFirstStep = dslContext.update(table);
@@ -59,6 +60,8 @@ public class UpdateService {
         log.info("Bind variables - {}", bindValues);
 
         jdbcTemplate.update(sql , bindValues.toArray());
+
+         */
     }
 
 }
