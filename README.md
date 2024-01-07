@@ -265,7 +265,7 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 
 **4. Get all Actors with Column Alias**
    
-This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
+Use the colon separator `:` to map a column to an alias.  This will retrieve all the rows and columns from the database. Avoid if the table has large number of rows, use pagination instead.
 This query shows how to change column name in the response JSON using Alias. 
 
 **cURL**
