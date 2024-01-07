@@ -6,7 +6,7 @@ import cz.jirutka.rsql.parser.ast.RSQLOperators;
 import java.util.Arrays;
 import java.util.Set;
 
-public class CustomRSQLOperators extends RSQLOperators {
+public class SimpleRSQLOperators extends RSQLOperators {
 
     public static final ComparisonOperator LIKE = new ComparisonOperator("=like=", false);
     public static final ComparisonOperator START_WITH = new ComparisonOperator("=startWith=", false);

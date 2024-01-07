@@ -1,15 +1,16 @@
-package com.homihq.db2rest.rsql.v2.operators;
+package com.homihq.db2rest.rsql.operators;
 
-import com.homihq.db2rest.rest.read.model.RCondition;
+import org.mybatis.dynamic.sql.SqlColumn;
+import org.mybatis.dynamic.sql.SqlCriterion;
 
 import java.util.List;
 
-public interface Operator {
+public interface OperatorV2 {
 
-    RCondition handle(String columnName, String value, Class type);
+    SqlCriterion handle(SqlColumn<Object> column, String value, Class type);
 
-    default RCondition handle(String columnName, List<String> value, Class type) {
-        return handle(columnName, value.get(0), type);
+    default SqlCriterion handle(SqlColumn<Object> column, List<String> value, Class type) {
+        return handle(column, value.get(0), type);
     }
 
     default Object parseValue(String value, Class type) {

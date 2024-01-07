@@ -5,15 +5,13 @@ import com.homihq.db2rest.rest.read.helper.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.jooq.Record;
 import org.mybatis.dynamic.sql.SqlTable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import static org.jooq.impl.DSL.*;
-import org.jooq.*;
+
 
 @Service
 @Slf4j
@@ -63,22 +61,6 @@ public class ReadService {
     }
 
 
-    private void addOrderBy(SelectJoinStep<Record> selectJoinStep, Pageable pageable) {
-        log.info("pageable - {}", pageable);
-
-        log.info("pageable.getSort().isSorted() - {}", pageable.getSort().isSorted());
-
-        if(pageable.getSort().isSorted()) {
-            Sort sort = pageable.getSort();
-            log.info("sort - {}", sort);
-
-            sort.forEach(i -> selectJoinStep
-                    .orderBy(field(i.getProperty()).sort(
-                            i.getDirection().isAscending() ? SortOrder.ASC : SortOrder.DESC))
-                    );
-
-        }
-    }
 
 
 

@@ -10,16 +10,16 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class SaveController {
+public class CreateController {
 
-    private final SaveService saveService;
+    private final CreateService createService;
     @PostMapping ("/{tableName}")
     public void save(@PathVariable String tableName,
                      @RequestHeader(name = "Content-Profile") String schemaName,
                      @RequestBody Map<String,Object> data) {
 
 
-        saveService.save(schemaName, tableName, data);
+        createService.save(schemaName, tableName, data);
     }
 
     @PostMapping ( "/{tableName}/bulk")
@@ -29,6 +29,6 @@ public class SaveController {
         log.info("data -> {}", data);
 
 
-        saveService.saveBulk(schemaName, tableName,data);
+        createService.saveBulk(schemaName, tableName,data);
     }
 }

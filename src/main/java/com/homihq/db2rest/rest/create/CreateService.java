@@ -25,7 +25,7 @@ import static org.mybatis.dynamic.sql.insert.GeneralInsertDSL.insertInto;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class SaveService {
+public class CreateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;

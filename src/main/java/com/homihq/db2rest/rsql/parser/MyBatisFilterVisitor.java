@@ -1,24 +1,17 @@
-package com.homihq.db2rest.rsql.v2.parser;
+package com.homihq.db2rest.rsql.parser;
 
-import static cz.jirutka.rsql.parser.ast.RSQLOperators.*;
-import static java.sql.JDBCType.*;
+
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
-
-import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.homihq.db2rest.rsql.operators.OperatorV2;
+import com.homihq.db2rest.rsql.operators.RSQLOperatorHandlers;
+import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.*;
-import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
-import org.mybatis.dynamic.sql.select.SelectModel;
 
-import cz.jirutka.rsql.parser.ast.AndNode;
-import cz.jirutka.rsql.parser.ast.ComparisonNode;
-import cz.jirutka.rsql.parser.ast.Node;
-import cz.jirutka.rsql.parser.ast.OrNode;
-import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -48,18 +41,29 @@ public class MyBatisFilterVisitor implements RSQLVisitor<SqlCriterion, Object> {
     }
 
     @Override
-    public SqlCriterion visit(ComparisonNode node, Object optionalParameter) {
-        String argument = node.getArguments().get(0);
-        String selector = node.getSelector();
+    public SqlCriterion visit(ComparisonNode comparisonNode, Object optionalParameter) {
+        ComparisonOperator op = comparisonNode.getOperator();
+        String columnName = comparisonNode.getSelector();
 
-        if (EQUAL.equals(node.getOperator())) {
-            SqlColumn<Object> column = sqlTable.column(selector, INTEGER);
-            if (INTEGER == column.jdbcType().orElseThrow()) {
-                return ColumnAndConditionCriterion.withColumn(column).withCondition(isEqualTo(Integer.parseInt(argument))).build();
-            }
-            return ColumnAndConditionCriterion.withColumn(column).withCondition(isEqualTo(argument)).build();
+        OperatorV2 operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
+        if (operatorHandler == null) {
+            throw new IllegalArgumentException(String.format("Operator '%s' is invalid", op.getSymbol()));
         }
-        return null;
+
+        SqlColumn<Object> column = sqlTable.column(columnName);
+
+        //Dummy type
+        Class clazz = Integer.class;
+
+
+        if (op.isMultiValue()) {
+
+            return operatorHandler.handle(column, comparisonNode.getArguments(), clazz);
+        }
+        else {
+            return operatorHandler.handle(column, comparisonNode.getArguments().get(0), clazz);
+        }
+
     }
 
     private SqlCriterion processCriteriaGroup(List<AndOrCriteriaGroup> criterionList){

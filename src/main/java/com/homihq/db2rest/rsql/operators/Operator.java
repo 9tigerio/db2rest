@@ -1,16 +1,14 @@
 package com.homihq.db2rest.rsql.operators;
 
-import org.jooq.Condition;
-import org.jooq.types.UNumber;
-import org.jooq.types.UShort;
+import com.homihq.db2rest.rest.read.model.RCondition;
 
 import java.util.List;
 
-public interface OperatorHandler {
+public interface Operator {
 
-    Condition handle(String columnName, String value, Class type);
+    RCondition handle(String columnName, String value, Class type);
 
-    default Condition handle(String columnName, List<String> value, Class type) {
+    default RCondition handle(String columnName, List<String> value, Class type) {
         return handle(columnName, value.get(0), type);
     }
 

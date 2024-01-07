@@ -80,27 +80,6 @@
             <artifactId>spring-data-commons</artifactId>
         </dependency>
 
-        <!-- TODO Remove -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jooq</artifactId>
-
-           <!-- Need to use JOOQ 3.19+ for explict join, path joins etc -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jooq</groupId>
-                    <artifactId>jooq</artifactId>
-                </exclusion>
-            </exclusions>
-
-        </dependency>
-
-        <!-- TODO Remove -->
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
-            <version>3.19.1</version>
-        </dependency>
 
 
 
