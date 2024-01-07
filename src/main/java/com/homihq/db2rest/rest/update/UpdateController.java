@@ -9,7 +9,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class UpdateResource {
+public class UpdateController {
 
     private final UpdateService updateService;
     @PatchMapping("/{tableName}")
@@ -18,6 +18,6 @@ public class UpdateResource {
                      @RequestBody Map<String,Object> data
         ,@RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
-        updateService.update(schemaName, tableName, data, filter);
+        updateService.patch(schemaName, tableName, data, filter);
     }
 }

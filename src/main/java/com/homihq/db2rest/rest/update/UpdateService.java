@@ -1,64 +1,67 @@
 package com.homihq.db2rest.rest.update;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.rest.read.helper.WhereBuilder;
-import com.homihq.db2rest.schema.SchemaService;
+import com.homihq.db2rest.exception.InvalidTableException;
+import com.homihq.db2rest.mybatis.MyBatisTable;
+import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
+import com.homihq.db2rest.rsql.v2.parser.MyBatisFilterVisitor;
+import com.homihq.db2rest.schema.SchemaManager;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.*;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.apache.commons.lang3.StringUtils;
+import org.mybatis.dynamic.sql.SqlCriterion;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.update.UpdateDSL;
+import org.mybatis.dynamic.sql.update.UpdateModel;
+import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import schemacrawler.schema.Table;
 import java.util.Map;
-
-import static org.jooq.impl.DSL.field;
+import static org.mybatis.dynamic.sql.update.UpdateDSL.update;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UpdateService {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final WhereBuilder whereBuilder;
-    private final DSLContext dslContext;
-    private final SchemaService schemaService;
     private final Db2RestConfigProperties db2RestConfigProperties;
+    private final SchemaManager schemaManager;
     @Transactional
-    public void update(String schemaName, String tableName, Map<String,Object> data, String filter) {
+    public void patch(String schemaName, String tableName, Map<String,Object> data, String filter) {
         db2RestConfigProperties.verifySchema(schemaName);
 
-        /*
-        Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
+        Table t = schemaManager.getTable(schemaName, tableName)
+                .orElseThrow(() -> new InvalidTableException(tableName));
 
-        UpdateSetFirstStep<?> updateSetFirstStep = dslContext.update(table);
+        MyBatisTable table = new MyBatisTable(schemaName, tableName, t);
 
-        UpdateSetMoreStep<?> updateSetMoreStep = null;
+        UpdateDSL<UpdateModel> updateDSL = update(table);
 
         for(String key : data.keySet()) {
-            updateSetMoreStep = updateSetFirstStep.set(field(key) , data.get(key));
+            updateDSL.set(table.column(key)).equalToOrNull(data.get(key));
         }
-
-        UpdateConditionStep<?> updateConditionStep;
-        String sql;
-        List<Object> bindValues;
         if(StringUtils.isNotBlank(filter)) {
-            updateConditionStep = updateSetMoreStep.where(whereBuilder.create(table , tableName,  filter));
-            sql = updateConditionStep.getSQL();
-            bindValues = updateConditionStep.getBindValues();
-        }
-        else{
-            sql = updateSetMoreStep.getSQL();
-            bindValues = updateSetMoreStep.getBindValues();
+
+            Node rootNode = new RSQLParser(CustomRSQLOperators.customOperators()).parse(filter);
+
+            SqlCriterion condition = rootNode
+                    .accept(new MyBatisFilterVisitor(table));
+
+            updateDSL.where(condition);
         }
 
+        UpdateStatementProvider updateStatement = updateDSL.build()
+                .render(RenderingStrategies.SPRING_NAMED_PARAMETER);
 
-        log.info("SQL - {}", sql); // TODO make it conditional
+        String sql = updateStatement.getUpdateStatement();
+        Map<String,Object> bindValues = updateStatement.getParameters();
+
+
+        log.info("SQL - {}", sql);
         log.info("Bind variables - {}", bindValues);
-
-        jdbcTemplate.update(sql , bindValues.toArray());
-
-         */
     }
 
 }
