@@ -1,6 +1,6 @@
 # DB2Rest
 
-> Don't write any database access code, Install DB2Rest instead. Unlock data, 30x boost for your application development.
+> Don't write any database access code, Install DB2Rest instead. 
 
 DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
 your existing or new databases. You can connect to the most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build a REST API in minutes without writing any code.
@@ -23,12 +23,16 @@ The business logic can be written in your favorite technology frameworks for Jav
 by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low code/node code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
 
 ## Benefits
-    - Without knowing SQL, you can write a simple URL query with parameters
-    - Accelerate applicaton development
-    - Unlock databases
-    - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip
 
-TODO - Add more details
+    - No code, no SQL knowledge required, instead use simple REST Query Language (RQL) to retrieve data.
+    - Accelerate applicaton development by 30x. 
+    - Unlock databases - secure REST API access for legacy data.
+    - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip, no code generation.
+    - Support for advanced custom queries, bulk data insert, remote stored procedure calls. 
+    - Best practices for transaction management, connection pooling, encryption, security - RBAC / data entitlement.
+    - Deploy and run anywhere - on premise, VM, Kubernetes, any cloud. 
+    - Zero downtime - adjusts to your evolving database schema. 
+    - Compatible with Devops processes. 
 
 
 # Installation 
