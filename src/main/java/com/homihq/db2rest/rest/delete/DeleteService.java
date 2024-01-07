@@ -2,27 +2,39 @@ package com.homihq.db2rest.rest.delete;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.DeleteOpNotAllowedException;
-import com.homihq.db2rest.rest.read.helper.WhereBuilder;
-import com.homihq.db2rest.schema.SchemaService;
+import com.homihq.db2rest.exception.InvalidTableException;
+import com.homihq.db2rest.mybatis.MyBatisTable;
+import com.homihq.db2rest.rsql.operators.CustomRSQLOperators;
+import com.homihq.db2rest.rsql.v2.parser.MyBatisFilterVisitor;
+import com.homihq.db2rest.schema.SchemaManager;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.jooq.DSLContext;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.mybatis.dynamic.sql.SqlCriterion;
+import org.mybatis.dynamic.sql.delete.DeleteDSL;
+import org.mybatis.dynamic.sql.delete.DeleteModel;
+import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.jooq.*;
+
+import schemacrawler.schema.Table;
+
+import java.util.Map;
+
+import static org.mybatis.dynamic.sql.delete.DeleteDSL.deleteFrom;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class DeleteService {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final WhereBuilder whereBuilder;
-    private final DSLContext dslContext;
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final SchemaService schemaService;
+
+
+    private final SchemaManager schemaManager;
 
     @Transactional
     public void delete(String schemaName, String tableName, String filter) {
@@ -34,31 +46,34 @@ public class DeleteService {
 
             db2RestConfigProperties.verifySchema(schemaName);
 
-            Table<?> table = schemaService.getTableByNameAndSchema(schemaName, tableName);
+            Table t = schemaManager.getTable(schemaName, tableName)
+                    .orElseThrow(() -> new InvalidTableException(tableName));
 
-            DeleteUsingStep<?> deleteUsingStep =
-                    dslContext.deleteFrom(table);
+            MyBatisTable table = new MyBatisTable(schemaName, tableName, t);
 
-            /*
-            Condition whereCondition =
-                    whereBuilder.create(table, tableName, filter);
+            DeleteDSL<DeleteModel> deleteDSL = deleteFrom(table);
 
+            if(StringUtils.isNotBlank(filter)) {
 
+                Node rootNode = new RSQLParser(CustomRSQLOperators.customOperators()).parse(filter);
 
-            DeleteConditionStep<?> deleteConditionStep = deleteUsingStep.where(whereCondition);
+                SqlCriterion condition = rootNode
+                        .accept(new MyBatisFilterVisitor(table));
 
+                deleteDSL.where(condition);
+            }
 
+            DeleteStatementProvider deleteStatement = deleteDSL.build()
+                    .render(RenderingStrategies.SPRING_NAMED_PARAMETER);
 
-            String sql = deleteConditionStep.getSQL();
-            List<Object> bindValues = deleteConditionStep.getBindValues();
+            String sql = deleteStatement.getDeleteStatement();
+            Map<String,Object> bindValues = deleteStatement.getParameters();
+
 
             log.info("SQL - {}", sql);
             log.info("Bind variables - {}", bindValues);
 
-            jdbcTemplate.update(sql , bindValues.toArray());
 
-
-             */
         }
 
     }

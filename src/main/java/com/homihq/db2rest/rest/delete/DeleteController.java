@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class DeleteResource {
+public class DeleteController {
 
     private final DeleteService deleteService;
 
