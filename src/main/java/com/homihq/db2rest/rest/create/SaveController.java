@@ -10,7 +10,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class SaveResource {
+public class SaveController {
 
     private final SaveService saveService;
     @PostMapping ("/{tableName}")
