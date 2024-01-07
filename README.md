@@ -1,5 +1,7 @@
 # DB2Rest
 
+> Don't write any database access code, Install DB2Rest instead. Unlock data, 30x boost for your application development.
+
 DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
 your existing or new databases. You can connect to the most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build a REST API in minutes without writing any code.
 You can now focus on building business logic and beautiful user interfaces at speed.
