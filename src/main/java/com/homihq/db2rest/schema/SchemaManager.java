@@ -49,12 +49,24 @@ public final class SchemaManager {
                 .withLimitOptions(limitOptionsBuilder.toOptions()).withLoadOptions(loadOptionsBuilder.toOptions());
 
         // Get the schema definition
+
         final Catalog catalog = SchemaCrawlerUtility.getCatalog(DatabaseConnectionSources.fromDataSource(dataSource), options);
 
         for (final Schema schema : catalog.getSchemas()) {
 
             for (final Table table : catalog.getTables(schema)) {
-                String fullName = table.getSchema().getCatalogName() + "." + table.getName();
+
+                //TODO - move DB specific handling to Dialect class
+                String schemaName = table.getSchema().getCatalogName();
+
+                if(StringUtils.isBlank(schemaName)) {
+                    //POSTGRESQL
+
+                    schemaName = table.getSchema().getName();
+                }
+
+                String fullName = schemaName + "." + table.getName();
+                log.info("Full name - {}", fullName);
                 tableMap.put(fullName, table);
 
             }
