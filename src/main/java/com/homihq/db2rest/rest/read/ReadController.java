@@ -17,7 +17,7 @@ public class ReadController {
 
     private final ReadService readService;
 
-    @GetMapping("/{tableName}")
+    @GetMapping(value = "/{tableName}" , produces = "application/json")
     public Object findByJoinTable(@PathVariable String tableName,
                                   @RequestHeader(name = "Accept-Profile") String schemaName,
                                   @RequestParam(name = "select", required = false, defaultValue = "") String select,
@@ -25,10 +25,10 @@ public class ReadController {
                                   Sort sort,
                                   Pageable pageable, HttpServletRequest httpServletRequest) {
 
-        log.debug("schemaName - {}", schemaName);
-        log.debug("select - {}", select);
-        log.debug("filter - {}", filter);
-        log.debug("pageable - {}", pageable);
+        log.info("schemaName - {}", schemaName);
+        log.info("select - {}", select);
+        log.info("filter - {}", filter);
+        log.info("pageable - {}", pageable);
 
 
         if( getIntParameter(httpServletRequest, "page", -1) == -1 &&
