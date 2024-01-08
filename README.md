@@ -635,14 +635,14 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 
 # Roadmap
 
-    - [ ] Support for Oracle
+    - [x] Support for Oracle - WONT DO - ORDS avaialble with Oracle DB.
     - [ ] Support for SQL Server
     - [ ] Support for MongoDB
     - [ ] Change data capture (CDC) with Webhooks to notify of database changes
     - [ ] JSON data type support
-    - [ ] Stored procedure, stored function calls - **IN PROGRESS** 
+    - [*] Stored procedure, stored function calls - **IN PROGRESS** 
     - [ ] Support for tenant id column for multi-tenancy 
-    - [*] ~Twitter Handle~
+    - [x] Twitter Handle - DONE [DB2Rest](https://twitter.com/DB2Rest)
     - [ ] New expanded Documentation Website with Docusaurus **IN PROGRESS**
     - [ ] Custom SQL query Execution via HTTP POST **IN PROGRESS**
     - [ ] Count query support
@@ -660,7 +660,7 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
     - [ ] Audit columns handling - created date, last updated date, created by, last updated by
     - [ ] Audit table / data diff handling
     - [ ] Version column handling
-    - [*] ~Offset & limit pagination~ 
+    - [x] Offset & limit pagination - DONE 
     - [ ] SEEK method for pagination
     - [ ] Caching - Redis support (Requested on Redit)
     - [ ] Open API specification 3.x generation
