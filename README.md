@@ -642,7 +642,7 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
     5. [ ] JSON data type support
     6. [ ] Stored procedure, stored function calls - **IN PROGRESS** 
     7. [ ] Support for tenant id column for multi-tenancy 
-    8. [ ] Twitter Handle
+    8. [*] ~Twitter Handle~
     9. [ ] New expanded Documentation Website with Docusaurus **IN PROGRESS**
     10. [ ] Custom SQL query Execution via HTTP POST **IN PROGRESS**
     11. [ ] Count query support
