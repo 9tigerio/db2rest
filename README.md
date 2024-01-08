@@ -635,46 +635,46 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 
 # Roadmap
 
-    1. [ ] Support for Oracle
-    2. [ ] Support for SQL Server
-    3. [ ] Support for MongoDB
-    4. [ ] Change data capture (CDC) with Webhooks to notify of database changes
-    5. [ ] JSON data type support
-    6. [ ] Stored procedure, stored function calls - **IN PROGRESS** 
-    7. [ ] Support for tenant id column for multi-tenancy 
-    8. [*] ~Twitter Handle~
-    9. [ ] New expanded Documentation Website with Docusaurus **IN PROGRESS**
-    10. [ ] Custom SQL query Execution via HTTP POST **IN PROGRESS**
-    11. [ ] Count query support
-    12. [ ] Exists query support
-    13. [ ] Data access control
-    14. [ ] Data Privacy, Encryption, Masking for read and update.
-    15. [ ] TSID support (ENTERPRISE EDITION)
-    16. [ ] Data transformation (some features possibly ENTERPRISE EDITION)
-    17. [ ] Automated Integration Test with Testcontainers
-    18. [ ] Multi-table implicit Join - with one to many based on select path.
-    19. [ ] Outer Join
-    20. [ ] Cross Join
-    21. [ ] Support - DB Sharding (ENTERPRISE EDITION)
-    22. [ ] Support - Rate Limiting
-    23. [ ] Audit columns handling - created date, last updated date, created by, last updated by
-    24. [ ] Audit table / data diff handling
-    25. [ ] Version column handling
-    26. [*] ~Offset & limit pagination~ 
-    27. [ ] SEEK method for pagination
-    28. [ ] Caching - Redis support (Requested on Redit)
-    29. [ ] Open API specification 3.x generation
-    30. [ ] Aggregate function
-    31. [ ] mTLS/Certificate auth
-    32. [ ] JWT/JWKS support (ENTERPRISE EDITION)
-    33. [ ] API Key support - unkey.dev or custom
-    34. [ ] Open policy agent support (ENTERPRISE EDITION)
-    35. [ ] OSO support (ENTERPRISE EDITION)
-    36. [ ] Integration with AWS KMS, Hashicorp Vault
-    37. [ ] Observability - Data dog (requested by a financial company)
-    38. [ ] HTTP2 support - (requested by a financial company)
-    39. [ ] Support for Grafana & Prometheus - (requested by a financial company)
-    40. [ ] Configuration Docs - AWS RDS Postgres, Aurora Postgres, DB User role
-    41. [ ] Youtube channel demonstrating features and working
-    42. [ ] Native binary image - simplify installation
-    43. [ ] Support for scripting (extensibility) - Python, Apache Groovy, Javascript/VS8 
+    - [ ] Support for Oracle
+    - [ ] Support for SQL Server
+    - [ ] Support for MongoDB
+    - [ ] Change data capture (CDC) with Webhooks to notify of database changes
+    - [ ] JSON data type support
+    - [ ] Stored procedure, stored function calls - **IN PROGRESS** 
+    - [ ] Support for tenant id column for multi-tenancy 
+    - [*] ~Twitter Handle~
+    - [ ] New expanded Documentation Website with Docusaurus **IN PROGRESS**
+    - [ ] Custom SQL query Execution via HTTP POST **IN PROGRESS**
+    - [ ] Count query support
+    - [ ] Exists query support
+    - [ ] Data access control
+    - [ ] Data Privacy, Encryption, Masking for read and update.
+    - [ ] TSID support (ENTERPRISE EDITION)
+    - [ ] Data transformation (some features possibly ENTERPRISE EDITION)
+    - [ ] Automated Integration Test with Testcontainers
+    - [ ] Multi-table implicit Join - with one to many based on select path.
+    - [ ] Outer Join
+    - [ ] Cross Join
+    - [ ] Support - DB Sharding (ENTERPRISE EDITION)
+    - [ ] Support - Rate Limiting
+    - [ ] Audit columns handling - created date, last updated date, created by, last updated by
+    - [ ] Audit table / data diff handling
+    - [ ] Version column handling
+    - [*] ~Offset & limit pagination~ 
+    - [ ] SEEK method for pagination
+    - [ ] Caching - Redis support (Requested on Redit)
+    - [ ] Open API specification 3.x generation
+    - [ ] Aggregate function
+    - [ ] mTLS/Certificate auth
+    - [ ] JWT/JWKS support (ENTERPRISE EDITION)
+    - [ ] API Key support - unkey.dev or custom
+    - [ ] Open policy agent support (ENTERPRISE EDITION)
+    - [ ] OSO support (ENTERPRISE EDITION)
+    - [ ] Integration with AWS KMS, Hashicorp Vault
+    - [ ] Observability - Data dog (requested by a financial company)
+    - [ ] HTTP2 support - (requested by a financial company)
+    - [ ] Support for Grafana & Prometheus - (requested by a financial company)
+    - [ ] Configuration Docs - AWS RDS Postgres, Aurora Postgres, DB User role
+    - [ ] Youtube channel demonstrating features and working
+    - [ ] Native binary image - simplify installation
+    - [ ] Support for scripting (extensibility) - Python, Apache Groovy, Javascript/VS8 
