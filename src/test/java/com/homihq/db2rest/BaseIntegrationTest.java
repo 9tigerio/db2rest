@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.templates.TemplateFormats;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,7 +29,9 @@ public abstract class BaseIntegrationTest {
                RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation))
+                .apply(documentationConfiguration(restDocumentation)
+                        .snippets().withTemplateFormat(TemplateFormats.markdown())
+                )
                 .build();
     }
 
