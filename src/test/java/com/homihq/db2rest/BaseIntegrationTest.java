@@ -18,7 +18,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("it")
-@ExtendWith({ RestDocumentationExtension.class})
+@ExtendWith({RestDocumentationExtension.class})
 public abstract class BaseIntegrationTest {
 
     @Autowired
