@@ -33,7 +33,7 @@ public class CreateService {
     private final DB2RestRenderingStrategy db2RestRenderingStrategy = new DB2RestRenderingStrategy();
 
     @Transactional
-    public void save(String schemaName, String tableName, Map<String,Object> data) {
+    public int save(String schemaName, String tableName, Map<String,Object> data) {
         db2RestConfigProperties.verifySchema(schemaName);
 
         SqlTable table = SqlTable.of(tableName);
@@ -53,10 +53,12 @@ public class CreateService {
 
         log.debug("Inserted - {} row(s)", rows);
 
+        return rows;
+
     }
 
     @Transactional
-    public void saveBulk(String schemaName, String tableName, List<Map<String, Object>> dataList) {
+    public int[] saveBulk(String schemaName, String tableName, List<Map<String, Object>> dataList) {
         if(Objects.isNull(dataList) || dataList.isEmpty()) throw new RuntimeException("No data provided");
 
         SqlTable table = SqlTable.of(tableName);
@@ -83,6 +85,8 @@ public class CreateService {
         int[] updateCounts = namedParameterJdbcTemplate.batchUpdate(batchInsert.getInsertStatementSQL(), batch);
 
         log.debug("Update counts - {}", updateCounts.length);
+
+        return updateCounts;
     }
 
 

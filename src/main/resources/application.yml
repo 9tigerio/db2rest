@@ -28,6 +28,8 @@ db2rest:
 
 logging:
   level:
+    com.homihq.db2rest:
+      rest: DEBUG
     org.springframework.web : INFO
     schemacrawler:
       schemacrawler: ERROR

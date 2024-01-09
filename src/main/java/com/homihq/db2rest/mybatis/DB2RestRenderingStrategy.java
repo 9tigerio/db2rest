@@ -9,13 +9,13 @@ public class DB2RestRenderingStrategy extends SpringNamedParameterRenderingStrat
 
     @Override
     public String getRecordBasedInsertBinding(BindableColumn<?> column, String prefix, String parameterName) {
-        log.info("Here - 1");
+
         return super.getRecordBasedInsertBinding(column, parameterName);
     }
 
     @Override
     public String getRecordBasedInsertBinding(BindableColumn<?> column, String parameterName) {
-        log.info("Here - 2");
+
         return super.getRecordBasedInsertBinding(column, parameterName);
     }
 }
