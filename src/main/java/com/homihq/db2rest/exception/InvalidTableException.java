@@ -17,7 +17,6 @@ public class InvalidTableException extends ErrorResponseException {
     private static ProblemDetail asProblemDetail(String message) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
         problemDetail.setTitle("Invalid Table Error");
-        problemDetail.setDetail(message);
         problemDetail.setType(URI.create("https://github.com/kdhrubo/db2rest/invalid-table"));
         problemDetail.setProperty("errorCategory", "Invalid-Table");
         problemDetail.setProperty("timestamp", Instant.now());
