@@ -3,9 +3,11 @@ package com.homihq.db2rest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+@Sql(scripts = {"classpath:pg/postgres-sakila-schema.sql", "classpath:pg/postgres-sakila-insert-data.sql"})
 public class PostgreSQLBaseIntegrationTest extends BaseIntegrationTest{
 
     @ServiceConnection
@@ -14,7 +16,6 @@ public class PostgreSQLBaseIntegrationTest extends BaseIntegrationTest{
     static {
         postgreSQLContainer.withUsername("postgres")
                 .withPassword("postgres")
-                .withInitScript("pg/postgres-sakila-schema.sql") // inside src/test/resources
                 .withDatabaseName("postgres");
     }
 
