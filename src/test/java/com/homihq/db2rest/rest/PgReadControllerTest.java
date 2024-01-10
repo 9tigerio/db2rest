@@ -20,7 +20,6 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Get all fields.")
     void findAllFilms() throws Exception {
 
-
         mockMvc.perform(get("/films")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
