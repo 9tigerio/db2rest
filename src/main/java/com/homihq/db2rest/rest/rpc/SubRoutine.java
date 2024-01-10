@@ -1,7 +1,9 @@
 package com.homihq.db2rest.rest.rpc;
 
+import com.homihq.db2rest.exception.RpcException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -18,7 +20,11 @@ public abstract class SubRoutine {
         jdbcTemplate.setResultsMapCaseInsensitive(true);
         SqlParameterSource in = new MapSqlParameterSource()
                 .addValues(inParams);
-        return getSimpleJdbcCall(subRoutineName).execute(in);
+        try {
+            return getSimpleJdbcCall(subRoutineName).execute(in);
+        } catch (InvalidDataAccessApiUsageException ex) {
+            throw new RpcException(subRoutineName, inParams);
+        }
     }
 
     abstract SimpleJdbcCall getSimpleJdbcCall(String subRoutineName);

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.Map;
 
 @RestController
@@ -18,7 +17,8 @@ public class ProcedureController {
 
     @PostMapping("/{procName}")
     public ResponseEntity<Map<String, Object>> execute(@PathVariable String procName,
-                                                       @RequestBody Map<String,Object> inParams) throws SQLException {
+                                                       @RequestBody Map<String,Object> inParams) {
+        log.debug("Execute stored procedure {} with IN params {}", procName, inParams.entrySet());
         return ResponseEntity.ok(procedureService.execute(procName, inParams));
     }
 }
