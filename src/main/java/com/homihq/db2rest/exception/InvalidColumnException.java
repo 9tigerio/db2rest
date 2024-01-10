@@ -17,7 +17,6 @@ public class InvalidColumnException extends ErrorResponseException {
     private static ProblemDetail asProblemDetail(String message) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
         problemDetail.setTitle("Invalid Column Error");
-        problemDetail.setDetail(message);
         problemDetail.setType(URI.create("https://github.com/kdhrubo/db2rest/invalid-column"));
         problemDetail.setProperty("errorCategory", "Invalid-Column");
         problemDetail.setProperty("timestamp", Instant.now());
