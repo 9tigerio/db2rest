@@ -17,7 +17,6 @@ public class InvalidSchemaException extends ErrorResponseException {
     private static ProblemDetail asProblemDetail(String message) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
         problemDetail.setTitle("Invalid Schema Error");
-        problemDetail.setDetail(message);
         problemDetail.setType(URI.create("https://github.com/kdhrubo/db2rest/invalid-schema"));
         problemDetail.setProperty("errorCategory", "Invalid-Schema");
         problemDetail.setProperty("timestamp", Instant.now());
