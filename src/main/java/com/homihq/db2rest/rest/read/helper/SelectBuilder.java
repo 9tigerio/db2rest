@@ -58,6 +58,8 @@ public class SelectBuilder{
 
     private MyBatisTable createTable(String schemaName, String tableName,  String colStr, int counter) {
 
+        //MyBatisTable table = schemaManager.findTable(schemaName, tableName, counter);
+
         MyBatisTable table = schemaManager.findTable(schemaName, tableName, counter);
 
         addColumns(table, colStr);

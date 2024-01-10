@@ -4,6 +4,7 @@ import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.Map;
 public class CreateController {
 
     private final CreateService createService;
+
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping ("/{tableName}")
     public CreateResponse save(@PathVariable String tableName,
                                @RequestHeader(name = "Content-Profile") String schemaName,
@@ -26,6 +29,7 @@ public class CreateController {
         return new CreateResponse(rows);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping ( "/{tableName}/bulk")
     public CreateBulkResponse saveBulk(@PathVariable String tableName,
                                        @RequestHeader(name = "Content-Profile") String schemaName,

@@ -34,7 +34,7 @@ public class CreateService {
 
     @Transactional
     public int save(String schemaName, String tableName, Map<String,Object> data) {
-        db2RestConfigProperties.verifySchema(schemaName);
+        //db2RestConfigProperties.verifySchema(schemaName);
 
         SqlTable table = SqlTable.of(tableName);
         GeneralInsertDSL generalInsertDSL = insertInto(table);

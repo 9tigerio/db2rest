@@ -38,3 +38,12 @@ logging:
       fatehi:
         utility:
           scheduler: ERROR
+    org:
+      springframework:
+        test:
+          context:
+            jdbc: DEBUG
+
+        jdbc:
+          datasource:
+            init: DEBUG

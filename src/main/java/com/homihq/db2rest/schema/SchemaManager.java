@@ -72,13 +72,15 @@ public final class SchemaManager {
             }
         }
 
+        log.info("tableMap - {}", tableMap);
+
     }
 
     public Optional<Table> getTable(String schemaName, String tableName) {
-        //log.info("Get table - {}.{}", schemaName, tableName);
+        log.info("Get table - {}.{}", schemaName, tableName);
         Table table = tableMap.get(schemaName + "." + tableName);
-
-      return Optional.of(table);
+        log.info("Get table - {}", table);
+        return Optional.of(table);
     }
 
     public Column getColumn(String schemaName, String tableName, String columnName) {

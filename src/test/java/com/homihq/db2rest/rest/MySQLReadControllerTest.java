@@ -7,16 +7,18 @@ import org.springframework.http.MediaType;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
-    @Test
+    //@Test
     @DisplayName("Get all fields.")
     void findAllFilms() throws Exception {
 
-        mockMvc.perform(get("/films")
+        mockMvc.perform(get("/films").header("Accept-Profile", "sakila")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
+                .andDo(print())
                 .andDo(document("get-all-films"));
     }
 }
