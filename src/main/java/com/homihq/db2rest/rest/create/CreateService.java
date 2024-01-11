@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.create;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.mybatis.DB2RestRenderingStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.mybatis.dynamic.sql.insert.GeneralInsertDSL;
 import org.mybatis.dynamic.sql.insert.render.BatchInsert;
 import org.mybatis.dynamic.sql.insert.render.GeneralInsertStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
@@ -43,14 +45,19 @@ public class CreateService {
             generalInsertDSL.set(table.column(key)).toValue(data.get(key));
         }
 
-
         GeneralInsertStatementProvider insertStatement = generalInsertDSL.build().render(RenderingStrategies.SPRING_NAMED_PARAMETER);
 
         log.debug("SQL - {}", insertStatement.getInsertStatement());
         log.debug("SQL - row - {}", insertStatement.getParameters());
 
-        int rows = namedParameterJdbcTemplate.update(insertStatement.getInsertStatement(), insertStatement.getParameters());
+        int rows = 0;
 
+        try {
+            rows = namedParameterJdbcTemplate.update(insertStatement.getInsertStatement(), insertStatement.getParameters());
+        }
+        catch(DataAccessException e) {
+            throw new GenericDataAccessException(e.getMessage());
+        }
         log.debug("Inserted - {} row(s)", rows);
 
         return rows;
