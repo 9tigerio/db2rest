@@ -56,20 +56,20 @@ to install OpenJDK 21.
 Now that you have successfully downloaded, installed and verified Java 21, the next step is to get DB2Rest. DB2Rest is shipped
 as a single executable Java Archive or jar file So its super easy to get up and running under a minute. 
 
-In order to download the latest edition(v-0.0.8) of DB2Rest click [here](https://pub-d494e6f63184463298f75f4d77bde7cb.r2.dev/db2rest-0.0.8.jar "here").
+In order to download the latest edition(v-0.0.8) of DB2Rest click [here](https://www.docker.com/get-started/).
 
 ### 3. Run DB2Rest.
 
 DB2Rest is just 60Mb and is immediately runnable. Fire up a terminal and execute the command below:
 
 ```Shell
-$ java  -DDB_PASSWORD=[DATABASE_PASSWORD] -DDB_SCHEMAS=[COMMA_SEPARATED_LIST_OF_DB_SCHEMAS] -DDB_URL=[JDBC_URL] -DDB_USER=[DATABASE_USER]  -Dspring.profiles.active=local -jar db2rest-0.0.8.jar
+$ java  -DDB_PASSWORD=[DATABASE_PASSWORD] -DDB_SCHEMAS=[LIST_OF_DB_SCHEMAS] -DDB_URL=[JDBC_URL] -DDB_USER=[DATABASE_USER]  -Dspring.profiles.active=local -jar db2rest-0.0.8.jar
 ``` 
 
 Replace the values for the following:
 
 - DATABASE_PASSWORD - database user password
-- COMMA_SEPARATED_LIST_OF_DB_SCHEMAS - e.g : sakila,world
+- LIST_OF_DB_SCHEMAS - comma separated list of schemas e.g : sakila,world
 - JDBC_URL - e.g :  jdbc:mysql://localhost:3306/sakila (MySQL)
 - DATABASE_USER - database user name.
 
@@ -79,7 +79,23 @@ Once this command is executed, within a few seconds, DB2Rest is ready to service
 
 ## With Docker
 
-Coming soon. 
+### 1. Install Docker
+
+Docker can be downloaded from the link [here](https://www.docker.com/get-started/) based on your operating system (OS). After download is completed, follow the steps outlined [here]https://docs.docker.com/desktop/
+as per your OS, to install Docker desktop.
+
+### 2. Run DB2Rest
+
+Now launch a terminal window to run DB2Rest docker image. DB2Rest docker image is available on [Dockerhub](https://hub.docker.com/repository/docker/kdhrubo/db2rest/general). 
+It is assumed that a MySQL server has already been installed, started and populated with Sakila database objects and data. MySQL Community Edition (CE) is available for download [here](https://dev.mysql.com/downloads/).  
+
+Now in the terminal window run the following command:
+
+```Shell
+$ docker run -e SPRING_PROFILES_ACTIVE=local -e DB_URL=jdbc:mysql://host.docker.internal:3306/sakila -e DB_USER=[DATABASE_USER] -e DB_PASSWORD=[DATABASE_PASSWORD] -e DB_SCHEMAS=sakila kdhrubo/db2rest:latest
+``` 
+
+This will start DB2Rest within seconds ready with to server API requests on the MySQL database. 
 
 ## Configuration Parameters
 
