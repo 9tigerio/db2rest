@@ -1,0 +1,4 @@
+src/test/resources/mysql/mysql-sakila.sql linguist-generated=true
+src/test/resources/mysql/mysql-sakila-insert-data.sql linguist-generated=true
+
+src/test/resources/pg/postgres-sakila.sql linguist-generated=true

@@ -93,8 +93,9 @@ Once this command is executed, within a few seconds, DB2Rest is ready to service
 
 ### 1. Install Docker
 
-Docker can be downloaded from the link [here](https://www.docker.com/get-started/) based on your operating system (OS). After download is completed, follow the steps outlined [here]https://docs.docker.com/desktop/
-as per your OS, to install Docker desktop.
+In order to download Docker desktop browse to this [link](https://www.docker.com/get-started/). This page then shows options 
+to download Docker for Mac, Windows and Linux. Please click on the link as per your operating system (OS) to start the download. 
+After download is completed, follow the steps outlined [here]https://docs.docker.com/desktop/ pertinent to your OS, to install and test Docker desktop.
 
 ### 2. Run DB2Rest
 
