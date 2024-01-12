@@ -32,14 +32,14 @@ You can now focus on building business logic and beautiful user interfaces at sp
 
 The diagram above shows an application architecture with DB2Rest. DB2Rest provides secure access to the database as REST API within seconds of installation/deployment. 
 The business logic can be written in your favorite technology frameworks for Java, PHP, Node, .NET or using any serverless framework. The business logic layer uses the database access layer (DBAL) provided
-by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low code/node code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
+by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low code/no-code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
 
 ## Benefits
 
     - No code, no SQL knowledge required, instead use simple REST Query Language (RQL) to retrieve data.
-    - Accelerate applicaton development by 30x. 
+    - Accelerate application development by 30x. 
     - Unlock databases - secure REST API access for legacy data.
-    - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip, no code generation.
+    - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip, does not use code generation.
     - Support for advanced custom queries, bulk data insert, remote stored procedure calls. 
     - Best practices for transaction management, connection pooling, encryption, security - RBAC / data entitlement.
     - Deploy and run anywhere - on premise, VM, Kubernetes, any cloud. 
