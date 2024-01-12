@@ -12,6 +12,7 @@ You can now focus on building business logic and beautiful user interfaces at sp
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/w/kdhrubo/db2rest)
 ![GitHub top language](https://img.shields.io/github/languages/top/kdhrubo/db2rest)
 
+![DB2Rest](https://discordapp.com/api/guilds/XP7aqKsv/widget.png?style=banner3)
 
 # How it works?
 
