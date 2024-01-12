@@ -37,9 +37,9 @@ by DB2Rest to query and modify data. The user experience layer can be developed 
 ## Benefits
 
     - No code, no SQL knowledge required, instead use simple REST Query Language (RQL) to retrieve data.
-    - Accelerate applicaton development by 30x. 
+    - Accelerate application development by 30x. 
     - Unlock databases - secure REST API access for legacy data.
-    - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip, no code generation.
+    - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip, does not use code generation.
     - Support for advanced custom queries, bulk data insert, remote stored procedure calls. 
     - Best practices for transaction management, connection pooling, encryption, security - RBAC / data entitlement.
     - Deploy and run anywhere - on premise, VM, Kubernetes, any cloud. 
