@@ -14,7 +14,11 @@ You can now focus on building business logic and beautiful user interfaces at sp
 
 # Support
 
-![DB2Rest](https://discordapp.com/api/guilds/1195238768014274590/widget.png?style=banner3)
+*Connect on Discord*
+
+[![](https://dcbadge.vercel.app/api/server/gytFPNW656?theme=discord)](https://discord.gg/gytFPNW656)
+
+
 
 # Contact
 
