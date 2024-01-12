@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -8,17 +9,16 @@ import org.springframework.http.MediaType;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import org.hamcrest.Matchers;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
+class MySQLCreateControllerTest extends PostgreSQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Create a film.")
     void create() throws Exception {
 
-       var json = """ 
+        var json = """ 
                {
                "title" : "Dunki",
                 "description" : "Film about illegal immigration" ,
@@ -34,7 +34,6 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
 	
         }
         """;
-
 
         mockMvc.perform(post("/film").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                         .header("Content-Profile", "public")
@@ -66,7 +65,6 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
 	            "country" : "USA"
         }
         """;
-
 
         mockMvc.perform(post("/film").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                         .header("Content-Profile", "public")
