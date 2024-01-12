@@ -51,24 +51,22 @@ by DB2Rest to query and modify data. The user experience layer can be developed 
 
 ## On Premise / On Virtual Machines (VM) 
 
-DB2Rest needs Java Runtime 21+ to run. This is because it is compiled with Java 21 and makes uses of Java Virtual Thread feature
-for high scalability. In other words, DB2Rest is capable of handling very high volume of requests even on a single node. 
+DB2Rest needs Java Runtime 21+ to run. This is because it is compiled with Java 21 and uses the [Java Virtual Thread](https://docs.oracle.com/en/java/javase/21/core/virtual-threads.html#GUID-DC4306FC-D6C1-4BCC-AECE-48C32C1A8DAA) feature for high scalability. In other words, DB2Rest is capable of handling a very high volume of requests even on a single node. 
 
-In case you are deploying DB2Rest on bare metal box or a VM on any cloud like Amazon EC2 or DigitalOcean Droplet, follow the steps below:
+In case you are deploying DB2Rest on a bare metal box or a VM on any cloud like Amazon EC2 or DigitalOcean Droplet, follow the steps below:
 
 ### 1. Install JDK 21+
 
-Download JDK 21 or above. There are many flavors of JDK available from different vendors like Oracle, AWS, OpenJDK. 
-Open JDK can be downloaded from here - https://jdk.java.net/21/. This article from https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-to-install-Java-21 provides a step by step guide 
-to install OpenJDK 21. 
+Download JDK 21 or above. There are many flavors of JDK available from different vendors like Oracle, AWS, and OpenJDK. 
+Open JDK can be downloaded from [here](https://jdk.java.net/21/). This article from [theserverside.com](https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-to-install-Java-21) provides a detailed step-by-step guide to install OpenJDK 21. 
 
 
 ### 2. Download DB2Rest
 
-Now that you have successfully downloaded, installed and verified Java 21, the next step is to get DB2Rest. DB2Rest is shipped
-as a single executable Java Archive or jar file So its super easy to get up and running under a minute. 
+Now that you have successfully downloaded, installed, and verified Java 21, the next step is to get DB2Rest. DB2Rest is shipped
+as a single executable Java Archive or jar file So it's super easy to get up and running under a minute. 
 
-In order to download the latest edition(v-0.0.8) of DB2Rest click [here](https://www.docker.com/get-started/).
+To download the latest edition(v-0.0.8) of DB2Rest click [here](https://www.docker.com/get-started/).
 
 ### 3. Run DB2Rest.
 
@@ -85,7 +83,7 @@ Replace the values for the following:
 - JDBC_URL - e.g :  jdbc:mysql://localhost:3306/sakila (MySQL)
 - DATABASE_USER - database user name.
 
-The above example is for connecting to MySQL database. 
+The above example is for connecting to a MySQL database. 
 
 Once this command is executed, within a few seconds, DB2Rest is ready to service your data access requests.  
 
@@ -93,14 +91,14 @@ Once this command is executed, within a few seconds, DB2Rest is ready to service
 
 ### 1. Install Docker
 
-In order to download Docker desktop browse to this [link](https://www.docker.com/get-started/). This page then shows options 
-to download Docker for Mac, Windows and Linux. Please click on the link as per your operating system (OS) to start the download. 
-After download is completed, follow the steps outlined [here]https://docs.docker.com/desktop/ pertinent to your OS, to install and test Docker desktop.
+To download the Docker desktop browse to this [link](https://www.docker.com/get-started/). This page then shows options 
+to download Docker for Mac, Windows, and Linux. Please click on the link for your operating system (OS) to start the download. 
+After the download is completed, follow the steps outlined [here]https://docs.docker.com/desktop/ pertinent to your OS, to install and test the Docker desktop.
 
 ### 2. Run DB2Rest
 
-Now launch a terminal window to run DB2Rest docker image. DB2Rest docker image is available on [Dockerhub](https://hub.docker.com/repository/docker/kdhrubo/db2rest/general). 
-It is assumed that a MySQL server has already been installed, started and populated with Sakila database objects and data. MySQL Community Edition (CE) is available for download [here](https://dev.mysql.com/downloads/).  
+Now launch a terminal window to run the DB2Rest docker image. DB2Rest docker image is available on [Dockerhub](https://hub.docker.com/repository/docker/kdhrubo/db2rest/general). 
+It is assumed that a MySQL server has already been installed, started, and populated with Sakila database objects and data. MySQL Community Edition (CE) is available for download [here](https://dev.mysql.com/downloads/).  
 
 Now in the terminal window run the following command:
 
@@ -129,53 +127,52 @@ This will start DB2Rest within seconds ready with to server API requests on the 
 - **PostgreSQL**
 - **MySQL**
 
-# Supported Operations
+# Supported Features
 
 **Save Record (Create)**
 
-    - [x] Single record.
-    - [x] Bulk records.
-
+- [x] Single record.
+- [x] Bulk records.
 
 **Query (Read)**
 
-    - [x] Row Filtering with rSQL DSL.
-    - [x] Column Selection
-    - [x] Rename Columns / Alias
-    - [x] Join - Inner
-    - [x] Include Join Columns
-    - [x] Pagination - Limit & Offset
-    - [X] Sort / Order by
-    - [ ] Group By
-    - [ ] Count
-    - [ ] Join column filter
+- [x] Row Filtering with rSQL DSL.
+- [x] Column Selection
+- [x] Rename Columns / Alias
+- [x] Join - Inner
+- [x] Include Join Columns
+- [x] Pagination - Limit & Offset
+- [X] Sort / Order by
+- [ ] Group By
+- [ ] Count
+- [ ] Join column filter
 
 
 **Edit**
 
-    - [x] Patch
-    - [x] Patch with row filtering
+- [x] Patch
+- [x] Patch with row filtering
 
 
 **Purge (Delete)**
 
-    - [x] Delete with row filter.
-    - [x] Safe delete.
+- [x] Delete with row filter.
+- [x] Safe delete.
 
 **Transactions**
 
-    - [x] Readonly for Select
-    - [x] Supported for Save, Edit, Purge 
+- [x] Readonly for Select
+- [x] Supported for Save, Edit, Purge 
 
 **Multi-tenancy**
 
-    - [ ] Tenant Id column
-    - [x] Schema per tenant
-    - [ ] Database per tenant
+- [ ] Tenant Id column
+- [x] Schema per tenant
+- [ ] Database per tenant
 
 **Schema Support**
 
-    - [x] Multiple schema support
+- [x] Multiple schema support
 
 
 # Supported Operators
