@@ -703,5 +703,6 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 - [ ] Youtube channel demonstrating features and working
 - [ ] Native binary image - simplify installation
 - [ ] Support for scripting (extensibility) - Python, Apache Groovy, Javascript/VS8 
-
+- [ ] Deploy to Digital Ocean
+- [ ] Ability to insert into multiple tables
 
