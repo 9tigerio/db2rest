@@ -3,6 +3,7 @@ package com.homihq.db2rest.rest.create;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.mybatis.DB2RestRenderingStrategy;
+import io.hypersistence.tsid.TSID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +32,9 @@ public class CreateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
+    private final String tsidColumnKey = "tsid_column";
+    private final String tsidColumnTypeKey = "tsid_column_type";
+    private final String defaultTSIDColumnType = "number";
     private final DB2RestRenderingStrategy db2RestRenderingStrategy = new DB2RestRenderingStrategy();
 
     @Transactional
@@ -40,6 +43,24 @@ public class CreateService {
 
         SqlTable table = SqlTable.of(tableName);
         GeneralInsertDSL generalInsertDSL = insertInto(table);
+
+        String columnType = defaultTSIDColumnType;
+
+        if(data.containsKey(tsidColumnKey)) {
+            if(data.containsKey(tsidColumnTypeKey)) {
+                columnType = data.get(tsidColumnTypeKey).toString();
+            }
+        } else {
+            throw new GenericDataAccessException("Missing tsid_column in request data");
+        }
+
+        String tsidColumn = data.get(tsidColumnKey).toString();
+        if(columnType.equals("string")) {
+            generalInsertDSL.set(table.column(tsidColumn)).toValue(TSID.Factory.getTsid().toString());
+        } else {
+            generalInsertDSL.set(table.column(tsidColumn)).toValue(TSID.Factory.getTsid().toLong());
+        }
+
 
         for(String key : data.keySet()) {
             generalInsertDSL.set(table.column(key)).toValue(data.get(key));
