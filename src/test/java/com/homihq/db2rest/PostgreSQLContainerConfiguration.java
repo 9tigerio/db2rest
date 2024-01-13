@@ -1,22 +1,41 @@
 package com.homihq.db2rest;
 
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.ext.ScriptUtils;
+import org.testcontainers.jdbc.JdbcDatabaseDelegate;
+
+import javax.sql.DataSource;
+import java.util.Set;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class PostgreSQLContainerConfiguration {
 
-    @Bean
-    @ServiceConnection
-    public PostgreSQLContainer<?> postgreSQLContainer() {
-        PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:15.2-alpine");
-        postgreSQLContainer.withUsername("postgres")
-                .withPassword("postgres")
-                .withInitScript("pg/postgres-sakila.sql")
-                .withDatabaseName("postgres").withReuse(true);
-        return postgreSQLContainer;
+    private static final Set<String> postgresScripts = Set.of("pg/postgres-sakila.sql",
+            "pg/postgres-sakila-data.sql");
 
+    private static final PostgreSQLContainer testPostgres = (PostgreSQLContainer) new PostgreSQLContainer("postgres:15.2-alpine")
+            .withDatabaseName("postgres")
+            .withUsername("postgres")
+            .withPassword("postgres")
+            .withReuse(true);
+
+    static {
+        testPostgres.start();
+        var containerDelegate = new JdbcDatabaseDelegate(testPostgres, "");
+        postgresScripts.forEach(initScript -> ScriptUtils.runInitScript(containerDelegate, initScript));
     }
+
+    @Bean("postgresDataSource")
+    public DataSource dataSource() {
+        var dataSourceBuilder = DataSourceBuilder.create();
+        dataSourceBuilder.driverClassName("org.postgresql.Driver");
+        dataSourceBuilder.url(testPostgres.getJdbcUrl());
+        dataSourceBuilder.username(testPostgres.getUsername());
+        dataSourceBuilder.password(testPostgres.getPassword());
+        return dataSourceBuilder.build();
+    }
+
 }
