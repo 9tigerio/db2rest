@@ -11,13 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
-    //@Test
+    @Test
     @DisplayName("Get all fields.")
     void findAllFilms() throws Exception {
 
-        mockMvc.perform(get("/films").header("Accept-Profile", "sakila")
+        mockMvc.perform(get("/film").header("Accept-Profile", "sakila")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("mysql-get-all-films"));
     }

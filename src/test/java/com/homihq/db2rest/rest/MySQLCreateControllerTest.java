@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest;
 
-import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
+import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class MySQLCreateControllerTest extends PostgreSQLBaseIntegrationTest {
+class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Create a film.")
