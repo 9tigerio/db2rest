@@ -19,6 +19,6 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
-                .andDo(document("get-all-films"));
+                .andDo(document("mysql-get-all-films"));
     }
 }

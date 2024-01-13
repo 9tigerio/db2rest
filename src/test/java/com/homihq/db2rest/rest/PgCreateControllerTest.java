@@ -42,7 +42,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
                 .andDo(print())
-                .andDo(document("create-a-film"));
+                .andDo(document("pg-create-a-film"));
 
     }
 
@@ -73,7 +73,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
-                .andDo(document("create-a-film-error"));
+                .andDo(document("pg-create-a-film-error"));
 
     }
 }
