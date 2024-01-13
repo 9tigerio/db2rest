@@ -25,6 +25,6 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("get-all-films"));
+                .andDo(document("pg-get-all-films"));
     }
 }
