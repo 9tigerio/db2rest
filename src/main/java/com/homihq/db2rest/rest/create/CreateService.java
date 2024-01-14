@@ -7,6 +7,7 @@ import io.hypersistence.tsid.TSID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.SqlTable;
 import org.mybatis.dynamic.sql.insert.BatchInsertDSL;
 import org.mybatis.dynamic.sql.insert.GeneralInsertDSL;
@@ -32,35 +33,16 @@ public class CreateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final String tsidColumnKey = "tsid_column";
-    private final String tsidColumnTypeKey = "tsid_column_type";
-    private final String defaultTSIDColumnType = "number";
     private final DB2RestRenderingStrategy db2RestRenderingStrategy = new DB2RestRenderingStrategy();
 
     @Transactional
-    public int save(String schemaName, String tableName, Map<String,Object> data) {
+    public int save(String schemaName, String tableName, Map<String,Object> data, String tsid, String tsidType) {
         //db2RestConfigProperties.verifySchema(schemaName);
+
+        processTSID(data, tsid, tsidType);
 
         SqlTable table = SqlTable.of(tableName);
         GeneralInsertDSL generalInsertDSL = insertInto(table);
-
-        String columnType = defaultTSIDColumnType;
-
-        if(data.containsKey(tsidColumnKey)) {
-            if(data.containsKey(tsidColumnTypeKey)) {
-                columnType = data.get(tsidColumnTypeKey).toString();
-            }
-        } else {
-            throw new GenericDataAccessException("Missing tsid_column in request data");
-        }
-
-        String tsidColumn = data.get(tsidColumnKey).toString();
-        if(columnType.equals("string")) {
-            generalInsertDSL.set(table.column(tsidColumn)).toValue(TSID.Factory.getTsid().toString());
-        } else {
-            generalInsertDSL.set(table.column(tsidColumn)).toValue(TSID.Factory.getTsid().toLong());
-        }
-
 
         for(String key : data.keySet()) {
             generalInsertDSL.set(table.column(key)).toValue(data.get(key));
@@ -82,6 +64,30 @@ public class CreateService {
         log.debug("Inserted - {} row(s)", rows);
 
         return rows;
+
+    }
+
+    private void processTSID(Map<String, Object> data, String tsid, String tsidType) {
+        //1. check if tsid column is specified if yes go ahead add or update it with generated TSID value
+
+        if(StringUtils.isNotBlank(tsid)) {
+            data.put(tsid, getTSIDValue(tsidType));
+        }
+
+        // adding to data will ensure its added in select statement
+
+    }
+
+    private Object getTSIDValue(String tsidType) {
+        if(StringUtils.equalsAnyIgnoreCase(tsidType, "number", "string")) {
+            return
+            StringUtils.equalsIgnoreCase(tsidType, "number") ? TSID.Factory.getTsid().toLong() :
+                    TSID.Factory.getTsid().toString();
+
+
+        }
+
+        throw new GenericDataAccessException("Invalid TSID data type.");
 
     }
 
