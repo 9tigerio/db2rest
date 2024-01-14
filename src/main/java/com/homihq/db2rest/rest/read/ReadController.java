@@ -19,7 +19,7 @@ public class ReadController {
 
     @GetMapping(value = "/{tableName}" , produces = "application/json")
     public Object findByJoinTable(@PathVariable String tableName,
-                                  @RequestHeader(name = "Accept-Profile") String schemaName,
+                                  @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
                                   @RequestParam(name = "select", required = false, defaultValue = "") String select,
                                   @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
                                   Sort sort,
