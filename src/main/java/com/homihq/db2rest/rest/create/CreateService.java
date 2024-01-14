@@ -3,9 +3,11 @@ package com.homihq.db2rest.rest.create;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.mybatis.DB2RestRenderingStrategy;
+import io.hypersistence.tsid.TSID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.SqlTable;
 import org.mybatis.dynamic.sql.insert.BatchInsertDSL;
 import org.mybatis.dynamic.sql.insert.GeneralInsertDSL;
@@ -31,12 +33,13 @@ public class CreateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     private final DB2RestRenderingStrategy db2RestRenderingStrategy = new DB2RestRenderingStrategy();
 
     @Transactional
-    public int save(String schemaName, String tableName, Map<String,Object> data) {
+    public int save(String schemaName, String tableName, Map<String,Object> data, String tsid, String tsidType) {
         //db2RestConfigProperties.verifySchema(schemaName);
+
+        processTSID(data, tsid, tsidType);
 
         SqlTable table = SqlTable.of(tableName);
         GeneralInsertDSL generalInsertDSL = insertInto(table);
@@ -61,6 +64,30 @@ public class CreateService {
         log.debug("Inserted - {} row(s)", rows);
 
         return rows;
+
+    }
+
+    private void processTSID(Map<String, Object> data, String tsid, String tsidType) {
+        //1. check if tsid column is specified if yes go ahead add or update it with generated TSID value
+
+        if(StringUtils.isNotBlank(tsid)) {
+            data.put(tsid, getTSIDValue(tsidType));
+        }
+
+        // adding to data will ensure its added in select statement
+
+    }
+
+    private Object getTSIDValue(String tsidType) {
+        if(StringUtils.equalsAnyIgnoreCase(tsidType, "number", "string")) {
+            return
+            StringUtils.equalsIgnoreCase(tsidType, "number") ? TSID.Factory.getTsid().toLong() :
+                    TSID.Factory.getTsid().toString();
+
+
+        }
+
+        throw new GenericDataAccessException("Invalid TSID data type.");
 
     }
 
