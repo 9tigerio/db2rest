@@ -700,9 +700,10 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 - [ ] HTTP2 support - (requested by a financial company)
 - [ ] Support for Grafana & Prometheus - (requested by a financial company)
 - [ ] Configuration Docs - AWS RDS Postgres, Aurora Postgres, DB User role
-- [ ] Youtube channel demonstrating features and working
+- [ ] Youtube videos
 - [ ] Native binary image - simplify installation
 - [ ] Support for scripting (extensibility) - Python, Apache Groovy, Javascript/VS8 
 - [ ] Deploy to Digital Ocean
 - [ ] Ability to insert into multiple tables
+- [ ] Batch loading of remote files
 
