@@ -8,12 +8,12 @@ import org.testcontainers.ext.ScriptUtils;
 import org.testcontainers.jdbc.JdbcDatabaseDelegate;
 
 import javax.sql.DataSource;
-import java.util.Set;
+import java.util.List;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class MySQLContainerConfiguration {
 
-    private static final Set<String> mySqlScripts = Set.of("mysql/mysql-sakila.sql",
+    private static final List<String> mySqlScripts = List.of("mysql/mysql-sakila.sql",
             "mysql/mysql-sakila-data.sql");
 
     private static final MySQLContainer mySQLContainer = (MySQLContainer) new MySQLContainer("mysql:8.2")

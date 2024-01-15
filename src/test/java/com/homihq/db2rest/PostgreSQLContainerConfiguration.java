@@ -8,12 +8,12 @@ import org.testcontainers.ext.ScriptUtils;
 import org.testcontainers.jdbc.JdbcDatabaseDelegate;
 
 import javax.sql.DataSource;
-import java.util.Set;
+import java.util.List;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class PostgreSQLContainerConfiguration {
 
-    private static final Set<String> postgresScripts = Set.of("pg/postgres-sakila.sql",
+    private static final List<String> postgresScripts = List.of("pg/postgres-sakila.sql",
             "pg/postgres-sakila-data.sql");
 
     private static final PostgreSQLContainer testPostgres = (PostgreSQLContainer) new PostgreSQLContainer("postgres:15.2-alpine")
