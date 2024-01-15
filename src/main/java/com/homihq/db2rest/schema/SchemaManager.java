@@ -14,6 +14,7 @@ import schemacrawler.tools.utility.SchemaCrawlerUtility;
 import us.fatehi.utility.datasource.DatabaseConnectionSources;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +29,7 @@ public final class SchemaManager {
 
     private final DataSource dataSource;
     private final Map<String, Table> tableMap = new ConcurrentHashMap<>();
+    private final List<Table> tableList = new ArrayList<>();
 
     @PostConstruct
     public void reload() {
@@ -56,24 +58,30 @@ public final class SchemaManager {
 
             for (final Table table : catalog.getTables(schema)) {
 
-                //TODO - move DB specific handling to Dialect class
-                String schemaName = table.getSchema().getCatalogName();
-
-                if(StringUtils.isBlank(schemaName)) {
-                    //POSTGRESQL
-
-                    schemaName = table.getSchema().getName();
-                }
+                String schemaName = getSchemaName(table);
 
                 String fullName = schemaName + "." + table.getName();
                 log.info("Full name - {}", fullName);
                 tableMap.put(fullName, table);
+                tableList.add(table);
 
             }
         }
 
         log.info("tableMap - {}", tableMap);
 
+    }
+
+    private String getSchemaName(Table table) {
+        //TODO - move DB specific handling to Dialect class
+        String schemaName = table.getSchema().getCatalogName();
+
+        if(StringUtils.isBlank(schemaName)) {
+            //POSTGRESQL
+
+            schemaName = table.getSchema().getName();
+        }
+        return schemaName;
     }
 
     public Optional<Table> getTable(String schemaName, String tableName) {
@@ -100,6 +108,18 @@ public final class SchemaManager {
       return table.getImportedForeignKeys().stream()
               .filter(fk -> StringUtils.equalsIgnoreCase(fk.getSchema().getCatalogName(), schemaName)
                       && StringUtils.equalsIgnoreCase(fk.getReferencedTable().getName(), childTable)).toList();
+    }
+
+    public List<MyBatisTable> findTables(String tableName) {
+        return tableList.stream()
+                .filter(t -> StringUtils.equalsIgnoreCase(t.getName(), tableName))
+                .toList()
+                .stream()
+                .map(t ->
+                        new MyBatisTable(
+                                getSchemaName(t), tableName, t))
+                .toList();
+
     }
 
     public MyBatisTable findTable(String schemaName, String tableName, int counter) {

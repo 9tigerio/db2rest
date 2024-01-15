@@ -21,6 +21,8 @@ public class WhereBuilder{
     private final SchemaManager schemaManager;
 
     public void build(ReadContext context) {
+        if(context.isUnion()) return;
+
         if(StringUtils.isNotBlank(context.filter)) {
 
             log.info("-Creating where condition -");

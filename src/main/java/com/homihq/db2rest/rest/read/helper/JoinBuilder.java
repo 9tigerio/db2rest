@@ -19,7 +19,12 @@ public class JoinBuilder  {
     private final SchemaManager schemaManager;
 
     public void build(ReadContext context) {
+
+        if(context.isUnion()) return;
+
         List<MyBatisTable> tableList = context.getTables();
+
+        log.info("Table list - {}", tableList);
 
         if(tableList.size() > 1) { //table join required
             for(int i = 0 ; i < tableList.size() ; i = i + 2) {
