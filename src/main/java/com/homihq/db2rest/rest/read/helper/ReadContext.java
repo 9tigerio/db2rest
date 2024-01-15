@@ -67,7 +67,7 @@ public class ReadContext {
         }
         else{
             from = getRootTable();
-            queryExpressionDSL = select(columns).from(from);
+            queryExpressionDSL = select(columns).from(from, from.getAlias());
         }
 
     }
