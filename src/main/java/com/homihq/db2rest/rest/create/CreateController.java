@@ -27,7 +27,6 @@ public class CreateController {
 
         int rows =
         createService.save(schemaName, tableName, data, tsid, tsidType);
-        log.info("==========> tsid " + tsid.toString());
 
         return new CreateResponse(rows);
     }
