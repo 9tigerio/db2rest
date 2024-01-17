@@ -3,7 +3,7 @@
 > Don't write any database access code, Install DB2Rest instead. 
 
 DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
-your existing or new databases. You can connect to the most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, MongoDB to build a REST API in minutes without writing any code.
+your existing or new databases. You can connect to the most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, and MongoDB to build a REST API in minutes without writing any code.
 You can now focus on building business logic and beautiful user interfaces at speed.
 
 
@@ -25,14 +25,14 @@ You can now focus on building business logic and beautiful user interfaces at sp
 <help@db2rest.com>
 
 
-# How it works?
+# How does it work?
 
 ![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
 
 
 The diagram above shows an application architecture with DB2Rest. DB2Rest provides secure access to the database as REST API within seconds of installation/deployment. 
-The business logic can be written in your favorite technology frameworks for Java, PHP, Node, .NET or using any serverless framework. The business logic layer uses the database access layer (DBAL) provided
-by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low code/no-code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
+The business logic can be written in your favorite technology frameworks for Java, PHP, Node, .NET, or using any serverless framework. The business logic layer uses the database access layer (DBAL) provided
+by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low-code/no-code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
 
 ## Benefits
 
@@ -40,11 +40,11 @@ by DB2Rest to query and modify data. The user experience layer can be developed 
     - Accelerate application development by 30x. 
     - Unlock databases - secure REST API access for legacy data.
     - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip, does not use code generation.
-    - Support for advanced custom queries, bulk data insert, remote stored procedure calls. 
+    - Support for advanced custom queries, bulk data insert, and remote stored procedure calls. 
     - Best practices for transaction management, connection pooling, encryption, security - RBAC / data entitlement.
-    - Deploy and run anywhere - on premise, VM, Kubernetes, any cloud. 
+    - Deploy and run anywhere - on-premise, VM, Kubernetes, or any cloud. 
     - Zero downtime - adjusts to your evolving database schema. 
-    - Compatible with Devops processes. 
+    - Compatible with DevOps processes. 
 
 
 # Installation 
@@ -66,7 +66,7 @@ Open JDK can be downloaded from [here](https://jdk.java.net/21/). This article f
 Now that you have successfully downloaded, installed, and verified Java 21, the next step is to get DB2Rest. DB2Rest is shipped
 as a single executable Java Archive or jar file So it's super easy to get up and running under a minute. 
 
-To download the latest edition(v-0.0.8) of DB2Rest click [here](https://www.docker.com/get-started/).
+To download the latest edition(v-0.0.8) of DB2Rest click [here](https://download.db2rest.com/db2rest-0.0.8.jar).
 
 ### 3. Run DB2Rest.
 
