@@ -1,12 +1,17 @@
 package com.homihq.db2rest.rest.read;
 
+import com.homihq.db2rest.rest.read.model.QueryRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import static org.springframework.web.bind.ServletRequestUtils.*;
+
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -39,7 +44,11 @@ public class ReadController {
 
         return readService.findAll(schemaName, tableName,select, filter, pageable, sort);
     }
-
-
+    @PostMapping(value = "/query", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findByCustomQuery(@RequestBody @Valid QueryRequest queryRequest) {
+        log.debug("Execute SQL statement {} with params {}", queryRequest.getSql(), queryRequest.getParams());
+        return ResponseEntity.ok(readService.findByCustomQuery(queryRequest));
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.read;
 
 import com.homihq.db2rest.rest.read.helper.*;
+import com.homihq.db2rest.rest.read.model.QueryRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -46,8 +47,9 @@ public class ReadService {
 
     }
 
-
-
-
-
+    Object findByCustomQuery(QueryRequest queryRequest) {
+        return queryRequest.isSingle() ?
+                namedParameterJdbcTemplate.queryForMap(queryRequest.getSql(), queryRequest.getParams()) :
+                namedParameterJdbcTemplate.queryForList(queryRequest.getSql(), queryRequest.getParams());
+    }
 }
