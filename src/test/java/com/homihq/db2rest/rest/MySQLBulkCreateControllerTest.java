@@ -128,7 +128,7 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
                 """;
 
         mockMvc.perform(post("/director/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                        .param("tsid", "tsid")
+                        .param("tsid", "director_id")
                         .param("tsidType", "number")
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
@@ -155,7 +155,7 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
                 """;
 
         mockMvc.perform(post("/director/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                        .param("tsid", "tsid")
+                        .param("tsid", "director_id")
                         .param("tsidType", "string")
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
@@ -166,28 +166,30 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("Create many directors with wrong tsid type.")
-    void createDirectorWithDefaultTsidType() throws Exception {
+    @DisplayName("Create reviews with default tsid type.")
+    void createReviewWithDefaultTsidType() throws Exception {
         var json = """
                 [
                    {
-                      "first_name": "Anurag",
-                      "last_name": "Kashyap"
+                      "message": "Very long film.",
+                      "rating": 3,
+                      "film_id" : 1
                    },
                    {
-                      "first_name": "Rajkumar",
-                      "last_name": "Hirani"
+                      "message": "Very exciting film.",
+                      "rating": 4,
+                      "film_id" : 2
                    } 
                 ]
                 """;
 
-        mockMvc.perform(post("/director/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                        .param("tsid", "tsid")
+        mockMvc.perform(post("/review/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "review_id")
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(print())
-                .andDo(document("mysql-bulk-create-directors-with-default-tsid-type"));
+                .andDo(document("mysql-bulk-create-reviews-with-default-tsid-type"));
 
     }
 

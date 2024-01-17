@@ -59,7 +59,7 @@ public class CreateService {
             rows = namedParameterJdbcTemplate.update(insertStatement.getInsertStatement(), insertStatement.getParameters());
         }
         catch(DataAccessException e) {
-            throw new GenericDataAccessException(e.getMessage());
+            throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
         log.debug("Inserted - {} row(s)", rows);
 
@@ -125,7 +125,7 @@ public class CreateService {
             updateCounts = namedParameterJdbcTemplate.batchUpdate(batchInsert.getInsertStatementSQL(), batch);
         }
         catch (DataAccessException e) {
-            throw new GenericDataAccessException(e.getMessage());
+            throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
 
         log.debug("Update counts - {}", updateCounts.length);

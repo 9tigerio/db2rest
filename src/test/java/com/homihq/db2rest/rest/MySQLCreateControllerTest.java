@@ -117,7 +117,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                 """;
 
         mockMvc.perform(post("/director").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                        .param("tsid", "tsid")
+                        .param("tsid", "director_id")
                         .param("tsidType", "number")
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
@@ -137,8 +137,8 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                 }
                 """;
         mockMvc.perform(post("/director").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                        .param("tsid", "tsid")
-                        .param("tsidType", "string")
+                        .param("tsid", "director_id")
+                        .param("tsidType", "float") //only support string, number
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -157,7 +157,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                 }
                 """;
         mockMvc.perform(post("/director").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                        .param("tsid", "tsid")
+                        .param("tsid", "director_id")
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
