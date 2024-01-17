@@ -27,6 +27,7 @@ public class CreateController {
 
         int rows =
         createService.save(schemaName, tableName, data, tsid, tsidType);
+        log.info("==========> tsid " + tsid.toString());
 
         return new CreateResponse(rows);
     }
@@ -35,10 +36,12 @@ public class CreateController {
     @PostMapping ( "/{tableName}/bulk")
     public CreateBulkResponse saveBulk(@PathVariable String tableName,
                                        @RequestHeader(name = "Content-Profile") String schemaName,
-                                       @RequestBody List<Map<String,Object>> data) {
+                                       @RequestBody List<Map<String,Object>> data,
+                                       @RequestParam(name = "tsid", required = false) String tsid,
+                                       @RequestParam(name = "tsidType", required = false, defaultValue = "number") String tsidType) {
 
         int [] rows =
-        createService.saveBulk(schemaName, tableName,data);
+        createService.saveBulk(schemaName, tableName, data, tsid, tsidType);
 
         return new CreateBulkResponse(rows);
     }

@@ -92,8 +92,11 @@ public class CreateService {
     }
 
     @Transactional
-    public int[] saveBulk(String schemaName, String tableName, List<Map<String, Object>> dataList) {
+    public int[] saveBulk(String schemaName, String tableName, List<Map<String, Object>> dataList, String tsid, String tsidType) {
         if(Objects.isNull(dataList) || dataList.isEmpty()) throw new RuntimeException("No data provided");
+
+        for(Map<String, Object> data : dataList)
+            processTSID(data, tsid, tsidType);
 
         SqlTable table = SqlTable.of(tableName);
 
@@ -116,7 +119,14 @@ public class CreateService {
         log.debug("SQL -> {}", batchInsert.getInsertStatementSQL());
         log.debug("batch -> {}", batch);
 
-        int[] updateCounts = namedParameterJdbcTemplate.batchUpdate(batchInsert.getInsertStatementSQL(), batch);
+        int[] updateCounts;
+
+        try {
+            updateCounts = namedParameterJdbcTemplate.batchUpdate(batchInsert.getInsertStatementSQL(), batch);
+        }
+        catch (DataAccessException e) {
+            throw new GenericDataAccessException(e.getMessage());
+        }
 
         log.debug("Update counts - {}", updateCounts.length);
 

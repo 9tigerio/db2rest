@@ -34,6 +34,21 @@ CREATE TABLE actor (
   KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+--
+-- Table structure for table `director`
+--
+
+CREATE TABLE director (
+  director_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  tsid BIGINT NOT NULL DEFAULT 0,
+  first_name VARCHAR(45) NOT NULL,
+  last_name VARCHAR(45) NOT NULL,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (director_id),
+  KEY idx_director_last_name (last_name)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Table structure for table `category`
 --

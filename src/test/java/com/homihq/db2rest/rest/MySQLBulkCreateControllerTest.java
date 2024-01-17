@@ -111,5 +111,84 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
 
     }
 
+    @Test
+    @DisplayName("Create many directors.")
+    void createDirector() throws Exception {
+        var json = """
+                [
+                   {
+                      "first_name": "Anurag",
+                      "last_name": "Kashyap"
+                   },
+                   {
+                      "first_name": "Rajkumar",
+                      "last_name": "Hirani"
+                   } 
+                ]
+                """;
+
+        mockMvc.perform(post("/director/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "tsid")
+                        .param("tsidType", "number")
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("mysql-bulk-create-directors"));
+
+    }
+
+    @Test
+    @DisplayName("Create many directors with wrong tsid type.")
+    void createDirectorWithWrongTsidType() throws Exception {
+        var json = """
+                [
+                   {
+                      "first_name": "Anurag",
+                      "last_name": "Kashyap"
+                   },
+                   {
+                      "first_name": "Rajkumar",
+                      "last_name": "Hirani"
+                   } 
+                ]
+                """;
+
+        mockMvc.perform(post("/director/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "tsid")
+                        .param("tsidType", "string")
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print())
+                .andDo(document("mysql-bulk-create-directors-with-wrong-tsid-type"));
+
+    }
+
+    @Test
+    @DisplayName("Create many directors with wrong tsid type.")
+    void createDirectorWithDefaultTsidType() throws Exception {
+        var json = """
+                [
+                   {
+                      "first_name": "Anurag",
+                      "last_name": "Kashyap"
+                   },
+                   {
+                      "first_name": "Rajkumar",
+                      "last_name": "Hirani"
+                   } 
+                ]
+                """;
+
+        mockMvc.perform(post("/director/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "tsid")
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("mysql-bulk-create-directors-with-default-tsid-type"));
+
+    }
 
 }
