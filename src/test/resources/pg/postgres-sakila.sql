@@ -57,6 +57,35 @@ CREATE TABLE actor (
 
 ALTER TABLE public.actor OWNER TO postgres;
 
+
+--
+-- Table structure for table `director`
+--
+
+CREATE TABLE director (
+        director_id bigint NOT NULL, --- this column will be filled with TSID long value
+        first_name character varying(45) NOT NULL,
+        last_name character varying(45) NOT NULL,
+        last_update timestamp without time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE public.director OWNER TO postgres;
+
+
+--
+-- Table structure for table `review`
+--
+
+CREATE TABLE review (
+          review_id character varying(20) NOT NULL, --- this column will be filled with TSID string value
+          message character varying(100) NOT NULL,
+          rating int NOT NULL,
+          film_id int NOT NULL,
+          last_update timestamp without time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE public.review OWNER TO postgres;
+
 --
 -- Name: year; Type: DOMAIN; Schema: public; Owner: postgres
 --

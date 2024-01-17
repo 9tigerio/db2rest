@@ -114,4 +114,87 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     }
 
 
+    @Test
+    @DisplayName("Create many directors.")
+    void createDirector() throws Exception {
+        var json = """
+                [
+                   {
+                      "first_name": "Anurag",
+                      "last_name": "Kashyap"
+                   },
+                   {
+                      "first_name": "Rajkumar",
+                      "last_name": "Hirani"
+                   } 
+                ]
+                """;
+
+        mockMvc.perform(post("/director/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "director_id")
+                        .param("tsidType", "number")
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("pg-bulk-create-directors"));
+
+    }
+
+    @Test
+    @DisplayName("Create many directors with wrong tsid type.")
+    void createDirectorWithWrongTsidType() throws Exception {
+        var json = """
+                [
+                   {
+                      "first_name": "Anurag",
+                      "last_name": "Kashyap"
+                   },
+                   {
+                      "first_name": "Rajkumar",
+                      "last_name": "Hirani"
+                   } 
+                ]
+                """;
+
+        mockMvc.perform(post("/director/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "director_id")
+                        .param("tsidType", "string")
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print())
+                .andDo(document("pg-bulk-create-directors-with-wrong-tsid-type"));
+
+    }
+
+    @Test
+    @DisplayName("Create reviews with default tsid type.")
+    void createReviewWithDefaultTsidType() throws Exception {
+        var json = """
+                [
+                   {
+                      "message": "Very long film.",
+                      "rating": 3,
+                      "film_id" : 1
+                   },
+                   {
+                      "message": "Very exciting film.",
+                      "rating": 4,
+                      "film_id" : 2
+                   } 
+                ]
+                """;
+
+        mockMvc.perform(post("/review/bulk").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "review_id")
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("pg-bulk-create-reviews-with-default-tsid-type"));
+
+    }
+
+
 }

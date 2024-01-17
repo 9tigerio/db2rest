@@ -123,7 +123,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(print())
-                .andDo(document("create-a-director-with-tsid-given-tsid-type"));
+                .andDo(document("mysql-create-a-director-with-tsid-given-tsid-type"));
 
     }
 
@@ -143,7 +143,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
-                .andDo(document("create-a-director-with-wrong-tsid-type"));
+                .andDo(document("mysql-create-a-director-with-wrong-tsid-type"));
 
     }
 
@@ -162,6 +162,6 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(print())
-                .andDo(document("create-a-director-with-tsid-given-tsid-type"));
+                .andDo(document("mysql-create-a-director-with-tsid-given-tsid-type"));
     }
 }
