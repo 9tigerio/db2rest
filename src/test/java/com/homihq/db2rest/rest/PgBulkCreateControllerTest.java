@@ -81,7 +81,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                     "length" : 150,
                     "replacement_cost" : 20.99 ,
                     "rating" : "PG-13" ,
-                    "special_features" : "Commentaries"
+                    "special_features" : "Commentaries",
                     "country" : "INDIA"
 	
                 },
