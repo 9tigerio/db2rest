@@ -51,4 +51,9 @@ public class ReadController {
         return ResponseEntity.ok(readService.findByCustomQuery(queryRequest));
     }
 
+    @GetMapping(value = "/query/{tableName}/count", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> getCount(@PathVariable String tableName) {
+        return ResponseEntity.ok(readService.findCount(tableName));
+    }
+
 }

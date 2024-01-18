@@ -91,4 +91,15 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andDo(print())
                 .andDo(document("pg-create-a-film"));
     }
+
+    @Test
+    @DisplayName("Get count")
+    void findFilmCount() throws Exception {
+        mockMvc.perform(get("/query/film/count")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("pg-get-film-count"));
+
+    }
 }

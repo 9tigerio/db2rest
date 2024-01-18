@@ -47,6 +47,22 @@ public class ReadService {
 
     }
 
+    public int findCount(String tableName) {
+        ReadContext ctx = ReadContext.builder()
+                .tableName(tableName)
+                .select("*")
+                .build();
+        selectBuilder.build(ctx);
+
+        String sql = ctx.prepareSQL();
+        Map<String, Object> bindValues = ctx.prepareParameters();
+
+        log.info("SQL count - {}", sql);
+        log.info("Bind variables - {}", bindValues);
+
+        return namedParameterJdbcTemplate.queryForList(sql, bindValues).size();
+    }
+
     Object findByCustomQuery(QueryRequest queryRequest) {
         return queryRequest.isSingle() ?
                 namedParameterJdbcTemplate.queryForMap(queryRequest.getSql(), queryRequest.getParams()) :
