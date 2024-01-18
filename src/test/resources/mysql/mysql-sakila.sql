@@ -34,6 +34,33 @@ CREATE TABLE actor (
   KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+--
+-- Table structure for table `director`
+--
+
+CREATE TABLE director (
+  director_id BIGINT UNSIGNED NOT NULL, --- this column will be filled with TSID long value
+  first_name VARCHAR(45) NOT NULL,
+  last_name VARCHAR(45) NOT NULL,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (director_id),
+  KEY idx_director_last_name (last_name)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `review`
+--
+
+CREATE TABLE review (
+          review_id VARCHAR(20) NOT NULL, --- this column will be filled with TSID string value
+          message VARCHAR(100) NOT NULL,
+          rating INT NOT NULL,
+          film_id INT NOT NULL,
+          last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          PRIMARY KEY  (review_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Table structure for table `category`
 --

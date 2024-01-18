@@ -104,4 +104,64 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                 .andDo(document("mysql-create-a-film-no-table"));
 
     }
+
+    @Test
+    @DisplayName("Create a director - number tsid type")
+    void createDirectorWithGivenTsidType() throws Exception {
+
+        var json = """
+                {
+                "first_name": "Rajkumar",
+                "last_name": "Hirani"
+                }
+                """;
+
+        mockMvc.perform(post("/director").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "director_id")
+                        .param("tsidType", "number")
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("mysql-create-a-director-with-tsid-given-tsid-type"));
+
+    }
+
+    @Test
+    @DisplayName("Create a director - with wrong tsid type")
+    void createDirectorWithWrongTsidType() throws Exception {
+        var json = """
+                {
+                    "first_name": "Rohit",
+                    "last_name": "Shetty"
+                }
+                """;
+        mockMvc.perform(post("/director").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "director_id")
+                        .param("tsidType", "float") //only support string, number
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print())
+                .andDo(document("mysql-create-a-director-with-wrong-tsid-type"));
+
+    }
+
+    @Test
+    @DisplayName("Create a director - with default tsid type")
+    void createDirectorWithDefaultTsidType() throws Exception {
+        var json = """
+                {
+                    "first_name": "Anurag",
+                    "last_name": "Kashyap"
+                }
+                """;
+        mockMvc.perform(post("/director").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .param("tsid", "director_id")
+                        .header("Content-Profile", "public")
+                        .content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("mysql-create-a-director-with-tsid-given-tsid-type"));
+    }
 }
