@@ -6,12 +6,17 @@ server:
       timeout: 90m
 
 spring:
+
   threads:
     virtual:
       enabled: true
 
 
   datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
     hikari:
       maximum-pool-size: 10
       pool-name: db2rest-platform-hikari-pool
