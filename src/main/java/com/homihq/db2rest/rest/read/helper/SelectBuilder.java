@@ -20,18 +20,35 @@ public class SelectBuilder{
     private final Db2RestConfigProperties db2RestConfigProperties;
 
     public void build(ReadContext context) {
-        context.setTables(createTables(context));
+        context.setTables(prepareTables(context));
         context.createSelect();
 
     }
 
-    private List<MyBatisTable> createTables(ReadContext context) {
+    private List<MyBatisTable> prepareTables(ReadContext context) {
         List<MyBatisTable> tables = new ArrayList<>();
+        int counter = 0;
+
+        if(context.isCountQuery()) {
+            tables = createTables(
+                    context.schemaName,
+                    context.tableName, null, counter);
+
+            for(MyBatisTable table : tables) {
+                table.setRoot(true);
+            }
+
+            return tables;
+        }
+
+
+
         log.info("context.select - {}", context.select);
+
         //split to get all fragments
         String [] tabCols = context.select.split(";");
 
-        int counter = 0;
+
 
         log.info("tabCols - {}", tabCols.length);
 
@@ -90,7 +107,9 @@ public class SelectBuilder{
         if(StringUtils.isNotBlank(sName)) {
             MyBatisTable table = schemaManager.findTable(sName, tName, counter);
 
-            addColumns(table, colStr);
+            if(StringUtils.isNotBlank(colStr)) {
+                addColumns(table, colStr);
+            }
 
             return List.of(table);
         }
@@ -98,7 +117,9 @@ public class SelectBuilder{
             List<MyBatisTable> tables = schemaManager.findTables(tName);
 
             for(MyBatisTable table : tables) {
-                addColumns(table, colStr);
+                if(StringUtils.isNotBlank(colStr)) {
+                    addColumns(table, colStr);
+                }
             }
 
             return tables;
