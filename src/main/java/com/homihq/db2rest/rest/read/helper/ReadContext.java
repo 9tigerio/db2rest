@@ -3,6 +3,7 @@ package com.homihq.db2rest.rest.read.helper;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.BasicColumn;
 import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlCriterion;
@@ -20,6 +21,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.mybatis.dynamic.sql.SqlBuilder.count;
 import static org.mybatis.dynamic.sql.select.SelectDSL.select;
 
 
@@ -48,7 +50,9 @@ public class ReadContext {
         queryExpressionDSL.where(condition);
     }
 
-
+    public boolean isCountQuery() {
+        return StringUtils.equals(select, "count(*)");
+    }
 
     public SqlColumn<?> getSortColumn(String columnName) {
         //for now just support root table
@@ -64,6 +68,10 @@ public class ReadContext {
 
         if(union) {
             createUnionQuery();
+        }
+        else if(isCountQuery()) {
+            from = getRootTable();
+            queryExpressionDSL = select(count()).from(from, from.getAlias());
         }
         else{
             from = getRootTable();

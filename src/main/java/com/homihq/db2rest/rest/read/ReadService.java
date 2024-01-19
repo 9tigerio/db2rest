@@ -47,6 +47,7 @@ public class ReadService {
 
     }
 
+
     Object findByCustomQuery(QueryRequest queryRequest) {
         return queryRequest.isSingle() ?
                 namedParameterJdbcTemplate.queryForMap(queryRequest.getSql(), queryRequest.getParams()) :

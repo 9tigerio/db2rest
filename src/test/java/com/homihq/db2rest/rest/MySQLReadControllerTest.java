@@ -21,4 +21,16 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
                 .andDo(print())
                 .andDo(document("mysql-get-all-films"));
     }
+
+
+    @Test
+    @DisplayName("Get count")
+    void findFilmCount() throws Exception {
+        mockMvc.perform(get("/query/film/count")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("mysql-get-film-count"));
+
+    }
 }

@@ -51,4 +51,5 @@ public class ReadController {
         return ResponseEntity.ok(readService.findByCustomQuery(queryRequest));
     }
 
+
 }
