@@ -8,6 +8,9 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET escape_string_warning = off;
 
+DROP SCHEMA IF EXISTS public cascade;
+CREATE SCHEMA public;
+
 --
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
 --
