@@ -8,6 +8,9 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET escape_string_warning = off;
 
+DROP SCHEMA IF EXISTS public cascade;
+CREATE SCHEMA public;
+
 --
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
 --
@@ -397,3 +400,16 @@ SELECT pg_catalog.setval('language_language_id_seq', 6, true);
 --
 
 ALTER TABLE language DISABLE TRIGGER ALL;
+
+--
+-- Stored procedure; Schema: public; Owner: postgres
+--
+
+CREATE OR REPLACE PROCEDURE GetMovieRentalRateProc(movieTitle IN varchar, rentalRate OUT numeric)
+	LANGUAGE plpgsql
+AS  $$
+	BEGIN
+		SELECT rental_rate INTO rentalRate FROM film WHERE title = movieTitle;
+	END;
+$$
+-- call GetMovieRentalRateProc('ACADEMY DINOSAUR', null);
