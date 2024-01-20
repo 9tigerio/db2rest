@@ -137,3 +137,12 @@ CREATE TABLE language (
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (language_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Stored procedure
+--
+
+CREATE PROCEDURE GetMovieRentalRateProc(IN movieTitle varchar(100), OUT rentalRate DECIMAL(4, 2))
+    BEGIN
+        SELECT rental_rate INTO rentalRate FROM film WHERE title = movieTitle;
+    END;
