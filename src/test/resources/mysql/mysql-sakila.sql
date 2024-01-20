@@ -146,3 +146,14 @@ CREATE PROCEDURE GetMovieRentalRateProc(IN movieTitle varchar(100), OUT rentalRa
     BEGIN
         SELECT rental_rate INTO rentalRate FROM film WHERE title = movieTitle;
     END;
+
+
+CREATE FUNCTION GetMovieRentalRateFunc(movieTitle varchar(100))
+    RETURNS DECIMAL(4, 2)
+    DETERMINISTIC
+BEGIN
+        DECLARE rentalRate DECIMAL(4, 2);
+        SET rentalRate = 0.00;
+SELECT rental_rate INTO rentalRate FROM film WHERE title = movieTitle;
+RETURN (rentalRate);
+END;
