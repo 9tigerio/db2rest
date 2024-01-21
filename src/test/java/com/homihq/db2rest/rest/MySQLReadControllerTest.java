@@ -5,12 +5,13 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultMatcher;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
@@ -43,6 +44,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(get("/film/one").accept(MediaType.APPLICATION_JSON)
                         .param("select", "title"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(1)))
                 .andDo(print())
                 .andDo(document("mysql-get-on-film"));
     }

@@ -111,6 +111,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(get("/film/one").accept(MediaType.APPLICATION_JSON)
                         .param("select", "title"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(1)))
                 .andDo(print())
                 .andDo(document("pg-get-on-film"));
     }
