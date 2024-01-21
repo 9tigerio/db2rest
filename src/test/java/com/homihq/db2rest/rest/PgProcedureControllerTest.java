@@ -32,8 +32,8 @@ class PgProcedureControllerTest extends PostgreSQLBaseIntegrationTest {
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", instanceOf(Map.class)))
-                //.andExpect(jsonPath("$.*", hasSize(2)))
-                //.andExpect(jsonPath("$.rentalRate", equalTo(0.99)))
+                .andExpect(jsonPath("$.*", hasSize(1)))
+                .andExpect(jsonPath("$.rentalrate", equalTo(0.99)))
                 .andDo(print())
                 .andDo(document("mysql-execute-procedure"));
     }
