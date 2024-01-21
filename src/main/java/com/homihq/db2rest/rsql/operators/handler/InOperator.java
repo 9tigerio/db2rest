@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rsql.operators.handler;
 
-import com.homihq.db2rest.rsql.operators.OperatorV2;
+import com.homihq.db2rest.rsql.operators.Operator;
 import org.mybatis.dynamic.sql.ColumnAndConditionCriterion;
 import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlCriterion;
@@ -11,7 +11,7 @@ import java.util.List;
 import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
 
 
-public class InOperator implements OperatorV2 {
+public class InOperator implements Operator {
 
     private static final String OPERATOR = " in ";
 

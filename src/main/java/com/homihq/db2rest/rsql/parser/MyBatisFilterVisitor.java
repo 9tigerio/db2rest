@@ -5,7 +5,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.homihq.db2rest.rsql.operators.OperatorV2;
+import com.homihq.db2rest.rsql.operators.Operator;
 import com.homihq.db2rest.rsql.operators.RSQLOperatorHandlers;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class MyBatisFilterVisitor implements RSQLVisitor<SqlCriterion, Object> {
         ComparisonOperator op = comparisonNode.getOperator();
         String columnName = comparisonNode.getSelector();
 
-        OperatorV2 operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
+        Operator operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
         if (operatorHandler == null) {
             throw new IllegalArgumentException(String.format("Operator '%s' is invalid", op.getSymbol()));
         }
