@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
@@ -34,5 +35,15 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
                 .andDo(print())
                 .andDo(document("mysql-get-film-count"));
 
+    }
+
+    @Test
+    @DisplayName("Get one")
+    void findOneFilm() throws Exception {
+        mockMvc.perform(get("/film/one").accept(MediaType.APPLICATION_JSON)
+                        .param("select", "title"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("mysql-get-on-film"));
     }
 }

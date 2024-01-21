@@ -44,6 +44,22 @@ public class ReadController {
 
         return readService.findAll(schemaName, tableName,select, filter, pageable, sort);
     }
+
+    @GetMapping("/{tableName}/one")
+    public Object findOne(@PathVariable String tableName,
+                          @RequestParam(name = "select", required = false, defaultValue = "") String select,
+                          @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
+
+
+        log.info("tableName - {}", tableName);
+        log.info("select - {}", select);
+        log.info("filter - {}", filter);
+
+        return this.readService.findWithLimit(tableName, select, filter, 1);
+    }
+
+
+
     @PostMapping(value = "/query", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findByCustomQuery(@RequestBody @Valid QueryRequest queryRequest) {

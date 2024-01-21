@@ -47,6 +47,27 @@ public class ReadService {
 
     }
 
+    public Object findWithLimit(String tableName, String select, String filter, int limit) {
+
+        Pageable currPage = Pageable.ofSize(limit).withPage(0);
+        ReadContext ctx = ReadContext.builder()
+                .pageable(currPage)
+                .tableName(tableName).select(select).filter(filter).build();
+
+        selectBuilder.build(ctx);
+        joinBuilder.build(ctx);
+        whereBuilder.build(ctx);
+        limitPaginationBuilder.build(ctx);
+
+        String sql = ctx.prepareSQL();
+        Map<String, Object> bindValues = ctx.prepareParameters();
+
+        log.info("SQL - {}", sql);
+        log.info("Bind variables - {}", bindValues);
+
+        return namedParameterJdbcTemplate.queryForList(sql, bindValues);
+    }
+
 
     Object findByCustomQuery(QueryRequest queryRequest) {
         return queryRequest.single() ?
