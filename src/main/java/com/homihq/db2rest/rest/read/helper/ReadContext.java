@@ -17,10 +17,7 @@ import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -72,6 +69,17 @@ public class ReadContext {
             return
                     new ColumnSortSpecification(table.getAlias(), SqlColumn.of(columnName, SqlTable.of(tableName)));
         }
+
+    }
+
+    public boolean isJoinTableColumnProjected(String tableName, String columnName) {
+        Optional<MyBatisTable> table =
+                tables.stream()
+                        .filter(t -> StringUtils.equalsIgnoreCase(t.getTableName(), tableName))
+                        .findFirst();
+
+        return table.map(myBatisTable -> myBatisTable.getSqlColumnList().stream()
+                .anyMatch(f -> f.name().equals(columnName))).orElse(false);
 
     }
 
