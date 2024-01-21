@@ -10,7 +10,7 @@ import static com.homihq.db2rest.rsql.operators.SimpleRSQLOperators.*;
 
 public class RSQLOperatorHandlers {
 
-    private static final Map<String, OperatorV2> OPERATOR_HANDLER_MAP = new HashMap<>();
+    private static final Map<String, Operator> OPERATOR_HANDLER_MAP = new HashMap<>();
 
     static {
         OPERATOR_HANDLER_MAP.put(EQUAL.getSymbol(), new EqualToOperator());
@@ -23,7 +23,7 @@ public class RSQLOperatorHandlers {
         OPERATOR_HANDLER_MAP.put(END_WITH.getSymbol(), new EndWithOperator());
     }
 
-    public static OperatorV2 getOperatorHandler(String symbol) {
+    public static Operator getOperatorHandler(String symbol) {
         return OPERATOR_HANDLER_MAP.get(symbol);
     }
 }
