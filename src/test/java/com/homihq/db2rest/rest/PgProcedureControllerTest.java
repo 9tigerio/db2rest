@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PgProcedureControllerTest extends PostgreSQLBaseIntegrationTest {
 
     @Test
-    @Disabled //TODO - Need to fix
     @DisplayName("Execute stored procedure on postgres db")
     void execute() throws Exception {
         var json = """ 
