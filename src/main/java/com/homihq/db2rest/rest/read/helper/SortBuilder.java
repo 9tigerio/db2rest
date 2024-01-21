@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.read.helper;
 
 
+import com.homihq.db2rest.rest.read.model.DbColumn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.SortSpecification;
@@ -32,10 +33,12 @@ public class SortBuilder {
 
     private SortSpecification getSortSpecification(ReadContext context, Sort.Order s) {
         String column = s.getProperty();
-        SqlColumn<?> sqlColumn = context.getSortColumn(column);
+
+        DbColumn dbColumn = TableUtil.getColumn(column);
+        ColumnSortSpecification columnSortSpecification = context.getSortColumn(dbColumn.tableName(), dbColumn.name());
 
         return
-        s.isAscending() ? new ColumnSortSpecification("", sqlColumn) :
-        new ColumnSortSpecification("", sqlColumn).descending();
+        s.isAscending() ? columnSortSpecification :
+                columnSortSpecification.descending();
     }
 }

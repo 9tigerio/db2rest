@@ -1,13 +1,16 @@
 package com.homihq.db2rest.rest.read.helper;
 
 import com.homihq.db2rest.exception.GenericDataAccessException;
+import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.BasicColumn;
 import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlCriterion;
+import org.mybatis.dynamic.sql.SqlTable;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.ColumnSortSpecification;
 import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
 import org.mybatis.dynamic.sql.select.SelectModel;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
@@ -54,10 +57,22 @@ public class ReadContext {
         return StringUtils.equals(select, "count(*)");
     }
 
-    public SqlColumn<?> getSortColumn(String columnName) {
-        //for now just support root table
+    public ColumnSortSpecification getSortColumn(String tableName, String columnName) {
+        if(StringUtils.isBlank(tableName)) {
+            return
+            new ColumnSortSpecification(from.getAlias(), from.column(columnName));
+        }
+        else {
+            //find by table and column
+            MyBatisTable table =
+            tables.stream()
+                    .filter(t -> StringUtils.equalsIgnoreCase(t.getTableName(), tableName))
+                    .findFirst().orElseThrow(() -> new InvalidTableException("Sort : " + tableName));
 
-        return from.column(columnName);
+            return
+                    new ColumnSortSpecification(table.getAlias(), SqlColumn.of(columnName, SqlTable.of(tableName)));
+        }
+
     }
 
     public void createSelect() {
