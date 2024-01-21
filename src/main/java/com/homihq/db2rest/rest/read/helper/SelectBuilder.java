@@ -129,16 +129,21 @@ public class SelectBuilder{
     }
 
     private void addColumns(MyBatisTable table, String colStr) {
-        String[] cols = colStr.split(",");
 
-        if(cols.length == 1) { //no columns specified
-            //TODO - do it only for root table.
+        if(StringUtils.isBlank(colStr)) {
             table.addAllColumns();
         }
         else {
+            String[] cols = colStr.split(",");
+
+            log.info("table --> {}|{}", table.getTableName(), table.getAlias());
+            log.info("cols --> {}", cols.length);
+
+
             for (String col : cols) {
                 addColumn(table, col);
             }
+
         }
 
     }
