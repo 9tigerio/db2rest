@@ -411,5 +411,22 @@ AS  $$
 	BEGIN
 		SELECT rental_rate INTO rentalRate FROM film WHERE title = movieTitle;
 	END;
-$$
+$$;
 -- call GetMovieRentalRateProc('ACADEMY DINOSAUR', null);
+
+--
+-- Function; Schema: public; Owner: postgres
+--
+
+CREATE OR REPLACE FUNCTION GetMovieRentalRateFunc(movieTitle varchar)
+    RETURNS numeric
+	LANGUAGE plpgsql
+AS $$
+	DECLARE
+		rentalRate numeric;
+	BEGIN
+		SELECT rental_rate INTO rentalRate FROM film WHERE title = movieTitle;
+		return rentalRate;
+	END;
+$$;
+-- select GetMovieRentalRateFunc('ACADEMY DINOSAUR');

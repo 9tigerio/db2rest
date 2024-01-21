@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
-import com.homihq.db2rest.rest.read.model.QueryRequest;
+import com.homihq.db2rest.rest.read.dto.QueryRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class ReadController {
     @PostMapping(value = "/query", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findByCustomQuery(@RequestBody @Valid QueryRequest queryRequest) {
-        log.debug("Execute SQL statement {} with params {}", queryRequest.getSql(), queryRequest.getParams());
+        log.debug("Execute SQL statement {} with params {}", queryRequest.sql(), queryRequest.params());
         return ResponseEntity.ok(readService.findByCustomQuery(queryRequest));
     }
 

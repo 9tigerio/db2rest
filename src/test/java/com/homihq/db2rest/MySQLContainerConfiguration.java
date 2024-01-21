@@ -18,8 +18,8 @@ public class MySQLContainerConfiguration {
 
     private static final MySQLContainer mySQLContainer = (MySQLContainer) new MySQLContainer("mysql:8.2")
             .withDatabaseName("sakila")
-            .withUsername("mysql")
-            .withPassword("mysql")
+            .withUsername("root")
+            //.withPassword("mysql")
             .withReuse(true);
 
     static {
@@ -31,7 +31,7 @@ public class MySQLContainerConfiguration {
     @Bean("mySQLDataSource")
     public DataSource dataSource() {
         var dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.driverClassName("com.mysql.jdbc.Driver");
+        dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
         dataSourceBuilder.url(mySQLContainer.getJdbcUrl());
         dataSourceBuilder.username(mySQLContainer.getUsername());
         dataSourceBuilder.password(mySQLContainer.getPassword());
