@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
+import com.homihq.db2rest.rest.read.dto.FindOneResponse;
 import com.homihq.db2rest.rest.read.dto.QueryRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -46,16 +47,16 @@ public class ReadController {
     }
 
     @GetMapping("/{tableName}/one")
-    public Object findOne(@PathVariable String tableName,
-                          @RequestParam(name = "select", required = false, defaultValue = "") String select,
-                          @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
+    public FindOneResponse findOne(@PathVariable String tableName,
+                                   @RequestParam(name = "select", required = false, defaultValue = "") String select,
+                                   @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
 
         log.info("tableName - {}", tableName);
         log.info("select - {}", select);
         log.info("filter - {}", filter);
 
-        return this.readService.findWithLimit(tableName, select, filter, 1);
+        return this.readService.findOne(tableName, select, filter);
     }
 
 

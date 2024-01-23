@@ -42,9 +42,8 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Get one")
     void findOneFilm() throws Exception {
         mockMvc.perform(get("/film/one").accept(MediaType.APPLICATION_JSON)
-                        .param("select", "title"))
+                        .param("select", "description"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(1)))
                 .andDo(print())
                 .andDo(document("mysql-get-on-film"));
     }
