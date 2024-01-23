@@ -69,7 +69,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
 
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Create many films with CSV type.")
     void createCSV() throws Exception {
