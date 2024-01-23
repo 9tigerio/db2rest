@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
+import com.homihq.db2rest.rest.read.dto.FindOneResponse;
 import com.homihq.db2rest.rest.read.helper.*;
 import com.homihq.db2rest.rest.read.dto.QueryRequest;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @Service
@@ -45,6 +49,28 @@ public class ReadService {
 
         return namedParameterJdbcTemplate.queryForList(sql, bindValues);
 
+    }
+
+    public FindOneResponse findOne(String tableName, String select, String filter) {
+
+        Pageable currPage = Pageable.ofSize(1).withPage(0);
+        ReadContext ctx = ReadContext.builder()
+                .pageable(currPage)
+                .tableName(tableName).select(select).filter(filter).build();
+
+        selectBuilder.build(ctx);
+        joinBuilder.build(ctx);
+        whereBuilder.build(ctx);
+        limitPaginationBuilder.build(ctx);
+
+        String sql = ctx.prepareSQL();
+        Map<String, Object> bindValues = ctx.prepareParameters();
+
+        log.info("SQL - {}", sql);
+        log.info("Bind variables - {}", bindValues);
+
+        return new FindOneResponse(
+                namedParameterJdbcTemplate.queryForObject(sql, bindValues, Object.class));
     }
 
 
