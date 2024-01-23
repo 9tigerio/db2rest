@@ -2,10 +2,13 @@ package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -57,9 +60,58 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                //.andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.rows").isArray())
+                .andExpect(jsonPath("$.rows", hasSize(2)))
+                .andExpect(jsonPath("$.rows", hasItem(1)))
+                .andExpect(jsonPath("$.rows", hasItem(1)))
                 .andDo(print())
                 .andDo(document("pg-bulk-create-films"));
+
+    }
+
+    @Disabled
+    @Test
+    @DisplayName("Create many films with CSV type.")
+    void createCSV() throws Exception {
+
+        String csv = """
+title,description,release_year,language_id,original_language_id,rental_duration,rental_rate,length,replacement_cost,rating,special_features
+Dunki2,Film about illegal immigration,2023,6,6,6,0.99,150,20.99,PG-13,Commentaries
+Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Commentaries      
+         """;
+
+        mockMvc.perform(post("/film/bulk").characterEncoding("utf-8")
+                        .content(csv)
+                        .contentType("text/csv")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.rows").isArray())
+                .andExpect(jsonPath("$.rows", hasSize(2)))
+                .andExpect(jsonPath("$.rows", hasItem(1)))
+                .andExpect(jsonPath("$.rows", hasItem(1)))
+                .andDo(print())
+                .andDo(document("pg-bulk-create-films-csv"));
+
+    }
+
+    @Disabled
+    @Test
+    @DisplayName("Create many films with CSV type resulting error.")
+    void createCSVWithError() throws Exception {
+
+        String csv = """
+title,description,release_year,language_id,original_language_id,rental_duration,rental_rate,length,replacement_cost,rating,special_features,country
+Dunki2,Film about illegal immigration,2023,6,6,6,0.99,150,20.99,PG-13,Commentaries,India
+Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Commentaries,India      
+         """;
+
+        mockMvc.perform(post("/film/bulk").characterEncoding("utf-8")
+                        .content(csv)
+                        .contentType("text/csv")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print())
+                .andDo(document("pg-bulk-create-films-csv-error"));
 
     }
 

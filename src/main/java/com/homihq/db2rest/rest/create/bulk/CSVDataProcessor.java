@@ -26,10 +26,10 @@ public class CSVDataProcessor implements DataProcessor{
     @Override
     public List<Map<String, Object>> getData(InputStream inputStream) throws Exception{
 
-
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
 
         ObjectReader oReader = csvMapper.readerFor(Map.class).with(schema);
+
         List<Map<String, Object>> data = new ArrayList<>();
         try (Reader reader = new InputStreamReader(inputStream)) {
             MappingIterator<Map<String, Object>> mi = oReader.readValues(reader);
