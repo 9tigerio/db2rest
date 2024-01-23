@@ -661,23 +661,23 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 
 # Roadmap
 
-- [x] Support for Oracle - *WON'T DO - ORDS available with Oracle DB*.
-- [ ] Support for SQL Server
+- [ ] Support for Oracle - Coming March 2024
+- [ ] Support for SQL Server - Coming April 2024
 - [ ] Support for MongoDB
 - [ ] Change data capture (CDC) with Webhooks to notify of database changes
 - [ ] JSON data type support
-- [ ] Stored procedure, stored function calls - **IN PROGRESS** 
+- [x] Stored procedure, stored function calls - *DONE*
 - [ ] Support for tenant id column for multi-tenancy 
 - [x] Twitter Handle - DONE [DB2Rest](https://twitter.com/DB2Rest)
-- [ ] New Documentation Website with Docusaurus **IN PROGRESS**
-- [ ] Custom SQL query Execution via HTTP POST **IN PROGRESS**
-- [ ] Count query support
+- [x] New Documentation Website with Docusaurus - [Website](https://db2rest.com)
+- [x] Custom SQL query Execution via HTTP POST **DONE**
+- [x] Count query support - *DONE*
 - [ ] Exists query support
 - [ ] Data access control
 - [ ] Data Privacy, Encryption, Masking for read and update.
-- [ ] TSID support (ENTERPRISE EDITION) 
+- [x] TSID support 
 - [ ] Data transformation (some features possibly ENTERPRISE EDITION)
-- [ ] Multi-table implicit Join - with one to many based on select path.
+- [x] Multi-table implicit Join - with one to many based on select path.
 - [ ] Outer Join
 - [ ] Cross Join
 - [ ] Support - DB Sharding (ENTERPRISE EDITION)
@@ -685,14 +685,14 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 - [ ] Audit columns handling - created date, last updated date, created by, last updated by
 - [ ] Audit table / data diff handling
 - [ ] Version column handling
-- [x] Offset & limit pagination - DONE 
+- [x] Offset & limit pagination - *DONE* 
 - [ ] SEEK method for pagination
 - [ ] Caching - Redis support (Requested on Redit)
-- [ ] Open API specification 3.x 
+- [ ] Open API specification 3.x - Coming Feb 2024 
 - [ ] Aggregate function
-- [ ] mTLS/Certificate auth
+- [ ] mTLS/Certificate auth 
 - [ ] JWT/JWKS support (ENTERPRISE EDITION)
-- [ ] API Key support - unkey.dev or custom
+- [ ] API Key support - unkey.dev or custom - Coming Feb 2024
 - [ ] Open policy agent support (ENTERPRISE EDITION)
 - [ ] OSO support (ENTERPRISE EDITION)
 - [ ] Integration with AWS KMS, Hashicorp Vault
@@ -704,6 +704,7 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
 - [ ] Native binary image - simplify installation
 - [ ] Support for scripting (extensibility) - Python, Apache Groovy, Javascript/VS8 
 - [ ] Deploy to Digital Ocean
+- [ ] Deploy to GCP
 - [ ] Ability to insert into multiple tables
 - [ ] Batch loading of remote files
 
