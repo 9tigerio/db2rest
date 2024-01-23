@@ -100,10 +100,10 @@ public class CreateService {
 
         SqlTable table = SqlTable.of(tableName);
 
-        Map<String,Object> item = dataList.get(0);
-
         BatchInsertDSL<Map<String, Object>> batchInsertDSL = insert(dataList)
                 .into(table);
+
+        Map<String,Object> item = dataList.get(0);
 
         for(String key : item.keySet()) {
             batchInsertDSL.map(table.column(key)).toProperty(key);
@@ -116,8 +116,9 @@ public class CreateService {
 
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
 
+
         log.debug("SQL -> {}", batchInsert.getInsertStatementSQL());
-        log.debug("batch -> {}", batch);
+        log.debug("batch -> {}", batchInsert.getRecords());
 
         int[] updateCounts;
 
@@ -125,6 +126,7 @@ public class CreateService {
             updateCounts = namedParameterJdbcTemplate.batchUpdate(batchInsert.getInsertStatementSQL(), batch);
         }
         catch (DataAccessException e) {
+            e.printStackTrace();
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
 

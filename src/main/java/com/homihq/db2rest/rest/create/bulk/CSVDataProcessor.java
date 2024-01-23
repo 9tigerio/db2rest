@@ -7,12 +7,14 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,16 +28,17 @@ public class CSVDataProcessor implements DataProcessor{
     @Override
     public List<Map<String, Object>> getData(InputStream inputStream) throws Exception{
 
-
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
 
         ObjectReader oReader = csvMapper.readerFor(Map.class).with(schema);
+
         List<Map<String, Object>> data = new ArrayList<>();
         try (Reader reader = new InputStreamReader(inputStream)) {
-            MappingIterator<Map<String, Object>> mi = oReader.readValues(reader);
+            MappingIterator<Map<String, String>> mi = oReader.readValues(reader);
             while (mi.hasNext()) {
-                Map<String, Object> current = mi.next();
-                data.add(current);
+                Map<String, String> current = mi.next();
+                Map<String, Object> transformedRow = transform(current);
+                data.add(transformedRow);
 
             }
         }
@@ -46,5 +49,34 @@ public class CSVDataProcessor implements DataProcessor{
     @Override
     public boolean handle(String contentType) {
         return StringUtils.equalsIgnoreCase(contentType, "text/csv");
+    }
+
+
+    private Map<String,Object> transform(Map<String,String> data) {
+        Map<String,Object> objectMap = new HashMap<>();
+
+        for(String key : data.keySet()) {
+            String val = data.get(key);
+            Object v = transform(val);
+
+            objectMap.put(key, v);
+        }
+
+        return objectMap;
+    }
+
+    private Object transform(String val) {
+
+        if(NumberUtils.isCreatable(val)) {//so this is a number
+            if(NumberUtils.isDigits(val)) {
+                return NumberUtils.createInteger(val);
+            }
+            else{
+                return NumberUtils.createFloat(val);
+            }
+        }
+
+        return val;
+
     }
 }
