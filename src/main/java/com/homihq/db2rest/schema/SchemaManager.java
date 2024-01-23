@@ -61,7 +61,7 @@ public final class SchemaManager {
                 String schemaName = getSchemaName(table);
 
                 String fullName = schemaName + "." + table.getName();
-                log.info("Full name - {}", fullName);
+                log.debug("Full name - {}", fullName);
                 tableMap.put(fullName, table);
                 tableList.add(table);
 

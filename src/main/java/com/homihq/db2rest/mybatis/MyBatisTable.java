@@ -3,6 +3,7 @@ package com.homihq.db2rest.mybatis;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.mybatis.dynamic.sql.AliasableSqlTable;
 import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlTable;
 import schemacrawler.schema.Column;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class MyBatisTable extends SqlTable{
+public class MyBatisTable extends AliasableSqlTable<MyBatisTable> {
 
     String alias;
     String tableName;
@@ -27,11 +28,15 @@ public class MyBatisTable extends SqlTable{
     boolean root;
 
     public MyBatisTable(String schemaName, String tableName, Table table) {
-        super(tableName);
+        super(tableName, MyBatisTable::new);
         this.tableName = tableName;
         this.schemaName = schemaName;
         this.table = table;
         sqlColumnList = new ArrayList<>();
+    }
+
+    public MyBatisTable() {
+        super("MyBatisTable", MyBatisTable::new);
     }
 
     public void addAllColumns() {

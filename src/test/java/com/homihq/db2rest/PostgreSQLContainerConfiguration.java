@@ -32,7 +32,7 @@ public class PostgreSQLContainerConfiguration {
     public DataSource dataSource() {
         var dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("org.postgresql.Driver");
-        dataSourceBuilder.url(testPostgres.getJdbcUrl());
+        dataSourceBuilder.url(testPostgres.getJdbcUrl() + "&escapeSyntaxCallMode=callIfNoReturn");
         dataSourceBuilder.username(testPostgres.getUsername());
         dataSourceBuilder.password(testPostgres.getPassword());
         return dataSourceBuilder.build();
