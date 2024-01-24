@@ -1,0 +1,4 @@
+db2rest:
+  schemas:
+    - sakila
+    - public

@@ -1,8 +1,6 @@
 package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

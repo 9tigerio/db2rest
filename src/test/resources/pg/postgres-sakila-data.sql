@@ -44,6 +44,30 @@ Insert into actor
 Values
     ('4','JENNIFER','DAVIS','2006-02-15 04:34:33.000');
 
+
+-- director
+
+Insert into director
+(director_id,first_name,last_name,last_update)
+Values
+    ('1','Michael','Tam','2006-02-15 04:34:33.000');
+
+Insert into director
+(director_id,first_name,last_name,last_update)
+Values
+    ('2','Paul','Anderson','2006-02-15 04:34:33.000');
+
+Insert into director
+(director_id,first_name,last_name,last_update)
+Values
+    ('3','Alex','Chase','2006-02-15 04:34:33.000');
+
+Insert into director
+(director_id,first_name,last_name,last_update)
+Values
+    ('4','Karol','Davis','2006-02-15 04:34:33.000');
+
+
 -- category
 
 Insert into category
