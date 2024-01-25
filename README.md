@@ -365,143 +365,10 @@ http GET 'http://localhost:8080/film?select=film_id:id,title,description,release
 TODO
 
 
-**8. Insert a Single Record**
+**8. Insert Records**
 
-This POST request inserts a single record in the 'film' table. Note that a null value is correctly handled by the DB2Rest engine. 
+Refer to [insert documentation](https://db2rest.com/docs/category/insert-records).
 
-```Shell
-curl --request POST \
-  --url http://localhost:8080/film \
-  --header 'Content-Profile: sakila' \
-  --header 'Content-Type: application/json' \
-  --header 'User-Agent: insomnia/8.4.5' \
-  --data '{
-	
-	"title" : "Dunki",
-	"description" : "Film about illegal immigration" ,
-	"release_year" : 2023, 
-	"language_id" : 1, 
-	"original_language_id" : null, 
-	"rental_duration" : 6, 
-	"rental_rate" : 0.99 , 
-	"length" : 150, 
-	"replacement_cost" : 20.99 , 
-	"rating" : "PG-13" , 
-	"special_features" : "Commentaries"
-	
-}'
-```
-**HTTPie**
-
-```Shell
-echo '{
-	
-	"title" : "Dunki",
-	"description" : "Film about illegal immigration" ,
-	"release_year" : 2023, 
-	"language_id" : 1, 
-	"original_language_id" : null, 
-	"rental_duration" : 6, 
-	"rental_rate" : 0.99 , 
-	"length" : 150, 
-	"replacement_cost" : 20.99 , 
-	"rating" : "PG-13" , 
-	"special_features" : "Commentaries"
-	
-}' |  \
-  http POST http://localhost:8080/film \
-  Content-Profile:sakila \
-  Content-Type:application/json \
-  User-Agent:insomnia/8.4.5
-```
-
-
-**9. Insert Multiple Records**
-
-This POST request inserts multiple records in the 'film' table. The records are batched before sending to the database
-thus is very fast. If you have too many records, suggest sending data in chunks of 10-20 records for optimal results. 
-
-```Shell
-curl --request POST \
-  --url http://localhost:8080/film/bulk \
-  --header 'Content-Profile: sakila' \
-  --header 'Content-Type: application/json' \
-  --data '[
-		{
-
-			"title" : "Jawan",
-			"description" : "Social issues solved by ex military officer" ,
-			"release_year" : 2023, 
-			"language_id" : 1, 
-			"original_language_id" : null, 
-			"rental_duration" : 6, 
-			"rental_rate" : 0.99 , 
-			"length" : 150, 
-			"replacement_cost" : 20.99 , 
-			"rating" : "PG-13" , 
-			"special_features" : "Commentaries"
-
-		},
-	
-	{
-
-			"title" : "Pathan",
-			"description" : "Story of a spy" ,
-			"release_year" : 2023, 
-			"language_id" : 1, 
-			"original_language_id" : null, 
-			"rental_duration" : 6, 
-			"rental_rate" : 0.99 , 
-			"length" : 150, 
-			"replacement_cost" : 20.99 , 
-			"rating" : "PG-13" , 
-			"special_features" : "Commentaries"
-
-		}
-
-]'
-```
-**HTTPie**
-
-```Shell
-echo '[
-		{
-
-			"title" : "Jawan",
-			"description" : "Social issues solved by ex military officer" ,
-			"release_year" : 2023, 
-			"language_id" : 1, 
-			"original_language_id" : null, 
-			"rental_duration" : 6, 
-			"rental_rate" : 0.99 , 
-			"length" : 150, 
-			"replacement_cost" : 20.99 , 
-			"rating" : "PG-13" , 
-			"special_features" : "Commentaries"
-
-		},
-	
-	{
-
-			"title" : "Pathan",
-			"description" : "Story of a spy" ,
-			"release_year" : 2023, 
-			"language_id" : 1, 
-			"original_language_id" : null, 
-			"rental_duration" : 6, 
-			"rental_rate" : 0.99 , 
-			"length" : 150, 
-			"replacement_cost" : 20.99 , 
-			"rating" : "PG-13" , 
-			"special_features" : "Commentaries"
-
-		}
-
-]' |  \
-  http POST http://localhost:8080/film/bulk \
-  Content-Profile:sakila \
-  Content-Type:application/json
-```
 
 
 **10. Update record with filter**
@@ -539,7 +406,7 @@ echo '{
 
 **11. Delete Records**
 
-Refer to [delete documentation](https://db2rest.com/docs/category/delete-records)
+Refer to [delete documentation](https://db2rest.com/docs/category/delete-records).
 
 
 
