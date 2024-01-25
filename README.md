@@ -19,7 +19,7 @@ You can now focus on building business logic and beautiful user interfaces at sp
 ![GitHub issues](https://img.shields.io/github/issues/kdhrubo/db2rest)
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/w/kdhrubo/db2rest)
 ![GitHub top language](https://img.shields.io/github/languages/top/kdhrubo/db2rest)
-![GitHub License](https://img.shields.io/github/license/:user/:repo)
+![GitHub License](https://img.shields.io/github/license/kdhrubo/db2rest)
 
 
 # Support
