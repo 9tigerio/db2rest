@@ -123,24 +123,6 @@ Refer to [installation quickstart documentation](https://db2rest.com/docs/instal
 - [x] Multiple schema support
 
 
-# Supported Operators
-
-| Operator    | Postgresql    | Description             | Supported |
-|-------------|---------------|-------------------------|-----------|
-| ==          | =             | equals                  | [X]       |
-| >           | >             | greater than            | [X]       |
-| =gt=        | >             | greater than            | [X]       |
-| >=          | >=            | greater than or equal   | [X]       |
-| =gt=        | >             | greater than or equal   | [X]       |
-| <           | <             | less than               | [X]       |
-| =lt=        | <             | less than               | [X]       |
-| <=          | <=            | less than or equal      | [X]       |
-| =le=        | <=            | less than or equal      | [X]       |
-| =in=        | <=            | in                      | [X]       |
-| =out=       | <=            | not in                  | [X]       |
-| =like=      | like          | like                    | [X]       |
-| =startWith= | like          | start with ex - Joy%    | [X]       |
-| =endWith=   | like          | start with ex - %Ful    | [X]       |
 
 
 # Request parameters for Pagination
@@ -156,25 +138,7 @@ Refer to [installation quickstart documentation](https://db2rest.com/docs/instal
 |----------------|-----------------------------------------------------------|
 | sort           | Properties that should be sorted by in the format property,property(,ASC|DESC). Default sort direction is ascending. Use multiple sort parameters if you want to switch directions, e.g. ?sort=firstname&sort=lastname,asc.  | 
 
-# RSQL 
 
-RSQL is a query language for parametrized filtering of entries in RESTful APIs. It’s based on [FIQL](https://datatracker.ietf.org/doc/html/draft-nottingham-atompub-fiql-00 "Feed Item Query Language") (Feed Item Query Language) – a URI-friendly syntax for expressing filters across the entries in an Atom Feed. FIQL is great for use in URI; there are no unsafe characters, so URL encoding is not required. On the other side, FIQL’s syntax is not very intuitive and URL encoding is not always a big deal, so RSQL also provides a friendlier syntax for logical operators and some of the comparison operators.
-
-For example, you can query your resource like this: `/movies?query=name=="Kill Bill";year=gt=2003` or `/movies?query=director.lastName==Nolan and year>=2000`. See examples below.
-
-RSQL expressions in both FIQL-like and alternative notation: 
-
-```
-- name=="Kill Bill";year=gt=2003
-- name=="Kill Bill" and year>2003
-- genres=in=(sci-fi,action);(director=='Christopher Nolan',actor==*Bale);year=ge=2000
-- genres=in=(sci-fi,action) and (director=='Christopher Nolan' or actor==*Bale) and year>=2000
-- director.lastName==Nolan;year=ge=2000;year=lt=2010
-- director.lastName==Nolan and year>=2000 and year<2010
-- genres=in=(sci-fi,action);genres=out=(romance,animated,horror),director==Que*Tarantino
-- genres=in=(sci-fi,action) and genres=out=(romance,animated,horror) or director==Que*Tarantino
-
-```
 
 # Examples 
 
