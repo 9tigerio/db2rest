@@ -537,85 +537,11 @@ echo '{
 ```
 
 
-**11. Delete All Rows**
+**11. Delete Records**
 
-This DELETE operation tries to delete all records in the table. However, if the parameter - 'ALLOW_SAFE_DELETE' is set to 'true', then this operation will fail with an error.
-
-```Shell
-curl --request DELETE \
-  --url http://localhost:8080/film \
-  --header 'Content-Profile: sakila' \
-  --header 'Content-Type: application/json' \
-  --header 'User-Agent: insomnia/8.4.5'
-```
-**HTTPie**
-
-```Shell
-http DELETE http://localhost:8080/film \
-  Content-Profile:sakila \
-  Content-Type:application/json \
-  User-Agent:insomnia/8.4.5
-```
-
-**Error**
-```
-{
-"type": "https://github.com/kdhrubo/db2rest/delete-bad-request",
-"title": "Delete Operation Not allowed",
-"status": 400,
-"detail": "Invalid delete operation , safe set to true",
-"instance": "/film",
-"errorCategory": "Delete-Error",
-"timestamp": "2023-12-26T08:19:43.232283Z"
-}
-```
+Refer to [delete documentation](https://db2rest.com/docs/category/delete-records)
 
 
-**12. Delete Rows with Filter**
-
-This DELETE operation will delete records in a table that match the filter criteria. The parameter - 'ALLOW_SAFE_DELETE' has no impact if filter is specified in the request.
-
-```Shell
-curl --request DELETE \
-  --url http://localhost:8080/film \
-  --header 'Content-Profile: sakila' \
-  --header 'Content-Type: application/json' \
-  --header 'User-Agent: insomnia/8.4.5'
-```
-**HTTPie**
-
-```Shell
-http DELETE http://localhost:8080/film \
-  Content-Profile:sakila \
-  Content-Type:application/json \
-  User-Agent:insomnia/8.4.5
-```
-
-**Error**
-```
-{
-"type": "https://github.com/kdhrubo/db2rest/delete-bad-request",
-"title": "Delete Operation Not allowed",
-"status": 400,
-"detail": "Invalid delete operation , safe set to true",
-"instance": "/film",
-"errorCategory": "Delete-Error",
-"timestamp": "2023-12-26T08:19:43.232283Z"
-}
-```
-
-**Error**
-```
-{
-"type": "https://github.com/kdhrubo/db2rest/delete-bad-request",
-"title": "Delete Operation Not allowed",
-"status": 400,
-"detail": "Invalid delete operation , safe set to true",
-"instance": "/film",
-"errorCategory": "Delete-Error",
-"timestamp": "2023-12-26T08:19:43.232283Z"
-}
-```
 
 
 **13. Offset pagination**
