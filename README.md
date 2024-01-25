@@ -1,3 +1,11 @@
+<p align="center">
+  <a href="https://db2rest.com" target="blank"><img src="https://db2rest.com/img/logo-db2rest.svg" width="120" alt="DB2Rest Logo" /></a>
+</p>
+
+
+<h3 align="center">No-Code REST API for Databases in Minutes. Deliver applications 20x faster, open up legacy data securely for innovation and integration.</h3>
+  
+
 # DB2Rest
 
 > Don't write any database access code, Install DB2Rest instead. 
@@ -11,6 +19,8 @@ You can now focus on building business logic and beautiful user interfaces at sp
 ![GitHub issues](https://img.shields.io/github/issues/kdhrubo/db2rest)
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/w/kdhrubo/db2rest)
 ![GitHub top language](https://img.shields.io/github/languages/top/kdhrubo/db2rest)
+![GitHub License](https://img.shields.io/github/license/:user/:repo)
+
 
 # Support
 
