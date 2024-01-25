@@ -396,9 +396,6 @@ http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filte
   User-Agent:insomnia/8.4.5
 ```
 
-# HTTP Headers
-
-(soon to be OPTIONAL see Issue [#80](https://github.com/kdhrubo/db2rest/issues/80) ) In case multiple schemas have been configured for use (with - DB_SCHEMAS parameter), it is mandatory to specify the schema to use with the HTTP HEADER - *Accept-Profile*. If no header is specified, the request will be rejected as a security measure. DB2Rest will not allow querying tables outside the schemas set.
 
 # Roadmap
 
