@@ -113,3 +113,26 @@ Insert into film
 (`film_id`,`title`,`description`,`release_year`,`language_id`,`original_language_id`,`rental_duration`,`rental_rate`,`length`,`replacement_cost`,`rating`,`special_features`,`last_update`)
 Values
     ('4','AFFAIR PREJUDICE','A Fanciful Documentary of a Frisbee And a Lumberjack who must Chase a Monkey in A Shark Tank','2006','1',NULL,'5','2.99','117','26.99','G','Commentaries,Behind the Scenes','2006-02-15 05:03:42.000');
+
+
+-- country
+
+Insert into country
+ (`country_id`,`country`,`last_update`)
+Values
+('1','Afghanistan','2006-02-15 04:44:00.000');
+
+Insert into country
+ (`country_id`,`country`,`last_update`)
+Values
+('2','Algeria','2006-02-15 04:44:00.000');
+
+Insert into country
+ (`country_id`,`country`,`last_update`)
+Values
+('3','American Samoa','2006-02-15 04:44:00.000');
+
+Insert into country
+ (`country_id`,`country`,`last_update`)
+Values
+('4','Angola','2006-02-15 04:44:00.000');
