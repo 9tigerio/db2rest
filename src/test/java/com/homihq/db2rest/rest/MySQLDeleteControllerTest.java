@@ -2,7 +2,6 @@ package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -40,13 +39,6 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
                         containsString("Invalid delete operation , safe set to true")))
                 .andDo(print())
                 .andDo(document("mysql-delete-a-director"));
-    }
-
-    @Disabled
-    @Test
-    @DisplayName("Delete all records while allowSafeDelete=false")
-    void delete_all_records_with_allow_safe_delete_false() throws Exception {
-
     }
 
     @Test

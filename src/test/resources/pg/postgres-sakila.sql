@@ -39,6 +39,15 @@ CREATE SEQUENCE actor_actor_id_seq
     NO MINVALUE
     CACHE 1;
 
+--
+-- Name: country_country_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE country_country_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 ALTER TABLE public.actor_actor_id_seq OWNER TO postgres;
 
@@ -215,6 +224,19 @@ CREATE TABLE language (
 ALTER TABLE public.language OWNER TO postgres;
 
 --
+-- Name: country; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
+--
+
+CREATE TABLE country (
+    country_id integer DEFAULT nextval('country_country_id_seq'::regclass) NOT NULL,
+    country character varying(50) NOT NULL,
+    last_update timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.country OWNER TO postgres;
+
+--
 -- Name: actor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace:
 --
 
@@ -257,6 +279,13 @@ ALTER TABLE ONLY film
 
 ALTER TABLE ONLY language
     ADD CONSTRAINT language_pkey PRIMARY KEY (language_id);
+
+--
+-- Name: country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace:
+--
+
+ALTER TABLE ONLY country
+    ADD CONSTRAINT country_pkey PRIMARY KEY (country_id);
 
 --
 -- Name: film_fulltext_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace:

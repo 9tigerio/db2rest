@@ -22,6 +22,29 @@ Values
     ('6','German','2006-02-15 05:02:19.000');
 
 
+-- country
+
+Insert into country
+ (country_id,country,last_update)
+Values
+('1','Afghanistan','2006-02-15 04:44:00.000');
+
+Insert into country
+ (country_id,country,last_update)
+Values
+('2','Algeria','2006-02-15 04:44:00.000');
+
+Insert into country
+ (country_id,country,last_update)
+Values
+('3','American Samoa','2006-02-15 04:44:00.000');
+
+Insert into country
+ (country_id,country,last_update)
+Values
+('4','Angola','2006-02-15 04:44:00.000');
+
+
 -- actor
 
 Insert into actor
