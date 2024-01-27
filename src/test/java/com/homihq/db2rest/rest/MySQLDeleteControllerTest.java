@@ -20,11 +20,11 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     void delete_single_record() throws Exception {
         mockMvc.perform(delete("/director")
                         .param("filter", "first_name==\"Alex\"")
-                        .header("Content-Profile", "sakila")
+                       // .header("Content-Profile", "sakila")
                         .accept(APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 
@@ -32,12 +32,12 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Delete all records while allowSafeDelete=true")
     void delete_all_records_with_allow_safe_delete_true() throws Exception {
         mockMvc.perform(delete("/director")
-                        .header("Content-Profile", "sakila")
+                       // .header("Content-Profile", "sakila")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Invalid delete operation , safe set to true")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 
@@ -46,12 +46,12 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     void column_does_not_exist() throws Exception {
         mockMvc.perform(delete("/director")
                         .param("filter", "_name==\"Alex\"")
-                        .header("Content-Profile", "sakila")
+                       //.header("Content-Profile", "sakila")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Unknown column '_name' in 'where clause'")))
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 
@@ -60,12 +60,12 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     void foreign_key_constraint_violation() throws Exception {
         mockMvc.perform(delete("/language")
                         .param("filter", "name==\"ENGLISH\"")
-                        .header("Content-Profile", "sakila")
+                        //.header("Content-Profile", "sakila")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Cannot delete or update a parent row: a foreign key constraint fails")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 }

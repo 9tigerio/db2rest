@@ -1,6 +1,6 @@
 package com.homihq.db2rest.schema;
 
-import com.homihq.db2rest.exception.InvalidColumnException;
+import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import jakarta.annotation.PostConstruct;
@@ -68,7 +68,6 @@ public final class SchemaManager {
             }
         }
 
-        log.info("tableMap - {}", tableMap);
 
     }
 
@@ -84,19 +83,23 @@ public final class SchemaManager {
         return schemaName;
     }
 
+    public MyBatisTable getTable(String tableName) {
+        List<MyBatisTable> tables = findTables(tableName);
+
+        if(tables.size() != 1) throw new GenericDataAccessException("Unable to find table with name - " + tableName);
+
+        return tables.get(0);
+    }
+
     public Optional<Table> getTable(String schemaName, String tableName) {
-        log.info("Get table - {}.{}", schemaName, tableName);
         Table table = tableMap.get(schemaName + "." + tableName);
-        log.info("Get table - {}", table);
         return Optional.of(table);
     }
 
-    public Column getColumn(String schemaName, String tableName, String columnName) {
+    public MyBatisTable getOneTable(String schemaName, String tableName) {
+        Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
+        return new MyBatisTable(schemaName, tableName, table);
 
-      Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
-
-      return table.getColumns().stream().filter(c -> StringUtils.equalsIgnoreCase(columnName, c.getName()))
-              .findFirst().orElseThrow(() -> new InvalidColumnException(tableName, columnName));
     }
 
     public List<ForeignKey> getForeignKeysBetween(String schemaName, String rootTable, String childTable) {
