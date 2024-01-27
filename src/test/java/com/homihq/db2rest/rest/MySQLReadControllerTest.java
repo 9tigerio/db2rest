@@ -22,7 +22,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(get("/film").header("Accept-Profile", "sakila")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-get-all-films"));
     }
 
@@ -33,7 +33,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(get("/film/count")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-get-film-count"));
 
     }
@@ -44,7 +44,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(get("/film/one").accept(MediaType.APPLICATION_JSON)
                         .param("select", "description"))
                 .andExpect(status().isOk())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-get-on-film"));
     }
 }

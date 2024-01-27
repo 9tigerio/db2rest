@@ -50,8 +50,8 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
-                        containsString("Unknown column '_name' in 'where clause'")))
-               // .andDo(print())
+                        containsString("Invalid column director._name")))
+                .andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 

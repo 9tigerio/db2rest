@@ -41,7 +41,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("pg-create-a-film"));
 
     }
@@ -72,7 +72,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-create-a-film-error"));
 
     }
@@ -102,7 +102,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("pg-create-a-film-no-table"));
 
     }
@@ -124,7 +124,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("pg-create-a-director-with-tsid-given-tsid-type"));
 
     }
@@ -144,7 +144,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-create-a-director-with-wrong-tsid-type"));
 
     }
@@ -163,7 +163,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-create-a-director-with-tsid-given-tsid-type"));
     }
 }
