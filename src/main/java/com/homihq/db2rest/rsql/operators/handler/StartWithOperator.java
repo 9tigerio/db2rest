@@ -12,7 +12,7 @@ public class StartWithOperator implements Operator {
 
 
     @Override
-    public SqlCriterion handle(SqlColumn<Object> column, String value, Class type) {
+    public SqlCriterion handle(SqlColumn<Object> column, String value, Class<?> type) {
 
         return ColumnAndConditionCriterion.withColumn(column)
                 .withCondition(isLike(value  + "%")).build();
