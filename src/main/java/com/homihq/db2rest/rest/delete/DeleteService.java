@@ -67,6 +67,7 @@ public class DeleteService {
             return namedParameterJdbcTemplate.update(deleteStatement.getDeleteStatement(),
                     deleteStatement.getParameters());
         } catch (DataAccessException e) {
+            log.error("Error in delete op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
     }

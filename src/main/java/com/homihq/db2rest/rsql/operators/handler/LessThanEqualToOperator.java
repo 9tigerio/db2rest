@@ -10,7 +10,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isLessThanOrEqualTo;
 public class LessThanEqualToOperator implements Operator {
 
     @Override
-    public SqlCriterion handle(SqlColumn<Object> column, String value, Class type) {
+    public SqlCriterion handle(SqlColumn<Object> column, String value, Class<?> type) {
         return ColumnAndConditionCriterion.withColumn(column)
                 .withCondition(isLessThanOrEqualTo(value)).build();
     }

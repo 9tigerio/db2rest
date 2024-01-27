@@ -24,7 +24,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(get("/film").header("Accept-Profile", "public")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("pg-get-all-films"));
     }
 
@@ -45,7 +45,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.first_name", equalTo("PENELOPE")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-create-a-film"));
     }
 
@@ -69,7 +69,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.*", hasSize(2)))
                 .andExpect(jsonPath("$[0].first_name", equalTo("PENELOPE")))
                 .andExpect(jsonPath("$[1].last_name", equalTo("WAHLBERG")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-create-a-film"));
     }
 
@@ -90,7 +90,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status", is(400)))
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("pg-create-a-film"));
     }
 
@@ -100,7 +100,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(get("/film/count")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
+              //  .andDo(print())
                 .andDo(document("pg-get-film-count"));
 
     }
@@ -111,7 +111,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(get("/film/one").accept(MediaType.APPLICATION_JSON)
                         .param("select", "title"))
                 .andExpect(status().isOk())
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("pg-get-on-film"));
     }
 }

@@ -32,7 +32,7 @@ class PgProcedureControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$", instanceOf(Map.class)))
                 .andExpect(jsonPath("$.*", hasSize(1)))
                 .andExpect(jsonPath("$.rentalrate", equalTo(0.99)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-execute-procedure"));
     }
 

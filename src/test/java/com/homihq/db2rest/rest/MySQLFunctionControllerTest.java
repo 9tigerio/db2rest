@@ -31,7 +31,7 @@ class MySQLFunctionControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$", instanceOf(Map.class)))
                 .andExpect(jsonPath("$.*", hasSize(1)))
                 .andExpect(jsonPath("$.return", equalTo(0.99)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-execute-function"));
     }
 }

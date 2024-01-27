@@ -14,7 +14,7 @@ public class LikeOperator implements Operator {
    private static final String OPERATOR = " like ";
 
     @Override
-    public SqlCriterion handle(SqlColumn<Object> column, String value, Class type) {
+    public SqlCriterion handle(SqlColumn<Object> column, String value, Class<?> type) {
 
         return ColumnAndConditionCriterion.withColumn(column)
                 .withCondition(isLike(value)).build();

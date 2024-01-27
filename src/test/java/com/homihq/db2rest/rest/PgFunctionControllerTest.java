@@ -32,7 +32,7 @@ class PgFunctionControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$", instanceOf(Map.class)))
                 .andExpect(jsonPath("$.*", hasSize(1)))
                 .andExpect(jsonPath("$.returnvalue", equalTo(0.99)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-execute-function"));
     }
 }

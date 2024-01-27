@@ -9,7 +9,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isNotEqualTo;
 public class NotEqualToOperator implements Operator {
 
     @Override
-    public SqlCriterion handle(SqlColumn<Object> column, String value, Class type) {
+    public SqlCriterion handle(SqlColumn<Object> column, String value, Class<?> type) {
 
         return ColumnAndConditionCriterion.withColumn(column)
                 .withCondition(isNotEqualTo(value)).build();

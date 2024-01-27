@@ -16,12 +16,12 @@ public class InOperator implements Operator {
     private static final String OPERATOR = " in ";
 
     @Override
-    public SqlCriterion handle(SqlColumn<Object> column, String value, Class type) {
+    public SqlCriterion handle(SqlColumn<Object> column, String value, Class<?> type) {
         return handle(column, Arrays.asList(value), type);
     }
 
     @Override
-    public SqlCriterion handle(SqlColumn<Object> column, List<String> values, Class type) {
+    public SqlCriterion handle(SqlColumn<Object> column, List<String> values, Class<?> type) {
         Object [] v =
         values.stream().map(value -> parseValue(value, type)).toList().toArray();
 
