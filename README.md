@@ -1,25 +1,28 @@
+DB2Rest is an **open-source tool** to rapidly build data access layer with minimal engineering effort. 
+DB2Rest connects with your database to instantly provide REST API to perform data access operations(create, read, insert, update) and execute stored functions/procedures. 
+Thus, DB2Rest can provide significant boost to your application delivery as it takes care of all data access logic and associated best practices. 
+
+Additionally, you can also use DB2Rest as a database gateway for legacy databases. This allows secure REST API based access to data for partners and internal developers. 
+This can simplify many file or direct database access based data sharing - thus opening up possibilities of rapid integration and innovation. 
+
+:star: If you find DB2Rest useful, please consider adding a star on GitHub! Your support motivates us to add new exciting features.
+
+![Number of GitHub contributors](https://img.shields.io/github/contributors/kdhrubo/db2rest)
+[![Number of GitHub issues that are open](https://img.shields.io/github/issues/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest/issues)
+[![Number of GitHub stars](https://img.shields.io/github/stars/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest/stargazers)
+![Number of GitHub closed issues](https://img.shields.io/github/issues-closed/kdhrubo/db2rest)
+![Number of GitHub pull requests that are open](https://img.shields.io/github/issues-pr-raw/kdhrubo/db2rest)
+![GitHub release; latest by date](https://img.shields.io/github/v/release/kdhrubo/db2rest)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/kdhrubo/db2rest)
+[![GitHub license](https://img.shields.io/github/license/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest)
+![GitHub top language](https://img.shields.io/github/languages/top/kdhrubo/db2rest)
+[![Follow us on X, formerly Twitter](https://img.shields.io/twitter/follow/db2rest?style=social)](https://twitter.com/db2rest)
+
+
+
 <p align="center">
   <a href="https://db2rest.com" target="blank"><img src="https://db2rest.com/img/logo-db2rest.svg" width="120" alt="DB2Rest Logo" /></a>
 </p>
-
-
-<h3 align="center">No-Code REST API for Databases in Minutes. Deliver applications 20x faster, open up legacy data securely for innovation and integration.</h3>
-  
-
-# DB2Rest
-
-> Don't write any database access code, Install DB2Rest instead. 
-
-DB2Rest is an [Apache 2.0 Licensed](https://github.com/kdhrubo/db2rest/blob/master/LICENSE) open-source low-code middleware that provides secure and blazing fast data access layer over
-your existing or new databases. You can connect to the most widely used databases like PostgreSQL, MySQL, Oracle, SQL Server, and MongoDB to build a REST API in minutes without writing any code.
-You can now focus on building business logic and beautiful user interfaces at speed.
-
-
-
-![GitHub issues](https://img.shields.io/github/issues/kdhrubo/db2rest)
-![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/w/kdhrubo/db2rest)
-![GitHub top language](https://img.shields.io/github/languages/top/kdhrubo/db2rest)
-![GitHub License](https://img.shields.io/github/license/kdhrubo/db2rest)
 
 
 # Support
