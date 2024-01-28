@@ -19,25 +19,6 @@ This can simplify many file or direct database access based data sharing - thus 
 [![Follow us on X, formerly Twitter](https://img.shields.io/twitter/follow/db2rest?style=social)](https://twitter.com/db2rest)
 
 
-
-<p align="center">
-  <a href="https://db2rest.com" target="blank"><img src="https://db2rest.com/img/logo-db2rest.svg" width="120" alt="DB2Rest Logo" /></a>
-</p>
-
-
-# Support
-
-*Connect on Discord*
-
-[![](https://dcbadge.vercel.app/api/server/gytFPNW656?theme=discord)](https://discord.gg/gytFPNW656)
-
-
-
-# Contact
-
-<help@db2rest.com>
-
-
 # How does it work?
 
 ![DB2Rest- How it works?](assets/db2rest-how-it-works.gif "DB2Rest")
@@ -124,6 +105,17 @@ Refer to [running with Docker documentation](https://db2rest.com/docs/installati
 - [x] Multiple schema support
 
 
+# Support
+
+*Connect on Discord*
+
+[![](https://dcbadge.vercel.app/api/server/gytFPNW656?theme=discord)](https://discord.gg/gytFPNW656)
+
+
+
+# Contact
+
+<help@db2rest.com>
 
 # Roadmap
 
