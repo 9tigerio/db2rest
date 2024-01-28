@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PgSQLUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
+public class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @DisplayName("Update an existing film")
     public void updateExistingFilm() throws Exception {
