@@ -40,12 +40,10 @@ This can simplify many file or direct database access based data sharing - thus 
 
 # How does it work?
 
-![DB2Rest- How it works?](assets/db2rest-hiw.png "DB2Rest")
+![DB2Rest- How it works?](assets/db2rest-how-it-works.gif "DB2Rest")
 
 
-The diagram above shows an application architecture with DB2Rest. DB2Rest provides secure access to the database as REST API within seconds of installation/deployment. 
-The business logic can be written in your favorite technology frameworks for Java, PHP, Node, .NET, or using any serverless framework. The business logic layer uses the database access layer (DBAL) provided
-by DB2Rest to query and modify data. The user experience layer can be developed using popular front-end frameworks or low-code/no-code platforms. This layer can make use of the business logic layer or directly access secure data layer provided by DB2Rest.
+
 
 ## Benefits
 
