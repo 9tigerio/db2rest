@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.update;
 
+import com.homihq.db2rest.rest.update.dto.UpdateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,12 @@ public class UpdateController {
 
     private final UpdateService updateService;
     @PatchMapping("/{tableName}")
-    public void save(@PathVariable String tableName,
-                     @RequestHeader(name = "Content-Profile") String schemaName,
-                     @RequestBody Map<String,Object> data
-        ,@RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
+    public UpdateResponse save(@PathVariable String tableName,
+                               @RequestHeader(name = "Content-Profile") String schemaName,
+                               @RequestBody Map<String,Object> data
+        , @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
-        updateService.patch(schemaName, tableName, data, filter);
+        int rows = updateService.patch(schemaName, tableName, data, filter);
+        return new UpdateResponse(rows);
     }
 }
