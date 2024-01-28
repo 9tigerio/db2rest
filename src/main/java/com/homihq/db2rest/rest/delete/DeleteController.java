@@ -5,7 +5,6 @@ import com.homihq.db2rest.rest.delete.dto.DeleteResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -16,7 +15,7 @@ public class DeleteController {
 
     private final DeleteService deleteService;
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{tableName}")
     public DeleteResponse delete(@PathVariable String tableName,
                                  @RequestParam(name = "schemaName", required = false) String schemaName,
