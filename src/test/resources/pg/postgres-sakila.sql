@@ -425,13 +425,6 @@ SELECT pg_catalog.setval('film_film_id_seq', 1000, true);
 SELECT pg_catalog.setval('language_language_id_seq', 6, true);
 
 --
--- Data for Name: actor; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
--- DO NOT Enable this line ever
--- ALTER TABLE language DISABLE TRIGGER ALL;
-
---
 -- Stored procedure; Schema: public; Owner: postgres
 --
 

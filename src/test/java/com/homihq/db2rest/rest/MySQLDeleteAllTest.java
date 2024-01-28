@@ -22,9 +22,9 @@ class MySQLDeleteAllTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(delete("/country")
                         //.header("Content-Profile", "sakila")
                         .accept(APPLICATION_JSON))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(4)))
-                //.andDo(print())
+                .andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 }

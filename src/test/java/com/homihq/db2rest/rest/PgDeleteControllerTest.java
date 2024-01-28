@@ -21,9 +21,9 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(delete("/director")
                         .param("filter", "first_name==\"Alex\"")
                         .accept(APPLICATION_JSON))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
-                //.andDo(print())
+                .andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }
 
@@ -35,7 +35,7 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Invalid delete operation , safe set to true")))
-                //.andDo(print())
+                .andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }
 
@@ -59,9 +59,10 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
                         .param("filter", "name==\"English\"")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                /*.andExpect(jsonPath("$.detail",
-                        containsString("Cannot delete or update a parent row: a foreign key constraint fails")))*/
-                //.andDo(print())
+                .andExpect(jsonPath("$.detail",
+                        containsString("ERROR: update or delete on table \"language\" violates foreign key " +
+                                "constraint \"film_language_id_fkey\" on table \"film")))
+                .andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }
 }
