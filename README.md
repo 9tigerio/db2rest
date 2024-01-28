@@ -66,7 +66,7 @@ Refer to [installation quickstart documentation](https://db2rest.com/docs/intro)
 
 ## With Docker
 
-Refer to [installation quickstart documentation](https://db2rest.com/docs/installation-running-with-docker).
+Refer to [running with Docker documentation](https://db2rest.com/docs/installation-running-with-docker).
 
 
 
@@ -124,13 +124,6 @@ Refer to [installation quickstart documentation](https://db2rest.com/docs/instal
 
 
 
-
-# Request parameters for Pagination
-
-| Parameter Name | Description                                               | 
-|----------------|-----------------------------------------------------------|
-| page           | Page you want to retrieve, 0 indexed and defaults to 0.   | 
-| size           | Size of the page you want to retrieve, defaults to 20.    | 
 
 # Request parameters for Sorting
 
@@ -315,50 +308,6 @@ echo '{
   User-Agent:insomnia/8.4.5
 ```
 
-
-**11. Delete Records**
-
-Refer to [delete documentation](https://db2rest.com/docs/category/delete-records).
-
-
-
-
-**13. Offset pagination**
-
-This GET operation will fetch results of the query in chunks of pages - 2 records at a time.
-
-```Shell
-curl --request GET \
-  --url 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2' \
-  --header 'Accept-Profile: sakila' \
-  --header 'User-Agent: insomnia/8.4.5'
-```
-**HTTPie**
-
-```Shell
-http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2' \
-  Accept-Profile:sakila \
-  User-Agent:insomnia/8.4.5
-```
-
-
-**14. Sorting with Offset pagination**
-
-This GET operation will fetch results of the query in chunks of pages - 2 records at a time and sorted.
-
-```Shell
-curl --request GET \
-  --url 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2&sort=actor_id&sort=first_name,DESC' \
-  --header 'Accept-Profile: sakila' \
-  --header 'User-Agent: insomnia/8.4.5'
-```
-**HTTPie**
-
-```Shell
-http GET 'http://localhost:8080/actor?select=actor_id,first_name,last_name&filter=first_name=="PENELOPE"&page=0&size=2&sort=actor_id&sort=first_name,DESC' \
-  Accept-Profile:sakila \
-  User-Agent:insomnia/8.4.5
-```
 
 
 # Roadmap
