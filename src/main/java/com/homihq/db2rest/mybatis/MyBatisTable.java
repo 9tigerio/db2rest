@@ -1,6 +1,8 @@
 package com.homihq.db2rest.mybatis;
 
+import com.homihq.db2rest.exception.InvalidColumnException;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.mybatis.dynamic.sql.AliasableSqlTable;
@@ -33,6 +35,15 @@ public class MyBatisTable extends AliasableSqlTable<MyBatisTable> {
         this.schemaName = schemaName;
         this.table = table;
         sqlColumnList = new ArrayList<>();
+    }
+
+    public Class<?> findColumnType(String columnName) {
+        return table.getColumns()
+                .stream()
+                .filter(c -> StringUtils.equalsIgnoreCase(c.getName(), columnName))
+                .findFirst().orElseThrow(() -> new InvalidColumnException(tableName, columnName))
+                .getColumnDataType()
+                .getJavaSqlType().getDefaultMappedClass();
     }
 
     public MyBatisTable() {

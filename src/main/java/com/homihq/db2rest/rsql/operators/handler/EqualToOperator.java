@@ -12,9 +12,12 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 public class EqualToOperator implements Operator {
 
     @Override
-    public SqlCriterion handle(SqlColumn<Object> column, String value, Class type) {
+    public SqlCriterion handle(SqlColumn<Object> column, String value, Class<?> type) {
+
+        log.info("Type - {}", type);
+
         return ColumnAndConditionCriterion.withColumn(column)
-                .withCondition(isEqualTo(value)).build();
+                .withCondition(isEqualTo(parseValue(value,type))).build();
 
     }
 }

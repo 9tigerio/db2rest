@@ -5,6 +5,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rsql.operators.Operator;
 import com.homihq.db2rest.rsql.operators.RSQLOperatorHandlers;
 import cz.jirutka.rsql.parser.ast.*;
@@ -16,7 +17,7 @@ import org.mybatis.dynamic.sql.*;
 @RequiredArgsConstructor
 @Slf4j
 public class MyBatisFilterVisitor implements RSQLVisitor<SqlCriterion, Object> {
-    private final SqlTable sqlTable;
+    private final MyBatisTable sqlTable;
 
     @Override
     public SqlCriterion visit(AndNode node, Object optionalParameter) {
@@ -53,7 +54,9 @@ public class MyBatisFilterVisitor implements RSQLVisitor<SqlCriterion, Object> {
         SqlColumn<Object> column = sqlTable.column(columnName);
 
         //Dummy type
-        Class clazz = Integer.class;
+        Class<?> clazz = sqlTable.findColumnType(columnName);
+
+        log.info("Col - {} Clazz - {}",columnName , clazz);
 
 
         if (op.isMultiValue()) {

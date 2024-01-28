@@ -32,7 +32,7 @@ class MySQLProcedureControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$", instanceOf(Map.class)))
                 .andExpect(jsonPath("$.*", hasSize(2)))
                 .andExpect(jsonPath("$.rentalRate", equalTo(0.99)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-execute-procedure"));
     }
 }

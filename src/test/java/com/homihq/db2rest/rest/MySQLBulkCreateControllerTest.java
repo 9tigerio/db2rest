@@ -62,7 +62,7 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-bulk-create-films"));
 
     }
@@ -86,7 +86,7 @@ Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Com
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("mysql-bulk-create-films-csv"));
 
     }
@@ -106,7 +106,7 @@ Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Com
                         .contentType("text/csv")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-bulk-create-films-csv-error"));
 
     }
@@ -155,7 +155,7 @@ Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Com
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-bulk-create-films-error"));
 
     }
@@ -182,7 +182,7 @@ Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Com
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-bulk-create-directors"));
 
     }
@@ -209,7 +209,7 @@ Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Com
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("mysql-bulk-create-directors-with-wrong-tsid-type"));
 
     }
@@ -237,7 +237,7 @@ Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Com
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-bulk-create-reviews-with-default-tsid-type"));
 
     }

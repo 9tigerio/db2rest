@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface Operator {
 
-    SqlCriterion handle(SqlColumn<Object> column, String value, Class type);
+    SqlCriterion handle(SqlColumn<Object> column, String value, Class<?> type);
 
-    default SqlCriterion handle(SqlColumn<Object> column, List<String> value, Class type) {
+    default SqlCriterion handle(SqlColumn<Object> column, List<String> value, Class<?> type) {
         return handle(column, value.get(0), type);
     }
 
-    default Object parseValue(String value, Class type) {
+    default Object parseValue(String value, Class<?> type) {
 
         if (String.class == type) {
             return value;
