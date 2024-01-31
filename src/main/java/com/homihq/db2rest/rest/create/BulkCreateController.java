@@ -6,7 +6,6 @@ import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,21 +14,18 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class BulkCreateController {
+public class BulkCreateController implements BulkCreateApi {
 
     private final CreateService createService;
 
     private final List<DataProcessor> dataProcessors;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping (value= "/{tableName}/bulk",
-            consumes = {"application/json", "text/csv"}
-    )
-    public CreateBulkResponse save(@PathVariable String tableName,
-                            @RequestHeader(name = "Content-Profile" , required = false) String schemaName,
-                                          @RequestParam(name = "tsid", required = false) String tsid,
-                                          @RequestParam(name = "tsidType", required = false, defaultValue = "number") String tsidType,
-                            HttpServletRequest request) throws Exception{
+    @Override
+    public CreateBulkResponse save(String tableName,
+                                   String schemaName,
+                                   String tsid,
+                                   String tsidType,
+                                   HttpServletRequest request) throws Exception{
 
         DataProcessor dataProcessor = dataProcessors.stream()
                 .filter(d -> d.handle(request.getContentType()))
