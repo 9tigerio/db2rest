@@ -42,13 +42,10 @@ public class SelectBuilder{
         }
 
 
-
         log.info("context.select - {}", context.select);
 
         //split to get all fragments
         String [] tabCols = context.select.split(";");
-
-
 
         log.info("tabCols - {}", tabCols.length);
 
@@ -75,8 +72,6 @@ public class SelectBuilder{
                 for(MyBatisTable table : myBatisTables) {
                     table.setRoot(true);
                 }
-
-                //TODO - multiple root tables and no other table = union query, else unsupported exception
 
             }
             tables.addAll(myBatisTables);

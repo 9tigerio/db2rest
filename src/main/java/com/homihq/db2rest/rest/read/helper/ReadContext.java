@@ -4,6 +4,7 @@ import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.BasicColumn;
 import org.mybatis.dynamic.sql.SqlColumn;
@@ -25,10 +26,12 @@ import static org.mybatis.dynamic.sql.SqlBuilder.count;
 import static org.mybatis.dynamic.sql.select.SelectDSL.select;
 
 
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Slf4j
 public class ReadContext {
 
     String schemaName;
@@ -97,10 +100,30 @@ public class ReadContext {
             queryExpressionDSL = select(count()).from(from, from.getAlias());
         }
         else{
+            log.info("Setting Select projections with columns - {}", columns);
             from = getRootTable();
-            queryExpressionDSL = select(columns).from(from, from.getAlias());
+
+            queryExpressionDSL = select(getSelectionColumns(getRootTable(), columns)).from(from, from.getAlias());
         }
 
+    }
+
+    private List<BasicColumn> getSelectionColumns(MyBatisTable rootTable, List<BasicColumn> columns) {
+        if(columns.isEmpty()) {
+            return
+            rootTable.getTable().getColumns()
+                    .stream()
+                    .peek(column -> {
+                        log.debug("Column Data type - {}",  column.getColumnDataType());
+                        log.debug("Column Data type - {}",  column.getColumnDataType().getJavaSqlType());
+                        log.debug("Data type - {}",  column.getType());
+                        log.debug("Data type - {}",  column.getType().getJavaSqlType());
+                    })
+                    .map(column -> (BasicColumn)SqlColumn.of(column.getName(), rootTable))//TODO - user jdbctype
+                    .toList();
+        }
+
+        return columns;
     }
 
     private MyBatisTable getRootTable() {
