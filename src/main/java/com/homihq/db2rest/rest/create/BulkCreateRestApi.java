@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-public interface BulkCreateApi {
+public interface BulkCreateRestApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/{tableName}/bulk",
             consumes = {"application/json", "text/csv"}
