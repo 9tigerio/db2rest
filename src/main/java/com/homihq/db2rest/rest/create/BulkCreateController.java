@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class BulkCreateController {
+public class BulkCreateController implements BulkCreateRestApi {
 
     private final CreateService createService;
 
