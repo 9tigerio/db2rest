@@ -1,16 +1,15 @@
 package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import org.hamcrest.Matchers;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
 
@@ -40,7 +39,8 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.row", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.generated_key").exists())
                // .andDo(print())
                 .andDo(document("pg-create-a-film"));
 

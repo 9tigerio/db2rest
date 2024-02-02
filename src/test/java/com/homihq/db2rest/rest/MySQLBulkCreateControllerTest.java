@@ -8,9 +8,8 @@ import org.springframework.http.MediaType;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
@@ -62,7 +61,9 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
-                //.andDo(print())
+                .andExpect(jsonPath("$.generated_keys", hasSize(2)))
+                .andExpect(jsonPath("$.generated_keys", allOf(notNullValue())))
+//                .andDo(print())
                 .andDo(document("mysql-bulk-create-films"));
 
     }
@@ -86,6 +87,9 @@ Jawan2,Socio-econmic problems and corruption,2023,6,6,6,0.99,160,20.99,PG-13,Com
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
+                .andExpect(jsonPath("$.generated_keys").isArray())
+                .andExpect(jsonPath("$.generated_keys", hasSize(2)))
+                .andExpect(jsonPath("$.generated_keys", allOf(notNullValue())))
                // .andDo(print())
                 .andDo(document("mysql-bulk-create-films-csv"));
 

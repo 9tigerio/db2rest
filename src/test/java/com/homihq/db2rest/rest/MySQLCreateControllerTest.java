@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,7 +38,8 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .header("Content-Profile", "public")
                         .content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.row", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.generated_key").exists())
                 //.andDo(print())
                 .andDo(document("mysql-create-a-film"));
 
