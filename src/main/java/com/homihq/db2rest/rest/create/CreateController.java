@@ -4,7 +4,9 @@ package com.homihq.db2rest.rest.create;
 import com.homihq.db2rest.rest.create.dto.CreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.util.Pair;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Map;
 
 @RestController
@@ -21,10 +23,9 @@ public class CreateController implements CreateRestApi {
                                String tsid,
                                String tsidType) {
 
-        int rows =
-        createService.save(schemaName, tableName, data, tsid, tsidType);
+        Pair<Integer, Object> result = createService.save(schemaName, tableName, data, tsid, tsidType);
 
-        return new CreateResponse(rows);
+        return new CreateResponse(result.getFirst(), result.getSecond());
     }
 
 }
