@@ -48,18 +48,25 @@ public class JoinBuilder  {
                 MyBatisTable root = tableList.get(i);
                 MyBatisTable child = tableList.get(i + 1);
 
+                /*
                 List<ForeignKey> foreignKeys = schemaManager.getForeignKeysBetween(context.getSchemaName(),
                         root.getTableName(),
                         child.getTableName());
 
+                 */
+
+                List<ForeignKey> foreignKeys = schemaManager.getForeignKeysBetween(root, child);
+
+                log.debug("Foreign keys - {}", foreignKeys);
+
                 int fk = 0;
                 for(ForeignKey foreignKey : foreignKeys) {
 
-                    log.info("ForeignKey reference - {}", foreignKey);
+                    log.debug("ForeignKey reference - {}", foreignKey);
 
                     for(ColumnReference columnReference : foreignKey.getColumnReferences()) {
 
-                        log.info("Column reference - {}", columnReference);
+                        log.debug("Column reference - {}", columnReference);
 
                         if(fk == 0) {
                             context.queryExpressionDSL
