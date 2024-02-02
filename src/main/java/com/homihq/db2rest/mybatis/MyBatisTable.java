@@ -16,6 +16,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString(of = {"schemaName", "tableName"})
 public class MyBatisTable extends AliasableSqlTable<MyBatisTable> {
 
     String alias;

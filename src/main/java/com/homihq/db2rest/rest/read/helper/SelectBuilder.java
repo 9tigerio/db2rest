@@ -99,6 +99,8 @@ public class SelectBuilder{
             }
         }
 
+        log.debug("sName - {}", sName);
+
         if(StringUtils.isNotBlank(sName)) {
             MyBatisTable table = schemaManager.findTable(sName, tName, counter);
 
@@ -109,6 +111,7 @@ public class SelectBuilder{
             return List.of(table);
         }
         else {
+            log.debug("no schema -> {}", sName);
             List<MyBatisTable> tables = schemaManager.findTables(tName);
 
             for(MyBatisTable table : tables) {

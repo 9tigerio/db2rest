@@ -67,8 +67,6 @@ public final class SchemaManager {
 
             }
         }
-
-
     }
 
     private String getSchemaName(Table table) {
@@ -80,6 +78,7 @@ public final class SchemaManager {
 
             schemaName = table.getSchema().getName();
         }
+        log.info("schemaName -> {}", schemaName);
         return schemaName;
     }
 
@@ -102,6 +101,22 @@ public final class SchemaManager {
 
     }
 
+    public List<ForeignKey> getForeignKeysBetween(MyBatisTable rootTable, MyBatisTable childTable) {
+        //1. first locate table in the cache
+        Table table = getTable(rootTable.getSchemaName(), rootTable.getTableName())
+                .orElseThrow(() -> new InvalidTableException(rootTable.getTableName()));
+
+        log.debug("Table - {}", table);
+        log.debug("Table - {}", table.getImportedForeignKeys());
+
+        //2. if foreign keys = null, look for join table option
+        return table.getImportedForeignKeys().stream()
+                .filter(fk -> StringUtils.equalsIgnoreCase(
+                        getSchemaName(fk.getParent()), rootTable.getSchemaName())
+                        && StringUtils.equalsIgnoreCase(fk.getReferencedTable().getName(), childTable.getTableName())).toList();
+    }
+
+    @Deprecated
     public List<ForeignKey> getForeignKeysBetween(String schemaName, String rootTable, String childTable) {
 
       //1. first locate table in the cache
