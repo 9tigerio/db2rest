@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.BasicColumn;
+import org.mybatis.dynamic.sql.SqlCriterion;
 
 import java.util.List;
 
@@ -29,4 +30,13 @@ public class ReadContextV2 {
     /* Processed attributes */
     MyBatisTable rootTable;
     List<BasicColumn> columns;
+    SqlCriterion whereCondition;
+
+    public void addWhereCondition(SqlCriterion whereCondition) {
+        this.whereCondition = whereCondition;
+    }
+
+    public void addColumns(BasicColumn column) {
+        columns.add(column);
+    }
 }

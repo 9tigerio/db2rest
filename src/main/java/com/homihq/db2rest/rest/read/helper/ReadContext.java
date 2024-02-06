@@ -108,6 +108,7 @@ public class ReadContext {
 
     }
 
+    @Deprecated
     private List<BasicColumn> getSelectionColumns(MyBatisTable rootTable, List<BasicColumn> columns) {
         if(columns.isEmpty()) {
             return

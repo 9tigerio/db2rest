@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Order(1)
-public class RootTableProcessor implements ReadProcessor{
+public class RootTablePreProcessor implements ReadPreProcessor {
 
     private final SchemaManager schemaManager;
     @Override

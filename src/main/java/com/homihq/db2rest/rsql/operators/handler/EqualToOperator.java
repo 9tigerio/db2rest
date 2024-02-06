@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rsql.operators.handler;
 
 import com.homihq.db2rest.rsql.operators.Operator;
+import com.homihq.db2rest.schema.TypeMapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.ColumnAndConditionCriterion;
 import org.mybatis.dynamic.sql.SqlColumn;
@@ -17,7 +18,7 @@ public class EqualToOperator implements Operator {
         log.info("Type - {}", type);
 
         return ColumnAndConditionCriterion.withColumn(column)
-                .withCondition(isEqualTo(parseValue(value,type))).build();
+                .withCondition(isEqualTo(TypeMapperUtil.parseValue(value,type))).build();
 
     }
 }

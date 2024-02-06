@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rsql.operators.handler;
 
 import com.homihq.db2rest.rsql.operators.Operator;
+import com.homihq.db2rest.schema.TypeMapperUtil;
 import org.mybatis.dynamic.sql.ColumnAndConditionCriterion;
 import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlCriterion;
@@ -21,7 +22,7 @@ public class NotInOperator implements Operator {
     @Override
     public SqlCriterion handle(SqlColumn<Object> column, List<String> values, Class<?> type) {
         Object [] v =
-                values.stream().map(value -> parseValue(value, type)).toList().toArray();
+                values.stream().map(value -> TypeMapperUtil.parseValue(value, type)).toList().toArray();
 
         return ColumnAndConditionCriterion.withColumn(column)
                 .withCondition(isNotIn(v)).build();

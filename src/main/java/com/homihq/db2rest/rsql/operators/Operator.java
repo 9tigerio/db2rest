@@ -13,6 +13,7 @@ public interface Operator {
         return handle(column, value.get(0), type);
     }
 
+    /*
     default Object parseValue(String value, Class<?> type) {
 
         if (String.class == type) {
@@ -30,5 +31,7 @@ public interface Operator {
         }
 
     }
+
+     */
 
 }
