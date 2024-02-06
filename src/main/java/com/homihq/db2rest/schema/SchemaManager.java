@@ -78,7 +78,7 @@ public final class SchemaManager {
 
             schemaName = table.getSchema().getName();
         }
-        log.info("schemaName -> {}", schemaName);
+        log.debug("schemaName -> {}", schemaName);
         return schemaName;
     }
 
