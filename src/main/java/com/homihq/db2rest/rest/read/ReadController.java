@@ -60,13 +60,4 @@ public class ReadController {
     }
 
 
-
-    @PostMapping(value = "/query", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findByCustomQuery(@RequestBody @Valid QueryRequest queryRequest) {
-        log.debug("Execute SQL statement {} with params {}", queryRequest.sql(), queryRequest.params());
-        return ResponseEntity.ok(readService.findByCustomQuery(queryRequest));
-    }
-
-
 }
