@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class FindOneController {
 
-    private final ReadService readService;
+    private final FindOneService findOneService;
 
     @GetMapping("/{tableName}/one")
     public FindOneResponse findOne(@PathVariable String tableName,
@@ -23,7 +23,7 @@ public class FindOneController {
         log.info("select - {}", select);
         log.info("filter - {}", filter);
 
-        return this.readService.findOne(tableName, select, filter);
+        return this.findOneService.findOne(tableName, select, filter);
     }
 
 

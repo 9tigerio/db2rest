@@ -3,6 +3,9 @@ package com.homihq.db2rest.rest.read;
 import com.homihq.db2rest.rest.read.dto.FindOneResponse;
 import com.homihq.db2rest.rest.read.helper.*;
 import com.homihq.db2rest.rest.read.dto.QueryRequest;
+import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.v2.processor.QueryCreatorTemplate;
+import com.homihq.db2rest.rest.read.v2.processor.ReadPreProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +31,9 @@ public class ReadService {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private final List<ReadPreProcessor> processorList;
+    private final QueryCreatorTemplate queryCreatorTemplate;
+
     public Object findAll(String schemaName, String tableName, String select, String filter,
                                      Pageable pageable, Sort sort) {
         ReadContext ctx = ReadContext.builder()
@@ -51,26 +57,35 @@ public class ReadService {
 
     }
 
-    public FindOneResponse findOne(String tableName, String select, String filter) {
+    public Object findAll(ReadContextV2 readContextV2) {
 
-        Pageable currPage = Pageable.ofSize(1).withPage(0);
-        ReadContext ctx = ReadContext.builder()
-                .pageable(currPage)
-                .tableName(tableName).select(select).filter(filter).build();
+
+        for(ReadPreProcessor processor : processorList) {
+            processor.process(readContextV2);
+        }
+
+        queryCreatorTemplate.createQuery(readContextV2);
+
+        /*
 
         selectBuilder.build(ctx);
         joinBuilder.build(ctx);
         whereBuilder.build(ctx);
         limitPaginationBuilder.build(ctx);
+        sortBuilder.build(ctx);
 
         String sql = ctx.prepareSQL();
-        Map<String, Object> bindValues = ctx.prepareParameters();
+        Map<String,Object> bindValues = ctx.prepareParameters();
 
         log.info("SQL - {}", sql);
         log.info("Bind variables - {}", bindValues);
 
-        return new FindOneResponse(
-                namedParameterJdbcTemplate.queryForObject(sql, bindValues, Object.class));
+        return namedParameterJdbcTemplate.queryForList(sql, bindValues);
+
+
+         */
+
+        return null;
     }
 
 }
