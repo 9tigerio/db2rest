@@ -1,8 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
-import com.homihq.db2rest.rest.read.dto.FindOneResponse;
 import com.homihq.db2rest.rest.read.helper.*;
-import com.homihq.db2rest.rest.read.dto.QueryRequest;
 import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
 import com.homihq.db2rest.rest.read.v2.processor.QueryCreatorTemplate;
 import com.homihq.db2rest.rest.read.v2.processor.ReadPreProcessor;
@@ -15,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+
 
 
 @Service
@@ -42,7 +40,7 @@ public class ReadService {
                 .tableName(tableName).select(select).filter(filter).build();
 
         selectBuilder.build(ctx);
-        joinBuilder.build(ctx);
+        //joinBuilder.build(ctx);
         whereBuilder.build(ctx);
         limitPaginationBuilder.build(ctx);
         sortBuilder.build(ctx);
@@ -59,31 +57,11 @@ public class ReadService {
 
     public Object findAll(ReadContextV2 readContextV2) {
 
-
         for(ReadPreProcessor processor : processorList) {
             processor.process(readContextV2);
         }
 
         queryCreatorTemplate.createQuery(readContextV2);
-
-        /*
-
-        selectBuilder.build(ctx);
-        joinBuilder.build(ctx);
-        whereBuilder.build(ctx);
-        limitPaginationBuilder.build(ctx);
-        sortBuilder.build(ctx);
-
-        String sql = ctx.prepareSQL();
-        Map<String,Object> bindValues = ctx.prepareParameters();
-
-        log.info("SQL - {}", sql);
-        log.info("Bind variables - {}", bindValues);
-
-        return namedParameterJdbcTemplate.queryForList(sql, bindValues);
-
-
-         */
 
         return null;
     }

@@ -23,10 +23,24 @@ public class QueryCreatorTemplate {
             queryExpressionDSL.where(readContextV2.getWhereCondition());
         }
 
+        addPagination(queryExpressionDSL, readContextV2.getOffset(), readContextV2.getLimit());
+
         SelectStatementProvider selectStatementProvider =  queryExpressionDSL.build().render(RenderingStrategies.SPRING_NAMED_PARAMETER);
 
         log.info("SQL - {}", selectStatementProvider.getSelectStatement());
         log.info("Bind Variables - {}", selectStatementProvider.getParameters());
+
+    }
+
+    protected void addPagination(QueryExpressionDSL<SelectModel> queryExpressionDSL, long offset, int limit) {
+
+        if(offset > -1) {
+            queryExpressionDSL.offset(offset);
+        }
+
+        if(limit > -1) {
+            queryExpressionDSL.limit(limit);
+        }
 
     }
 
