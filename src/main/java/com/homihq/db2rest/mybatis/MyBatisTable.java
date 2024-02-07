@@ -37,17 +37,20 @@ public class MyBatisTable extends AliasableSqlTable<MyBatisTable> {
         sqlColumnList = new ArrayList<>();
     }
 
-    public Class<?> findColumnType(String columnName) {
-        return table.getColumns()
-                .stream()
-                .filter(c -> StringUtils.equalsIgnoreCase(c.getName(), columnName))
-                .findFirst().orElseThrow(() -> new InvalidColumnException(tableName, columnName))
-                .getColumnDataType()
-                .getJavaSqlType().getDefaultMappedClass();
-    }
+
 
     public MyBatisTable() {
         super("MyBatisTable", MyBatisTable::new);
+    }
+
+
+    public Column findColumn(String columnName) {
+        return this.getTable()
+                .getColumns()
+                .stream()
+                .filter(col -> StringUtils.equalsIgnoreCase(columnName, col.getName()))
+                .findFirst()
+                .orElseThrow(() -> new InvalidColumnException(tableName, columnName));
     }
 
     public void addAllColumns() {

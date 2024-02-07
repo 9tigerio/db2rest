@@ -17,13 +17,15 @@ public class ReadControllerV2 {
 
     private final ReadServiceV2 readServiceV2;
 
+
     @GetMapping(value = "/V2/{tableName}" , produces = "application/json")
     public Object find(@PathVariable String tableName,
                                   @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                                   @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
                                   @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
                        @RequestParam(name = "limit", required = false, defaultValue = "-1") int limit,
-                       @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset) {
+                       @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset
+                        ) {
 
         log.info("fields - {}", fields);
         log.info("filter - {}", filter);
@@ -37,7 +39,8 @@ public class ReadControllerV2 {
                 .filter(filter)
                 .sorts(sorts)
                 .limit(limit)
-                .offset(offset).build();
+                .offset(offset)
+                .build();
 
 
         return readServiceV2.find(readContextV2);

@@ -1,4 +1,4 @@
-package com.homihq.db2rest.jdbc;
+package com.homihq.db2rest.type;
 
 import org.joda.convert.StringConvert;
 

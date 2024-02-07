@@ -1,6 +1,8 @@
 package com.homihq.db2rest.rsql.parser;
 
 
+import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
+import static com.homihq.db2rest.schema.TypeMapperUtil.getColumnJavaType;
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,20 +49,23 @@ public class MyBatisFilterVisitor implements RSQLVisitor<SqlCriterion, Object> {
         String columnName = comparisonNode.getSelector();
 
         Operator operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
+
         if (operatorHandler == null) {
             throw new IllegalArgumentException(String.format("Operator '%s' is invalid", op.getSymbol()));
         }
 
-        SqlColumn<Object> column = sqlTable.column(columnName);
+        SqlColumn<Object> column =
+                SqlColumn.of(columnName, this.sqlTable,
+                getJdbcType(this.sqlTable.findColumn(columnName)));
 
-        //Dummy type
-        Class<?> clazz = sqlTable.findColumnType(columnName);
 
-        log.info("Col - {} Clazz - {}",columnName , clazz);
+        //Java type
+        Class<?> clazz = getColumnJavaType(sqlTable.getTable(), columnName);
+
+        log.debug("Col - {} Clazz - {}",columnName , clazz);
 
 
         if (op.isMultiValue()) {
-
             return operatorHandler.handle(column, comparisonNode.getArguments(), clazz);
         }
         else {
