@@ -25,6 +25,7 @@ public class ReadContextV2 {
     List<String> sorts;
     int limit;
     long offset;
+    List<String> joins;
 
 
     /* Processed attributes */
