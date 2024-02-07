@@ -8,6 +8,8 @@ import org.mybatis.dynamic.sql.select.SelectModel;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 import static org.mybatis.dynamic.sql.select.SelectDSL.select;
 
 @Component
@@ -16,6 +18,11 @@ public class QueryCreatorTemplate {
 
     public void createQuery(ReadContextV2 readContextV2) {
         QueryExpressionDSL<SelectModel> queryExpressionDSL = createProjection(readContextV2);
+
+        if(Objects.nonNull(readContextV2.getWhereCondition())) {
+            queryExpressionDSL.where(readContextV2.getWhereCondition());
+        }
+
         SelectStatementProvider selectStatementProvider =  queryExpressionDSL.build().render(RenderingStrategies.SPRING_NAMED_PARAMETER);
 
         log.info("SQL - {}", selectStatementProvider.getSelectStatement());
