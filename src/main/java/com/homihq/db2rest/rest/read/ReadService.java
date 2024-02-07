@@ -73,10 +73,4 @@ public class ReadService {
                 namedParameterJdbcTemplate.queryForObject(sql, bindValues, Object.class));
     }
 
-
-    Object findByCustomQuery(QueryRequest queryRequest) {
-        return queryRequest.single() ?
-                namedParameterJdbcTemplate.queryForMap(queryRequest.sql(), queryRequest.params()) :
-                namedParameterJdbcTemplate.queryForList(queryRequest.sql(), queryRequest.params());
-    }
 }
