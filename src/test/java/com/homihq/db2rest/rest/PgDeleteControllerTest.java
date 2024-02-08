@@ -19,8 +19,8 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Delete a Director")
     void delete_single_record() throws Exception {
         mockMvc.perform(delete("/director")
-                        .param("filter", "first_name==\"Alex\"")
-                        .accept(APPLICATION_JSON))
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "first_name==\"Alex\""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
                 .andDo(print())
@@ -43,8 +43,8 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Column Does Not Exist")
     void column_does_not_exist() throws Exception {
         mockMvc.perform(delete("/director")
-                        .param("filter", "_name==\"Alex\"")
-                        .accept(APPLICATION_JSON))
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "_name==\"Alex\""))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Invalid column director._name")))
@@ -56,8 +56,8 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Foreign Key Constraint Violation")
     void foreign_key_constraint_violation() throws Exception {
         mockMvc.perform(delete("/language")
-                        .param("filter", "name==\"English\"")
-                        .accept(APPLICATION_JSON))
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "name==\"English\""))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("ERROR: update or delete on table \"language\" violates foreign key " +

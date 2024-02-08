@@ -5,13 +5,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultMatcher;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
@@ -19,13 +16,13 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Get all fields.")
     void findAllFilms() throws Exception {
 
-        mockMvc.perform(get("/film").header("Accept-Profile", "sakila")
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/film")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("Accept-Profile", "sakila"))
                 .andExpect(status().isOk())
                 //.andDo(print())
                 .andDo(document("mysql-get-all-films"));
     }
-
 
     @Test
     @DisplayName("Get count")
@@ -41,7 +38,8 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Get one")
     void findOneFilm() throws Exception {
-        mockMvc.perform(get("/film/one").accept(MediaType.APPLICATION_JSON)
+        mockMvc.perform(get("/film/one")
+                        .accept(MediaType.APPLICATION_JSON)
                         .param("select", "description"))
                 .andExpect(status().isOk())
                 //.andDo(print())

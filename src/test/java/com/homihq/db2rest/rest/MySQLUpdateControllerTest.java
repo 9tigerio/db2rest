@@ -1,75 +1,66 @@
 package com.homihq.db2rest.rest;
 
-import com.github.dockerjava.api.command.AuthCmd;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import org.hamcrest.Matchers;
+import com.homihq.db2rest.utils.ITestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
+class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Update an existing film")
-    public void updateExistingFilm() throws Exception {
-
-        var json = """
-                {
-                    "rating": "NC-17"
-                }
-                """;
+    void updateExistingFilm() throws Exception {
 
         mockMvc.perform(patch("/film")
-                        .param("filter", "title==\"ACADEMY DINOSAUR\"")
-                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .characterEncoding(UTF_8)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .header("Content-Profile", "sakila")
-                        .content(json).accept(MediaType.APPLICATION_JSON))
+                        .param("filter", "title==\"ACADEMY DINOSAUR\"")
+                        .content(ITestUtil.UPDATE_FILM_REQUEST))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.rows", equalTo(1)))
                 .andDo(print())
                 .andDo(document("mysql-update-existing-film"));
     }
 
     @Test
     @DisplayName("Update a non-existing film")
-    public void updateNonExistingFilm() throws Exception {
-
-        var json = """
-                {
-                    "special_features": "CGI,Fantasy,Action"
-                }
-                """;
+    void updateNonExistingFilm() throws Exception {
 
         mockMvc.perform(patch("/film")
-                        .param("filter", "title==\"BAAHUBALI\"")
-                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .characterEncoding(UTF_8)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .header("Content-Profile", "sakila")
-                        .content(json).accept(MediaType.APPLICATION_JSON))
+                        .param("filter", "title==\"BAAHUBALI\"")
+                        .content(ITestUtil.UPDATE_NON_EXISTING_FILM_REQUEST))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rows", Matchers.equalTo(0)))
+                .andExpect(jsonPath("$.rows", equalTo(0)))
                 .andDo(print())
                 .andDo(document("mysql-update-non-existing-film"));
     }
 
     @Test
     @DisplayName("Update non-existing table")
-    public void updateNonExistingTable() throws Exception {
-        var json = """
-                {
-                    "sample_col": "sample value"
-                }
-                """;
+    void updateNonExistingTable() throws Exception {
 
-        mockMvc.perform(patch("/unnamed_table")
-                    .param("filter", "sample_col==\"sample value 1\"")
-                    .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                    .header("Content-Profile", "sakila")
-                    .content(json).accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/unknown_table")
+                        .characterEncoding(UTF_8)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .header("Content-Profile", "sakila")
+                        .param("filter", "sample_col==\"sample value 1\"")
+                        .content(ITestUtil.UPDATE_NON_EXISTING_TABLE))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("mysql-update-non-existing-table"));
@@ -77,20 +68,17 @@ public class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Updating multiple films")
-    public void updateMultipleColumns() throws Exception {
-        var json = """
-                {
-                    "rating": "PG"
-                }
-                """;
+    void updateMultipleColumns() throws Exception {
 
         mockMvc.perform(patch("/film")
+                        .characterEncoding(UTF_8)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
-                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                         .header("Content-Profile", "sakila")
-                        .content(json).accept(MediaType.APPLICATION_JSON))
+                        .content(ITestUtil.UPDATE_FILMS_REQUEST))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rows", Matchers.equalTo(2)))
+                .andExpect(jsonPath("$.rows", equalTo(2)))
                 .andDo(print())
                 .andDo(document("mysql-update-multiple-films"));
     }
