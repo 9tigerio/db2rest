@@ -67,7 +67,10 @@ public class JoinBuilder  {
                                     .on(
                                             child.column(columnReference.getPrimaryKeyColumn().getName())
                                             , equalTo(root.column(columnReference.getForeignKeyColumn().getName()))
-                                    );
+                                    )
+
+
+                            ;
 
                         }
                         else {

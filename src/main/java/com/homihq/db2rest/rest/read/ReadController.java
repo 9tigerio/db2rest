@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
+import com.homihq.db2rest.rest.read.v2.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import static org.springframework.web.bind.ServletRequestUtils.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -43,13 +45,14 @@ public class ReadController {
         return readService.findAll(schemaName, tableName,select, filter, pageable, sort);
     }
 
-    @GetMapping(value = "/V2/{tableName}" , produces = "application/json")
+    @PostMapping(value = "/V2/{tableName}" , produces = "application/json")
     public Object find(@PathVariable String tableName,
                        @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                        @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
                        @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
                        @RequestParam(name = "limit", required = false, defaultValue = "-1") int limit,
-                       @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset
+                       @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset,
+                       @RequestBody List<JoinDetail> joins
     ) {
 
         log.info("fields - {}", fields);
@@ -58,6 +61,8 @@ public class ReadController {
         log.info("limit - {}", limit);
         log.info("offset - {}", offset);
 
+        log.info("join - {}", joins);
+
         ReadContextV2 readContextV2 = ReadContextV2.builder()
                 .tableName(tableName)
                 .fields(fields)
@@ -65,6 +70,7 @@ public class ReadController {
                 .sorts(sorts)
                 .limit(limit)
                 .offset(offset)
+                .joins(joins)
                 .build();
 
 

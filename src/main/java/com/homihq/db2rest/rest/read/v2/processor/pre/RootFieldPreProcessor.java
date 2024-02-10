@@ -1,9 +1,11 @@
-package com.homihq.db2rest.rest.read.v2.processor;
+package com.homihq.db2rest.rest.read.v2.processor.pre;
 
 import com.homihq.db2rest.exception.InvalidColumnException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
 import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
+
+import com.homihq.db2rest.rest.read.v2.processor.pre.ReadPreProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.BasicColumn;
