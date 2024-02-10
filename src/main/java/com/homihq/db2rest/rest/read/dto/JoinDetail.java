@@ -1,7 +1,6 @@
-package com.homihq.db2rest.rest.read.v2.dto;
+package com.homihq.db2rest.rest.read.dto;
 
 import org.apache.commons.lang3.StringUtils;
-import org.mybatis.dynamic.sql.select.join.JoinCriterion;
 import org.mybatis.dynamic.sql.select.join.JoinType;
 
 import java.util.List;

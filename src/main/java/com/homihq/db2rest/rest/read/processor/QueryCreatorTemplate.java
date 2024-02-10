@@ -1,13 +1,12 @@
-package com.homihq.db2rest.rest.read.v2.processor;
+package com.homihq.db2rest.rest.read.processor;
 
-import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
-import com.homihq.db2rest.rest.read.v2.processor.post.ReadPostProcessor;
+import com.homihq.db2rest.rest.read.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.processor.post.ReadPostProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
 import org.mybatis.dynamic.sql.select.SelectModel;
-import org.mybatis.dynamic.sql.select.join.JoinSpecification;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +29,6 @@ public class QueryCreatorTemplate {
             queryExpressionDSL.where(readContextV2.getWhereCondition());
         }
 
-        addPagination(queryExpressionDSL, readContextV2.getOffset(), readContextV2.getLimit());
         addSort(queryExpressionDSL, readContextV2.getSorts());
 
         for(ReadPostProcessor processor : postProcessors) {
@@ -47,17 +45,6 @@ public class QueryCreatorTemplate {
     private void addSort(QueryExpressionDSL<SelectModel> queryExpressionDSL, List<String> sorts) {
     }
 
-    protected void addPagination(QueryExpressionDSL<SelectModel> queryExpressionDSL, long offset, int limit) {
-
-        if(offset > -1) {
-            queryExpressionDSL.offset(offset);
-        }
-
-        if(limit > -1) {
-            queryExpressionDSL.limit(limit);
-        }
-
-    }
 
     protected QueryExpressionDSL<SelectModel> createProjection(ReadContextV2 readContextV2) {
        return

@@ -1,18 +1,14 @@
-package com.homihq.db2rest.rest.read.v2.processor.post;
+package com.homihq.db2rest.rest.read.processor.post;
 
 import com.homihq.db2rest.mybatis.MyBatisTable;
-import com.homihq.db2rest.rest.read.v2.dto.JoinDetail;
-import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
-import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
+import com.homihq.db2rest.rest.read.dto.JoinDetail;
+import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import com.homihq.db2rest.rsql.parser.JoinOnParser;
 import com.homihq.db2rest.schema.SchemaManager;
-import cz.jirutka.rsql.parser.RSQLParser;
-import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
 import org.mybatis.dynamic.sql.select.SelectModel;
-import org.mybatis.dynamic.sql.select.join.JoinCriterion;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +18,7 @@ import java.util.Objects;
 @Slf4j
 @Order(3)
 @RequiredArgsConstructor
-public class JoinProcessor implements ReadPostProcessor {
+public class JoinPostProcessor implements ReadPostProcessor {
 
     private final SchemaManager schemaManager;
     private final JoinOnParser joinOnParser;

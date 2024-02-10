@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.read;
 
-import com.homihq.db2rest.rest.read.v2.dto.JoinDetail;
-import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.dto.JoinDetail;
+import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import static org.springframework.web.bind.ServletRequestUtils.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
