@@ -25,7 +25,7 @@ import java.util.Objects;
 public class JoinProcessor implements ReadPostProcessor {
 
     private final SchemaManager schemaManager;
-
+    private final JoinOnParser joinOnParser;
     @Override
     public void process(QueryExpressionDSL<SelectModel> queryExpressionDSL, ReadContextV2 readContextV2) {
         log.info("Join processor");
@@ -34,9 +34,9 @@ public class JoinProcessor implements ReadPostProcessor {
             MyBatisTable rootTable = readContextV2.getRootTable();
 
             for(JoinDetail join : readContextV2.getJoins()) {
-                log.info("## Join -> {}", join);
+                //log.info("## Join -> {}", join);
                 MyBatisTable childTable =
-                schemaManager.getTable(readContextV2.getTableName());
+                schemaManager.getTable(join.table());
 
                 switch (join.getJoinType()) {
 
@@ -57,8 +57,6 @@ public class JoinProcessor implements ReadPostProcessor {
 
     private void createInnerJoin(MyBatisTable rootTable, MyBatisTable childTable, JoinDetail join, QueryExpressionDSL<SelectModel> queryExpressionDSL) {
         log.info("Processing inner join");
-
-        JoinOnParser joinOnParser = new JoinOnParser();
 
         joinOnParser.parse(rootTable, childTable, join.on(), queryExpressionDSL);
 

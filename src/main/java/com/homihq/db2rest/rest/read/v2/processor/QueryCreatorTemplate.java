@@ -32,7 +32,6 @@ public class QueryCreatorTemplate {
 
         addPagination(queryExpressionDSL, readContextV2.getOffset(), readContextV2.getLimit());
         addSort(queryExpressionDSL, readContextV2.getSorts());
-        //addJoins(queryExpressionDSL, readContextV2.getJoinSpecification());
 
         for(ReadPostProcessor processor : postProcessors) {
             processor.process(queryExpressionDSL, readContextV2);
@@ -42,10 +41,6 @@ public class QueryCreatorTemplate {
 
         log.info("SQL - {}", selectStatementProvider.getSelectStatement());
         log.info("Bind Variables - {}", selectStatementProvider.getParameters());
-
-    }
-
-    private void addJoins(QueryExpressionDSL<SelectModel> queryExpressionDSL, JoinSpecification joinSpecification) {
 
     }
 

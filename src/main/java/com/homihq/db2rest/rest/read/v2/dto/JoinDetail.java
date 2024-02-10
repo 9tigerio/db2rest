@@ -15,13 +15,5 @@ public record JoinDetail (String table, List<String> fields,String on, List<Stri
 
     }
 
-    public JoinCriterion getOnJoinCriterion() {
-        if(StringUtils.isNotBlank(on)) {
-            if(StringUtils.containsAnyIgnoreCase(on, "=eq=","===")){
 
-            }
-        }
-
-        return null;
-    }
 }

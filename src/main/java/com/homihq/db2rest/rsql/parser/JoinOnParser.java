@@ -31,7 +31,7 @@ public class JoinOnParser  {
         //TODO Verify column and apply type
         SqlColumn<?> rootColumn = rootTable.column(left);
 
-        queryExpressionDSL.join(rootTable)
+        queryExpressionDSL.join(childTable)
                .on(rootColumn, getJoinCondition(childTable, right, operator));
 
 
