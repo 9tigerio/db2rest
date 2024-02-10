@@ -6,7 +6,7 @@ import org.mybatis.dynamic.sql.select.join.JoinType;
 import java.util.List;
 
 
-public record JoinDetail (String table, List<String> fields,String on, List<String> andFilter, String type){
+public record JoinDetail (String table, List<String> fields,String on, String andFilter, String type){
 
     public JoinType getJoinType() {
         return StringUtils.isBlank(type) ? JoinType.INNER :

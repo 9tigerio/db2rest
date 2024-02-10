@@ -1,50 +1,64 @@
 package com.homihq.db2rest.rsql.parser;
 
 
-import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
-import static com.homihq.db2rest.schema.TypeMapperUtil.getColumnJavaType;
-import static org.mybatis.dynamic.sql.SqlBuilder.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rsql.operators.Operator;
 import com.homihq.db2rest.rsql.operators.RSQLOperatorHandlers;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.dynamic.sql.*;
+import org.mybatis.dynamic.sql.AndOrCriteriaGroup;
+import org.mybatis.dynamic.sql.SqlColumn;
+import org.mybatis.dynamic.sql.SqlCriterion;
+import org.mybatis.dynamic.sql.select.join.JoinCriterion;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.homihq.db2rest.schema.TypeMapperUtil.getColumnJavaType;
+import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
+import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
 
 @RequiredArgsConstructor
 @Slf4j
-public class MyBatisFilterVisitorParser implements RSQLVisitor<SqlCriterion, Object> {
+public class JoinWhereFilterVisitor implements RSQLVisitor<JoinCriterion, Object> {
     private final MyBatisTable sqlTable;
 
     @Override
-    public SqlCriterion visit(AndNode node, Object optionalParameter) {
+    public JoinCriterion visit(AndNode node, Object optionalParameter) {
+        log.info("AndNode - {}", node);
+
         List<AndOrCriteriaGroup> criterionList = new ArrayList<>();
 
         for (Node child : node.getChildren()) {
-            criterionList.add(and(child.accept(this, optionalParameter)));
+            //criterionList.add(and(child.accept(this, optionalParameter)));
         }
 
-        return processCriteriaGroup(criterionList);
+        //return processCriteriaGroup(criterionList);
+
+        return null;
     }
 
     @Override
-    public SqlCriterion visit(OrNode node, Object optionalParameter) {
+    public JoinCriterion visit(OrNode node, Object optionalParameter) {
+        log.info("OrNode - {}", node);
+
         List<AndOrCriteriaGroup> criterionList = new ArrayList<>();
 
         for (Node child : node.getChildren()) {
-            criterionList.add(or(child.accept(this, optionalParameter)));
+            //criterionList.add(or(child.accept(this, optionalParameter)));
         }
 
-        return processCriteriaGroup(criterionList);
+        //return processCriteriaGroup(criterionList);
+
+        return null;
     }
 
     @Override
-    public SqlCriterion visit(ComparisonNode comparisonNode, Object optionalParameter) {
+    public JoinCriterion visit(ComparisonNode comparisonNode, Object optionalParameter) {
+        log.info("ComparisonNode - {}", comparisonNode);
+
         ComparisonOperator op = comparisonNode.getOperator();
         String columnName = comparisonNode.getSelector();
 
@@ -64,13 +78,17 @@ public class MyBatisFilterVisitorParser implements RSQLVisitor<SqlCriterion, Obj
 
         log.debug("Col - {} Clazz - {}",columnName , clazz);
 
-
+        /*
         if (op.isMultiValue()) {
             return operatorHandler.handle(column, comparisonNode.getArguments(), clazz);
         }
         else {
             return operatorHandler.handle(column, comparisonNode.getArguments().get(0), clazz);
         }
+
+         */
+
+        return null;
 
     }
 

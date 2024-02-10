@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.read.helper;
 
 import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
-import com.homihq.db2rest.rsql.parser.MyBatisFilterVisitorParser;
+import com.homihq.db2rest.rsql.parser.WhereFilterVisitor;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class WhereBuilder{
             Node rootNode = new RSQLParser(SimpleRSQLOperators.customOperators()).parse(context.filter);
 
             SqlCriterion condition = rootNode
-                    .accept(new MyBatisFilterVisitorParser(context.from));
+                    .accept(new WhereFilterVisitor(context.from));
 
             context.addWhereClause(condition);
 
