@@ -1,6 +1,7 @@
-package com.homihq.db2rest.rest.read.v2.dto;
+package com.homihq.db2rest.rest.read.dto;
 
 import com.homihq.db2rest.mybatis.MyBatisTable;
+import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.BasicColumn;
 import org.mybatis.dynamic.sql.SqlCriterion;
-import org.mybatis.dynamic.sql.select.join.JoinSpecification;
 
 import java.util.List;
 
@@ -33,13 +33,13 @@ public class ReadContextV2 {
     MyBatisTable rootTable;
     List<BasicColumn> columns;
     SqlCriterion whereCondition;
-    JoinSpecification joinSpecification;
+
 
     public void addWhereCondition(SqlCriterion whereCondition) {
         this.whereCondition = whereCondition;
     }
 
-    public void addColumns(BasicColumn column) {
-        columns.add(column);
+    public void addColumns(List<BasicColumn> columnList) {
+        this.columns.addAll(columnList);
     }
 }

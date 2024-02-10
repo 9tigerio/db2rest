@@ -1,11 +1,10 @@
-package com.homihq.db2rest.rest.read.v2.processor.pre;
+package com.homihq.db2rest.rest.read.processor.pre;
 
 import com.homihq.db2rest.exception.InvalidColumnException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
-import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
 
-import com.homihq.db2rest.rest.read.v2.processor.pre.ReadPreProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.BasicColumn;
@@ -14,6 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import schemacrawler.schema.Column;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 @Slf4j
 @Order(2)
-public class RootFieldPreProcessor implements ReadPreProcessor {
+public class RootTableFieldPreProcessor implements ReadPreProcessor {
     @Override
     public void process(ReadContextV2 readContextV2) {
         String fields = readContextV2.getFields();
@@ -33,11 +33,11 @@ public class RootFieldPreProcessor implements ReadPreProcessor {
         fields = StringUtils.trim(fields);
 
         log.info("Fields - {}", fields);
-        List<BasicColumn> columns;
+        List<BasicColumn> columnList = new ArrayList<>();
         if(StringUtils.equals("*", fields)) {
 
             //include all fields of root table
-            columns =
+            List<BasicColumn> columns =
             readContextV2.getRootTable()
                     .getTable().getColumns()
                             .stream()
@@ -45,17 +45,17 @@ public class RootFieldPreProcessor implements ReadPreProcessor {
                                     getJdbcType(column)))
                             .toList();
 
-
+            columnList.addAll(columns);
         }
         else{ //query has specific columns so parse and map it.
-            columns =
+            List<BasicColumn> columns =
                     Arrays.stream(readContextV2.getFields().split(","))
                             .map(col -> getColumn(col, readContextV2.getRootTable()))
                             .toList();
-            
+            columnList.addAll(columns);
         }
 
-        readContextV2.setColumns(columns);
+        readContextV2.setColumns(columnList);
 
     }
 

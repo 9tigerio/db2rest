@@ -1,6 +1,6 @@
-package com.homihq.db2rest.rest.read.v2.processor.pre;
+package com.homihq.db2rest.rest.read.processor.pre;
 
-import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
 import com.homihq.db2rest.rsql.parser.MyBatisFilterVisitorParser;
 import cz.jirutka.rsql.parser.RSQLParser;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@Order(3)
+@Order(6)
 public class RootWhereProcessor implements ReadPreProcessor {
     @Override
     public void process(ReadContextV2 readContextV2) {

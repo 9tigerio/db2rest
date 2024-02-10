@@ -1,8 +1,7 @@
-package com.homihq.db2rest.rest.read.v2.processor.pre;
+package com.homihq.db2rest.rest.read.processor.pre;
 
 import com.homihq.db2rest.mybatis.MyBatisTable;
-import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
-import com.homihq.db2rest.rest.read.v2.processor.pre.ReadPreProcessor;
+import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
