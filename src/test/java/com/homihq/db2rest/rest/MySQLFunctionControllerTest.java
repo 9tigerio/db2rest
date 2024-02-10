@@ -7,10 +7,12 @@ import org.springframework.http.MediaType;
 
 import java.util.Map;
 
-import static org.hamcrest.Matchers.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,8 +27,10 @@ class MySQLFunctionControllerTest extends MySQLBaseIntegrationTest {
                 """;
 
         mockMvc.perform(post("/function/GetMovieRentalRateFunc")
-                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                        .content(json).accept(MediaType.APPLICATION_JSON))
+                        .characterEncoding(UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", instanceOf(Map.class)))
                 .andExpect(jsonPath("$.*", hasSize(1)))
