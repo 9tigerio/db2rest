@@ -18,7 +18,7 @@ import org.mybatis.dynamic.sql.*;
 
 @RequiredArgsConstructor
 @Slf4j
-public class MyBatisFilterVisitor implements RSQLVisitor<SqlCriterion, Object> {
+public class MyBatisFilterVisitorParser implements RSQLVisitor<SqlCriterion, Object> {
     private final MyBatisTable sqlTable;
 
     @Override

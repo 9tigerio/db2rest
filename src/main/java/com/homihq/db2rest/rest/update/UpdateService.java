@@ -2,14 +2,12 @@ package com.homihq.db2rest.rest.update;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
-import com.homihq.db2rest.rsql.parser.MyBatisFilterVisitor;
+import com.homihq.db2rest.rsql.parser.MyBatisFilterVisitorParser;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +20,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import schemacrawler.schema.Table;
+
 import java.util.Map;
 import static org.mybatis.dynamic.sql.update.UpdateDSL.update;
 
@@ -77,7 +75,7 @@ public class UpdateService {
             Node rootNode = new RSQLParser(SimpleRSQLOperators.customOperators()).parse(filter);
 
             SqlCriterion condition = rootNode
-                    .accept(new MyBatisFilterVisitor(table));
+                    .accept(new MyBatisFilterVisitorParser(table));
 
             updateDSL.where(condition);
         }

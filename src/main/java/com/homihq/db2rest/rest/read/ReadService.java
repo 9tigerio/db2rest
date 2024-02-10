@@ -3,7 +3,7 @@ package com.homihq.db2rest.rest.read;
 import com.homihq.db2rest.rest.read.helper.*;
 import com.homihq.db2rest.rest.read.v2.dto.ReadContextV2;
 import com.homihq.db2rest.rest.read.v2.processor.QueryCreatorTemplate;
-import com.homihq.db2rest.rest.read.v2.processor.ReadPreProcessor;
+import com.homihq.db2rest.rest.read.v2.processor.pre.ReadPreProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;

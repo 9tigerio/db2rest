@@ -1,13 +1,17 @@
 package com.homihq.db2rest.rsql.operators;
 
 import com.homihq.db2rest.rsql.operators.handler.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 import static com.homihq.db2rest.rsql.operators.SimpleRSQLOperators.*;
 
+
+@Slf4j
 public class RSQLOperatorHandlers {
 
     private static final Map<String, Operator> OPERATOR_HANDLER_MAP = new HashMap<>();
@@ -24,6 +28,13 @@ public class RSQLOperatorHandlers {
     }
 
     public static Operator getOperatorHandler(String symbol) {
+
+        log.info("OPERATOR_HANDLER_MAP - {}", OPERATOR_HANDLER_MAP);
+
         return OPERATOR_HANDLER_MAP.get(symbol);
+    }
+
+    public static Set<String> getAllOperators() {
+        return OPERATOR_HANDLER_MAP.keySet();
     }
 }

@@ -4,7 +4,7 @@ import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
-import com.homihq.db2rest.rsql.parser.MyBatisFilterVisitor;
+import com.homihq.db2rest.rsql.parser.MyBatisFilterVisitorParser;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
@@ -78,7 +78,7 @@ public class DeleteService {
             Node rootNode = new RSQLParser(SimpleRSQLOperators.customOperators()).parse(filter);
 
             SqlCriterion condition = rootNode
-                    .accept(new MyBatisFilterVisitor(table));
+                    .accept(new MyBatisFilterVisitorParser(table));
 
             deleteDSL.where(condition);
         }

@@ -45,6 +45,7 @@ logging:
           scheduler: ERROR
     org:
       springframework:
+        web: INFO
         test:
           context:
             jdbc: DEBUG
