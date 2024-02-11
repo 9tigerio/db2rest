@@ -56,13 +56,16 @@ public class ReadService {
     }
 
     public Object findAll(ReadContextV2 readContextV2) {
-
-        for(ReadPreProcessor processor : processorList) {
-            processor.process(readContextV2);
+        try {
+            for (ReadPreProcessor processor : processorList) {
+                processor.process(readContextV2);
+            }
+            log.info("** TIME TO GENERATE QUERY **");
+            queryCreatorTemplate.createQuery(readContextV2);
         }
-
-        queryCreatorTemplate.createQuery(readContextV2);
-
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

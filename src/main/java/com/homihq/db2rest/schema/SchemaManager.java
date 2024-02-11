@@ -3,6 +3,7 @@ package com.homihq.db2rest.schema;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
+import com.homihq.db2rest.rest.read.model.DbTable;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,6 +89,26 @@ public final class SchemaManager {
         if(tables.size() != 1) throw new GenericDataAccessException("Unable to find table with name - " + tableName);
 
         return tables.get(0);
+    }
+
+    public DbTable getTableV2(String tableName) {
+        List<DbTable> tables = findTablesV2(tableName);
+
+        if(tables.size() != 1) throw new GenericDataAccessException("Unable to find table with name - " + tableName);
+
+        return tables.get(0);
+    }
+
+    public List<DbTable> findTablesV2(String tableName) {
+        return tableList.stream()
+                .filter(t -> StringUtils.equalsIgnoreCase(t.getName(), tableName))
+                .toList()
+                .stream()
+                .map(t ->
+                        new DbTable(
+                                getSchemaName(t), tableName, "", t))
+                .toList();
+
     }
 
     public Optional<Table> getTable(String schemaName, String tableName) {

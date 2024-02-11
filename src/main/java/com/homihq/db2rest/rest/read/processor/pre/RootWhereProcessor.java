@@ -11,7 +11,7 @@ import org.mybatis.dynamic.sql.SqlCriterion;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @Slf4j
 @Order(6)
 public class RootWhereProcessor implements ReadPreProcessor {

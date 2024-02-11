@@ -2,6 +2,8 @@ package com.homihq.db2rest.rest.read.dto;
 
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
+import com.homihq.db2rest.rest.read.model.DbColumn;
+import com.homihq.db2rest.rest.read.model.DbTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +36,10 @@ public class ReadContextV2 {
     List<BasicColumn> columns;
     SqlCriterion whereCondition;
 
+
+    /* Attributes to replace the ones above */
+    DbTable root;
+    List<DbColumn> cols;
 
     public void addWhereCondition(SqlCriterion whereCondition) {
         this.whereCondition = whereCondition;
