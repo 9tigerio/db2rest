@@ -41,9 +41,13 @@ public class ReadContextV2 {
     DbTable root;
     List<DbColumn> cols;
 
+
+
     public void addWhereCondition(SqlCriterion whereCondition) {
         this.whereCondition = whereCondition;
     }
+
+
 
     public void addColumns(List<BasicColumn> columnList) {
         this.columns.addAll(columnList);
