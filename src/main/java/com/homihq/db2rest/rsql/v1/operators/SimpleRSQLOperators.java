@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rsql.operators;
+package com.homihq.db2rest.rsql.v1.operators;
 
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;

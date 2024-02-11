@@ -1,15 +1,13 @@
 package com.homihq.db2rest.rest.read.processor.pre;
 
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
-import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
-import com.homihq.db2rest.rsql.parser.JoinWhereFilterVisitor;
-import com.homihq.db2rest.rsql.parser.WhereFilterVisitor;
+import com.homihq.db2rest.rsql.v1.operators.SimpleRSQLOperators;
+import com.homihq.db2rest.rsql.v1.parser.WhereFilterVisitor;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.SqlCriterion;
-import org.mybatis.dynamic.sql.select.join.JoinCriterion;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +23,11 @@ public class RootWhereProcessor implements ReadPreProcessor {
 
             Node rootNode = new RSQLParser(SimpleRSQLOperators.customOperators()).parse(readContextV2.getFilter());
 
-            JoinCriterion condition = rootNode
-                    .accept(new JoinWhereFilterVisitor(readContextV2.getRootTable()));
+            SqlCriterion condition = rootNode
+                    .accept(new WhereFilterVisitor(readContextV2.getRootTable()));
 
-            log.info("condition - {}", condition);
-            //readContextV2.addWhereCondition(condition);
+
+            readContextV2.addWhereCondition(condition);
 
         }
     }

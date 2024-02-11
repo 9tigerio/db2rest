@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.read.helper;
 
-import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
-import com.homihq.db2rest.rsql.parser.WhereFilterVisitor;
+import com.homihq.db2rest.rsql.v1.operators.SimpleRSQLOperators;
+import com.homihq.db2rest.rsql.v1.parser.WhereFilterVisitor;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
