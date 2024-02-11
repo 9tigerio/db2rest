@@ -1,6 +1,5 @@
 package com.homihq.db2rest.rsql.v1.operators;
 
-import com.homihq.db2rest.rsql.operators.handler.*;
 import com.homihq.db2rest.rsql.v1.operators.handler.*;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
 import lombok.extern.slf4j.Slf4j;
