@@ -41,7 +41,8 @@ public class RootWhereProcessor implements ReadPreProcessor {
 
             log.info("param map - {}", paramMap);
 
-            //readContextV2.addWhereCondition(condition);
+            readContextV2.setRootWhere(where);
+            readContextV2.setParamMap(paramMap);
 
         }
     }

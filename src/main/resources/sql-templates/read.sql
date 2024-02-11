@@ -1,7 +1,8 @@
 SELECT
     [# th:each="column : ${columns}"]
-    [(${column.name})]
-    [/]
+    [(${column.name})][/]
 FROM
     [(${rootTable.name})]
-
+[# th:if="${rootWhere}"]WHERE
+    [(${rootWhere})]
+[/]

@@ -30,9 +30,10 @@ public class QueryCreatorTemplate {
 
         log.info("**** Preparing to render ****");
 
-        Map data = new HashMap();
+        Map<String,Object> data = new HashMap<>();
         data.put("columns", readContextV2.getCols());
         data.put("rootTable", readContextV2.getRoot());
+        data.put("rootWhere", readContextV2.getRootWhere());
         sqlRenderer.render("read", data);
 
 

@@ -13,6 +13,7 @@ import org.mybatis.dynamic.sql.BasicColumn;
 import org.mybatis.dynamic.sql.SqlCriterion;
 
 import java.util.List;
+import java.util.Map;
 
 @Builder
 @AllArgsConstructor
@@ -40,8 +41,8 @@ public class ReadContextV2 {
     /* Attributes to replace the ones above */
     DbTable root;
     List<DbColumn> cols;
-
-
+    String rootWhere;
+    Map<String,Object> paramMap;
 
     public void addWhereCondition(SqlCriterion whereCondition) {
         this.whereCondition = whereCondition;
