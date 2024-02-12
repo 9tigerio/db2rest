@@ -41,7 +41,7 @@ public class RootTableFieldPreProcessor implements ReadPreProcessor {
                     .table().getColumns()
                             .stream()
                     .map(column ->
-                            new DbColumn(readContextV2.getTableName(), column.getName(),getJdbcType(column) , column, ""))
+                            new DbColumn(readContextV2.getTableName(), column.getName(),getJdbcType(column) , column, "", readContextV2.getRoot().alias()))
                     .toList();
 
             columnList.addAll(columns);
@@ -61,6 +61,6 @@ public class RootTableFieldPreProcessor implements ReadPreProcessor {
     private DbColumn getColumn(String columnName, DbTable rootTable) {
         Column column = rootTable.lookupColumn(columnName);
         
-        return new DbColumn(rootTable.name(), columnName, getJdbcType(column) , column, "");
+        return new DbColumn(rootTable.name(), columnName, getJdbcType(column) , column, "", rootTable.alias());
     }
 }

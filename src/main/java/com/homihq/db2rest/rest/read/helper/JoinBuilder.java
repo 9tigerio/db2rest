@@ -22,6 +22,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.or;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 public class JoinBuilder  {
 
     private final SchemaManager schemaManager;

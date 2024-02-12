@@ -27,7 +27,7 @@ public class QueryCreatorTemplate {
 
         Map<String,Object> data = new HashMap<>();
         data.put("columns", createProjections(readContextV2.getCols()));
-        data.put("rootTable", readContextV2.getRoot());
+        data.put("rootTable", readContextV2.getRoot().render());
         data.put("rootWhere", readContextV2.getRootWhere());
 
         Context context = new Context();

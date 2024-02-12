@@ -44,10 +44,10 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
         }
     }
 
-    private DbColumn createColumn(String columnName, DbTable rootTable) {
-        Column column = rootTable.lookupColumn(columnName);
+    private DbColumn createColumn(String columnName, DbTable table) {
+        Column column = table.lookupColumn(columnName);
 
-        return new DbColumn(rootTable.name(), columnName, getJdbcType(column) , column, "");
+        return new DbColumn(table.name(), columnName, getJdbcType(column) , column, "", table.alias());
     }
 
     private List<DbColumn> addColumns(DbTable table, List<String> fields) {

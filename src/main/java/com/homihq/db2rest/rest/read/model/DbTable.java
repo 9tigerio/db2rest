@@ -7,6 +7,10 @@ import schemacrawler.schema.Table;
 
 public record DbTable(String schema, String name, String alias, Table table) {
 
+    public String render() {
+        return name + " " + alias;
+    }
+
     public Column lookupColumn(String columnName) {
         return table
             .getColumns()

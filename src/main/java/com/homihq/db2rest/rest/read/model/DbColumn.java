@@ -5,9 +5,9 @@ import schemacrawler.schema.Column;
 
 import java.sql.JDBCType;
 
-public record DbColumn(String tableName, String name, JDBCType jdbcType, Column column, String alias) {
+public record DbColumn(String tableName, String name, JDBCType jdbcType, Column column, String alias, String tableAlias) {
 
     public String render() {
-        return name + " " + alias;
+        return tableAlias + "."+ name + " " + alias;
     }
 }

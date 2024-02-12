@@ -15,6 +15,7 @@ import java.util.List;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 public class SortBuilder {
 
     public void build(ReadContext context) {

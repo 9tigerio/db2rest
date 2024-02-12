@@ -36,7 +36,7 @@ public class ReadController {
         return readService.findAll(readContextV2);
     }
 
-    @PostMapping(value = "/{tableName}/expand" , produces = "application/json")
+    @PostMapping(value = "/{tableName}/_expand" , produces = "application/json")
     public Object find(@PathVariable String tableName,
                        @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                        @RequestParam(name = "filter", required = false, defaultValue = "") String filter,

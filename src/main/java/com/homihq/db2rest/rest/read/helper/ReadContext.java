@@ -32,6 +32,7 @@ import static org.mybatis.dynamic.sql.select.SelectDSL.select;
 @NoArgsConstructor
 @Data
 @Slf4j
+@Deprecated
 public class ReadContext {
 
     String schemaName;

@@ -1,7 +1,7 @@
 SELECT
     [(${columns})]
 FROM
-    [(${rootTable.name})]
+    [(${rootTable})]
 [# th:if="${rootWhere}"]WHERE
     [(${rootWhere})]
 [/]
