@@ -29,6 +29,8 @@ public class QueryCreatorTemplate {
         data.put("columns", createProjections(readContextV2.getCols()));
         data.put("rootTable", readContextV2.getRoot().render());
         data.put("rootWhere", readContextV2.getRootWhere());
+        data.put("joins", readContextV2.getDbJoins());
+
 
         Context context = new Context();
         context.setVariables(data);

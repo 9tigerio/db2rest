@@ -4,6 +4,7 @@ package com.homihq.db2rest.rest.read.processor.pre;
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import com.homihq.db2rest.rest.read.model.DbColumn;
+import com.homihq.db2rest.rest.read.model.DbJoin;
 import com.homihq.db2rest.rest.read.model.DbTable;
 import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
@@ -40,9 +41,22 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
 
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
 
-           readContextV2.addColumns(columnList);
+            readContextV2.addColumns(columnList);
+
+            addJoin(table, joinDetail.getJoinType(), readContextV2);
         }
     }
+
+    private void addJoin(DbTable table, String joinType, ReadContextV2 readContextV2) {
+        DbJoin join = new DbJoin();
+        join.setTableName(table.name());
+        join.setAlias(table.alias());
+        join.setJoinType(joinType);
+        readContextV2.addJoin(join);
+
+    }
+
+
 
     private DbColumn createColumn(String columnName, DbTable table) {
         Column column = table.lookupColumn(columnName);

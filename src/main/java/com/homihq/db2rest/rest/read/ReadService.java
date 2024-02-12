@@ -29,6 +29,7 @@ public class ReadService {
         }
 
         String sql = queryCreatorTemplate.createQuery(readContextV2);
+        log.info("{}", sql);
 
         return namedParameterJdbcTemplate.queryForList(sql, readContextV2.getParamMap());
 
