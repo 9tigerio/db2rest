@@ -21,23 +21,15 @@ public class ReadService {
     private final List<ReadProcessor> processorList;
     private final QueryCreatorTemplate queryCreatorTemplate;
 
-
     public Object findAll(ReadContextV2 readContextV2) {
-        try {
-            for (ReadProcessor processor : processorList) {
-                processor.process(readContextV2);
-            }
-
-            String sql = queryCreatorTemplate.createQuery(readContextV2);
-            log.info("{}", sql);
-            log.info("{}", readContextV2.getParamMap());
-            return namedParameterJdbcTemplate.queryForList(sql, readContextV2.getParamMap());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        for (ReadProcessor processor : processorList) {
+            processor.process(readContextV2);
         }
 
-        return null;
+        String sql = queryCreatorTemplate.createQuery(readContextV2);
+        log.info("{}", sql);
+        log.info("{}", readContextV2.getParamMap());
+        return namedParameterJdbcTemplate.queryForList(sql, readContextV2.getParamMap());
     }
 
 }

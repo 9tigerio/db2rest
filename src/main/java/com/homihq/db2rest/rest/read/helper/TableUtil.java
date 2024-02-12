@@ -4,12 +4,13 @@ import com.homihq.db2rest.rest.read.model.DbAlias;
 import com.homihq.db2rest.rest.read.model.DbColumn;
 import com.homihq.db2rest.rest.read.model.DbTable;
 
+@Deprecated
 public abstract class TableUtil {
 
     private TableUtil() {}
 
 
-
+    @Deprecated
     public static DbTable getTable(String tableName) {
         //check if table contains schema name
 
@@ -29,6 +30,7 @@ public abstract class TableUtil {
         }
     }
 
+    @Deprecated
     public static DbColumn getColumn(String columName) {
         //check if table contains schema name
 

@@ -8,6 +8,10 @@ import java.sql.JDBCType;
 public record DbColumn(String tableName, String name, JDBCType jdbcType, Column column, String alias, String tableAlias) {
 
     public String render() {
+        return tableAlias + "."+ name ;
+    }
+
+    public String renderWithAlias() {
         return tableAlias + "."+ name + " " + alias;
     }
 

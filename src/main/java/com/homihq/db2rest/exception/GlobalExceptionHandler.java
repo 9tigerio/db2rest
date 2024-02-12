@@ -1,14 +1,18 @@
 package com.homihq.db2rest.exception;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.net.URI;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -35,6 +39,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("errorCategory", "Invalid-Arguments");
         body.put("timestamp", Instant.now());
         return new ResponseEntity<>(body, headers, status);
+    }
+
+    @ExceptionHandler(Exception.class)
+    ErrorResponse handleBookmarkNotFoundException(Exception e) {
+        return ErrorResponse.builder(e, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage())
+                .title("Unknown error")
+                .type(URI.create("https://github.com/kdhrubo/db2rest/unknown-error"))
+                .property("errorCategory", "Unknown")
+                .property("timestamp", Instant.now())
+                .build();
     }
 
 }

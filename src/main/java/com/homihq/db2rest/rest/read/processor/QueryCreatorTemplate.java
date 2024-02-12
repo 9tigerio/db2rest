@@ -40,7 +40,7 @@ public class QueryCreatorTemplate {
 
     public String createProjections(List<DbColumn> columns) {
         List<String> columList =
-        columns.stream().map(DbColumn::render).toList();
+        columns.stream().map(DbColumn::renderWithAlias).toList();
 
         return StringUtils.join(columList, "\n\t,");
     }
