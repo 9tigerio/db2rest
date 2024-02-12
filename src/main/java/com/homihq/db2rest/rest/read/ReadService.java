@@ -23,16 +23,21 @@ public class ReadService {
 
 
     public Object findAll(ReadContextV2 readContextV2) {
+        try {
+            for (ReadPreProcessor processor : processorList) {
+                processor.process(readContextV2);
+            }
 
-        for (ReadPreProcessor processor : processorList) {
-            processor.process(readContextV2);
+            String sql = queryCreatorTemplate.createQuery(readContextV2);
+            log.info("{}", sql);
+
+            return namedParameterJdbcTemplate.queryForList(sql, readContextV2.getParamMap());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
 
-        String sql = queryCreatorTemplate.createQuery(readContextV2);
-        log.info("{}", sql);
-
-        return namedParameterJdbcTemplate.queryForList(sql, readContextV2.getParamMap());
-
+        return null;
     }
 
 }

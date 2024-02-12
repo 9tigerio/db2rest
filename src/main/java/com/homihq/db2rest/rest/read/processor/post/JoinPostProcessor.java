@@ -19,6 +19,7 @@ import java.util.Objects;
 @Slf4j
 @Order(3)
 @RequiredArgsConstructor
+@Deprecated
 public class JoinPostProcessor implements ReadPostProcessor {
 
     private final SchemaManager schemaManager;

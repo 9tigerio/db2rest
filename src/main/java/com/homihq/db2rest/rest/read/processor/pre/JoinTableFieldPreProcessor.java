@@ -1,14 +1,20 @@
 package com.homihq.db2rest.rest.read.processor.pre;
 
 
+import com.homihq.db2rest.exception.InvalidOperatorException;
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import com.homihq.db2rest.rest.read.model.DbColumn;
 import com.homihq.db2rest.rest.read.model.DbJoin;
 import com.homihq.db2rest.rest.read.model.DbTable;
+import com.homihq.db2rest.rest.read.processor.rsql.operator.CustomRSQLOperators;
+import com.homihq.db2rest.rest.read.processor.rsql.operator.handler.OperatorMap;
+import com.homihq.db2rest.rsql.v1.operators.RSQLOperatorHandlers;
 import com.homihq.db2rest.schema.SchemaManager;
+import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import schemacrawler.schema.Column;
@@ -27,12 +33,14 @@ import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
 public class JoinTableFieldPreProcessor implements ReadPreProcessor {
 
     private final SchemaManager schemaManager;
-
+    private final OperatorMap operatorMap;
     @Override
     public void process(ReadContextV2 readContextV2) {
         List<JoinDetail> joins = readContextV2.getJoins();
 
         if(Objects.isNull(joins) || joins.isEmpty()) return;
+
+        DbTable rootTable = readContextV2.getRoot();
 
         for(JoinDetail joinDetail : joins) {
             String tableName = joinDetail.table();
@@ -43,20 +51,59 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
 
             readContextV2.addColumns(columnList);
 
-            addJoin(table, joinDetail.getJoinType(), readContextV2);
+            addJoin(table, rootTable, joinDetail, readContextV2);
         }
     }
 
-    private void addJoin(DbTable table, String joinType, ReadContextV2 readContextV2) {
+    private void addJoin(DbTable table, DbTable rootTable, JoinDetail joinDetail, ReadContextV2 readContextV2) {
         DbJoin join = new DbJoin();
         join.setTableName(table.name());
         join.setAlias(table.alias());
-        join.setJoinType(joinType);
+        join.setJoinType(joinDetail.getJoinType());
+
+        addCondition(table, rootTable, joinDetail, join);
+
         readContextV2.addJoin(join);
 
     }
 
+    private void addCondition(DbTable table, DbTable rootTable, JoinDetail joinDetail, DbJoin dbJoin) {
 
+        if(joinDetail.hasOn()) {
+            int onIdx = 1;
+            for(String on : joinDetail.on()) {
+                processOn(on, onIdx, table, rootTable, dbJoin);
+                onIdx++;
+            }
+        }
+
+    }
+
+    private void processOn(String on, int onIdx, DbTable table, DbTable rootTable, DbJoin dbJoin) {
+        String rSqlOperator = getOperator(on);
+        String operator = this.operatorMap.getSQLOp(rSqlOperator);
+
+        String left = on.substring(0, on.indexOf(rSqlOperator)).trim();
+        String right = on.substring(on.indexOf(rSqlOperator) + rSqlOperator.length()).trim();
+
+        log.info("{} | {} | {}", operator, left, right);
+
+        DbColumn leftColumn = rootTable.buildColumn(left);
+        DbColumn rightColumn = table.buildColumn(right);
+
+        if(onIdx == 1) dbJoin.addOn(leftColumn, operator, rightColumn);
+    }
+
+    protected String getOperator(String on) {
+        return
+                CustomRSQLOperators.customOperators()
+                        .stream()
+                        .map(ComparisonOperator::getSymbol)
+                        .filter(op -> StringUtils.containsIgnoreCase(on, op))
+                        .findFirst().orElseThrow(() -> new InvalidOperatorException("Operator not supported", ""));
+
+
+    }
 
     private DbColumn createColumn(String columnName, DbTable table) {
         Column column = table.lookupColumn(columnName);

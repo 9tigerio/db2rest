@@ -21,6 +21,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 @Component
+@Deprecated
 public class JoinOnParser  {
 
 

@@ -3,6 +3,7 @@ package com.homihq.db2rest.rest.read.dto;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public record JoinDetail (String table, String with, List<String> fields,
@@ -13,6 +14,8 @@ public record JoinDetail (String table, String with, List<String> fields,
                 StringUtils.upperCase(type);
 
     }
-
+    public boolean hasOn() {
+        return Objects.nonNull(on) && !on.isEmpty();
+    }
 
 }
