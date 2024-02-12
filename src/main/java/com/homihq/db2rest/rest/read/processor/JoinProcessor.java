@@ -139,22 +139,13 @@ public class JoinProcessor implements ReadProcessor {
 
         List<DbColumn> columnList = new ArrayList<>();
 
-        if(Objects.isNull(fields)) {
-
-            //include all fields of root table
-            List<DbColumn> columns =
-                    table.table()
-                    .getColumns()
-                            .stream()
-                            .map(column -> createColumn(column.getName(), table))
-                            .toList();
-
-            columnList.addAll(columns);
+        if(Objects.isNull(fields)) {//include all fields of root table
+            columnList.addAll( table.buildColumns());
         }
         else{ //query has specific columns so parse and map it.
             List<DbColumn> columns =
                     fields.stream()
-                            .map(col -> createColumn(col, table))
+                            .map(table::buildColumn)
                             .toList();
             columnList.addAll(columns);
         }
