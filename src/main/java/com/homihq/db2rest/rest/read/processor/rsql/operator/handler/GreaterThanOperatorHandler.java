@@ -8,7 +8,11 @@ public class GreaterThanOperatorHandler implements OperatorHandler {
 
     @Override
     public String handle(String columnName, String value, Class type, Map<String, Object> paramMap) {
-        return columnName + OPERATOR + parseValue(value, type);
+        Object vo = parseValue(value, type);
+
+        paramMap.put(columnName, vo);
+
+        return columnName + OPERATOR + PREFIX + columnName;
     }
 
 }

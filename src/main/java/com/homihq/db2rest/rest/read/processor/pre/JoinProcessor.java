@@ -7,10 +7,14 @@ import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import com.homihq.db2rest.rest.read.model.DbColumn;
 import com.homihq.db2rest.rest.read.model.DbJoin;
 import com.homihq.db2rest.rest.read.model.DbTable;
+import com.homihq.db2rest.rest.read.model.DbWhere;
 import com.homihq.db2rest.rest.read.processor.rsql.operator.CustomRSQLOperators;
 import com.homihq.db2rest.rest.read.processor.rsql.operator.handler.OperatorMap;
+import com.homihq.db2rest.rest.read.processor.rsql.parser.RSQLParserBuilder;
+import com.homihq.db2rest.rest.read.processor.rsql.visitor.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
+import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +33,7 @@ import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
 @Slf4j
 @Order(6)
 @RequiredArgsConstructor
-public class JoinTableFieldPreProcessor implements ReadPreProcessor {
+public class JoinProcessor implements ReadProcessor {
 
     private final SchemaManager schemaManager;
     private final OperatorMap operatorMap;
@@ -62,7 +66,39 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
 
         addCondition(table, rootTable, joinDetail, join);
 
+        processFilter(table, joinDetail, join, readContextV2);
+
         readContextV2.addJoin(join);
+
+    }
+
+    private void processFilter(DbTable table, JoinDetail joinDetail, DbJoin join,
+                               ReadContextV2 readContextV2) {
+        if(joinDetail.hasFilter()){
+            readContextV2.createParamMap();
+            log.info("Filter - {}", joinDetail.filter());
+            log.info("Param map - {}", readContextV2.getParamMap());
+
+            DbWhere dbWhere = new DbWhere(
+                    table.name(),
+                    table,table.buildColumns(),readContextV2.getParamMap());
+
+            log.info("-Creating join where condition -");
+
+            Node rootNode = RSQLParserBuilder.newRSQLParser().parse(joinDetail.filter());
+
+            String where = rootNode
+                    .accept(new BaseRSQLVisitor(
+                            dbWhere));
+
+            log.info("Where - {}", where);
+
+            join.addAdditionalWhere(where);
+
+            log.info("param map - {}", readContextV2.getParamMap());
+
+
+        }
 
     }
 

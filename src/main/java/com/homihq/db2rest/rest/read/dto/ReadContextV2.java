@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Builder
 @AllArgsConstructor
@@ -39,6 +36,16 @@ public class ReadContextV2 {
     String rootWhere;
     Map<String,Object> paramMap;
     List<DbJoin> dbJoins;
+
+    public boolean createParamMap() {
+        if(Objects.isNull(paramMap)) {
+            paramMap = new HashMap<>();
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     public void addColumns(List<DbColumn> columnList) {
         this.cols.addAll(columnList);

@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 @Slf4j
 @Order(4)
-public class RootTableFieldPreProcessor implements ReadPreProcessor {
+public class RootTableFieldProcessor implements ReadProcessor {
     @Override
     public void process(ReadContextV2 readContextV2) {
         String fields = readContextV2.getFields();

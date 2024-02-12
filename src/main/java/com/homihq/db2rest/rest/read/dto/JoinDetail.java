@@ -7,7 +7,7 @@ import java.util.Objects;
 
 
 public record JoinDetail (String table, String with, List<String> fields,
-                          List<String> on, List<String> andFilters, String type){
+                          List<String> on, String filter, String type){
 
     public String getJoinType() {
         return StringUtils.isBlank(type) ? "INNER" :
@@ -18,4 +18,7 @@ public record JoinDetail (String table, String with, List<String> fields,
         return Objects.nonNull(on) && !on.isEmpty();
     }
 
+    public boolean hasFilter() {
+        return StringUtils.isNotBlank(filter);
+    }
 }

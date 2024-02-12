@@ -20,6 +20,7 @@ public class DbJoin {
     private String onOperator;
 
     private List<DbJoinAndCondition> andConditions;
+    private List<String> additionalWhere;
 
     public String render() {
 
@@ -51,6 +52,12 @@ public class DbJoin {
 
         andConditions.add(new DbJoinAndCondition(leftColumn, operator, rightColumn));
 
+    }
+
+    public void addAdditionalWhere(String where) {
+        if(Objects.isNull(additionalWhere)) additionalWhere = new ArrayList<>();
+
+        additionalWhere.add(where);
     }
 
     private record DbJoinAndCondition(DbColumn leftColumn, String operator, DbColumn rightColumn) {}
