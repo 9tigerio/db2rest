@@ -1,15 +1,13 @@
 package com.homihq.db2rest.rest.read.processor.pre;
 
-import com.homihq.db2rest.exception.InvalidColumnException;
-import com.homihq.db2rest.mybatis.MyBatisTable;
+
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.model.DbColumn;
+import com.homihq.db2rest.rest.read.model.DbTable;
 import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.mybatis.dynamic.sql.BasicColumn;
-import org.mybatis.dynamic.sql.SqlColumn;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import schemacrawler.schema.Column;
@@ -21,9 +19,9 @@ import java.util.Objects;
 import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
 
 
-//@Component
+@Component
 @Slf4j
-@Order(3)
+@Order(6)
 @RequiredArgsConstructor
 public class JoinTableFieldPreProcessor implements ReadPreProcessor {
 
@@ -33,20 +31,26 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
     public void process(ReadContextV2 readContextV2) {
         List<JoinDetail> joins = readContextV2.getJoins();
 
+        if(Objects.isNull(joins) || joins.isEmpty()) return;
+
         for(JoinDetail joinDetail : joins) {
-            String t = joinDetail.table();
+            String tableName = joinDetail.table();
 
-            //TODO - Same tables looked up again to set join relations - can be optimized
+            DbTable table = schemaManager.getTableV2(tableName);
 
-            MyBatisTable myBatisTable = schemaManager.getTable(t);
-            List<BasicColumn> columnList =
-            addColumns(myBatisTable, joinDetail.fields());
+            List<DbColumn> columnList = addColumns(table, joinDetail.fields());
 
            readContextV2.addColumns(columnList);
         }
     }
 
-    private List<BasicColumn> addColumns(MyBatisTable table, List<String> fields) {
+    private DbColumn createColumn(String columnName, DbTable rootTable) {
+        Column column = rootTable.lookupColumn(columnName);
+
+        return new DbColumn(rootTable.name(), columnName, getJdbcType(column) , column, "");
+    }
+
+    private List<DbColumn> addColumns(DbTable table, List<String> fields) {
 
         //There are 2 possibilities
         // - field can be *
@@ -54,25 +58,24 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
 
         log.info("Fields - {}", fields);
 
-        List<BasicColumn> columnList = new ArrayList<>();
+        List<DbColumn> columnList = new ArrayList<>();
 
         if(Objects.isNull(fields)) {
 
             //include all fields of root table
-            List<BasicColumn> columns =
-                    table.getTable()
+            List<DbColumn> columns =
+                    table.table()
                     .getColumns()
                             .stream()
-                            .map(column -> (BasicColumn)SqlColumn.of(column.getName(), table,
-                                    getJdbcType(column)))
+                            .map(column -> createColumn(column.getName(), table))
                             .toList();
 
             columnList.addAll(columns);
         }
         else{ //query has specific columns so parse and map it.
-            List<BasicColumn> columns =
+            List<DbColumn> columns =
                     fields.stream()
-                            .map(col -> getColumn(col, table))
+                            .map(col -> createColumn(col, table))
                             .toList();
             columnList.addAll(columns);
         }
@@ -80,16 +83,5 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
         return columnList;
     }
 
-    private BasicColumn getColumn(String col, MyBatisTable rootTable) {
-        Column c =
-        rootTable.getTable()
-                .getColumns()
-                .stream()
-                .filter(column -> StringUtils.equalsIgnoreCase(col, column.getName()))
-                .findFirst()
-                .orElseThrow(()-> new InvalidColumnException(rootTable.getTableName(), col));
-        
-        return (BasicColumn)SqlColumn.of(c.getName(), rootTable,
-                getJdbcType(c));
-    }
+
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Component
 @Slf4j
-@Order(6)
+@Order(8)
 public class RootWhereProcessor implements ReadPreProcessor {
     @Override
     public void process(ReadContextV2 readContextV2) {

@@ -26,6 +26,7 @@ public class JoinOnParser  {
 
     public void parse(MyBatisTable rootTable, MyBatisTable childTable, JoinDetail joinDetail,  QueryExpressionDSL<SelectModel> queryExpressionDSL) {
 
+        /*
         String operator = getOperator(joinDetail.on());
         String left = joinDetail.on().substring(0, joinDetail.on().indexOf(operator)).trim();
         String right = joinDetail.on().substring(joinDetail.on().indexOf(operator) + operator.length()).trim();
@@ -48,6 +49,8 @@ public class JoinOnParser  {
                 //joinSpecificationFinisher.and(childTable.column(left))
             }
         }
+
+         */
 
     }
 

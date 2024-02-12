@@ -26,6 +26,7 @@ public class JoinPostProcessor implements ReadPostProcessor {
     @Override
     public void process(QueryExpressionDSL<SelectModel> queryExpressionDSL, ReadContextV2 readContextV2) {
         log.info("Join processor");
+        /*
         if(Objects.nonNull(readContextV2.getJoins()) && !readContextV2.getJoins().isEmpty()) {
 
             MyBatisTable rootTable = readContextV2.getRootTable();
@@ -50,6 +51,8 @@ public class JoinPostProcessor implements ReadPostProcessor {
 
             }
         }
+
+         */
     }
 
     private void createInnerJoin(MyBatisTable rootTable, MyBatisTable childTable, JoinDetail joinDetail, QueryExpressionDSL<SelectModel> queryExpressionDSL) {
