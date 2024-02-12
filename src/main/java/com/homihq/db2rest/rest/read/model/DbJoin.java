@@ -35,7 +35,12 @@ public class DbJoin {
                 str += "\n AND " + dbJoinAndCondition.leftColumn.render() + " " + dbJoinAndCondition.operator + " "
                         + dbJoinAndCondition.rightColumn.render();
             }
+        }
 
+        if(Objects.nonNull(additionalWhere) && !additionalWhere.isEmpty()) {//filters
+            for(String where : additionalWhere) {
+                str += "\n AND " + where;
+            }
         }
 
         return str;

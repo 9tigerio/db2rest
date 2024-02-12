@@ -1,23 +1,18 @@
-package com.homihq.db2rest.rest.read.processor.pre;
+package com.homihq.db2rest.rest.read.processor;
 
-
-import com.homihq.db2rest.exception.InvalidOperatorException;
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import com.homihq.db2rest.rest.read.model.DbColumn;
 import com.homihq.db2rest.rest.read.model.DbJoin;
 import com.homihq.db2rest.rest.read.model.DbTable;
 import com.homihq.db2rest.rest.read.model.DbWhere;
-import com.homihq.db2rest.rest.read.processor.rsql.operator.CustomRSQLOperators;
 import com.homihq.db2rest.rest.read.processor.rsql.operator.handler.OperatorMap;
 import com.homihq.db2rest.rest.read.processor.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rest.read.processor.rsql.visitor.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
-import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import schemacrawler.schema.Column;
@@ -76,14 +71,11 @@ public class JoinProcessor implements ReadProcessor {
                                ReadContextV2 readContextV2) {
         if(joinDetail.hasFilter()){
             readContextV2.createParamMap();
-            log.info("Filter - {}", joinDetail.filter());
-            log.info("Param map - {}", readContextV2.getParamMap());
 
             DbWhere dbWhere = new DbWhere(
                     table.name(),
                     table,table.buildColumns(),readContextV2.getParamMap());
 
-            log.info("-Creating join where condition -");
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(joinDetail.filter());
 
@@ -91,11 +83,7 @@ public class JoinProcessor implements ReadProcessor {
                     .accept(new BaseRSQLVisitor(
                             dbWhere));
 
-            log.info("Where - {}", where);
-
             join.addAdditionalWhere(where);
-
-            log.info("param map - {}", readContextV2.getParamMap());
 
 
         }
@@ -107,7 +95,6 @@ public class JoinProcessor implements ReadProcessor {
         if(joinDetail.hasOn()) {
             int onIdx = 1;
             for(String on : joinDetail.on()) {
-                log.info("Processing - on : {}", on);
                 processOn(on, onIdx, table, rootTable, dbJoin);
                 onIdx++;
             }
@@ -122,7 +109,6 @@ public class JoinProcessor implements ReadProcessor {
         String left = onExpression.substring(0, onExpression.indexOf(rSqlOperator)).trim();
         String right = onExpression.substring(onExpression.indexOf(rSqlOperator) + rSqlOperator.length()).trim();
 
-        log.info("{} | {} | {}", operator, left, right);
 
         DbColumn leftColumn = rootTable.buildColumn(left);
         DbColumn rightColumn = table.buildColumn(right);
@@ -136,16 +122,6 @@ public class JoinProcessor implements ReadProcessor {
 
     }
 
-    protected String getOperator(String on) {
-        return
-                CustomRSQLOperators.customOperators()
-                        .stream()
-                        .map(ComparisonOperator::getSymbol)
-                        .filter(op -> StringUtils.containsIgnoreCase(on, op))
-                        .findFirst().orElseThrow(() -> new InvalidOperatorException("Operator not supported", ""));
-
-
-    }
 
     private DbColumn createColumn(String columnName, DbTable table) {
         Column column = table.lookupColumn(columnName);

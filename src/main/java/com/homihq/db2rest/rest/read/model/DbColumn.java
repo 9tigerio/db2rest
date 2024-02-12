@@ -10,4 +10,8 @@ public record DbColumn(String tableName, String name, JDBCType jdbcType, Column 
     public String render() {
         return tableAlias + "."+ name + " " + alias;
     }
+
+    public String getAliasedName() {return tableAlias + "."+ name;}
+
+    public String getAliasedNameParam() {return tableAlias + "_"+ name;}
 }

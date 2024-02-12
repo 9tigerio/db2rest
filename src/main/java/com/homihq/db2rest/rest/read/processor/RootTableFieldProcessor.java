@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.processor.pre;
+package com.homihq.db2rest.rest.read.processor;
 
 
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;

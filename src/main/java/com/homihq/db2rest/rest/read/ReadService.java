@@ -2,7 +2,7 @@ package com.homihq.db2rest.rest.read;
 
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
 import com.homihq.db2rest.rest.read.processor.QueryCreatorTemplate;
-import com.homihq.db2rest.rest.read.processor.pre.ReadProcessor;
+import com.homihq.db2rest.rest.read.processor.ReadProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -30,7 +30,7 @@ public class ReadService {
 
             String sql = queryCreatorTemplate.createQuery(readContextV2);
             log.info("{}", sql);
-
+            log.info("{}", readContextV2.getParamMap());
             return namedParameterJdbcTemplate.queryForList(sql, readContextV2.getParamMap());
         }
         catch (Exception e) {

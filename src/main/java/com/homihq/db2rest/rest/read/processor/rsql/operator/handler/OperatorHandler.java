@@ -1,5 +1,7 @@
 package com.homihq.db2rest.rest.read.processor.rsql.operator.handler;
 
+import com.homihq.db2rest.rest.read.model.DbColumn;
+
 import java.util.List;
 import java.util.Map;
 
@@ -7,10 +9,10 @@ public interface OperatorHandler {
 
     String PREFIX = ":";
 
-    String handle(String columnName, String value, Class type, Map<String, Object> paramMap);
+    String handle(DbColumn column, String value, Class type, Map<String, Object> paramMap);
 
-    default String handle(String columnName, List<String> value, Class type, Map<String, Object> paramMap) {
-        return handle(columnName, value.get(0), type, paramMap);
+    default String handle(DbColumn column, List<String> value, Class type, Map<String, Object> paramMap) {
+        return handle(column, value.get(0), type, paramMap);
     }
 
     default String parseValue(String value, Class type) {

@@ -39,15 +39,15 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
     public String visit(ComparisonNode node, Object o) {
         ComparisonOperator op = node.getOperator();
 
-        DbColumn sqlColumn = getColumn(node.getSelector());
+        DbColumn dbColumn = getColumn(node.getSelector());
 
-        if (sqlColumn == null) {
+        if (dbColumn == null) {
             throw new IllegalArgumentException(String.format("Field '%s' is invalid", node.getSelector()));
         }
 
-        Class type = sqlColumn.column().getType().getTypeMappedClass();
+        Class type = dbColumn.column().getType().getTypeMappedClass();
 
-        String queryColumnName = sqlColumn.name();
+        String queryColumnName = dbColumn.name();
 
         OperatorHandler operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
         if (operatorHandler == null) {
@@ -55,10 +55,10 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
         }
 
         if (op.isMultiValue()) {
-            return operatorHandler.handle(queryColumnName, node.getArguments(), type, this.dbWhere.paramMap());
+            return operatorHandler.handle(dbColumn, node.getArguments(), type, this.dbWhere.paramMap());
         }
         else {
-            return operatorHandler.handle(queryColumnName, node.getArguments().get(0), type, this.dbWhere.paramMap());
+            return operatorHandler.handle(dbColumn, node.getArguments().get(0), type, this.dbWhere.paramMap());
         }
 
     }
