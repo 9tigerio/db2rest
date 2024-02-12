@@ -3,6 +3,9 @@ package com.homihq.db2rest.rest.read.model;
 
 import lombok.Data;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -16,6 +19,8 @@ public class DbJoin {
     private DbColumn onRight;
     private String onOperator;
 
+    private List<DbJoinAndCondition> andConditions;
+
     public String render() {
 
         String str = joinType + " JOIN " + tableName + " " + alias + "\n";
@@ -23,6 +28,15 @@ public class DbJoin {
         if(Objects.nonNull(onLeft)) {
             str += " ON " + onLeft.render() + " " + onOperator + " " + onRight.render();
         }
+
+        if(Objects.nonNull(andConditions) && !andConditions.isEmpty()) {
+            for(DbJoinAndCondition dbJoinAndCondition : andConditions) {
+                str += "\n AND " + dbJoinAndCondition.leftColumn.render() + " " + dbJoinAndCondition.operator + " "
+                        + dbJoinAndCondition.rightColumn.render();
+            }
+
+        }
+
         return str;
     }
 
@@ -31,4 +45,13 @@ public class DbJoin {
         this.onLeft = leftColumn;
         this.onOperator = operator;
     }
+
+    public void addAndCondition(DbColumn leftColumn, String operator, DbColumn rightColumn) {
+        if(Objects.isNull(andConditions)) andConditions = new ArrayList<>();
+
+        andConditions.add(new DbJoinAndCondition(leftColumn, operator, rightColumn));
+
+    }
+
+    private record DbJoinAndCondition(DbColumn leftColumn, String operator, DbColumn rightColumn) {}
 }

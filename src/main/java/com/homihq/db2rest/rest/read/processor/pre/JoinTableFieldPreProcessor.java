@@ -9,7 +9,6 @@ import com.homihq.db2rest.rest.read.model.DbJoin;
 import com.homihq.db2rest.rest.read.model.DbTable;
 import com.homihq.db2rest.rest.read.processor.rsql.operator.CustomRSQLOperators;
 import com.homihq.db2rest.rest.read.processor.rsql.operator.handler.OperatorMap;
-import com.homihq.db2rest.rsql.v1.operators.RSQLOperatorHandlers;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +71,7 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
         if(joinDetail.hasOn()) {
             int onIdx = 1;
             for(String on : joinDetail.on()) {
+                log.info("Processing - on : {}", on);
                 processOn(on, onIdx, table, rootTable, dbJoin);
                 onIdx++;
             }
@@ -79,19 +79,25 @@ public class JoinTableFieldPreProcessor implements ReadPreProcessor {
 
     }
 
-    private void processOn(String on, int onIdx, DbTable table, DbTable rootTable, DbJoin dbJoin) {
-        String rSqlOperator = getOperator(on);
-        String operator = this.operatorMap.getSQLOp(rSqlOperator);
+    private void processOn(String onExpression, int onIdx, DbTable table, DbTable rootTable, DbJoin dbJoin) {
+        String rSqlOperator = this.operatorMap.getRSQLOperator(onExpression);
+        String operator = this.operatorMap.getSQLOperator(rSqlOperator);
 
-        String left = on.substring(0, on.indexOf(rSqlOperator)).trim();
-        String right = on.substring(on.indexOf(rSqlOperator) + rSqlOperator.length()).trim();
+        String left = onExpression.substring(0, onExpression.indexOf(rSqlOperator)).trim();
+        String right = onExpression.substring(onExpression.indexOf(rSqlOperator) + rSqlOperator.length()).trim();
 
         log.info("{} | {} | {}", operator, left, right);
 
         DbColumn leftColumn = rootTable.buildColumn(left);
         DbColumn rightColumn = table.buildColumn(right);
 
-        if(onIdx == 1) dbJoin.addOn(leftColumn, operator, rightColumn);
+        if(onIdx == 1) {
+            dbJoin.addOn(leftColumn, operator, rightColumn);
+        }
+        else{
+            dbJoin.addAndCondition(leftColumn, operator, rightColumn);
+        }
+
     }
 
     protected String getOperator(String on) {
