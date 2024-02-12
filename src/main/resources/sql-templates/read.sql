@@ -1,6 +1,5 @@
 SELECT
-    [# th:each="column : ${columns}"]
-    [(${column.name})][/]
+    [(${columns})]
 FROM
     [(${rootTable.name})]
 [# th:if="${rootWhere}"]WHERE

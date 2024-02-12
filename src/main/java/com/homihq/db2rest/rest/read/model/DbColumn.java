@@ -7,5 +7,7 @@ import java.sql.JDBCType;
 
 public record DbColumn(String tableName, String name, JDBCType jdbcType, Column column, String alias) {
 
-
+    public String render() {
+        return name + " " + alias;
+    }
 }

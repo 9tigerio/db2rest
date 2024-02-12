@@ -44,9 +44,6 @@ public class ReadContextV2 {
     String rootWhere;
     Map<String,Object> paramMap;
 
-    public void addWhereCondition(SqlCriterion whereCondition) {
-        this.whereCondition = whereCondition;
-    }
 
 
 
