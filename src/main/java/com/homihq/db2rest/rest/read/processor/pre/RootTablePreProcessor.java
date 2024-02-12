@@ -1,7 +1,8 @@
 package com.homihq.db2rest.rest.read.processor.pre;
 
-import com.homihq.db2rest.mybatis.MyBatisTable;
+
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.model.DbTable;
 import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +18,10 @@ public class RootTablePreProcessor implements ReadPreProcessor {
     private final SchemaManager schemaManager;
     @Override
     public void process(ReadContextV2 readContextV2) {
-        MyBatisTable table =
-        schemaManager.getTable(readContextV2.getTableName());
+        log.info("Processing root table");
+        DbTable table =
+        schemaManager.getTableV2(readContextV2.getTableName());
 
-        readContextV2.setRootTable(table);
+        readContextV2.setRoot(table);
     }
 }

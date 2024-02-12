@@ -1,15 +1,19 @@
 package com.homihq.db2rest.rest.read.processor.pre;
 
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
-import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
-import com.homihq.db2rest.rsql.parser.MyBatisFilterVisitorParser;
-import cz.jirutka.rsql.parser.RSQLParser;
+
+
+import com.homihq.db2rest.rest.read.model.DbWhere;
+import com.homihq.db2rest.rest.read.processor.rsql.parser.RSQLParserBuilder;
+import com.homihq.db2rest.rest.read.processor.rsql.visitor.BaseRSQLVisitor;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.mybatis.dynamic.sql.SqlCriterion;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -19,14 +23,26 @@ public class RootWhereProcessor implements ReadPreProcessor {
     public void process(ReadContextV2 readContextV2) {
         if(StringUtils.isNotBlank(readContextV2.getFilter())) {
 
-            log.info("-Creating where condition -");
+            Map<String,Object> paramMap = new HashMap<>();
 
-            Node rootNode = new RSQLParser(SimpleRSQLOperators.customOperators()).parse(readContextV2.getFilter());
+            DbWhere dbWhere = new DbWhere(
+                    readContextV2.getTableName(),
+                    readContextV2.getRoot(),readContextV2.getCols(),paramMap);
 
-            SqlCriterion condition = rootNode
-                    .accept(new MyBatisFilterVisitorParser(readContextV2.getRootTable()));
+            log.info("-Creating root where condition -");
 
-            readContextV2.addWhereCondition(condition);
+            Node rootNode = RSQLParserBuilder.newRSQLParser().parse(readContextV2.getFilter());
+
+            String where = rootNode
+                    .accept(new BaseRSQLVisitor(
+                            dbWhere));
+
+            log.info("Where - {}", where);
+
+            log.info("param map - {}", paramMap);
+
+            readContextV2.setRootWhere(where);
+            readContextV2.setParamMap(paramMap);
 
         }
     }

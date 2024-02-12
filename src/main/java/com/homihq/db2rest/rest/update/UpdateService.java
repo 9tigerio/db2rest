@@ -3,8 +3,8 @@ package com.homihq.db2rest.rest.update;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
-import com.homihq.db2rest.rsql.operators.SimpleRSQLOperators;
-import com.homihq.db2rest.rsql.parser.MyBatisFilterVisitorParser;
+import com.homihq.db2rest.rsql.v1.operators.SimpleRSQLOperators;
+import com.homihq.db2rest.rsql.v1.parser.WhereFilterVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
@@ -75,7 +75,7 @@ public class UpdateService {
             Node rootNode = new RSQLParser(SimpleRSQLOperators.customOperators()).parse(filter);
 
             SqlCriterion condition = rootNode
-                    .accept(new MyBatisFilterVisitorParser(table));
+                    .accept(new WhereFilterVisitor(table));
 
             updateDSL.where(condition);
         }

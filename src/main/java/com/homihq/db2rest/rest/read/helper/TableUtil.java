@@ -16,12 +16,14 @@ public abstract class TableUtil {
         if(tableParts.length == 2) {
             String table = tableParts[1];
             DbAlias alias = getAlias(table);
-            return new DbTable(tableParts[0], alias.name(), alias.alias());
+           // return new DbTable(tableParts[0], alias.name(), alias.alias());
+            return null;
         }
         else{
             String table = tableParts[0];
             DbAlias alias = getAlias(table);
-            return new DbTable(null, alias.name(), alias.alias());
+            //return new DbTable(null, alias.name(), alias.alias());
+            return null;
         }
     }
 
@@ -33,12 +35,14 @@ public abstract class TableUtil {
         if(columnParts.length == 2) {
             String col = columnParts[1];
             DbAlias alias = getAlias(col);
-            return new DbColumn(columnParts[0], alias.name(), alias.alias());
+            //return new DbColumn(columnParts[0], alias.name(), alias.alias());
+            return null;
         }
         else{
             String col = columnParts[0];
             DbAlias alias = getAlias(col);
-            return new DbColumn(null, alias.name(), alias.alias());
+            //return new DbColumn(null, alias.name(), alias.alias());
+            return null;
         }
     }
 

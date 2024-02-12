@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rsql.parser;
+package com.homihq.db2rest.rsql.v1.parser;
 
 
 import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.homihq.db2rest.mybatis.MyBatisTable;
-import com.homihq.db2rest.rsql.operators.Operator;
-import com.homihq.db2rest.rsql.operators.RSQLOperatorHandlers;
+import com.homihq.db2rest.rsql.v1.operators.Operator;
+import com.homihq.db2rest.rsql.v1.operators.RSQLOperatorHandlers;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.mybatis.dynamic.sql.*;
 
 @RequiredArgsConstructor
 @Slf4j
-public class MyBatisFilterVisitorParser implements RSQLVisitor<SqlCriterion, Object> {
+public class WhereFilterVisitor implements RSQLVisitor<SqlCriterion, Object> {
     private final MyBatisTable sqlTable;
 
     @Override

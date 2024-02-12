@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rsql.operators;
+package com.homihq.db2rest.rsql.v1.operators;
 
 import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlCriterion;

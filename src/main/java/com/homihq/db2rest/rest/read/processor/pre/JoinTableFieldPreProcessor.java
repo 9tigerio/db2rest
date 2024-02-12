@@ -21,7 +21,7 @@ import java.util.Objects;
 import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
 
 
-@Component
+//@Component
 @Slf4j
 @Order(3)
 @RequiredArgsConstructor

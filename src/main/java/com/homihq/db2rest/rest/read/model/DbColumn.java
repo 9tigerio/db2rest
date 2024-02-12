@@ -1,7 +1,11 @@
 package com.homihq.db2rest.rest.read.model;
 
 
-public record DbColumn(String tableName, String name, String alias) {
+import schemacrawler.schema.Column;
+
+import java.sql.JDBCType;
+
+public record DbColumn(String tableName, String name, JDBCType jdbcType, Column column, String alias) {
 
 
 }
