@@ -1,18 +1,24 @@
 package com.homihq.db2rest.rest.read.dto;
 
 import org.apache.commons.lang3.StringUtils;
-import org.mybatis.dynamic.sql.select.join.JoinType;
 
 import java.util.List;
+import java.util.Objects;
 
 
-public record JoinDetail (String table, List<String> fields,String on, List<String> andFilters, String type){
+public record JoinDetail (String table, String with, List<String> fields,
+                          List<String> on, String filter, String type){
 
-    public JoinType getJoinType() {
-        return StringUtils.isBlank(type) ? JoinType.INNER :
-                JoinType.valueOf(StringUtils.upperCase(type));
+    public String getJoinType() {
+        return StringUtils.isBlank(type) ? "INNER" :
+                StringUtils.upperCase(type);
 
     }
+    public boolean hasOn() {
+        return Objects.nonNull(on) && !on.isEmpty();
+    }
 
-
+    public boolean hasFilter() {
+        return StringUtils.isNotBlank(filter);
+    }
 }

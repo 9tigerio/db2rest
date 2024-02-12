@@ -1,6 +1,7 @@
 package com.homihq.db2rest.schema;
 
 import com.homihq.db2rest.exception.InvalidColumnException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import schemacrawler.schema.Column;
 import schemacrawler.schema.Table;
@@ -8,6 +9,7 @@ import schemacrawler.schema.Table;
 import java.sql.Types;
 import java.sql.JDBCType;
 
+@Slf4j
 public class TypeMapperUtil {
 
     private TypeMapperUtil() {}
@@ -41,8 +43,9 @@ public class TypeMapperUtil {
     }
 
     public static JDBCType getJdbcType(Column column) {
+
         switch (column.getColumnDataType().getJavaSqlType().getVendorTypeNumber()) {
-            case Types.VARCHAR, 1111 -> {
+            case Types.VARCHAR, 1111, Types.LONGNVARCHAR -> {
                 return JDBCType.VARCHAR;
             }
             case Types.INTEGER, 2001 -> {
@@ -63,7 +66,7 @@ public class TypeMapperUtil {
             case Types.DECIMAL, Types.NUMERIC -> {
                 return JDBCType.DECIMAL;
             }
-            case Types.SMALLINT, Types.BIT -> {
+            case Types.SMALLINT, Types.BIT, Types.TINYINT -> {
                 return JDBCType.SMALLINT;
             }
             case Types.BLOB, Types.BINARY -> {
@@ -72,7 +75,8 @@ public class TypeMapperUtil {
             case Types.CLOB -> {
                 return JDBCType.CLOB;
             }
-            case 2147483647 -> {
+            case 2147483647, -1 -> {
+                log.info("here");
                 JDBCType jt = getJdbcTypeForUnknownJavaSqlType(column);
                 if (jt != null) {
                     return jt;
@@ -86,8 +90,12 @@ public class TypeMapperUtil {
         /*
          * unknown type
          */
+
         if (column.getColumnDataType().getName().contains("TIMESTAMP")) {
             return JDBCType.TIMESTAMP;
+        }
+        else if (column.getColumnDataType().getName().contains("TEXT")) {
+            return JDBCType.VARCHAR;
         }
         return null;
     }

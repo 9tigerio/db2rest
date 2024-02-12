@@ -1,9 +1,9 @@
 SELECT
-    [# th:each="column : ${columns}"]
-    [(${column.name})][/]
+    [(${columns})]
 FROM
-    [(${rootTable.name})]
+    [(${rootTable})]
+[# th:if="${joins}"][# th:each="join : ${joins}"][(${join.render()})][/][/]
 [# th:if="${rootWhere}"]WHERE
-    [(${rootWhere})]
+[(${rootWhere})]
 [/]
 [# th:if="${limit}"]LIMIT [(${limit})][/] [# th:if="${offset}"]LIMIT [(${offset})][/]

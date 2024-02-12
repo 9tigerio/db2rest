@@ -3,6 +3,7 @@ package com.homihq.db2rest.schema;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
+import com.homihq.db2rest.rest.read.helper.AliasGenerator;
 import com.homihq.db2rest.rest.read.model.DbTable;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,8 @@ public final class SchemaManager {
     private final DataSource dataSource;
     private final Map<String, Table> tableMap = new ConcurrentHashMap<>();
     private final List<Table> tableList = new ArrayList<>();
+
+    private final AliasGenerator aliasGenerator;
 
     @PostConstruct
     public void reload() {
@@ -83,6 +86,7 @@ public final class SchemaManager {
         return schemaName;
     }
 
+    @Deprecated
     public MyBatisTable getTable(String tableName) {
         List<MyBatisTable> tables = findTables(tableName);
 
@@ -106,7 +110,8 @@ public final class SchemaManager {
                 .stream()
                 .map(t ->
                         new DbTable(
-                                getSchemaName(t), tableName, "", t))
+                                getSchemaName(t), tableName,
+                                aliasGenerator.getAlias("", 4, tableName), t))
                 .toList();
 
     }
@@ -116,6 +121,7 @@ public final class SchemaManager {
         return Optional.of(table);
     }
 
+    @Deprecated
     public MyBatisTable getOneTable(String schemaName, String tableName) {
         Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
         return new MyBatisTable(schemaName, tableName, table);

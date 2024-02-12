@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 public class LimitPaginationBuilder {
 
     public void build(ReadContext context) {

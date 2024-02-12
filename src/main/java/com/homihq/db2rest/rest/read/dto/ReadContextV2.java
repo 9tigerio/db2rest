@@ -1,19 +1,17 @@
 package com.homihq.db2rest.rest.read.dto;
 
-import com.homihq.db2rest.mybatis.MyBatisTable;
-import com.homihq.db2rest.rest.read.dto.JoinDetail;
+
 import com.homihq.db2rest.rest.read.model.DbColumn;
+import com.homihq.db2rest.rest.read.model.DbJoin;
 import com.homihq.db2rest.rest.read.model.DbTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.dynamic.sql.BasicColumn;
-import org.mybatis.dynamic.sql.SqlCriterion;
 
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 @Builder
 @AllArgsConstructor
@@ -32,25 +30,30 @@ public class ReadContextV2 {
     List<JoinDetail> joins;
 
 
-    /* Processed attributes */
-    MyBatisTable rootTable;
-    List<BasicColumn> columns;
-    SqlCriterion whereCondition;
-
-
     /* Attributes to replace the ones above */
     DbTable root;
     List<DbColumn> cols;
     String rootWhere;
     Map<String,Object> paramMap;
+    List<DbJoin> dbJoins;
 
-    public void addWhereCondition(SqlCriterion whereCondition) {
-        this.whereCondition = whereCondition;
+    public boolean createParamMap() {
+        if(Objects.isNull(paramMap)) {
+            paramMap = new HashMap<>();
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
+    public void addColumns(List<DbColumn> columnList) {
+        this.cols.addAll(columnList);
+    }
 
+    public void addJoin(DbJoin join) {
+        if(Objects.isNull(dbJoins)) dbJoins = new ArrayList<>();
 
-    public void addColumns(List<BasicColumn> columnList) {
-        this.columns.addAll(columnList);
+        dbJoins.add(join);
     }
 }

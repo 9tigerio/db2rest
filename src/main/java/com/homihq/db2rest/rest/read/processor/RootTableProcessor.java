@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.processor.pre;
+package com.homihq.db2rest.rest.read.processor;
 
 
 import com.homihq.db2rest.rest.read.dto.ReadContextV2;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Order(1)
-public class RootTablePreProcessor implements ReadPreProcessor {
+public class RootTableProcessor implements ReadProcessor {
 
     private final SchemaManager schemaManager;
     @Override
