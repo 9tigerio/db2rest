@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.read.processor;
 
-import com.homihq.db2rest.rest.read.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.model.DbWhere;
 import com.homihq.db2rest.rsql2.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql2.visitor.BaseRSQLVisitor;
@@ -15,17 +15,17 @@ import org.springframework.stereotype.Component;
 @Order(8)
 public class RootWhereProcessor implements ReadProcessor {
     @Override
-    public void process(ReadContextV2 readContextV2) {
-        if(StringUtils.isNotBlank(readContextV2.getFilter())) {
-            readContextV2.createParamMap();
+    public void process(ReadContext readContext) {
+        if(StringUtils.isNotBlank(readContext.getFilter())) {
+            readContext.createParamMap();
 
             DbWhere dbWhere = new DbWhere(
-                    readContextV2.getTableName(),
-                    readContextV2.getRoot(),readContextV2.getCols(),readContextV2.getParamMap());
+                    readContext.getTableName(),
+                    readContext.getRoot(), readContext.getCols(), readContext.getParamMap());
 
             log.info("-Creating root where condition -");
 
-            Node rootNode = RSQLParserBuilder.newRSQLParser().parse(readContextV2.getFilter());
+            Node rootNode = RSQLParserBuilder.newRSQLParser().parse(readContext.getFilter());
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
@@ -33,9 +33,9 @@ public class RootWhereProcessor implements ReadProcessor {
 
             log.info("Where - {}", where);
 
-            log.info("param map - {}", readContextV2.getParamMap());
+            log.info("param map - {}", readContext.getParamMap());
 
-            readContextV2.setRootWhere(where);
+            readContext.setRootWhere(where);
 
 
         }

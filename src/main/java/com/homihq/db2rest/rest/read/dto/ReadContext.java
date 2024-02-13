@@ -3,6 +3,7 @@ package com.homihq.db2rest.rest.read.dto;
 
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbJoin;
+import com.homihq.db2rest.model.DbSort;
 import com.homihq.db2rest.model.DbTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Slf4j
-public class ReadContextV2 {
+public class ReadContext {
 
     /* Input Attributes */
     String tableName;
@@ -30,12 +31,13 @@ public class ReadContextV2 {
     List<JoinDetail> joins;
 
 
-    /* Attributes to replace the ones above */
+    /* Derived attributes */
     DbTable root;
     List<DbColumn> cols;
     String rootWhere;
     Map<String,Object> paramMap;
     List<DbJoin> dbJoins;
+    List<DbSort> dbSortList;
 
     public void createParamMap() {
         if(Objects.isNull(paramMap)) {

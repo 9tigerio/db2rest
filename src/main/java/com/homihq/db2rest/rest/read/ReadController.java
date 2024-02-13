@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.read;
 
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
-import com.homihq.db2rest.rest.read.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class ReadController {
                           @RequestParam(name = "limit", required = false, defaultValue = "-1") int limit,
                           @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset) {
 
-        ReadContextV2 readContextV2 = ReadContextV2.builder()
+        ReadContext readContext = ReadContext.builder()
                 .tableName(tableName)
                 .fields(fields)
                 .filter(filter)
@@ -33,7 +33,7 @@ public class ReadController {
                 .build();
 
 
-        return readService.findAll(readContextV2);
+        return readService.findAll(readContext);
     }
 
     @PostMapping(value = "/{tableName}/_expand" , produces = "application/json")
@@ -46,7 +46,7 @@ public class ReadController {
                        @RequestBody List<JoinDetail> joins
     ) {
 
-        ReadContextV2 readContextV2 = ReadContextV2.builder()
+        ReadContext readContext = ReadContext.builder()
                 .tableName(tableName)
                 .fields(fields)
                 .filter(filter)
@@ -57,7 +57,7 @@ public class ReadController {
                 .build();
 
 
-        return readService.findAll(readContextV2);
+        return readService.findAll(readContext);
 
     }
 
