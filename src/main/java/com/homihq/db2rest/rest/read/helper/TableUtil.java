@@ -1,8 +1,8 @@
 package com.homihq.db2rest.rest.read.helper;
 
-import com.homihq.db2rest.rest.read.model.DbAlias;
-import com.homihq.db2rest.rest.read.model.DbColumn;
-import com.homihq.db2rest.rest.read.model.DbTable;
+import com.homihq.db2rest.model.DbAlias;
+import com.homihq.db2rest.model.DbColumn;
+import com.homihq.db2rest.model.DbTable;
 
 @Deprecated
 public abstract class TableUtil {

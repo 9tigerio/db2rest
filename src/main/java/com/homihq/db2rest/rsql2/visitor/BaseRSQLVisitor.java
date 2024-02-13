@@ -1,10 +1,9 @@
-package com.homihq.db2rest.rest.read.processor.rsql.visitor;
+package com.homihq.db2rest.rsql2.visitor;
 
-import com.homihq.db2rest.exception.InvalidColumnException;
-import com.homihq.db2rest.rest.read.model.DbColumn;
-import com.homihq.db2rest.rest.read.model.DbWhere;
-import com.homihq.db2rest.rest.read.processor.rsql.operator.handler.OperatorHandler;
-import com.homihq.db2rest.rest.read.processor.rsql.operator.handler.RSQLOperatorHandlers;
+import com.homihq.db2rest.model.DbColumn;
+import com.homihq.db2rest.model.DbWhere;
+import com.homihq.db2rest.rsql2.operator.handler.OperatorHandler;
+import com.homihq.db2rest.rsql2.operator.handler.RSQLOperatorHandlers;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
@@ -12,7 +11,6 @@ import cz.jirutka.rsql.parser.ast.OrNode;
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.stream.Collectors;
 
@@ -39,15 +37,13 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
     public String visit(ComparisonNode node, Object o) {
         ComparisonOperator op = node.getOperator();
 
-        DbColumn dbColumn = getColumn(node.getSelector());
+        log.info("Handling column - {}", node.getSelector());
 
-        if (dbColumn == null) {
-            throw new IllegalArgumentException(String.format("Field '%s' is invalid", node.getSelector()));
-        }
 
-        Class type = dbColumn.column().getType().getTypeMappedClass();
+        DbColumn dbColumn = this.dbWhere.table().buildColumn(node.getSelector());
 
-        String queryColumnName = dbColumn.name();
+        Class<?> type = dbColumn.column().getType().getTypeMappedClass();
+
 
         OperatorHandler operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());
         if (operatorHandler == null) {
@@ -64,16 +60,5 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
     }
 
 
-    public DbColumn getColumn(String col) {
-        return
-        this.dbWhere.columns()
-                .stream()
-                .filter(dbColumn ->
-                    StringUtils.equalsIgnoreCase(this.dbWhere.tableName(), dbColumn.tableName())
-                    &&
-                    StringUtils.equalsIgnoreCase(dbColumn.name(), col)
-                ).findFirst()
-                .orElseThrow(() -> new InvalidColumnException(this.dbWhere.tableName(), col));
-    }
 
 }

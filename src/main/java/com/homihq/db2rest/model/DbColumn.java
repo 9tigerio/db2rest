@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.model;
+package com.homihq.db2rest.model;
 
 
 import schemacrawler.schema.Column;

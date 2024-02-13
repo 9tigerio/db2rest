@@ -1,12 +1,12 @@
-package com.homihq.db2rest.rest.read.processor.rsql.operator.handler;
+package com.homihq.db2rest.rsql2.operator.handler;
 
-import com.homihq.db2rest.rest.read.model.DbColumn;
+import com.homihq.db2rest.model.DbColumn;
 
 import java.util.Map;
 
-public class EqualToOperatorHandler implements OperatorHandler {
+public class GreaterThanEqualToOperatorHandler implements OperatorHandler {
 
-   private static final String OPERATOR = " = ";
+   private static final String OPERATOR = " >= ";
 
     @Override
     public String handle(DbColumn column, String value, Class type, Map<String, Object> paramMap) {

@@ -1,9 +1,9 @@
 package com.homihq.db2rest.rest.read.dto;
 
 
-import com.homihq.db2rest.rest.read.model.DbColumn;
-import com.homihq.db2rest.rest.read.model.DbJoin;
-import com.homihq.db2rest.rest.read.model.DbTable;
+import com.homihq.db2rest.model.DbColumn;
+import com.homihq.db2rest.model.DbJoin;
+import com.homihq.db2rest.model.DbTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,13 +37,9 @@ public class ReadContextV2 {
     Map<String,Object> paramMap;
     List<DbJoin> dbJoins;
 
-    public boolean createParamMap() {
+    public void createParamMap() {
         if(Objects.isNull(paramMap)) {
             paramMap = new HashMap<>();
-            return true;
-        }
-        else{
-            return false;
         }
     }
 

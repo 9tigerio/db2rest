@@ -1,11 +1,10 @@
 package com.homihq.db2rest.rest.read.helper;
 
 
-import com.homihq.db2rest.rest.read.model.DbColumn;
+import com.homihq.db2rest.model.DbColumn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.SortSpecification;
-import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.select.ColumnSortSpecification;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;

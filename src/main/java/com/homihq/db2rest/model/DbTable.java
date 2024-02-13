@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.model;
+package com.homihq.db2rest.model;
 
 import com.homihq.db2rest.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public record DbTable(String schema, String name, String alias, Table table) {
             return new DbAlias(aliasParts[0], aliasParts[1]);
         }
         else {
-            return new DbAlias(aliasParts[0], null);
+            return new DbAlias(aliasParts[0], "");
         }
     }
 
