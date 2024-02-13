@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.read.processor;
 
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
-import com.homihq.db2rest.rest.read.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbJoin;
 import com.homihq.db2rest.model.DbTable;
@@ -33,12 +33,12 @@ public class JoinProcessor implements ReadProcessor {
     private final SchemaManager schemaManager;
     private final OperatorMap operatorMap;
     @Override
-    public void process(ReadContextV2 readContextV2) {
-        List<JoinDetail> joins = readContextV2.getJoins();
+    public void process(ReadContext readContext) {
+        List<JoinDetail> joins = readContext.getJoins();
 
         if(Objects.isNull(joins) || joins.isEmpty()) return;
 
-        DbTable rootTable = readContextV2.getRoot();
+        DbTable rootTable = readContext.getRoot();
 
         for(JoinDetail joinDetail : joins) {
             String tableName = joinDetail.table();
@@ -47,13 +47,13 @@ public class JoinProcessor implements ReadProcessor {
 
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
 
-            readContextV2.addColumns(columnList);
+            readContext.addColumns(columnList);
 
-            addJoin(table, rootTable, joinDetail, readContextV2);
+            addJoin(table, rootTable, joinDetail, readContext);
         }
     }
 
-    private void addJoin(DbTable table, DbTable rootTable, JoinDetail joinDetail, ReadContextV2 readContextV2) {
+    private void addJoin(DbTable table, DbTable rootTable, JoinDetail joinDetail, ReadContext readContext) {
         DbJoin join = new DbJoin();
         join.setTableName(table.name());
         join.setAlias(table.alias());
@@ -61,20 +61,20 @@ public class JoinProcessor implements ReadProcessor {
 
         addCondition(table, rootTable, joinDetail, join);
 
-        processFilter(table, joinDetail, join, readContextV2);
+        processFilter(table, joinDetail, join, readContext);
 
-        readContextV2.addJoin(join);
+        readContext.addJoin(join);
 
     }
 
     private void processFilter(DbTable table, JoinDetail joinDetail, DbJoin join,
-                               ReadContextV2 readContextV2) {
+                               ReadContext readContext) {
         if(joinDetail.hasFilter()){
-            readContextV2.createParamMap();
+            readContext.createParamMap();
 
             DbWhere dbWhere = new DbWhere(
                     table.name(),
-                    table,table.buildColumns(),readContextV2.getParamMap());
+                    table,table.buildColumns(), readContext.getParamMap());
 
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(joinDetail.filter());

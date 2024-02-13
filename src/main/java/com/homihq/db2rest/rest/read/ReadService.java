@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.read;
 
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.rest.read.dto.ReadContextV2;
+import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.rest.read.processor.QueryCreatorTemplate;
 import com.homihq.db2rest.rest.read.processor.ReadProcessor;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +23,17 @@ public class ReadService {
     private final List<ReadProcessor> processorList;
     private final QueryCreatorTemplate queryCreatorTemplate;
 
-    public Object findAll(ReadContextV2 readContextV2) {
+    public Object findAll(ReadContext readContext) {
         for (ReadProcessor processor : processorList) {
-            processor.process(readContextV2);
+            processor.process(readContext);
         }
 
-        String sql = queryCreatorTemplate.createQuery(readContextV2);
+        String sql = queryCreatorTemplate.createQuery(readContext);
         log.info("{}", sql);
-        log.info("{}", readContextV2.getParamMap());
+        log.info("{}", readContext.getParamMap());
 
         try {
-            return namedParameterJdbcTemplate.queryForList(sql, readContextV2.getParamMap());
+            return namedParameterJdbcTemplate.queryForList(sql, readContext.getParamMap());
         } catch (DataAccessException e) {
             log.error("Error in read op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());

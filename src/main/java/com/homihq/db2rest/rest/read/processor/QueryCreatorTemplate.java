@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.read.processor;
 
-import com.homihq.db2rest.rest.read.dto.ReadContextV2;
+import com.homihq.db2rest.model.DbSort;
+import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.model.DbColumn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @Component
@@ -21,18 +23,23 @@ public class QueryCreatorTemplate {
 
 
     private final SpringTemplateEngine templateEngine;
-    public String createQuery(ReadContextV2 readContextV2) {
+    public String createQuery(ReadContext readContext) {
 
         log.info("**** Preparing to render ****");
 
         Map<String,Object> data = new HashMap<>();
-        data.put("columns", createProjections(readContextV2.getCols()));
-        data.put("rootTable", readContextV2.getRoot().render());
-        data.put("rootWhere", readContextV2.getRootWhere());
-        data.put("joins", readContextV2.getDbJoins());
+        data.put("columns", createProjections(readContext.getCols()));
+        data.put("rootTable", readContext.getRoot().render());
+        data.put("rootWhere", readContext.getRootWhere());
+        data.put("joins", readContext.getDbJoins());
 
-        if(readContextV2.getLimit() > -1) data.put("limit", readContextV2.getLimit());
-        if(readContextV2.getOffset() > -1) data.put("offset", readContextV2.getOffset());
+        if(Objects.nonNull(readContext.getDbSortList()) && !readContext.getDbSortList().isEmpty()) {
+            data.put("sorts", createOrderBy(readContext.getDbSortList()));
+        }
+
+
+        if(readContext.getLimit() > -1) data.put("limit", readContext.getLimit());
+        if(readContext.getOffset() > -1) data.put("offset", readContext.getOffset());
 
 
         Context context = new Context();
@@ -48,6 +55,11 @@ public class QueryCreatorTemplate {
         return StringUtils.join(columList, "\n\t,");
     }
 
+    public String createOrderBy(List<DbSort> sorts) {
+        List<String> sortList =
+                sorts.stream().map(DbSort::render).toList();
 
+        return StringUtils.join(sortList, "\n\t,");
+    }
 
 }
