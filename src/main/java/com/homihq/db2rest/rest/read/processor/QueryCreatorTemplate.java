@@ -31,6 +31,9 @@ public class QueryCreatorTemplate {
         data.put("rootWhere", readContextV2.getRootWhere());
         data.put("joins", readContextV2.getDbJoins());
 
+        if(readContextV2.getLimit() > -1) data.put("limit", readContextV2.getLimit());
+        if(readContextV2.getOffset() > -1) data.put("offset", readContextV2.getOffset());
+
 
         Context context = new Context();
         context.setVariables(data);
