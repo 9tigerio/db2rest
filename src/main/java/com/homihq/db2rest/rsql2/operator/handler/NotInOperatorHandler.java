@@ -1,6 +1,6 @@
-package com.homihq.db2rest.rest.read.processor.rsql.operator.handler;
+package com.homihq.db2rest.rsql2.operator.handler;
 
-import com.homihq.db2rest.rest.read.model.DbColumn;
+import com.homihq.db2rest.model.DbColumn;
 
 import java.util.Arrays;
 import java.util.List;

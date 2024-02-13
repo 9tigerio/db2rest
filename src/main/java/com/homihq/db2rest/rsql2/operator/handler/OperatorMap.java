@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.processor.rsql.operator.handler;
+package com.homihq.db2rest.rsql2.operator.handler;
 
 
 import com.homihq.db2rest.exception.InvalidOperatorException;

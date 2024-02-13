@@ -1,6 +1,6 @@
-package com.homihq.db2rest.rest.read.processor.rsql.parser;
+package com.homihq.db2rest.rsql2.parser;
 
-import com.homihq.db2rest.rest.read.processor.rsql.operator.CustomRSQLOperators;
+import com.homihq.db2rest.rsql2.operator.CustomRSQLOperators;
 
 import cz.jirutka.rsql.parser.RSQLParser;
 

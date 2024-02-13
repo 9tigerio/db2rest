@@ -4,7 +4,7 @@ import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rest.read.helper.AliasGenerator;
-import com.homihq.db2rest.rest.read.model.DbTable;
+import com.homihq.db2rest.model.DbTable;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -125,6 +125,17 @@ public final class SchemaManager {
     public MyBatisTable getOneTable(String schemaName, String tableName) {
         Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
         return new MyBatisTable(schemaName, tableName, table);
+
+    }
+
+
+    public DbTable getOneTableV2(String schemaName, String tableName) {
+        Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
+
+        return new DbTable(
+                getSchemaName(table), tableName,
+                aliasGenerator.getAlias("", 4, tableName), table);
+
 
     }
 

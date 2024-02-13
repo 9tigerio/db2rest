@@ -11,6 +11,5 @@ public interface DeleteRestApi {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{tableName}")
     DeleteResponse delete(@PathVariable String tableName,
-                          @RequestParam(name = "schemaName", required = false) String schemaName,
                           @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 }
