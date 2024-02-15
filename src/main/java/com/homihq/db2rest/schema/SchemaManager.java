@@ -1,11 +1,13 @@
 package com.homihq.db2rest.schema;
 
+import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
 import com.homihq.db2rest.rest.read.helper.AliasGenerator;
 import com.homihq.db2rest.model.DbTable;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +37,11 @@ public final class SchemaManager {
 
     private final AliasGenerator aliasGenerator;
 
+    private final List<Dialect> dialects;
+
+    @Getter
+    private Dialect dialect;
+
     @PostConstruct
     public void reload() {
         createSchemaCache();
@@ -58,6 +65,18 @@ public final class SchemaManager {
 
         final Catalog catalog = SchemaCrawlerUtility.getCatalog(DatabaseConnectionSources.fromDataSource(dataSource), options);
 
+        DatabaseInfo databaseInfo = catalog.getDatabaseInfo();
+
+        log.info("Database - {}", databaseInfo);
+
+        for(Dialect dialect : dialects) {
+
+            if(dialect.canSupport(databaseInfo)) {
+                this.dialect = dialect;
+                break;
+            }
+        }
+
         for (final Schema schema : catalog.getSchemas()) {
 
             for (final Table table : catalog.getTables(schema)) {
@@ -65,7 +84,7 @@ public final class SchemaManager {
                 String schemaName = getSchemaName(table);
 
                 String fullName = schemaName + "." + table.getName();
-                log.debug("Full name - {}", fullName);
+
                 tableMap.put(fullName, table);
                 tableList.add(table);
 

@@ -37,7 +37,7 @@ public class CreateService {
 
     @Transactional
     public Pair<Integer, Object> save(String schemaName, String tableName, List<String> includedColumns,
-                                      Map<String, Object> data, boolean tsIdEnabled, String tsId, String tsIdType) {
+                                      Map<String, Object> data, boolean tsIdEnabled) {
         try {
             //1. get actual table
             DbTable dbTable = StringUtils.isNotBlank(schemaName) ?
@@ -52,6 +52,8 @@ public class CreateService {
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
                 tsidProcessor.processTsId(data, pkColumns);
             }
+
+            this.schemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
 
             CreateContext context = new CreateContext(dbTable, insertableColumns);
             String sql = createCreatorTemplate.createQuery(context);
@@ -71,6 +73,7 @@ public class CreateService {
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
+
 
     }
 

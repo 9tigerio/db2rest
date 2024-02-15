@@ -2,7 +2,6 @@ package com.homihq.db2rest.model;
 
 import com.homihq.db2rest.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import schemacrawler.schema.Column;
 import schemacrawler.schema.Table;
 
@@ -18,11 +17,8 @@ public record DbTable(String schema, String name, String alias, Table table) {
     }
 
     public Column lookupColumn(String columnName) {
-        return table
-            .getColumns()
-            .stream()
-            .filter(column -> StringUtils.equalsIgnoreCase(columnName, column.getName()))
-            .findFirst()
+
+        return table.lookupColumn(columnName)
             .orElseThrow(()-> new InvalidColumnException(name, columnName));
     }
 
