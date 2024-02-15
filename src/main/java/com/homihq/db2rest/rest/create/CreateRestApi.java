@@ -13,7 +13,5 @@ public interface CreateRestApi {
     CreateResponse save(@PathVariable String tableName,
                         @RequestParam(name = "columns", required = false) List<String> includeColumns,
                         @RequestBody Map<String, Object> data,
-                        @RequestParam(name = "tsIdEnabled", required = false, defaultValue = "false") boolean tsIdEnabled,
-                        @RequestParam(name = "tsId", required = false) String tsId,
-                        @RequestParam(name = "tsIdType", required = false, defaultValue = "number") String tsIdType);
+                        @RequestParam(name = "tsIdEnabled", required = false, defaultValue = "false") boolean tsIdEnabled);
 }

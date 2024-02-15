@@ -21,12 +21,10 @@ public class CreateController implements CreateRestApi {
     public CreateResponse save(String tableName,
                                List<String> includeColumns,
                                Map<String, Object> data,
-                               boolean tsIdEnabled,
-                               String tsId,
-                               String tsIdType) {
+                               boolean tsIdEnabled) {
 
         Pair<Integer, Object> result = createService
-                .save(null, tableName, includeColumns, data, tsIdEnabled, tsId, tsIdType);
+                .save(null, tableName, includeColumns, data, tsIdEnabled);
 
         return new CreateResponse(result.getFirst(), result.getSecond());
     }

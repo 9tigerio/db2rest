@@ -10,6 +10,7 @@ import java.sql.Types;
 import java.sql.JDBCType;
 
 @Slf4j
+@Deprecated
 public class TypeMapperUtil {
 
     private TypeMapperUtil() {}
