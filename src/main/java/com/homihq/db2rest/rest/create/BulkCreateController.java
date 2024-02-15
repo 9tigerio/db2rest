@@ -18,7 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BulkCreateController implements BulkCreateRestApi {
 
-    private final CreateService createService;
+    private final BulkCreateService bulkCreateService;
 
     private final List<DataProcessor> dataProcessors;
 
@@ -27,9 +27,8 @@ public class BulkCreateController implements BulkCreateRestApi {
             consumes = {"application/json", "text/csv"}
     )
     public CreateBulkResponse save(@PathVariable String tableName,
-                            @RequestHeader(name = "Content-Profile" , required = false) String schemaName,
-                                          @RequestParam(name = "tsid", required = false) String tsid,
-                                          @RequestParam(name = "tsidType", required = false, defaultValue = "number") String tsidType,
+                                   @RequestParam(name = "columns", required = false) List<String> includeColumns,
+                            @RequestParam(name = "tsIdEnabled", required = false, defaultValue = "false") boolean tsIdEnabled,
                             HttpServletRequest request) throws Exception{
 
         DataProcessor dataProcessor = dataProcessors.stream()
@@ -40,10 +39,9 @@ public class BulkCreateController implements BulkCreateRestApi {
         List<Map<String,Object>> data =
             dataProcessor.getData(request.getInputStream());
 
-        log.info("### data -> {}", data);
 
-        Pair<int[], List<Object>> result =
-                createService.saveBulk(schemaName, tableName, data, tsid, tsidType);
+        Pair<int[], List<Map<String, Object>>> result =
+                bulkCreateService.saveBulk(null, tableName, includeColumns, data, tsIdEnabled);
 
         return new CreateBulkResponse(result.getFirst(), result.getSecond());
     }
