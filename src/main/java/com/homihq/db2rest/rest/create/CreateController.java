@@ -19,13 +19,14 @@ public class CreateController implements CreateRestApi {
 
     @Override
     public CreateResponse save(String tableName,
-                               String schemaName,
-                               List<String> columns,
+                               List<String> includeColumns,
                                Map<String, Object> data,
-                               String tsid,
-                               String tsidType) {
+                               boolean tsIdEnabled,
+                               String tsId,
+                               String tsIdType) {
 
-        Pair<Integer, Object> result = createService.save(schemaName, tableName, columns, data, tsid, tsidType);
+        Pair<Integer, Object> result = createService
+                .save(null, tableName, includeColumns, data, tsIdEnabled, tsId, tsIdType);
 
         return new CreateResponse(result.getFirst(), result.getSecond());
     }

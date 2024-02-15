@@ -56,4 +56,14 @@ public record DbTable(String schema, String name, String alias, Table table) {
                                 "", alias))
                 .toList();
     }
+
+    public List<DbColumn> buildPkColumns() {
+        return table.getColumns()
+                .stream()
+                .filter(Column::isPartOfPrimaryKey)
+                .map(column ->
+                        new DbColumn(name, column.getName(),getJdbcType(column) , column,
+                                "", alias))
+                .toList();
+    }
 }

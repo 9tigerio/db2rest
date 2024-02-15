@@ -11,7 +11,6 @@ public interface BulkCreateRestApi {
             consumes = {"application/json", "text/csv"}
     )
     CreateBulkResponse save(@PathVariable String tableName,
-                            @RequestHeader(name = "Content-Profile", required = false) String schemaName,
                             @RequestParam(name = "tsid", required = false) String tsid,
                             @RequestParam(name = "tsidType", required = false, defaultValue = "number") String tsidType,
                             HttpServletRequest request) throws Exception;

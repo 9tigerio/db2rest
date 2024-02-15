@@ -11,9 +11,9 @@ public interface CreateRestApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{tableName}")
     CreateResponse save(@PathVariable String tableName,
-                        @RequestHeader(name = "Content-Profile") String schemaName,
-                        @RequestParam(name = "columns", required = false) List<String> columns,
+                        @RequestParam(name = "columns", required = false) List<String> includeColumns,
                         @RequestBody Map<String, Object> data,
-                        @RequestParam(name = "tsid", required = false) String tsid,
-                        @RequestParam(name = "tsidType", required = false, defaultValue = "number") String tsidType);
+                        @RequestParam(name = "tsIdEnabled", required = false, defaultValue = "false") boolean tsIdEnabled,
+                        @RequestParam(name = "tsId", required = false) String tsId,
+                        @RequestParam(name = "tsIdType", required = false, defaultValue = "number") String tsIdType);
 }

@@ -41,6 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, headers, status);
     }
 
+    /*
     @ExceptionHandler(Exception.class)
     ErrorResponse handleBookmarkNotFoundException(Exception e) {
         return ErrorResponse.builder(e, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage())
@@ -50,5 +51,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .property("timestamp", Instant.now())
                 .build();
     }
+
+     */
 
 }
