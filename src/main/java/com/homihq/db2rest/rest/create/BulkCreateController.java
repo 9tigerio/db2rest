@@ -27,8 +27,8 @@ public class BulkCreateController implements BulkCreateRestApi {
             consumes = {"application/json", "text/csv"}
     )
     public CreateBulkResponse save(@PathVariable String tableName,
-                            @RequestParam(name = "tsId", required = false) String tsId,
-                            @RequestParam(name = "tsIdType", required = false, defaultValue = "number") String tsIdType,
+                                   @RequestParam(name = "columns", required = false) List<String> includeColumns,
+                            @RequestParam(name = "tsIdEnabled", required = false, defaultValue = "false") boolean tsIdEnabled,
                             HttpServletRequest request) throws Exception{
 
         DataProcessor dataProcessor = dataProcessors.stream()
@@ -41,7 +41,7 @@ public class BulkCreateController implements BulkCreateRestApi {
 
 
         Pair<int[], List<Map<String, Object>>> result =
-                bulkCreateService.saveBulk(null, tableName, data, tsId, tsIdType);
+                bulkCreateService.saveBulk(null, tableName, includeColumns, data, tsIdEnabled);
 
         return new CreateBulkResponse(result.getFirst(), result.getSecond());
     }

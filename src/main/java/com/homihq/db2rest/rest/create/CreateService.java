@@ -44,8 +44,8 @@ public class CreateService {
                     schemaManager.getOneTableV2(schemaName, tableName) : schemaManager.getTableV2(tableName);
 
             //2. determine the columns to be included in insert statement
-            List<String> insertableColumns = isEmpty(includedColumns) ? includedColumns : data.keySet().stream().toList();
-
+            List<String> insertableColumns = isEmpty(includedColumns) ? data.keySet().stream().toList() :
+                    includedColumns;
 
             //3. check if tsId is enabled and add those values for PK.
             if (tsIdEnabled) {
@@ -53,7 +53,7 @@ public class CreateService {
                 tsidProcessor.processTsId(data, pkColumns);
             }
 
-            CreateContext context = new CreateContext(insertableColumns);
+            CreateContext context = new CreateContext(dbTable, insertableColumns);
             String sql = createCreatorTemplate.createQuery(context);
 
 

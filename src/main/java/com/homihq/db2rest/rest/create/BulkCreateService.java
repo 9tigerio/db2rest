@@ -4,7 +4,6 @@ import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
-import com.homihq.db2rest.rest.create.param.ParameterValueMapCreator;
 import com.homihq.db2rest.rest.create.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Service
 @Slf4j
@@ -31,41 +31,43 @@ import java.util.Objects;
 public class BulkCreateService {
 
     private final TSIDProcessor tsidProcessor;
-
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final CreateCreatorTemplate createCreatorTemplate;
-    private final ParameterValueMapCreator parameterValueMapCreator;
     private final SchemaManager schemaManager;
 
 
     @Transactional
-    public Pair<int[], List<Map<String, Object>>> saveBulk(String schemaName, String tableName, List<Map<String, Object>> dataList,
-                                                           String tsId, String tsIdType) {
+    public Pair<int[], List<Map<String, Object>>> saveBulk(String schemaName, String tableName,
+                                                           List<String> includedColumns,
+                                                           List<Map<String, Object>> dataList,
+                                                           boolean tsIdEnabled) {
         if (Objects.isNull(dataList) || dataList.isEmpty()) throw new GenericDataAccessException("No data provided");
+
         try {
-            for (Map<String, Object> data : dataList)
-                tsidProcessor.processTsId(data, tsId, tsIdType);
 
+            //1. get actual table
             DbTable dbTable = StringUtils.isNotBlank(schemaName) ?
-                    schemaManager.getOneTableV2(schemaName, tableName) :
-                    schemaManager.getTableV2(tableName);
+                    schemaManager.getOneTableV2(schemaName, tableName) : schemaManager.getTableV2(tableName);
 
-            List<DbColumn> columnList = dbTable.buildColumns();
+            //2. determine the columns to be included in insert statement
+            List<String> insertableColumns = isEmpty(includedColumns) ? dataList.get(0).keySet().stream().toList() :
+                    includedColumns;
 
-            List<String> columns = columnList.stream().map(DbColumn::name).toList();
+            //3. check if tsId is enabled and add those values for PK.
+            if (tsIdEnabled) {
+                List<DbColumn> pkColumns = dbTable.buildPkColumns();
 
-            List<Map<String, Object>> valueList = new ArrayList<>();
-
-            for (Map<String, Object> data : dataList) {
-                valueList.add(parameterValueMapCreator.prepareValues(columnList, data, columns, tsId));
+                for (Map<String, Object> data : dataList) {
+                    tsidProcessor.processTsId(data, pkColumns);
+                }
             }
 
-            CreateContext context = new CreateContext(dbTable, columnList, valueList.get(0));
-
+            CreateContext context = new CreateContext(dbTable, insertableColumns);
             String sql = createCreatorTemplate.createQuery(context);
 
-            SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(valueList.toArray());
+            log.info("SQL - {}", sql);
+
+            SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
 
             log.debug("SQL -> {}", sql);
 

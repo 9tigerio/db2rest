@@ -23,7 +23,7 @@ public class CreateCreatorTemplate {
 
         Map<String,Object> data = new HashMap<>();
 
-        data.put("table", createContext.table().name());
+        data.put("table", createContext.table().table().getFullName());
         data.put("columns", createContext.renderColumns());
         data.put("parameters", createContext.renderParams());
 
