@@ -4,7 +4,9 @@ import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.model.DbWhere;
 import com.homihq.db2rest.rsql2.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql2.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
@@ -13,7 +15,11 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @Order(8)
+@RequiredArgsConstructor
 public class RootWhereProcessor implements ReadProcessor {
+
+    private final SchemaManager schemaManager;
+
     @Override
     public void process(ReadContext readContext) {
         if(StringUtils.isNotBlank(readContext.getFilter())) {
@@ -29,7 +35,7 @@ public class RootWhereProcessor implements ReadProcessor {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere));
+                            dbWhere, schemaManager.getDialect()));
 
             log.info("Where - {}", where);
 
