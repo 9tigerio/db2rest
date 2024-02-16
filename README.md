@@ -1,4 +1,4 @@
-DB2Rest is an **open-source tool** to rapidly build data access layer with minimal engineering effort. 
+DB2Rest is an **open-source API platform** to rapidly build data access layer with minimal engineering effort. 
 DB2Rest connects with your database to instantly provide REST API to perform data access operations(create, read, insert, update) 
 and execute stored functions/procedures. 
 It takes care of all data access logic and best practices, so that developers can focus on solving complex business logic or building small user-interface components. 
@@ -26,9 +26,10 @@ The capability to expose existing data to partners and internal developers secur
 ![DB2Rest- How it works?](assets/db2rest-how-it-works.gif "DB2Rest")
 
 
+## Use Cases 
 
 
-## Benefits
+## Key Features
 
     - No code, no SQL knowledge required, instead use simple REST Query Language (RQL) to retrieve data.
     - Accelerate application development by 30x. 
@@ -53,58 +54,29 @@ Refer to [installation quickstart documentation](https://db2rest.com/docs/intro)
 Refer to [running with Docker documentation](https://db2rest.com/docs/installation-running-with-docker).
 
 
-
 # Supported Databases
 
 - **PostgreSQL**
 - **MySQL**
+- **Oracle** (Coming soon)
+- **MariaDB** (Coming soon)
 
-# Supported Features
+# Supported AI powered Modern Databases
 
-**Save Record (Create)**
+- **Tembo** (Docs coming soon)
+- **Neon** (Docs coming soon)
+- **Nile** (Docs coming soon)
+- [PostgreML](https://postgresml.org/) : Work in Progress
+- **MindsDB** (Coming soon)
+- [KDB](https://kdb.ai/)
+- [Zilliz](https://zilliz.com/)
+- [AstraDB](https://www.datastax.com/products/datastax-astra)
+- [Vespa](https://vespa.ai/)
+- 
 
-- [x] Single record.
-- [x] Bulk records.
-
-**Query (Read)**
-
-- [x] Row Filtering with rSQL DSL.
-- [x] Column Selection
-- [x] Rename Columns / Alias
-- [x] Join - Inner
-- [x] Include Join Columns
-- [x] Pagination - Limit & Offset
-- [X] Sort / Order by
-- [ ] Group By
-- [ ] Count
-- [ ] Join column filter
+# Data API Features
 
 
-**Edit**
-
-- [x] Patch
-- [x] Patch with row filtering
-
-
-**Purge (Delete)**
-
-- [x] Delete with row filter.
-- [x] Safe delete.
-
-**Transactions**
-
-- [x] Readonly for Select
-- [x] Supported for Save, Edit, Purge 
-
-**Multi-tenancy**
-
-- [ ] Tenant Id column
-- [x] Schema per tenant
-- [ ] Database per tenant
-
-**Schema Support**
-
-- [x] Multiple schema support
 
 
 # Support
