@@ -25,10 +25,20 @@ powered by artificial intelligence(AI).
 ![DB2Rest- How it works?](assets/db2rest-how-it-works.gif "DB2Rest")
 
 
-## Use Cases 
+# Use Cases 
+
+- **Innovation with AI powered Applications** - DB2Rest provides instant REST DATA API over modern AI powered databases. This allows rapid exchange of insights to other applications. 
+- **Application Delivery Accelerator** - Instant REST API to boost application development. Low code and best practices pre-built.
+- **Digital Transformation** - secure gateway access to database for data sharing - with internal developers and partners paving way for new channels of data access.
+- **Simplify Integration** - replace complex, cumbersome, erroneous file based data sharing with secure DATA API. 
+- **Loose coupling** - promote loose coupling between business logic and data access logic. Reduce direct database based integration. 
+- **Database CI/CD** - Evolve database structures at speed with DB2Rest DML support.
+
+# Advantages
 
 
-## Data API Features
+
+# Data API Features
 
 [Data API features documentation](https://db2rest.com/docs/data-api-features)
 
