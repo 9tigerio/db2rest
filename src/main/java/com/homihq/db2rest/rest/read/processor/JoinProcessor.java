@@ -81,7 +81,7 @@ public class JoinProcessor implements ReadProcessor {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere));
+                            dbWhere, schemaManager.getDialect()));
 
             join.addAdditionalWhere(where);
 

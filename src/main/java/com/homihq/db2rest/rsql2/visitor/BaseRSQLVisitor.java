@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rsql2.visitor;
 
+import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbWhere;
 import com.homihq.db2rest.rsql2.operator.handler.OperatorHandler;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
 
     private final DbWhere dbWhere;
+    private final Dialect dialect;
 
     @Override
     public String visit(AndNode andNode, Object o) {
@@ -37,8 +39,7 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
     public String visit(ComparisonNode node, Object o) {
         ComparisonOperator op = node.getOperator();
 
-        log.info("Handling column - {}", node.getSelector());
-
+        log.debug("Handling column - {}", node.getSelector());
 
         DbColumn dbColumn = this.dbWhere.table().buildColumn(node.getSelector());
 
@@ -51,10 +52,10 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
         }
 
         if (op.isMultiValue()) {
-            return operatorHandler.handle(dbColumn, node.getArguments(), type, this.dbWhere.paramMap());
+            return operatorHandler.handle(dialect, dbColumn, node.getArguments(), type, this.dbWhere.paramMap());
         }
         else {
-            return operatorHandler.handle(dbColumn, node.getArguments().get(0), type, this.dbWhere.paramMap());
+            return operatorHandler.handle(dialect,dbColumn, node.getArguments().get(0), type, this.dbWhere.paramMap());
         }
 
     }

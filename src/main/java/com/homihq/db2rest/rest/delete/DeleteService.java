@@ -82,7 +82,7 @@ public class DeleteService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere));
+                            dbWhere, schemaManager.getDialect()));
             context.setWhere(where);
 
         }
