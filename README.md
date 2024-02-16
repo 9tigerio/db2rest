@@ -31,27 +31,15 @@ The capability to expose existing data to partners and internal developers secur
 
 ## Key Features
 
-    - No code, no SQL knowledge required, instead use simple REST Query Language (RQL) to retrieve data.
-    - Accelerate application development by 30x. 
-    - Unlock databases - secure REST API access for legacy data.
-    - Blazing fast - No ORM, Single SQL Statement, 1 Database round-trip, does not use code generation.
-    - Support for advanced custom queries, bulk data insert, and remote stored procedure calls. 
-    - Best practices for transaction management, connection pooling, encryption, security - RBAC / data entitlement.
-    - Deploy and run anywhere - on-premise, VM, Kubernetes, or any cloud. 
-    - Zero downtime - adjusts to your evolving database schema. 
-    - Compatible with DevOps processes. 
+
 
 
 # Installation 
 
-## On Premise / On Virtual Machines (VM) 
 
-Refer to [installation quickstart documentation](https://db2rest.com/docs/intro).
+[On premise / On Virtual Machines installation guide](https://db2rest.com/docs/intro).
 
-
-## With Docker
-
-Refer to [running with Docker documentation](https://db2rest.com/docs/installation-running-with-docker).
+[Docker based installation guide](https://db2rest.com/docs/installation-running-with-docker).
 
 
 # Supported Databases
@@ -72,11 +60,6 @@ Refer to [running with Docker documentation](https://db2rest.com/docs/installati
 - [Zilliz](https://zilliz.com/)
 - [AstraDB](https://www.datastax.com/products/datastax-astra)
 - [Vespa](https://vespa.ai/)
-- 
-
-# Data API Features
-
-
 
 
 # Support
