@@ -1,11 +1,9 @@
-DB2Rest is an **open-source API platform** to rapidly build data access layer with minimal engineering effort. 
-DB2Rest connects with your database to instantly provide REST API to perform data access operations(create, read, insert, update) 
-and execute stored functions/procedures. 
-It takes care of all data access logic and best practices, so that developers can focus on solving complex business logic or building small user-interface components. 
-Thus, DB2Rest can provide significant boost to your application delivery and save engineering cost. 
+DB2Rest is an **open-source REST DATA API platform** to rapidly build data access layer with minimal engineering effort. 
+DB2Rest connects with modern AI powered database or traditional database to instantly provide API to perform data access, manipulation operations, 
+, load ML models, export and share data.  
 
-DB2Rest can also act as a secure gateway for legacy databases. This can replace cumbersome, expensive file based data sharing and shared database based integration.
-The capability to expose existing data to partners and internal developers securely at scale opens up possibilities of innovation and digital transformation. 
+It has all the best practices built-in, so that developers can focus on business logic, build intuitive user-interface and build intelligent applications
+powered by artificial intelligence(AI). 
 
 :star: If you find DB2Rest useful, please consider adding a star on GitHub! Your support motivates us to add new exciting features.
 
