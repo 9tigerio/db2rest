@@ -34,9 +34,6 @@ powered by artificial intelligence(AI).
 - **Loose coupling** - promote loose coupling between business logic and data access logic. Reduce direct database based integration. 
 - **Database CI/CD** - Evolve database structures at speed with DB2Rest DML support.
 
-# Advantages
-
-
 
 # Data API Features
 
