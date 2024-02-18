@@ -15,10 +15,6 @@ public class UnkeyDevService {
 
     private final RestTemplateBuilder restTemplateBuilder;
 
-    private final RestTemplate restTemplate = restTemplateBuilder
-                    .defaultHeader("Content-Type", "application/json")
-                    .build();
-
 
     String UNKEY_DEV_DOMAIN = "https://api.unkey.dev/v1";
     String VERIFY_API_KEY_URL = "keys.verifyKey";
@@ -27,6 +23,11 @@ public class UnkeyDevService {
 
     // TODO: Might need to return user id?
     public boolean verifyApiKey(String apiKey) {
+
+        RestTemplate restTemplate = restTemplateBuilder
+                .defaultHeader("Content-Type", "application/json")
+                .build();
+
         // TODO: Need how to get apiId
         VerifyKeyRequest request = VerifyKeyRequest.builder()
                     .key(apiKey).apiId("").build();
