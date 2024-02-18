@@ -72,23 +72,6 @@ public class PostGreSQLDialect implements Dialect{
        return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    @Override
-    public Object processValue(String value, Class<?> type, String format) {
-        if (String.class == type) {
-            return "'" + value + "'";
-        }
-        else if (Boolean.class == type || boolean.class == type) {
-            return Boolean.valueOf(value);
-
-        }
-        else if (Integer.class == type || int.class == type) {
-            return Integer.valueOf(value);
-        }
-        else {
-            return value;
-        }
-
-    }
 
     private Object convertToInt(Object value) {
         if(value.getClass().isAssignableFrom(Integer.class)) {

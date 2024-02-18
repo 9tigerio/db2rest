@@ -45,8 +45,6 @@ public class MySQLDialect implements Dialect{
                     data.put(columnName, objectMapper.writeValueAsString(value));
                 }
 
-
-
             }
         }
         catch (Exception exception) {
@@ -54,11 +52,5 @@ public class MySQLDialect implements Dialect{
         }
 
     }
-
-    @Override
-    public Object processValue(String value, Class<?> type, String format) {
-        return null;
-    }
-
 
 }

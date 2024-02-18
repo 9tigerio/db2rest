@@ -14,5 +14,21 @@ public interface Dialect {
 
     void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
 
-    Object processValue(String value, Class<?> type, String format);
+
+    default Object processValue(String value, Class<?> type, String format) {
+        if (String.class == type) {
+            return "'" + value + "'";
+        }
+        else if (Boolean.class == type || boolean.class == type) {
+            return Boolean.valueOf(value);
+
+        }
+        else if (Integer.class == type || int.class == type) {
+            return Integer.valueOf(value);
+        }
+        else {
+            return value;
+        }
+
+    }
 }
