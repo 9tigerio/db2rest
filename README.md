@@ -16,9 +16,7 @@ It connects (traditional and ML enabled)databases and AI services(OPENAI, AWS Be
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/kdhrubo/db2rest)
 [![GitHub license](https://img.shields.io/github/license/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest)
 ![GitHub top language](https://img.shields.io/github/languages/top/kdhrubo/db2rest)
-
 ![Docker Pulls](https://img.shields.io/docker/pulls/kdhrubo/db2rest)
-
 [![Follow us on X, formerly Twitter](https://img.shields.io/twitter/follow/db2rest?style=social)](https://twitter.com/db2rest)
 
 
