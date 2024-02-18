@@ -1,4 +1,4 @@
-DB2Rest is an **open-source DATA API platform** that provides REST API over databases in seconds.
+DB2Rest is an **open-source DATA API platform** that provides REST API over databases in minutes.
 It takes care of all the boilerplate data access logic and best practices, thus freeing up development team to focus on building 
 complex business logic and intuitive user interfaces. :airplane:
 
