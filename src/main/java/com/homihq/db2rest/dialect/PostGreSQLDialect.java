@@ -16,6 +16,7 @@ import schemacrawler.schema.DatabaseInfo;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -74,12 +75,41 @@ public class PostGreSQLDialect implements Dialect{
                     }
                 }
 
+                else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamptz")) {
+
+                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
+                        log.info("Found a timestamptz column value as string");
+
+                        OffsetDateTime v = convertToOffsetDateTime((String)value);
+
+                        log.info("OffsetDateTime - {}" , v);
+
+                        data.put(columnName, v);
+                    }
+                }
+
+                else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timetz")) {
+
+                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
+                        log.info("Found a timetz column value as string");
+
+                        OffsetTime v = convertToOffsetTime((String)value);
+
+                        log.info("OffsetTime - {}" , v);
+
+                        data.put(columnName, v);
+                    }
+                }
 
             }
         }
         catch (Exception exception) {
             throw new GenericDataAccessException(exception.getMessage());
         }
+    }
+
+    private OffsetTime convertToOffsetTime(String value) {
+        return OffsetTime.parse(value, DateTimeFormatter.ISO_OFFSET_TIME);
     }
 
     private LocalDateTime convertToLocalDateTime(String value) {
