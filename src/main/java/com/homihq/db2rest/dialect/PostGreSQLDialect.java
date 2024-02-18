@@ -14,8 +14,11 @@ import schemacrawler.schema.DatabaseInfo;
 
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -37,17 +40,36 @@ public class PostGreSQLDialect implements Dialect{
 
                 String columnDataTypeName = table.lookupColumn(columnName).getColumnDataType().getName();
 
+                log.info("columnDataTypeName - {}", columnDataTypeName);
+
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
                     Object v = convertToJson(value, columnDataTypeName);
 
                     data.put(columnName, v);
                 }
+                else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamp")) {
+
+                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
+                        log.info("Found a timestamp column value as string");
+
+                        LocalDateTime v = convertToLocalDateTime((String)value);
+
+                        log.info("LocalDateTime - {}" , v);
+
+                        data.put(columnName, v);
+                    }
+                }
+
 
             }
         }
         catch (Exception exception) {
             throw new GenericDataAccessException(exception.getMessage());
         }
+    }
+
+    private LocalDateTime convertToLocalDateTime(String value) {
+       return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @Override
