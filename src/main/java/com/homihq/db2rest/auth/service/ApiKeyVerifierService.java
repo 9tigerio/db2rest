@@ -13,7 +13,7 @@ public class ApiKeyVerifierService {
 
     public boolean verifyApiKey(String token) {
         // TODO: Check if need to return user or role
-        return unkeyDevService.verifyApiKey();
+        return unkeyDevService.verifyApiKey(token);
     }
 
 }

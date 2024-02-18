@@ -1,5 +1,6 @@
 package com.homihq.db2rest.auth.service;
 
+import com.homihq.db2rest.auth.to.VerifyKeyRequest;
 import com.homihq.db2rest.auth.to.VerifyKeyResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +15,27 @@ public class UnkeyDevService {
 
     private final RestTemplateBuilder restTemplateBuilder;
 
-    String VERIFY_API_KEY_URL = "";
+    private final RestTemplate restTemplate = restTemplateBuilder
+                    .defaultHeader("Content-Type", "application/json")
+                    .build();
+
+
+    String UNKEY_DEV_DOMAIN = "https://api.unkey.dev/v1";
+    String VERIFY_API_KEY_URL = "keys.verifyKey";
 
 
 
     // TODO: Might need to return user id?
-    public boolean verifyApiKey() {
-        // TODO: Need to add unkey dev auth creds to connect
-        VerifyKeyResponse verifyResponse = restTemplateBuilder.build().getForObject(VERIFY_API_KEY_URL, VerifyKeyResponse.class);
-        if(verifyResponse != null) {
-            return verifyResponse.valid;
+    public boolean verifyApiKey(String apiKey) {
+        // TODO: Need how to get apiId
+        VerifyKeyRequest request = VerifyKeyRequest.builder()
+                    .key(apiKey).apiId("").build();
+
+        VerifyKeyResponse response = restTemplate.postForObject(UNKEY_DEV_DOMAIN + "/" + VERIFY_API_KEY_URL,
+                    request, VerifyKeyResponse.class);
+
+        if(response != null) {
+            return response.valid;
         } else {
             log.error("verify key response from UnkeyDev returned null");
         }
