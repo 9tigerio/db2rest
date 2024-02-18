@@ -27,20 +27,24 @@ It connects (traditional and ML enabled)databases and AI services(OPENAI, AWS Be
 
 # Use Cases 
 
-## Faster Innovation with Instant AI API Gateway
+## Accelerate Application Delivery with Instant REST DATA API
 
-DB2Rest provides instant REST API over AI-powered databases.  This allows AI traffic control, governance, observability, natural language queries, rapid provisioning of ML models, data sanitization, and exchange of insights and data.
+DB2Rest provides instant REST API(no code generation) to boost development by 30x. Low code and best practices are built-in saving engineering teams
+months of effort and cost. 
 
-## Application Delivery Accelerator
-DB2Rest provides instant REST API(no code generation) to boost development by 30x. Low code and best practices are built-in. Engineers can focus on complex business rules and user interface development.  
+## Faster Innovation with Secure AI Gateway
+
+DB2Rest works hand in glove with modern AI powered databases, LLM implementations to provide consistent Web APIs to deliver smart applications.
+Low code AI integration, natural language query and visualization, ability to execute tasks allows faster innovation. DB2Rest can function 
+as centralized AI gateway providing governance, metrics 
 
 ## Simplify Integration
-DB2Rest works as a secure database gateway to open up databases to internal developers and partners paving the way to build new applications and innovative solution.
 
-Complex, insecure and maintenance-heavy file-based data exchange can be replaced with DB2Rest. Applications can be loosely coupled by reducing direct database based integration.
-
+DB2Rest works as a secure database gateway. This helps enterprises to open up data to internal developers and partners in a safe and agile way which was not possible earlier. 
+Complex and maintenance-heavy file-based data exchange can be replaced with DB2Rest. Applications can be loosely coupled by reducing direct database based integration. 
 
 ## Easy Database DevOps and Documentation
+
 Evolve database structures at speed with DB2Rest DML support. DB2Rest provides database visualization, diagramming, linting and diff.
 
 
@@ -55,17 +59,22 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 
 - **PostgreSQL**
 - **MySQL**
-- [PostgreML](https://postgresml.org/) : Feb 2024 - release
-- **Tembo** : Feb 2024 - release
+- [PostgreML](https://postgresml.org/) : March 2024 - release
+- **Tembo** : March 2024 - release
 - **Neon** (Planned)
 - **Nile** (Planned)
-- **MindsDB** (Plan)
+- **MindsDB** 
 - [KDB](https://kdb.ai/)
 - [Zilliz](https://zilliz.com/)
 - [AstraDB](https://www.datastax.com/products/datastax-astra)
 - [Vespa](https://vespa.ai/)
 - **Oracle** (Coming soon)
 - **MariaDB** (Coming soon)
+- **MS SQL Server** 
+- **CockroachDB**
+- **Yugabyte**
+- **AWS RDS Postgres**
+- **AWS RDS MySQL**
 
 # Support
 
@@ -74,11 +83,13 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 [![](https://dcbadge.vercel.app/api/server/gytFPNW656?theme=discord)](https://discord.gg/gytFPNW656)
 
 
-
 # Contact
 
 <help@db2rest.com>
 
+{::comment}
 # Roadmap
 
 Refer to [open roadmap](https://db2rest.com/roadmap/) items.
+
+{:/comment}
