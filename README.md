@@ -92,4 +92,4 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 
 Refer to [open roadmap](https://db2rest.com/roadmap/) items.
 
-{:/comment}
+{::/comment}
