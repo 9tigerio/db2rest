@@ -1,4 +1,5 @@
-DB2Rest is an open-source AI API Gateway platform to rapidly build intelligent applications on top of modern databases.
+DB2Rest is an **open-source AI API Gateway platform** to rapidly build intelligent applications on top of modern databases and 
+AI Services.
 It connects with modern AI-enabled (and existing) databases to instantly provide API to load AI models, perform data access and manipulation operations, and share insights and data rapidly.  
 It has all the best practices built-in allowing developers to focus on business logic, and build intuitive user interfaces for intelligent applications powered by artificial intelligence(AI).
 
