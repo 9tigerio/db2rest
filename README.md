@@ -52,7 +52,7 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 
 - **PostgreSQL**
 - **MySQL**
-- - [PostgreML](https://postgresml.org/) : Feb 2024 - release
+- [PostgreML](https://postgresml.org/) : Feb 2024 - release
 - **Tembo** : Feb 2024 - release
 - **Neon** (Planned)
 - **Nile** (Planned)
