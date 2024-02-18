@@ -14,8 +14,13 @@ import schemacrawler.schema.DatabaseInfo;
 
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -37,10 +42,63 @@ public class PostGreSQLDialect implements Dialect{
 
                 String columnDataTypeName = table.lookupColumn(columnName).getColumnDataType().getName();
 
+                log.info("columnDataTypeName - {}", columnDataTypeName);
+
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
                     Object v = convertToJson(value, columnDataTypeName);
 
                     data.put(columnName, v);
+                }
+                else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamp")) {
+
+                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
+                        log.info("Found a timestamp column value as string");
+
+                        LocalDateTime v = convertToLocalDateTime((String)value);
+
+                        log.info("LocalDateTime - {}" , v);
+
+                        data.put(columnName, v);
+                    }
+                }
+
+                else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamptz")) {
+
+                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
+                        log.info("Found a timestamptz column value as string");
+
+                        OffsetDateTime v = convertToOffsetDateTime((String)value);
+
+                        log.info("LocalDateTime - {}" , v);
+
+                        data.put(columnName, v);
+                    }
+                }
+
+                else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamptz")) {
+
+                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
+                        log.info("Found a timestamptz column value as string");
+
+                        OffsetDateTime v = convertToOffsetDateTime((String)value);
+
+                        log.info("OffsetDateTime - {}" , v);
+
+                        data.put(columnName, v);
+                    }
+                }
+
+                else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timetz")) {
+
+                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
+                        log.info("Found a timetz column value as string");
+
+                        OffsetTime v = convertToOffsetTime((String)value);
+
+                        log.info("OffsetTime - {}" , v);
+
+                        data.put(columnName, v);
+                    }
                 }
 
             }
@@ -50,22 +108,16 @@ public class PostGreSQLDialect implements Dialect{
         }
     }
 
-    @Override
-    public Object processValue(String value, Class<?> type, String format) {
-        if (String.class == type) {
-            return "'" + value + "'";
-        }
-        else if (Boolean.class == type || boolean.class == type) {
-            return Boolean.valueOf(value);
+    private OffsetTime convertToOffsetTime(String value) {
+        return OffsetTime.parse(value, DateTimeFormatter.ISO_OFFSET_TIME);
+    }
 
-        }
-        else if (Integer.class == type || int.class == type) {
-            return Integer.valueOf(value);
-        }
-        else {
-            return value;
-        }
+    private LocalDateTime convertToLocalDateTime(String value) {
+       return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+    }
 
+    private OffsetDateTime convertToOffsetDateTime(String value) {
+        return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
     private Object convertToInt(Object value) {
