@@ -1,4 +1,4 @@
-DB2Rest is an open-source low-code platform to rapidly build intelligent applications.
+DB2Rest is an open-source AI API Gateway platform to rapidly build intelligent applications on top of modern databases.
 It connects with modern AI-enabled (and existing) databases to instantly provide API to load AI models, perform data access and manipulation operations, and share insights and data rapidly.  
 It has all the best practices built-in allowing developers to focus on business logic, and build intuitive user interfaces for intelligent applications powered by artificial intelligence(AI).
 
@@ -23,17 +23,21 @@ It has all the best practices built-in allowing developers to focus on business 
 
 # Use Cases 
 
-- **Innovation with AI powered Applications** - DB2Rest provides instant REST DATA API over modern AI powered databases. This allows rapid exchange of insights to other applications. 
-- **Application Delivery Accelerator** - Instant REST API to boost application development. Low code and best practices pre-built.
-- **Digital Transformation** - secure gateway access to database for data sharing - with internal developers and partners paving way for new channels of data access.
-- **Simplify Integration** - replace complex, cumbersome, erroneous file based data sharing with secure DATA API. 
-- **Loose coupling** - promote loose coupling between business logic and data access logic. Reduce direct database based integration. 
-- **Database CI/CD** - Evolve database structures at speed with DB2Rest DML support.
+## Faster Innovation with instant AI API Gateway
+
+DB2Rest provides instant REST API over AI-powered databases.  This allows AI traffic control, governance, observability, natural language queries, rapid provisioning of ML models, data sanitization, and exchange of insights and data.
+
+## Application Delivery Accelerator
+DB2Rest provides instant REST API(no code generation) to boost development by 30x. Low code and best practices are built-in. Engineers can focus on complex business rules and user interface development.  
+
+## Simplify Integration
+DB2Rest works as a secure database gateway to open up databases to internal developers and partners paving the way to build new applications and innovative solution.
+
+Complex, insecure and maintenance-heavy file-based data exchange can be replaced with DB2Rest. Applications can be loosely coupled by reducing direct database based integration.
 
 
-# Data API Features
-
-[Data API features documentation](https://db2rest.com/docs/data-api-features)
+## Easy Database DevOps and Documentation
+Evolve database structures at speed with DB2Rest DML support. DB2Rest provides database visualization, diagramming, linting and diff.
 
 
 # Installation 
@@ -47,21 +51,17 @@ It has all the best practices built-in allowing developers to focus on business 
 
 - **PostgreSQL**
 - **MySQL**
-- **Oracle** (Coming soon)
-- **MariaDB** (Coming soon)
-
-# Supported AI powered Modern Databases
-
-- **Tembo** (Docs coming soon)
-- **Neon** (Docs coming soon)
-- **Nile** (Docs coming soon)
-- [PostgreML](https://postgresml.org/) : Work in Progress
-- **MindsDB** (Coming soon)
+- - [PostgreML](https://postgresml.org/) : Feb 2024 - release
+- **Tembo** : Feb 2024 - release
+- **Neon** (Planned)
+- **Nile** (Planned)
+- **MindsDB** (Plan)
 - [KDB](https://kdb.ai/)
 - [Zilliz](https://zilliz.com/)
 - [AstraDB](https://www.datastax.com/products/datastax-astra)
 - [Vespa](https://vespa.ai/)
-
+- **Oracle** (Coming soon)
+- **MariaDB** (Coming soon)
 
 # Support
 
