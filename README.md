@@ -1,7 +1,10 @@
-DB2Rest is an **open-source AI API Gateway platform** to rapidly build intelligent applications on top of modern databases and 
-AI Services.
-It connects with modern AI-enabled (and existing) databases and services(OPENAI, AWS Bedrock) to instantly provide API to load AI models, perform data access and manipulation operations, and share insights and data rapidly.  
-It has all the best practices built-in allowing developers to focus on business logic, and build intuitive user interfaces for intelligent applications powered by artificial intelligence(AI).
+DB2Rest is an **open-source DATA API platform** that provides instant REST API over databases.
+It takes care of all the boilerplate data access logic and best practices, thus freeing up development team to focus on building 
+complex business logic and intuitive user interfaces.
+
+DB2Rest simplifies development of intelligent applications with databases and AI Services.
+It connects with modern AI-enabled and existing databases and services(OPENAI, AWS Bedrock) to provide API to load AI models, perform data access and update operations, and share insights and data rapidly.  
+.
 
 :star: If you find DB2Rest useful, please consider adding a star on GitHub! Your support motivates us to add new exciting features.
 
@@ -14,6 +17,9 @@ It has all the best practices built-in allowing developers to focus on business 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/kdhrubo/db2rest)
 [![GitHub license](https://img.shields.io/github/license/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest)
 ![GitHub top language](https://img.shields.io/github/languages/top/kdhrubo/db2rest)
+
+![Docker Pulls](https://img.shields.io/docker/pulls/kdhrubo/db2rest)
+
 [![Follow us on X, formerly Twitter](https://img.shields.io/twitter/follow/db2rest?style=social)](https://twitter.com/db2rest)
 
 
