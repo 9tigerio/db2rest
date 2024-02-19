@@ -17,7 +17,9 @@ public interface Dialect {
 
     default Object processValue(String value, Class<?> type, String format) {
         if (String.class == type) {
-            return "'" + value + "'";
+            //return "'" + value + "'";
+
+            return value;
         }
         else if (Boolean.class == type || boolean.class == type) {
             return Boolean.valueOf(value);
