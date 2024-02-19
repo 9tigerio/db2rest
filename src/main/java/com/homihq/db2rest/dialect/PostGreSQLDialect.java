@@ -43,62 +43,32 @@ public class PostGreSQLDialect implements Dialect{
                 String columnDataTypeName = table.lookupColumn(columnName).getColumnDataType().getName();
 
                 log.info("columnDataTypeName - {}", columnDataTypeName);
+                if(Objects.isNull(value)) continue;
 
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
                     Object v = convertToJson(value, columnDataTypeName);
-
                     data.put(columnName, v);
                 }
                 else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamp")) {
+                    LocalDateTime v = convertToLocalDateTime((String)value);
+                    data.put(columnName, v);
 
-                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
-                        log.info("Found a timestamp column value as string");
-
-                        LocalDateTime v = convertToLocalDateTime((String)value);
-
-                        log.info("LocalDateTime - {}" , v);
-
-                        data.put(columnName, v);
-                    }
                 }
-
                 else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamptz")) {
+                    OffsetDateTime v = convertToOffsetDateTime((String)value);
+                    data.put(columnName, v);
 
-                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
-                        log.info("Found a timestamptz column value as string");
-
-                        OffsetDateTime v = convertToOffsetDateTime((String)value);
-
-                        log.info("LocalDateTime - {}" , v);
-
-                        data.put(columnName, v);
-                    }
                 }
-
                 else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamptz")) {
-
-                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
-                        log.info("Found a timestamptz column value as string");
-
-                        OffsetDateTime v = convertToOffsetDateTime((String)value);
-
-                        log.info("OffsetDateTime - {}" , v);
-
-                        data.put(columnName, v);
-                    }
+                    OffsetDateTime v = convertToOffsetDateTime((String)value);
+                    data.put(columnName, v);
                 }
-
                 else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timetz")) {
-
-                    if(Objects.nonNull(value) && value.getClass().isAssignableFrom(String.class)) {
-                        log.info("Found a timetz column value as string");
-
                         OffsetTime v = convertToOffsetTime((String)value);
-
-                        log.info("OffsetTime - {}" , v);
-
                         data.put(columnName, v);
-                    }
+                }
+                else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "int4","int2","int8","int")) {
+                    data.put(columnName, Integer.valueOf(value.toString().trim()));
                 }
 
             }
