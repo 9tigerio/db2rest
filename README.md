@@ -75,6 +75,9 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - **Yugabyte**
 - **AWS RDS Postgres**
 - **AWS RDS MySQL**
+- **PlanetScale**
+- **CrunchyData**
+- **Singlestore** 
 
 # Support
 

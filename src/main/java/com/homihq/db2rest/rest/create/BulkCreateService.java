@@ -55,7 +55,13 @@ public class BulkCreateService {
 
             //3. check if tsId is enabled and add those values for PK.
             if (tsIdEnabled) {
+                log.info("tsIdEnabled - {}", tsIdEnabled);
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
+
+                log.info("PK Columns # -> {}", pkColumns);
+                for(DbColumn pkColumn : pkColumns) {
+                    insertableColumns.add(pkColumn.name());
+                }
 
                 for (Map<String, Object> data : dataList) {
                     tsidProcessor.processTsId(data, pkColumns);
@@ -66,10 +72,11 @@ public class BulkCreateService {
             String sql = createCreatorTemplate.createQuery(context);
 
             log.info("SQL - {}", sql);
+            log.info("Data - {}", dataList);
 
             SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
 
-            log.debug("SQL -> {}", sql);
+
 
             int[] updateCounts;
             KeyHolder keyHolder = new GeneratedKeyHolder();
