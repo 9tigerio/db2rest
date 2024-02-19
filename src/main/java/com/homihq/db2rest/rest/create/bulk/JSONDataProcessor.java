@@ -18,8 +18,6 @@ public class JSONDataProcessor implements DataProcessor{
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public List<Map<String, Object>> getData(InputStream inputStream) throws Exception{
-
-        log.info("#### Json Data ###");
         return objectMapper.readValue(inputStream, new TypeReference<List<Map<String, Object>>>(){});
     }
 

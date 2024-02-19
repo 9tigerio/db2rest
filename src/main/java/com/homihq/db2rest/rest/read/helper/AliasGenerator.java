@@ -7,7 +7,7 @@ import java.util.Random;
 
 @Component
 public class AliasGenerator {
-    private Random random = new Random();
+    private final Random random = new Random();
     public String getAlias(String prefix, int length, String sqlIdentifier) {
         return
         sqlIdentifier.length() > length ?

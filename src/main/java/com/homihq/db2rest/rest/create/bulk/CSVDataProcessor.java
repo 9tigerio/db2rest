@@ -7,7 +7,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -57,26 +56,10 @@ public class CSVDataProcessor implements DataProcessor{
 
         for(String key : data.keySet()) {
             String val = data.get(key);
-            Object v = transform(val);
-
-            objectMap.put(key, v);
+            objectMap.put(key, val);
         }
 
         return objectMap;
     }
 
-    private Object transform(String val) {
-
-        if(NumberUtils.isCreatable(val)) {//so this is a number
-            if(NumberUtils.isDigits(val)) {
-                return NumberUtils.createInteger(val);
-            }
-            else{
-                return NumberUtils.createFloat(val);
-            }
-        }
-
-        return val;
-
-    }
 }
