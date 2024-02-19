@@ -22,6 +22,7 @@ public class DeleteContext{
     DbTable table;
     String where;
     Map<String,Object> paramMap;
+    Map<String,Object> data;
 
     public void createParamMap() {
         if(Objects.isNull(paramMap)) {

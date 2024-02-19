@@ -2,27 +2,25 @@ package com.homihq.db2rest.rest.update;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.mybatis.MyBatisTable;
-import com.homihq.db2rest.rsql.v1.operators.SimpleRSQLOperators;
-import com.homihq.db2rest.rsql.v1.parser.WhereFilterVisitor;
+import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.model.DbWhere;
+import com.homihq.db2rest.rest.update.dto.UpdateContext;
+
+import com.homihq.db2rest.rsql2.parser.RSQLParserBuilder;
+import com.homihq.db2rest.rsql2.visitor.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
-import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.mybatis.dynamic.sql.SqlCriterion;
-import org.mybatis.dynamic.sql.render.RenderingStrategies;
-import org.mybatis.dynamic.sql.update.UpdateDSL;
-import org.mybatis.dynamic.sql.update.UpdateModel;
-import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
-import static org.mybatis.dynamic.sql.update.UpdateDSL.update;
+
 
 @Service
 @Slf4j
@@ -32,52 +30,73 @@ public class UpdateService {
     private final Db2RestConfigProperties db2RestConfigProperties;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SchemaManager schemaManager;
+    private final UpdateCreatorTemplate updateCreatorTemplate;
+
     @Transactional
     public int patch(String schemaName, String tableName, Map<String,Object> data, String filter) {
 
-        MyBatisTable table;
+        DbTable dbTable;
         if(db2RestConfigProperties.getMultiTenancy().isSchemaBased()) {
-            table = schemaManager.getOneTable(schemaName, tableName);
-        } else {
-            table = schemaManager.getTable(tableName);
+            //Only relevant for schema per tenant multi tenancy
+            //TODO - handle schema retrieval from request
+            dbTable = schemaManager.getOneTableV2(schemaName, tableName);
+        }
+        else{
+            //get a unique table
+            dbTable = schemaManager.getTableV2(tableName);
         }
 
-        return executeUpdate(filter, data, table);
+        List<String> updatableColumns =
+            data.keySet().stream().toList();
+
+        this.schemaManager.getDialect().processTypes(dbTable, updatableColumns, data);
+
+        UpdateContext context = UpdateContext.builder()
+                .tableName(tableName)
+                .table(dbTable)
+                .updatableColumns(updatableColumns)
+                .build();
+
+        context.createParamMap(data);
+
+        return executeUpdate(filter, dbTable, context);
+
 
     }
 
-    private int executeUpdate(String filter, Map<String, Object> data, MyBatisTable table) {
-        UpdateDSL<UpdateModel> updateDSL = update(table);
+    private int executeUpdate(String filter, DbTable table, UpdateContext context) {
 
-        for(String key : data.keySet()) {
-            updateDSL.set(table.column(key)).equalToOrNull(data.get(key));
-        }
+        addWhere(filter, table, context);
+        String sql =
+                updateCreatorTemplate.updateQuery(context);
 
-        addWhere(filter, table, updateDSL);
-
-        UpdateStatementProvider updateStatement = updateDSL.build()
-                .render(RenderingStrategies.SPRING_NAMED_PARAMETER);
-
-        log.info("SQL - {}", updateStatement.getUpdateStatement());
-        log.info("Bind variables - {}", updateStatement.getParameters());
+        log.info("{}", sql);
+        log.info("{}", context.getParamMap());
 
         try {
-            return namedParameterJdbcTemplate.update(updateStatement.getUpdateStatement(),
-                    updateStatement.getParameters());
+            return namedParameterJdbcTemplate.update(sql,
+                    context.getParamMap());
         } catch (DataAccessException e) {
+            log.error("Error in delete op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
     }
 
-    private void addWhere(String filter, MyBatisTable table, UpdateDSL<UpdateModel> updateDSL) {
+    private void addWhere(String filter, DbTable table, UpdateContext context) {
+
         if(StringUtils.isNotBlank(filter)) {
 
-            Node rootNode = new RSQLParser(SimpleRSQLOperators.customOperators()).parse(filter);
+            DbWhere dbWhere = new DbWhere(
+                    context.getTableName(),
+                    table, null ,context.getParamMap());
 
-            SqlCriterion condition = rootNode
-                    .accept(new WhereFilterVisitor(table));
+            Node rootNode = RSQLParserBuilder.newRSQLParser().parse(filter);
 
-            updateDSL.where(condition);
+            String where = rootNode
+                    .accept(new BaseRSQLVisitor(
+                            dbWhere, schemaManager.getDialect()));
+            context.setWhere(where);
+
         }
     }
 
