@@ -4,7 +4,6 @@ import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.mybatis.MyBatisTable;
-import com.homihq.db2rest.rest.read.helper.AliasGenerator;
 import com.homihq.db2rest.model.DbTable;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -50,10 +49,9 @@ public final class SchemaManager {
     public void createSchemaCache() {
 
         // Create the options
-        final LimitOptionsBuilder limitOptionsBuilder = LimitOptionsBuilder.builder();
+        final LimitOptionsBuilder limitOptionsBuilder = LimitOptionsBuilder.builder().tableTypes("TABLE","VIEW","MATERIALIZED VIEW");
 
         final LoadOptionsBuilder loadOptionsBuilder = LoadOptionsBuilder.builder()
-
                 // Set what details are required in the schema - this affects the
                 // time taken to crawl the schema
                 .withSchemaInfoLevel(SchemaInfoLevelBuilder.standard());
@@ -80,7 +78,7 @@ public final class SchemaManager {
         for (final Schema schema : catalog.getSchemas()) {
 
             for (final Table table : catalog.getTables(schema)) {
-
+                log.info("{}", table.getFullName());
                 String schemaName = getSchemaName(table);
 
                 String fullName = schemaName + "." + table.getName();

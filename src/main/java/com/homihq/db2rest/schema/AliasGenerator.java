@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.helper;
+package com.homihq.db2rest.schema;
 
 
 import org.springframework.stereotype.Component;
