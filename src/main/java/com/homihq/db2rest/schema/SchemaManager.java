@@ -115,7 +115,7 @@ public final class SchemaManager {
     public DbTable getTableV2(String tableName) {
         List<DbTable> tables = findTablesV2(tableName);
 
-        if(tables.size() != 1) throw new GenericDataAccessException("Unable to find table with name - " + tableName);
+        if(tables.size() != 1) throw new InvalidTableException(tableName);
 
         return tables.get(0);
     }
