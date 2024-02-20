@@ -11,14 +11,14 @@ public class InvalidTableException extends ErrorResponseException {
 
 
     public InvalidTableException(String tableName) {
-        super(HttpStatus.BAD_REQUEST, asProblemDetail("Invalid table " + tableName), null);
+        super(HttpStatus.NOT_FOUND, asProblemDetail("Missing table " + tableName), null);
     }
 
     private static ProblemDetail asProblemDetail(String message) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
-        problemDetail.setTitle("Invalid Table Error");
-        problemDetail.setType(URI.create("https://github.com/kdhrubo/db2rest/invalid-table"));
-        problemDetail.setProperty("errorCategory", "Invalid-Table");
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, message);
+        problemDetail.setTitle("Missing Table Error");
+        problemDetail.setType(URI.create("https://db2rest.com/error/missing-table"));
+        problemDetail.setProperty("errorCategory", "Missing-Table");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
     }
