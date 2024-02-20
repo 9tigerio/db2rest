@@ -70,6 +70,7 @@ public class CreateService {
 
             return Pair.of(row, Objects.requireNonNull(keyHolder.getKeys()));
         } catch (DataAccessException e) {
+
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
