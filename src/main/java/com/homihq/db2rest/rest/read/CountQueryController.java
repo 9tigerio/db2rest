@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.read;
 
 import com.homihq.db2rest.rest.read.dto.CountResponse;
+import com.homihq.db2rest.rest.read.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,11 @@ public class CountQueryController {
         log.info("tableName - {}", tableName);
         log.info("filter - {}", filter);
 
-        return countQueryService.count(tableName, filter);
+        ReadContext readContext = ReadContext.builder()
+                .tableName(tableName)
+                .filter(filter)
+                .build();
+
+        return countQueryService.count(readContext);
     }
 }

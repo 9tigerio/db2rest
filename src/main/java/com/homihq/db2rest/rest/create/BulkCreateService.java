@@ -74,19 +74,19 @@ public class BulkCreateService {
             CreateContext context = new CreateContext(dbTable, insertableColumns);
             String sql = createCreatorTemplate.createQuery(context);
 
-            log.info("SQL - {}", sql);
-            log.info("Data - {}", dataList);
+            log.debug("SQL - {}", sql);
+            log.debug("Data - {}", dataList);
 
             SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
 
             int[] updateCounts;
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
-
-            updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch, keyHolder);
+            updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch, keyHolder, dbTable.getKeyColumnNames());
 
             return Pair.of(updateCounts, keyHolder.getKeyList());
         } catch (DataAccessException e) {
+            log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
 

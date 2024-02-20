@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 
 @Component
@@ -29,6 +30,11 @@ public class RootTableFieldProcessor implements ReadProcessor {
         fields = StringUtils.trim(fields);
 
         log.info("Fields - {}", fields);
+
+        if(Objects.isNull(fields)) { //most likely count query
+            return;
+        }
+
         List<DbColumn> columnList = new ArrayList<>();
         if(StringUtils.equals("*", fields)) {
 
