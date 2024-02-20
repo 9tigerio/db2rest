@@ -10,7 +10,7 @@ It connects (traditional and ML enabled)databases and AI services(OPENAI, AWS Be
 
 
 > [!TIP]  **DB2Rest is transitioning to support LLMs**
-> DB2Rest is transitioning. We continue to work to make DB2REST the best DATA API platform for databases.
+> <span color="red"> DB2Rest is transitioning. We continue to work to make DB2REST the best DATA API platform for databases.</span>
 > However, in coming months and days, we will also work to make DB2REST your goto platform to
 > connect your data with the leading framework for LLMs. Stay tuned!
 > 
