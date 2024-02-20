@@ -78,7 +78,7 @@ public final class SchemaManager {
         for (final Schema schema : catalog.getSchemas()) {
 
             for (final Table table : catalog.getTables(schema)) {
-                log.info("{}", table.getFullName());
+                log.debug("{}", table.getFullName());
                 String schemaName = getSchemaName(table);
 
                 String fullName = schemaName + "." + table.getName();
