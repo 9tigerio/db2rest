@@ -9,13 +9,12 @@ It connects (traditional and ML enabled)databases and AI services(OPENAI, AWS Be
 
 
 
-> [!TIP]  **DB2Rest is transitioning to support LLMs**
+> [!IMPORTANT]
 > DB2Rest is transitioning. We continue to work to make DB2REST the best DATA API platform for databases.
 > However, in coming months and days, we will also work to make DB2REST your goto platform to
 > connect your data with the leading framework for LLMs. Stay tuned!
 
 
-`#ffffff` DB2Rest is transitioning. We continue to work to make DB2REST the best DATA API platform for databases.
 
 ![Number of GitHub contributors](https://img.shields.io/github/contributors/kdhrubo/db2rest)
 [![Number of GitHub issues that are open](https://img.shields.io/github/issues/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest/issues)
