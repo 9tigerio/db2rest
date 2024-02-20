@@ -2,7 +2,7 @@ package com.homihq.db2rest.rest.read;
 
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.rest.read.processor.QueryCreatorTemplate;
+import com.homihq.db2rest.rest.read.sql.QueryCreatorTemplate;
 import com.homihq.db2rest.rest.read.processor.ReadProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

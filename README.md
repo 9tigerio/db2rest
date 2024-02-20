@@ -7,6 +7,10 @@ It connects (traditional and ML enabled)databases and AI services(OPENAI, AWS Be
 
 :star: If you find DB2Rest useful, please consider adding a star on GitHub! Your support motivates us to add new exciting features.
 
+
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
+
 ![Number of GitHub contributors](https://img.shields.io/github/contributors/kdhrubo/db2rest)
 [![Number of GitHub issues that are open](https://img.shields.io/github/issues/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest/issues)
 [![Number of GitHub stars](https://img.shields.io/github/stars/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest/stargazers)
