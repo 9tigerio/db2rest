@@ -3,6 +3,7 @@ package com.homihq.db2rest.model;
 import com.homihq.db2rest.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;
 import schemacrawler.schema.Column;
+import schemacrawler.schema.NamedObject;
 import schemacrawler.schema.Table;
 
 import java.util.List;
@@ -61,5 +62,13 @@ public record DbTable(String schema, String name, String alias, Table table) {
                         new DbColumn(name, column.getName(),getJdbcType(column) , column,
                                 "", alias))
                 .toList();
+    }
+
+    public String [] getKeyColumnNames() {
+        return table.getColumns()
+                .stream()
+                .filter(Column::isPartOfPrimaryKey)
+                .map(Column::getName)
+                .toList().toArray(String[]::new);
     }
 }

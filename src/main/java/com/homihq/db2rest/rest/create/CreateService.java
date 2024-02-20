@@ -59,13 +59,13 @@ public class CreateService {
             String sql = createCreatorTemplate.createQuery(context);
 
 
-            log.info("SQL - {}", sql);
-            log.info("Data - {}", data);
+            log.debug("SQL - {}", sql);
+            log.debug("Data - {}", data);
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
             int row = namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(data),
-                    keyHolder
+                    keyHolder, dbTable.getKeyColumnNames()
             );
 
             return Pair.of(row, Objects.requireNonNull(keyHolder.getKeys()));
