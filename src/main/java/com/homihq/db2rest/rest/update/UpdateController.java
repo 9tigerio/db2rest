@@ -15,11 +15,10 @@ public class UpdateController {
     private final UpdateService updateService;
     @PatchMapping("/{tableName}")
     public UpdateResponse save(@PathVariable String tableName,
-                               @RequestHeader(name = "Content-Profile") String schemaName,
                                @RequestBody Map<String,Object> data
         , @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
-        int rows = updateService.patch(schemaName, tableName, data, filter);
+        int rows = updateService.patch(null, tableName, data, filter);
         return new UpdateResponse(rows);
     }
 }

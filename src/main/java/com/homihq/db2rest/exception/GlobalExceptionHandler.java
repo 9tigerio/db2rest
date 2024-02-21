@@ -41,17 +41,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, headers, status);
     }
 
-    /*
-    @ExceptionHandler(Exception.class)
-    ErrorResponse handleBookmarkNotFoundException(Exception e) {
-        return ErrorResponse.builder(e, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage())
-                .title("Unknown error")
-                .type(URI.create("https://github.com/kdhrubo/db2rest/unknown-error"))
-                .property("errorCategory", "Unknown")
-                .property("timestamp", Instant.now())
-                .build();
-    }
 
-     */
 
 }

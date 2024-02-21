@@ -55,30 +55,38 @@ public class BulkCreateService {
 
             //3. check if tsId is enabled and add those values for PK.
             if (tsIdEnabled) {
+                log.debug("Handling TSID");
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
+
+                log.debug("PK Columns # -> {}", pkColumns);
+                for(DbColumn pkColumn : pkColumns) {
+                    insertableColumns.add(pkColumn.name());
+                }
 
                 for (Map<String, Object> data : dataList) {
                     tsidProcessor.processTsId(data, pkColumns);
                 }
             }
 
+            for(Map<String,Object> data : dataList)
+                this.schemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
+
             CreateContext context = new CreateContext(dbTable, insertableColumns);
             String sql = createCreatorTemplate.createQuery(context);
 
-            log.info("SQL - {}", sql);
+            log.debug("SQL - {}", sql);
+            log.debug("Data - {}", dataList);
 
             SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
-
-            log.debug("SQL -> {}", sql);
 
             int[] updateCounts;
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
-
-            updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch, keyHolder);
+            updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch, keyHolder, dbTable.getKeyColumnNames());
 
             return Pair.of(updateCounts, keyHolder.getKeyList());
         } catch (DataAccessException e) {
+            log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
 

@@ -53,5 +53,4 @@ logging:
         jdbc:
           datasource:
             init: DEBUG
-          core:
-            JdbcTemplate: DEBUG
+          core.*: DEBUG

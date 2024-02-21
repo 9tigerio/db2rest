@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.processor;
+package com.homihq.db2rest.rest.read.sql;
 
 import com.homihq.db2rest.model.DbSort;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
@@ -23,6 +23,29 @@ public class QueryCreatorTemplate {
 
 
     private final SpringTemplateEngine templateEngine;
+
+    public String createFindOneQuery(ReadContext readContext) {
+        Map<String,Object> data = new HashMap<>();
+        data.put("columns", createProjections(readContext.getCols()));
+        data.put("rootTable", readContext.getRoot().render());
+        data.put("rootWhere", readContext.getRootWhere());
+
+        Context context = new Context();
+        context.setVariables(data);
+        return templateEngine.process("find-one", context);
+    }
+
+    public String createCountQuery(ReadContext readContext) {
+        Map<String,Object> data = new HashMap<>();
+
+        data.put("rootTable", readContext.getRoot().render());
+        data.put("rootWhere", readContext.getRootWhere());
+
+        Context context = new Context();
+        context.setVariables(data);
+        return templateEngine.process("count", context);
+    }
+
     public String createQuery(ReadContext readContext) {
 
         log.info("**** Preparing to render ****");

@@ -9,16 +9,15 @@ import java.time.Instant;
 
 public class InvalidColumnException extends ErrorResponseException {
 
-
     public InvalidColumnException(String tableName, String columnName) {
-        super(HttpStatus.BAD_REQUEST, asProblemDetail("Invalid column " + tableName + "." + columnName), null);
+        super(HttpStatus.NOT_FOUND, asProblemDetail("Missing column " + tableName + "." + columnName), null);
     }
 
     private static ProblemDetail asProblemDetail(String message) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
-        problemDetail.setTitle("Invalid Column Error");
-        problemDetail.setType(URI.create("https://github.com/kdhrubo/db2rest/invalid-column"));
-        problemDetail.setProperty("errorCategory", "Invalid-Column");
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, message);
+        problemDetail.setTitle("Missing Column Error");
+        problemDetail.setType(URI.create("https://db2rest.com/error/missing-column"));
+        problemDetail.setProperty("errorCategory", "Missing-Column");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
     }
