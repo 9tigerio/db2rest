@@ -24,6 +24,17 @@ public class QueryCreatorTemplate {
 
     private final SpringTemplateEngine templateEngine;
 
+    public String createFindOneQuery(ReadContext readContext) {
+        Map<String,Object> data = new HashMap<>();
+        data.put("columns", createProjections(readContext.getCols()));
+        data.put("rootTable", readContext.getRoot().render());
+        data.put("rootWhere", readContext.getRootWhere());
+
+        Context context = new Context();
+        context.setVariables(data);
+        return templateEngine.process("find-one", context);
+    }
+
     public String createCountQuery(ReadContext readContext) {
         Map<String,Object> data = new HashMap<>();
 

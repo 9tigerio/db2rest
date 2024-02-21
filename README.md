@@ -8,10 +8,13 @@ It connects (traditional and ML enabled)databases and AI services(OPENAI, AWS Be
 :star: If you find DB2Rest useful, please consider adding a star on GitHub! Your support motivates us to add new exciting features.
 
 
-> [!TIP]  
+
+> [!IMPORTANT]
 > DB2Rest is transitioning. We continue to work to make DB2REST the best DATA API platform for databases.
-> However, in coming months and days, we will also work to make DB2REST your goto platform to 
+> However, in coming months and days, we will also work to make DB2REST your goto platform to
 > connect your data with the leading framework for LLMs. Stay tuned!
+
+
 
 ![Number of GitHub contributors](https://img.shields.io/github/contributors/kdhrubo/db2rest)
 [![Number of GitHub issues that are open](https://img.shields.io/github/issues/kdhrubo/db2rest)](https://github.com/kdhrubo/db2rest/issues)
@@ -96,9 +99,8 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 
 <help@db2rest.com>
 
-{::comment}
+
 # Roadmap
 
 Refer to [open roadmap](https://db2rest.com/roadmap/) items.
 
-{::/comment}
