@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -21,27 +22,28 @@ public class UnkeyDevService {
 
 
 
-    // TODO: Might need to return user id?
-    public boolean verifyApiKey(String apiKey) {
+    public VerifyKeyResponse verifyApiKey(String apiKey) {
 
         RestTemplate restTemplate = restTemplateBuilder
                 .defaultHeader("Content-Type", "application/json")
                 .build();
 
-        // TODO: Need how to get apiId
-        VerifyKeyRequest request = VerifyKeyRequest.builder()
-                    .key(apiKey).apiId("").build();
+        VerifyKeyRequest request = new VerifyKeyRequest(apiKey);
 
-        VerifyKeyResponse response = restTemplate.postForObject(UNKEY_DEV_DOMAIN + "/" + VERIFY_API_KEY_URL,
+        VerifyKeyResponse response;
+        try {
+            response = restTemplate.postForObject(UNKEY_DEV_DOMAIN + "/" + VERIFY_API_KEY_URL,
                     request, VerifyKeyResponse.class);
-
-        if(response != null) {
-            return response.valid;
-        } else {
-            log.error("verify key response from UnkeyDev returned null");
+            if(response != null) {
+                return response;
+            }
+        } catch (RestClientException restClientException) {
+            log.error("error connecting to unkey.dev - " + restClientException);
+            return null;
         }
 
-        return false;
+        log.error("received null response from unkey.dev");
+        return null;
     }
 
 }

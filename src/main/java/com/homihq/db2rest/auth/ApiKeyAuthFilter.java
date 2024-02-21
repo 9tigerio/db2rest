@@ -1,6 +1,7 @@
 package com.homihq.db2rest.auth;
 
 import com.homihq.db2rest.auth.service.ApiKeyVerifierService;
+import com.homihq.db2rest.auth.to.AuthInfo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,17 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
     String API_KEY_HEADER = "X-API-KEY";
 
 
+    private void setAuthContextForToken(String token) {
+        if(StringUtils.isBlank(token))
+            return;
+        AuthInfo authInfo = apiKeyVerifier.getAuthInfo(token);
+        if(authInfo != null)
+            logger.info(" **** api key is verified");
+        else
+            logger.info("**** api key is not verified");
+        AuthContext.setCurrentAuthInfo(authInfo);
+    }
+
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
@@ -29,24 +41,10 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
         String url = request.getRequestURI();
 
         if(StringUtils.containsAnyIgnoreCase(url, WHITE_LIST_URLS)) {
-            logger.info("Bypass due to white list URL: " + url);
+            logger.info("*** Bypass due to white list URL: " + url);
         } else {
             logger.info(" *** Apply ApiKeyAuth Filter ***");
-
-            final String token = request.getHeader(API_KEY_HEADER);
-            if(StringUtils.isBlank(token)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            // TODO: Might need to obtain the user??
-            if(!apiKeyVerifier.verifyApiKey(token)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            // TODO: Set AuthContext
-
+            setAuthContextForToken(request.getHeader(API_KEY_HEADER));
         }
         filterChain.doFilter(request, response);
     }

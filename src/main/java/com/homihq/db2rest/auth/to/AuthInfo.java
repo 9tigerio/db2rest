@@ -1,10 +1,6 @@
 package com.homihq.db2rest.auth.to;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class VerifyKeyResponse {
-
+public class AuthInfo {
     public String code;
 
     public boolean enabled;
@@ -15,7 +11,7 @@ public class VerifyKeyResponse {
 
     public String keyId;
 
-    public Meta meta;
+    public VerifyKeyResponse.Meta meta;
 
     public String name;
 
@@ -23,7 +19,7 @@ public class VerifyKeyResponse {
 
     public String[] permissions;
 
-    public RateLimit rateLimit;
+    public VerifyKeyResponse.RateLimit rateLimit;
 
     public int remaining;
 
