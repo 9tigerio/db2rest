@@ -24,6 +24,8 @@ spring:
         reWriteBatchedInserts: true
 
 db2rest:
+  unkeyDev:
+    url: ${UNKEY_DEV_URL}
   allowSafeDelete : ${ALLOW_SAFE_DELETE:true}
   schemas: ${DB_SCHEMAS}
   multiTenancy:

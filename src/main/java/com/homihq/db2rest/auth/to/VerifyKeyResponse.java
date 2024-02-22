@@ -3,29 +3,29 @@ package com.homihq.db2rest.auth.to;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VerifyKeyResponse {
+public record VerifyKeyResponse() {
 
-    public String code;
+    public static String code;
 
-    public boolean enabled;
+    public static boolean enabled;
 
-    public int expires;
+    public static int expires;
 
-    public boolean valid;
+    public static boolean valid;
 
-    public String keyId;
+    public static String keyId;
 
-    public Meta meta;
+    public static Meta meta;
 
-    public String name;
+    public static String name;
 
-    public String ownerId;
+    public static String ownerId;
 
-    public String[] permissions;
+    public static String[] permissions;
 
-    public RateLimit rateLimit;
+    public static RateLimit rateLimit;
 
-    public int remaining;
+    public static int remaining;
 
     static class Meta {
         String[] roles;

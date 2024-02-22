@@ -21,4 +21,10 @@ public class ApiKeyVerifierService {
         return authInfo;
     }
 
+
+    public boolean isKeyValid(AuthInfo authInfo) {
+        // checking if the key is valid and enabled
+        return authInfo.valid && authInfo.enabled;
+    }
+
 }

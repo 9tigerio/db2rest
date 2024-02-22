@@ -4,6 +4,7 @@ import com.homihq.db2rest.auth.to.VerifyKeyRequest;
 import com.homihq.db2rest.auth.to.VerifyKeyResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -17,7 +18,8 @@ public class UnkeyDevService {
     private final RestTemplateBuilder restTemplateBuilder;
 
 
-    String UNKEY_DEV_DOMAIN = "https://api.unkey.dev/v1";
+    @Value("${db2rest.unkeyDev.url}")
+    String UNKEY_DEV_DOMAIN;
     String VERIFY_API_KEY_URL = "keys.verifyKey";
 
 

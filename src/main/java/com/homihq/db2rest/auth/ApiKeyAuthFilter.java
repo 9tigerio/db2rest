@@ -2,6 +2,8 @@ package com.homihq.db2rest.auth;
 
 import com.homihq.db2rest.auth.service.ApiKeyVerifierService;
 import com.homihq.db2rest.auth.to.AuthInfo;
+import com.homihq.db2rest.exception.AuthenticationFailedException;
+import com.homihq.db2rest.exception.MissingAuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,14 +25,21 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
     String API_KEY_HEADER = "X-API-KEY";
 
 
-    private void setAuthContextForToken(String token) {
-        if(StringUtils.isBlank(token))
-            return;
+    private void setAuthContext(String token) {
+
+        // Get key information from unkey.dev
         AuthInfo authInfo = apiKeyVerifier.getAuthInfo(token);
-        if(authInfo != null)
-            logger.info(" **** api key is verified");
-        else
-            logger.info("**** api key is not verified");
+
+        // Check if able to get key information
+        if(authInfo == null) {
+            throw new AuthenticationFailedException("Unable to get key status");
+        }
+
+        // Check if key is valid
+        if(!apiKeyVerifier.isKeyValid(authInfo)) {
+            throw new AuthenticationFailedException("Unable to verify key. ERR CODE: " + authInfo.code);
+        }
+
         AuthContext.setCurrentAuthInfo(authInfo);
     }
 
@@ -44,7 +53,14 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
             logger.info("*** Bypass due to white list URL: " + url);
         } else {
             logger.info(" *** Apply ApiKeyAuth Filter ***");
-            setAuthContextForToken(request.getHeader(API_KEY_HEADER));
+
+            // Check the header and return authentication failed if header not present
+            String token = request.getHeader(API_KEY_HEADER);
+            if(StringUtils.isBlank(token)) {
+                throw new MissingAuthenticationException("Missing header " + API_KEY_HEADER);
+            }
+
+            setAuthContext(request.getHeader(API_KEY_HEADER));
         }
         filterChain.doFilter(request, response);
     }
