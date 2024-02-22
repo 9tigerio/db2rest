@@ -1,11 +1,11 @@
 package com.homihq.db2rest.rest.read.processor;
 
-import com.homihq.db2rest.rest.read.dto.JoinDetail;
-import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbJoin;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.model.DbWhere;
+import com.homihq.db2rest.rest.read.dto.JoinDetail;
+import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.rsql2.operator.handler.OperatorMap;
 import com.homihq.db2rest.rsql2.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql2.visitor.BaseRSQLVisitor;
