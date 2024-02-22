@@ -1,8 +1,8 @@
 package com.homihq.db2rest.rest.read.sql;
 
+import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbSort;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.model.DbColumn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +45,20 @@ public class QueryCreatorTemplate {
         context.setVariables(data);
         return templateEngine.process("count", context);
     }
+
+    public String createExistsQuery(ReadContext readContext) {
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("rootTable", readContext.getRoot().render());
+        data.put("rootWhere", readContext.getRootWhere());
+        data.put("joins", readContext.getDbJoins());
+
+        Context context = new Context();
+        context.setVariables(data);
+
+        return templateEngine.process("exists", context);
+    }
+
 
     public String createQuery(ReadContext readContext) {
 
