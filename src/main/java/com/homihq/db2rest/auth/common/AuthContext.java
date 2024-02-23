@@ -1,6 +1,6 @@
-package com.homihq.db2rest.auth;
+package com.homihq.db2rest.auth.common;
 
-import com.homihq.db2rest.auth.to.AuthInfo;
+import com.homihq.db2rest.auth.common.AuthInfo;
 
 public abstract class AuthContext {
     private static final ThreadLocal<AuthInfo> currentAuthInfo = new ThreadLocal<AuthInfo>();
