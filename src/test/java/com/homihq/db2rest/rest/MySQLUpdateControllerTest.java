@@ -21,10 +21,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     void updateExistingFilm() throws Exception {
 
         mockMvc.perform(patch("/film")
-                        .characterEncoding(UTF_8)
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "sakila")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"ACADEMY DINOSAUR\"")
                         .content(ITestUtil.UPDATE_FILM_REQUEST))
                 .andExpect(status().isOk())
@@ -38,10 +35,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     void updateNonExistingFilm() throws Exception {
 
         mockMvc.perform(patch("/film")
-                        .characterEncoding(UTF_8)
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "sakila")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"BAAHUBALI\"")
                         .content(ITestUtil.UPDATE_NON_EXISTING_FILM_REQUEST))
                 .andExpect(status().isOk())
@@ -55,13 +49,10 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     void updateNonExistingTable() throws Exception {
 
         mockMvc.perform(patch("/unknown_table")
-                        .characterEncoding(UTF_8)
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "sakila")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
                         .content(ITestUtil.UPDATE_NON_EXISTING_TABLE))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(document("mysql-update-non-existing-table"));
     }
@@ -71,11 +62,8 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     void updateMultipleColumns() throws Exception {
 
         mockMvc.perform(patch("/film")
-                        .characterEncoding(UTF_8)
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
-                        .header("Content-Profile", "sakila")
                         .content(ITestUtil.UPDATE_FILMS_REQUEST))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(2)))
