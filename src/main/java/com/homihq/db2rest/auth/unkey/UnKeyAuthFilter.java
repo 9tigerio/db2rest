@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
@@ -28,8 +27,8 @@ public class UnKeyAuthFilter extends OncePerRequestFilter {
     String API_KEY_HEADER = "X-API-KEY";
 
     @Override
-    protected void doFilterInternal(final HttpServletRequest request, final @NotNull HttpServletResponse response,
-                                    final @NotNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
+                                    final FilterChain filterChain) throws ServletException, IOException {
         logger.info(" *** Apply UnKeyAuth Filter ***");
 
         // Check the header and return authentication failed if header not present
