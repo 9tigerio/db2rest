@@ -60,7 +60,7 @@ public class PostGreSQLDialect implements Dialect {
                 OffsetTime v = convertToOffsetTime((String) value);
                 data.put(columnName, v);
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "int4", "int2", "int8", "int")) {
-                data.put(columnName, Integer.valueOf(value.toString().trim()));
+                data.put(columnName, Long.valueOf(value.toString().trim()));
             }
 
         }

@@ -19,6 +19,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -43,6 +44,8 @@ public class BulkCreateService {
                                                            boolean tsIdEnabled) {
         if (Objects.isNull(dataList) || dataList.isEmpty()) throw new GenericDataAccessException("No data provided");
 
+        log.info("** Bulk Insert **");
+
         try {
 
             //1. get actual table
@@ -50,16 +53,16 @@ public class BulkCreateService {
                     schemaManager.getOneTableV2(schemaName, tableName) : schemaManager.getTableV2(tableName);
 
             //2. determine the columns to be included in insert statement
-            List<String> insertableColumns = isEmpty(includedColumns) ? dataList.get(0).keySet().stream().toList() :
-                    includedColumns;
+            List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(dataList.get(0).keySet().stream().toList()) :
+                    new ArrayList<>(includedColumns);
 
             //3. check if tsId is enabled and add those values for PK.
             if (tsIdEnabled) {
                 log.debug("Handling TSID");
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
 
-                log.debug("PK Columns # -> {}", pkColumns);
                 for(DbColumn pkColumn : pkColumns) {
+                    log.info("Adding primary key columns - {}", pkColumn.name());
                     insertableColumns.add(pkColumn.name());
                 }
 
@@ -71,11 +74,13 @@ public class BulkCreateService {
             for(Map<String,Object> data : dataList)
                 this.schemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
 
+            log.info("Finally insertable columns - {}", insertableColumns);
+
             CreateContext context = new CreateContext(dbTable, insertableColumns);
             String sql = createCreatorTemplate.createQuery(context);
 
-            log.debug("SQL - {}", sql);
-            log.debug("Data - {}", dataList);
+            log.info("SQL - {}", sql);
+            log.info("Data - {}", dataList);
 
             SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
 

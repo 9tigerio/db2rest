@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT FIRST_NAME,LAST_NAME FROM ACTOR WHERE ACTOR_ID IN (:id1, :id2)",
+  "params" : {
+    "id1" : 1,
+    "id2" : 2
+  },
+  "single" : false
+}

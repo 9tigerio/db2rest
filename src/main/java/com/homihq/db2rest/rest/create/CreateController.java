@@ -23,6 +23,8 @@ public class CreateController implements CreateRestApi {
                                Map<String, Object> data,
                                boolean tsIdEnabled) {
 
+        log.info("includeColumns - {}", includeColumns);
+
         Pair<Integer, Object> result = createService
                 .save(null, tableName, includeColumns, data, tsIdEnabled);
 

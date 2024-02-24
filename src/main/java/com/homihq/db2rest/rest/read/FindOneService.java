@@ -32,8 +32,9 @@ public class FindOneService {
         String sql = queryCreatorTemplate.createFindOneQuery(readContext);
         Map<String, Object> bindValues = readContext.getParamMap();
 
-        log.info("SQL - {}", sql);
-        log.info("{}", bindValues);
+        log.debug("SQL - {}", sql);
+        log.debug("Params - {}", bindValues);
+
         try {
             return
             namedParameterJdbcTemplate.queryForMap(sql, bindValues);

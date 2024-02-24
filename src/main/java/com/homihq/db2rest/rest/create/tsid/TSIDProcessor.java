@@ -24,7 +24,7 @@ public class TSIDProcessor {
             if(!dbColumn.column().isGenerated() && !dbColumn.column().isAutoIncremented()) {
                 //detect type
 
-                log.info("detect type of the TSID column - {}", dbColumn.column().isAutoIncremented());
+                log.info("detect type of the TSID column - {}", dbColumn.column().getColumnDataType().getName());
 
                 if(dbColumn.isIntFamily()) {
                     log.info("PK of Int family");
