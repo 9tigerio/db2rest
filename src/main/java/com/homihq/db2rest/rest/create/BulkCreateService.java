@@ -3,6 +3,7 @@ package com.homihq.db2rest.rest.create;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
 import com.homihq.db2rest.rest.create.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaManager;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.util.Pair;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
@@ -38,7 +38,7 @@ public class BulkCreateService {
 
 
     @Transactional
-    public Pair<int[], List<Map<String, Object>>> saveBulk(String schemaName, String tableName,
+    public CreateBulkResponse saveBulk(String schemaName, String tableName,
                                                            List<String> includedColumns,
                                                            List<Map<String, Object>> dataList,
                                                            boolean tsIdEnabled) {
@@ -89,7 +89,7 @@ public class BulkCreateService {
 
             updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch, keyHolder, dbTable.getKeyColumnNames());
 
-            return Pair.of(updateCounts, keyHolder.getKeyList());
+            return new CreateBulkResponse(updateCounts, keyHolder.getKeyList());
         } catch (DataAccessException e) {
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
