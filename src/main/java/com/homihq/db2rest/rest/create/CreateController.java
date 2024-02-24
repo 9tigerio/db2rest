@@ -4,7 +4,6 @@ package com.homihq.db2rest.rest.create;
 import com.homihq.db2rest.rest.create.dto.CreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,10 +24,9 @@ public class CreateController implements CreateRestApi {
 
         log.info("includeColumns - {}", includeColumns);
 
-        Pair<Integer, Object> result = createService
+        return createService
                 .save(null, tableName, includeColumns, data, tsIdEnabled);
 
-        return new CreateResponse(result.getFirst(), result.getSecond());
     }
 
 }

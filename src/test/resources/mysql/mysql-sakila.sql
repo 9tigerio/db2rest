@@ -48,6 +48,19 @@ CREATE TABLE director (
   KEY idx_director_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+--
+-- Table structure for table `vanity_van`
+--
+
+CREATE TABLE vanity_van (
+          van_id VARCHAR(45) NOT NULL, --- this column will be filled with TSID string value
+          name VARCHAR(45) NOT NULL,
+          last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          PRIMARY KEY  (van_id),
+          KEY idx_vanity_van_name (name)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Table structure for table `review`
 --

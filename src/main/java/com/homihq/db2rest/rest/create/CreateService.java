@@ -4,6 +4,7 @@ import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
+import com.homihq.db2rest.rest.create.dto.CreateResponse;
 import com.homihq.db2rest.rest.create.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class CreateService {
     private final SchemaManager schemaManager;
 
     @Transactional
-    public Pair<Integer, Object> save(String schemaName, String tableName, List<String> includedColumns,
+    public CreateResponse save(String schemaName, String tableName, List<String> includedColumns,
                                       Map<String, Object> data, boolean tsIdEnabled) {
         try {
             //1. get actual table
@@ -69,13 +70,17 @@ public class CreateService {
             log.info("SQL - {}", sql);
             log.info("Data - {}", data);
 
+
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
             int row = namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(data),
                     keyHolder, dbTable.getKeyColumnNames()
             );
 
-            return Pair.of(row, Objects.requireNonNull(keyHolder.getKeys()));
+
+            return new CreateResponse(row, keyHolder.getKeys());
+
+
         } catch (DataAccessException e) {
 
             log.error("Error", e);
