@@ -83,6 +83,33 @@ CREATE TABLE director (
 
 ALTER TABLE public.director OWNER TO postgres;
 
+--
+-- Name: director_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace:
+--
+
+ALTER TABLE ONLY director
+    ADD CONSTRAINT director_pkey PRIMARY KEY (director_id);
+
+
+
+CREATE TABLE vanity_van (
+                vanity_van_id varchar(20) NOT NULL, --- this column will be filled with TSID string value
+                name character varying(45) NOT NULL,
+                last_update timestamp without time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE public.vanity_van OWNER TO postgres;
+
+--
+-- Name: director_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace:
+--
+
+ALTER TABLE ONLY vanity_van
+    ADD CONSTRAINT vanity_van_pkey PRIMARY KEY (vanity_van_id);
+
+
+
+
 
 --
 -- Table structure for table `review`
@@ -97,6 +124,9 @@ CREATE TABLE review (
 );
 
 ALTER TABLE public.review OWNER TO postgres;
+
+ALTER TABLE ONLY review
+    ADD CONSTRAINT review_id_pkey PRIMARY KEY (review_id);
 
 --
 -- Name: year; Type: DOMAIN; Schema: public; Owner: postgres

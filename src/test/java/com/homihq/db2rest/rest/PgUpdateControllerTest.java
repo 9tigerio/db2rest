@@ -55,13 +55,11 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     void updateNonExistingTable() throws Exception {
 
         mockMvc.perform(patch("/unknown_table")
-                        .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "public")
                         .param("filter", "sample_col==\"sample value 1\"")
                         .content(ITestUtil.UPDATE_NON_EXISTING_TABLE))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(document("pg-update-non-existing-table"));
     }
@@ -71,7 +69,6 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     void updateMultipleColumns() throws Exception {
 
         mockMvc.perform(patch("/film")
-                        .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")

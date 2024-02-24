@@ -240,6 +240,15 @@
             <scope>test</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>io.hosuaby</groupId>
+            <artifactId>inject-resources-junit-jupiter</artifactId>
+            <version>0.3.3</version>
+            <scope>test</scope>
+        </dependency>
+
+
         <dependency>
             <groupId>io.hypersistence</groupId>
             <artifactId>tsid</artifactId>

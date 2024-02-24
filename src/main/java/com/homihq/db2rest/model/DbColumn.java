@@ -38,7 +38,7 @@ public record DbColumn(String tableName, String name, JDBCType jdbcType, Column 
 
     public boolean isIntFamily() {
         return StringUtils.equalsAnyIgnoreCase(column.getColumnDataType().getName(),
-                "SMALLINT");
+                "SMALLINT", "int8", "BIGINT UNSIGNED");
     }
     public boolean isStringFamily() {
         return StringUtils.equalsAnyIgnoreCase(column.getColumnDataType().getName(),

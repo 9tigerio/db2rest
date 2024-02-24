@@ -4,6 +4,7 @@ import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
+import com.homihq.db2rest.rest.create.dto.CreateResponse;
 import com.homihq.db2rest.rest.create.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,7 +38,7 @@ public class CreateService {
     private final SchemaManager schemaManager;
 
     @Transactional
-    public Pair<Integer, Object> save(String schemaName, String tableName, List<String> includedColumns,
+    public CreateResponse save(String schemaName, String tableName, List<String> includedColumns,
                                       Map<String, Object> data, boolean tsIdEnabled) {
         try {
             //1. get actual table
@@ -44,12 +46,18 @@ public class CreateService {
                     schemaManager.getOneTableV2(schemaName, tableName) : schemaManager.getTableV2(tableName);
 
             //2. determine the columns to be included in insert statement
-            List<String> insertableColumns = isEmpty(includedColumns) ? data.keySet().stream().toList() :
-                    includedColumns;
+            List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(data.keySet().stream().toList()) :
+                    new ArrayList<>(includedColumns);
 
             //3. check if tsId is enabled and add those values for PK.
             if (tsIdEnabled) {
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
+
+                for(DbColumn pkColumn : pkColumns) {
+                    log.info("Adding primary key columns - {}", pkColumn.name());
+                    insertableColumns.add(pkColumn.name());
+                }
+
                 tsidProcessor.processTsId(data, pkColumns);
             }
 
@@ -59,8 +67,9 @@ public class CreateService {
             String sql = createCreatorTemplate.createQuery(context);
 
 
-            log.debug("SQL - {}", sql);
-            log.debug("Data - {}", data);
+            log.info("SQL - {}", sql);
+            log.info("Data - {}", data);
+
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -68,7 +77,10 @@ public class CreateService {
                     keyHolder, dbTable.getKeyColumnNames()
             );
 
-            return Pair.of(row, Objects.requireNonNull(keyHolder.getKeys()));
+
+            return new CreateResponse(row, keyHolder.getKeys());
+
+
         } catch (DataAccessException e) {
 
             log.error("Error", e);

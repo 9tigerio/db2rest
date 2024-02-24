@@ -12,13 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
-    @Disabled  // TODO: Need to fix
     @DisplayName("Get all fields.")
     void findAllFilms() throws Exception {
 
         mockMvc.perform(get("/film")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header("Accept-Profile", "sakila"))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andDo(print())
                 .andDo(document("mysql-get-all-films"));
@@ -40,7 +38,8 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     void findOneFilm() throws Exception {
         mockMvc.perform(get("/film/one")
                         .accept(MediaType.APPLICATION_JSON)
-                        .param("select", "description"))
+                .param("fields", "title")
+                .param("filter", "film_id==1"))
                 .andExpect(status().isOk())
                 //.andDo(print())
                 .andDo(document("mysql-get-on-film"));

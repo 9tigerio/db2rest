@@ -45,9 +45,9 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(delete("/director")
                         .accept(APPLICATION_JSON)
                         .param("filter", "_name==\"Alex\""))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.detail",
-                        containsString("Invalid column director._name")))
+                        containsString("Missing column director._name")))
                 .andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }
