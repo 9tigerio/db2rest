@@ -39,7 +39,7 @@ public class PostGreSQLDialect implements Dialect {
 
             String columnDataTypeName = table.lookupColumn(columnName).getColumnDataType().getName();
 
-            log.debug("columnDataTypeName - {}", columnDataTypeName);
+            log.info("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
             if (Objects.isNull(value)) continue;
 
             if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
@@ -61,6 +61,11 @@ public class PostGreSQLDialect implements Dialect {
                 data.put(columnName, v);
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "int4", "int2", "int8", "int")) {
                 data.put(columnName, Long.valueOf(value.toString().trim()));
+            } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "numeric")) {
+                data.put(columnName, Double.valueOf(value.toString().trim()));
+            }
+            else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "year")) {
+                data.put(columnName, Integer.valueOf(value.toString().trim()));
             }
 
         }

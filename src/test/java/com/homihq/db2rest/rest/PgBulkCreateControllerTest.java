@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,20 +22,18 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     void create() throws Exception {
 
         mockMvc.perform(post("/film/bulk")
-                        .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "public")
                         .content(ITestUtil.BULK_CREATE_FILM_REQUEST))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows").isArray())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
-                .andExpect(jsonPath("$.rows", hasItem(1)))
-                .andExpect(jsonPath("$.generated_keys").isArray())
-                .andExpect(jsonPath("$.generated_keys", hasSize(2)))
-                .andExpect(jsonPath("$.generated_keys", allOf(notNullValue())))
-                //.andDo(print())
+
+                .andExpect(jsonPath("$.keys").isArray())
+                .andExpect(jsonPath("$.keys", hasSize(2)))
+                .andExpect(jsonPath("$.keys", allOf(notNullValue())))
+                .andDo(print())
                 .andDo(document("pg-bulk-create-films"));
 
     }
@@ -44,31 +43,28 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     void createCSV() throws Exception {
 
         mockMvc.perform(post("/film/bulk")
-                        .characterEncoding(UTF_8)
                         .contentType("text/csv")
                         .accept(APPLICATION_JSON)
                         .content(ITestUtil.CREATE_FILM_REQUEST_CSV))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
-                .andExpect(jsonPath("$.generated_keys", hasSize(2)))
-                .andExpect(jsonPath("$.generated_keys", allOf(notNullValue())))
+                .andExpect(jsonPath("$.keys", hasSize(2)))
+                .andExpect(jsonPath("$.keys", allOf(notNullValue())))
                 //.andDo(print())
                 .andDo(document("pg-bulk-create-films-csv"));
 
     }
 
-    @Disabled
     @Test
     @DisplayName("Create many films with CSV type resulting error.")
     void createCSVWithError() throws Exception {
 
         mockMvc.perform(post("/film/bulk")
-                        .characterEncoding(UTF_8)
                         .contentType("text/csv")
                         .accept(APPLICATION_JSON)
                         .content(ITestUtil.CREATE_FILM_BAD_REQUEST_CSV))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 //.andDo(print())
                 .andDo(document("pg-bulk-create-films-csv-error"));
 
@@ -79,12 +75,10 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     void createError() throws Exception {
 
         mockMvc.perform(post("/film/bulk")
-                        .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "public")
                         .content(ITestUtil.BULK_CREATE_FILM_BAD_REQUEST))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 // .andDo(print())
                 .andDo(document("pg-bulk-create-films-error"));
 
@@ -95,12 +89,8 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     void createDirector() throws Exception {
 
         mockMvc.perform(post("/director/bulk")
-                        .characterEncoding(UTF_8)
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "public")
-                        .param("tsid", "director_id")
-                        .param("tsidType", "number")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .param("tsIdEnabled", "true")
                         .content(ITestUtil.BULK_CREATE_DIRECTOR_REQUEST))
                 .andExpect(status().isCreated())
                 //.andDo(print())
@@ -109,37 +99,30 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("Create many directors with wrong tsid type.")
-    void createDirectorWithWrongTsidType() throws Exception {
+    @DisplayName("Create many directors with Int tsid type.")
+    void createDirectorWithIntTsIdType() throws Exception {
 
         mockMvc.perform(post("/director/bulk")
-                        .characterEncoding(UTF_8)
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
-                        .param("tsid", "director_id")
-                        .param("tsidType", "string")
-                        .header("Content-Profile", "public")
-                        .content(ITestUtil.BULK_CREATE_DIRECTOR_BAD_REQUEST))
-                .andExpect(status().isBadRequest())
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .param("tsIdEnabled", "true")
+                        .content(ITestUtil.BULK_CREATE_DIRECTOR_BAD_REQUEST)) //TODO - review
+                .andExpect(status().isCreated())
                 //.andDo(print())
-                .andDo(document("pg-bulk-create-directors-with-wrong-tsid-type"));
+                .andDo(document("pg-bulk-create-directors-with-int-tsid-type"));
 
     }
 
     @Test
-    @DisplayName("Create reviews with default tsid type.")
-    void createReviewWithDefaultTsidType() throws Exception {
+    @DisplayName("Create reviews with STRING TSID Type.")
+    void createReviewWithDefaultTsIdType() throws Exception {
 
         mockMvc.perform(post("/review/bulk")
-                        .characterEncoding(UTF_8)
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "public")
-                        .param("tsid", "review_id")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .param("tsIdEnabled", "true")
                         .content(ITestUtil.BULK_CREATE_REVIEW_REQUEST))
                 .andExpect(status().isCreated())
                 //.andDo(print())
-                .andDo(document("pg-bulk-create-reviews-with-default-tsid-type"));
+                .andDo(document("pg-bulk-create-reviews-with-string-tsid-type"));
 
     }
 

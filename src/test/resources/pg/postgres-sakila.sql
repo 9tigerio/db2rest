@@ -125,6 +125,9 @@ CREATE TABLE review (
 
 ALTER TABLE public.review OWNER TO postgres;
 
+ALTER TABLE ONLY review
+    ADD CONSTRAINT review_id_pkey PRIMARY KEY (review_id);
+
 --
 -- Name: year; Type: DOMAIN; Schema: public; Owner: postgres
 --
