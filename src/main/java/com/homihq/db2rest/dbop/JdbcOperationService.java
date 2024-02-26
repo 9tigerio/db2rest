@@ -8,6 +8,7 @@ import com.homihq.db2rest.rest.read.dto.CountResponse;
 import com.homihq.db2rest.rest.read.dto.ExistsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -22,14 +23,17 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JdbcOperationService {
+@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
+public class JdbcOperationService implements DbOperationService {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    @Override
     public int update(Map<String, Object> paramMap, String sql) {
         return namedParameterJdbcTemplate.update(sql, paramMap);
     }
 
+    @Override
     public List<Map<String, Object>> read(Map<String, Object> paramMap, String sql) {
         int hashCode = this.namedParameterJdbcTemplate.getJdbcTemplate().getDataSource().hashCode();
         log.info("**** hashcode - {}", hashCode);
@@ -37,10 +41,12 @@ public class JdbcOperationService {
         return namedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 
+    @Override
     public Map<String, Object> findOne(String sql, Map<String, Object> paramMap) {
         return namedParameterJdbcTemplate.queryForMap(sql, paramMap);
     }
 
+    @Override
     public ExistsResponse exists(Map<String, Object> paramMap, String sql) {
         List<String> queryResult = namedParameterJdbcTemplate.query(sql,
                 paramMap,
@@ -51,22 +57,26 @@ public class JdbcOperationService {
         return new ExistsResponse(true);
     }
 
+    @Override
     public CountResponse count(Map<String, Object> paramMap, String sql) {
         Long itemCount = namedParameterJdbcTemplate.queryForObject(sql, paramMap, Long.class);
         return new CountResponse(itemCount);
     }
 
+    @Override
     public Object queryCustom(boolean single, String sql, Map<String, Object> params) {
         return single ?
                 namedParameterJdbcTemplate.queryForMap(sql, params) :
                 namedParameterJdbcTemplate.queryForList(sql, params);
     }
 
+    @Override
     public int delete(Map<String, Object> params, String sql) {
         return namedParameterJdbcTemplate.update(sql,
                 params);
     }
 
+    @Override
     public CreateResponse create(Map<String, Object> data, String sql, DbTable dbTable) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -78,6 +88,7 @@ public class JdbcOperationService {
         return new CreateResponse(row, keyHolder.getKeys());
     }
 
+    @Override
     public CreateBulkResponse batchUpdate(List<Map<String, Object>> dataList, String sql, DbTable dbTable) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
 

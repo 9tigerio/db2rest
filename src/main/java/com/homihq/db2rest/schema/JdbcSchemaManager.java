@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import schemacrawler.schema.*;
 import schemacrawler.schemacrawler.*;
@@ -24,7 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public final class JdbcSchemaManager {
+@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
+public final class JdbcSchemaManager implements SchemaManager {
 
     private final DataSource dataSource;
     private final Map<String, Table> tableMap = new ConcurrentHashMap<>();
@@ -100,6 +102,7 @@ public final class JdbcSchemaManager {
     }
 
 
+    @Override
     public DbTable getTable(String tableName) {
         List<DbTable> tables = findTables(tableName);
 
@@ -110,6 +113,7 @@ public final class JdbcSchemaManager {
         return tables.get(0);
     }
 
+    @Override
     public List<DbTable> findTables(String tableName) {
         return tableList.stream()
                 .filter(t -> StringUtils.equalsIgnoreCase(t.getName(), tableName))
@@ -128,6 +132,7 @@ public final class JdbcSchemaManager {
         return Optional.of(table);
     }
 
+    @Override
     public DbTable getOneTable(String schemaName, String tableName) {
         Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
 

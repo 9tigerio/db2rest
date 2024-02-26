@@ -1,14 +1,14 @@
 package com.homihq.db2rest.rest.delete;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.dbop.JdbcOperationService;
+import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbWhere;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.JdbcSchemaManager;
+import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeleteService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final JdbcSchemaManager jdbcSchemaManager;
+    private final SchemaManager schemaManager;
     private final DeleteCreatorTemplate deleteCreatorTemplate;
-    private final JdbcOperationService jdbcOperationService;
+    private final DbOperationService dbOperationService;
 
     @Transactional
     public int delete(String schemaName, String tableName, String filter) {
@@ -35,11 +35,11 @@ public class DeleteService {
         if(db2RestConfigProperties.getMultiTenancy().isSchemaBased()) {
             //Only relevant for schema per tenant multi tenancy
             //TODO - handle schema retrieval from request
-            dbTable = jdbcSchemaManager.getOneTable(schemaName, tableName);
+            dbTable = schemaManager.getOneTable(schemaName, tableName);
         }
         else{
             //get a unique table
-            dbTable = jdbcSchemaManager.getTable(tableName);
+            dbTable = schemaManager.getTable(tableName);
         }
         DeleteContext context = DeleteContext.builder()
                 .tableName(tableName)
@@ -61,7 +61,7 @@ public class DeleteService {
         log.info("{}", context.getParamMap());
 
         try {
-            return jdbcOperationService.delete(context.getParamMap(), sql);
+            return dbOperationService.delete(context.getParamMap(), sql);
         } catch (DataAccessException e) {
             log.error("Error in delete op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
@@ -83,7 +83,7 @@ public class DeleteService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcSchemaManager.getDialect()));
+                            dbWhere, schemaManager.getDialect()));
             context.setWhere(where);
 
         }

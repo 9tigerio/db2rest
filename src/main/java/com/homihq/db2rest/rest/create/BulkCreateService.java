@@ -1,13 +1,13 @@
 package com.homihq.db2rest.rest.create;
 
-import com.homihq.db2rest.dbop.JdbcOperationService;
+import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
 import com.homihq.db2rest.rest.create.tsid.TSIDProcessor;
-import com.homihq.db2rest.schema.JdbcSchemaManager;
+import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,8 +29,8 @@ public class BulkCreateService {
 
     private final TSIDProcessor tsidProcessor;
     private final CreateCreatorTemplate createCreatorTemplate;
-    private final JdbcSchemaManager jdbcSchemaManager;
-    private final JdbcOperationService jdbcOperationService;
+    private final SchemaManager schemaManager;
+    private final DbOperationService dbOperationService;
 
     @Transactional
     public CreateBulkResponse saveBulk(String schemaName, String tableName,
@@ -45,7 +45,7 @@ public class BulkCreateService {
 
             //1. get actual table
             DbTable dbTable = StringUtils.isNotBlank(schemaName) ?
-                    jdbcSchemaManager.getOneTable(schemaName, tableName) : jdbcSchemaManager.getTable(tableName);
+                    schemaManager.getOneTable(schemaName, tableName) : schemaManager.getTable(tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(dataList.get(0).keySet().stream().toList()) :
@@ -67,7 +67,7 @@ public class BulkCreateService {
             }
 
             for(Map<String,Object> data : dataList)
-                this.jdbcSchemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
+                this.schemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
 
             log.debug("Finally insertable columns - {}", insertableColumns);
 
@@ -77,7 +77,7 @@ public class BulkCreateService {
             log.info("SQL - {}", sql);
             log.info("Data - {}", dataList);
 
-            return jdbcOperationService.batchUpdate(dataList, sql, dbTable);
+            return dbOperationService.batchUpdate(dataList, sql, dbTable);
         } catch (DataAccessException e) {
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());

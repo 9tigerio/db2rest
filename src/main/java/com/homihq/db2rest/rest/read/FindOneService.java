@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
-import com.homihq.db2rest.dbop.JdbcOperationService;
+import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.rest.read.processor.ReadProcessor;
@@ -20,7 +20,7 @@ public class FindOneService {
 
     private final QueryCreatorTemplate queryCreatorTemplate;
     private final List<ReadProcessor> processorList;
-    private final JdbcOperationService jdbcOperationService;
+    private final DbOperationService dbOperationService;
 
     public Map<String,Object> findOne(ReadContext readContext) {
 
@@ -35,7 +35,7 @@ public class FindOneService {
         log.debug("Params - {}", bindValues);
 
         try {
-            return jdbcOperationService.findOne(sql, bindValues);
+            return dbOperationService.findOne(sql, bindValues);
         }
         catch (DataAccessException e) {
             log.error("Error in read op : " , e);

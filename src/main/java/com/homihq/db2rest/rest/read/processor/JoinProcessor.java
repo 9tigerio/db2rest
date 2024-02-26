@@ -9,7 +9,7 @@ import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.rsql.operator.handler.OperatorMap;
 import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.JdbcSchemaManager;
+import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
 @RequiredArgsConstructor
 public class JoinProcessor implements ReadProcessor {
 
-    private final JdbcSchemaManager jdbcSchemaManager;
+    private final SchemaManager schemaManager;
     private final OperatorMap operatorMap;
     @Override
     public void process(ReadContext readContext) {
@@ -43,7 +43,7 @@ public class JoinProcessor implements ReadProcessor {
         for(JoinDetail joinDetail : joins) {
             String tableName = joinDetail.table();
 
-            DbTable table = jdbcSchemaManager.getTable(tableName);
+            DbTable table = schemaManager.getTable(tableName);
 
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
 
@@ -81,7 +81,7 @@ public class JoinProcessor implements ReadProcessor {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcSchemaManager.getDialect()));
+                            dbWhere, schemaManager.getDialect()));
 
             join.addAdditionalWhere(where);
 
