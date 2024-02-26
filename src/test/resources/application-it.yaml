@@ -1,4 +1,3 @@
 db2rest:
-  schemas:
-    - sakila
-    - public
+  datasource:
+    type: jdbc

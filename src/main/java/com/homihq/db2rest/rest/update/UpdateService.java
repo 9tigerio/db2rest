@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.update;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.dbop.JdbcOperationService;
+import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.model.DbWhere;
@@ -9,7 +9,7 @@ import com.homihq.db2rest.rest.update.dto.UpdateContext;
 
 import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.JdbcSchemaManager;
+import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +28,9 @@ import java.util.Map;
 public class UpdateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final JdbcSchemaManager jdbcSchemaManager;
+    private final SchemaManager schemaManager;
     private final UpdateCreatorTemplate updateCreatorTemplate;
-    private final JdbcOperationService jdbcOperationService;
+    private final DbOperationService dbOperationService;
 
     @Transactional
     public int patch(String schemaName, String tableName, Map<String,Object> data, String filter) {
@@ -39,17 +39,17 @@ public class UpdateService {
         if(db2RestConfigProperties.getMultiTenancy().isSchemaBased()) {
             //Only relevant for schema per tenant multi tenancy
             //TODO - handle schema retrieval from request
-            dbTable = jdbcSchemaManager.getOneTable(schemaName, tableName);
+            dbTable = schemaManager.getOneTable(schemaName, tableName);
         }
         else{
             //get a unique table
-            dbTable = jdbcSchemaManager.getTable(tableName);
+            dbTable = schemaManager.getTable(tableName);
         }
 
         List<String> updatableColumns =
             data.keySet().stream().toList();
 
-        this.jdbcSchemaManager.getDialect().processTypes(dbTable, updatableColumns, data);
+        this.schemaManager.getDialect().processTypes(dbTable, updatableColumns, data);
 
         UpdateContext context = UpdateContext.builder()
                 .tableName(tableName)
@@ -74,7 +74,7 @@ public class UpdateService {
         log.info("{}", context.getParamMap());
 
         try {
-            return jdbcOperationService.update(context.getParamMap(), sql);
+            return dbOperationService.update(context.getParamMap(), sql);
         } catch (DataAccessException e) {
             log.error("Error in delete op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
@@ -95,7 +95,7 @@ public class UpdateService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcSchemaManager.getDialect()));
+                            dbWhere, schemaManager.getDialect()));
             context.setWhere(where);
 
         }

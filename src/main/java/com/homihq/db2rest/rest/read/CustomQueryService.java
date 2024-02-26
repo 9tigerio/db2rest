@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
-import com.homihq.db2rest.dbop.JdbcOperationService;
+import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.rest.read.dto.QueryRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class CustomQueryService {
-    private final JdbcOperationService jdbcOperationService;
+    private final DbOperationService dbOperationService;
 
     Object find(QueryRequest queryRequest) {
-        return jdbcOperationService.queryCustom(queryRequest.single(),
+        return dbOperationService.queryCustom(queryRequest.single(),
                 queryRequest.sql(),
                 queryRequest.params());
     }

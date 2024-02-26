@@ -2,6 +2,7 @@ package com.homihq.db2rest.rest.rpc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 @RequestMapping("procedure")
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
 public class ProcedureController {
 
     private final ProcedureService procedureService;
