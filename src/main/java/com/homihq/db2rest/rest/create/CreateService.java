@@ -42,7 +42,7 @@ public class CreateService {
         try {
             //1. get actual table
             DbTable dbTable = StringUtils.isNotBlank(schemaName) ?
-                    schemaManager.getOneTableV2(schemaName, tableName) : schemaManager.getTableV2(tableName);
+                    schemaManager.getOneTableV2(schemaName, tableName) : schemaManager.getTable(tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(data.keySet().stream().toList()) :

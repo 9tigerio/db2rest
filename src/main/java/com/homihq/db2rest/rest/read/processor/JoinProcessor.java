@@ -43,7 +43,7 @@ public class JoinProcessor implements ReadProcessor {
         for(JoinDetail joinDetail : joins) {
             String tableName = joinDetail.table();
 
-            DbTable table = schemaManager.getTableV2(tableName);
+            DbTable table = schemaManager.getTable(tableName);
 
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
 

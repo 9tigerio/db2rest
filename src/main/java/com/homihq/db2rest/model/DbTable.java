@@ -3,7 +3,6 @@ package com.homihq.db2rest.model;
 import com.homihq.db2rest.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;
 import schemacrawler.schema.Column;
-import schemacrawler.schema.NamedObject;
 import schemacrawler.schema.Table;
 
 import java.util.List;

@@ -38,11 +38,11 @@ public final class SchemaManager {
     private Dialect dialect;
 
     @PostConstruct
-    public void reload() {
+    private void reload() {
         createSchemaCache();
     }
 
-    public void createSchemaCache() {
+    private void createSchemaCache() {
 
         // Create the options
         final LimitOptionsBuilder limitOptionsBuilder = LimitOptionsBuilder.builder().tableTypes("TABLE","VIEW","MATERIALIZED VIEW");
@@ -100,17 +100,17 @@ public final class SchemaManager {
     }
 
 
-    public DbTable getTableV2(String tableName) {
-        List<DbTable> tables = findTablesV2(tableName);
+    public DbTable getTable(String tableName) {
+        List<DbTable> tables = findTables(tableName);
 
-        log.info("tables - {}", tables);
+        log.debug("tables - {}", tables);
 
         if(tables.size() != 1) throw new InvalidTableException(tableName);
 
         return tables.get(0);
     }
 
-    public List<DbTable> findTablesV2(String tableName) {
+    public List<DbTable> findTables(String tableName) {
         return tableList.stream()
                 .filter(t -> StringUtils.equalsIgnoreCase(t.getName(), tableName))
                 .toList()
@@ -123,7 +123,7 @@ public final class SchemaManager {
 
     }
 
-    public Optional<Table> getTable(String schemaName, String tableName) {
+    private Optional<Table> getTable(String schemaName, String tableName) {
         Table table = tableMap.get(schemaName + "." + tableName);
         return Optional.of(table);
     }
