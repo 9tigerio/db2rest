@@ -20,7 +20,7 @@ public class RootTableProcessor implements ReadProcessor {
     public void process(ReadContext readContext) {
         log.info("Processing root table");
         DbTable table =
-        schemaManager.getTableV2(readContext.getTableName());
+        schemaManager.getTable(readContext.getTableName());
 
         readContext.setRoot(table);
     }

@@ -39,7 +39,7 @@ public class DeleteService {
         }
         else{
             //get a unique table
-            dbTable = schemaManager.getTableV2(tableName);
+            dbTable = schemaManager.getTable(tableName);
         }
         DeleteContext context = DeleteContext.builder()
                 .tableName(tableName)

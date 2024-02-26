@@ -43,7 +43,7 @@ public class UpdateService {
         }
         else{
             //get a unique table
-            dbTable = schemaManager.getTableV2(tableName);
+            dbTable = schemaManager.getTable(tableName);
         }
 
         List<String> updatableColumns =
