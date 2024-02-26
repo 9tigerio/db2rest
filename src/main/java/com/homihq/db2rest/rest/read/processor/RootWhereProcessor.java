@@ -4,7 +4,7 @@ import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.model.DbWhere;
 import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.JdbcSchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RootWhereProcessor implements ReadProcessor {
 
-    private final SchemaManager schemaManager;
+    private final JdbcSchemaManager jdbcSchemaManager;
 
     @Override
     public void process(ReadContext readContext) {
@@ -35,7 +35,7 @@ public class RootWhereProcessor implements ReadProcessor {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, schemaManager.getDialect()));
+                            dbWhere, jdbcSchemaManager.getDialect()));
 
             log.info("Where - {}", where);
 

@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public final class SchemaManager {
+public final class JdbcSchemaManager {
 
     private final DataSource dataSource;
     private final Map<String, Table> tableMap = new ConcurrentHashMap<>();
@@ -128,7 +128,7 @@ public final class SchemaManager {
         return Optional.of(table);
     }
 
-    public DbTable getOneTableV2(String schemaName, String tableName) {
+    public DbTable getOneTable(String schemaName, String tableName) {
         Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
 
         return new DbTable(

@@ -8,7 +8,7 @@ import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.JdbcSchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeleteService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final SchemaManager schemaManager;
+    private final JdbcSchemaManager jdbcSchemaManager;
     private final DeleteCreatorTemplate deleteCreatorTemplate;
     private final JdbcOperationService jdbcOperationService;
 
@@ -35,11 +35,11 @@ public class DeleteService {
         if(db2RestConfigProperties.getMultiTenancy().isSchemaBased()) {
             //Only relevant for schema per tenant multi tenancy
             //TODO - handle schema retrieval from request
-            dbTable = schemaManager.getOneTableV2(schemaName, tableName);
+            dbTable = jdbcSchemaManager.getOneTable(schemaName, tableName);
         }
         else{
             //get a unique table
-            dbTable = schemaManager.getTable(tableName);
+            dbTable = jdbcSchemaManager.getTable(tableName);
         }
         DeleteContext context = DeleteContext.builder()
                 .tableName(tableName)
@@ -83,7 +83,7 @@ public class DeleteService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, schemaManager.getDialect()));
+                            dbWhere, jdbcSchemaManager.getDialect()));
             context.setWhere(where);
 
         }

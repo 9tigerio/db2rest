@@ -7,7 +7,7 @@ import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
 import com.homihq.db2rest.rest.create.tsid.TSIDProcessor;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.JdbcSchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ public class BulkCreateService {
 
     private final TSIDProcessor tsidProcessor;
     private final CreateCreatorTemplate createCreatorTemplate;
-    private final SchemaManager schemaManager;
+    private final JdbcSchemaManager jdbcSchemaManager;
     private final JdbcOperationService jdbcOperationService;
 
     @Transactional
@@ -45,7 +45,7 @@ public class BulkCreateService {
 
             //1. get actual table
             DbTable dbTable = StringUtils.isNotBlank(schemaName) ?
-                    schemaManager.getOneTableV2(schemaName, tableName) : schemaManager.getTable(tableName);
+                    jdbcSchemaManager.getOneTable(schemaName, tableName) : jdbcSchemaManager.getTable(tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(dataList.get(0).keySet().stream().toList()) :
@@ -67,7 +67,7 @@ public class BulkCreateService {
             }
 
             for(Map<String,Object> data : dataList)
-                this.schemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
+                this.jdbcSchemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
 
             log.debug("Finally insertable columns - {}", insertableColumns);
 

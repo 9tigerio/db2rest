@@ -9,7 +9,7 @@ import com.homihq.db2rest.rest.update.dto.UpdateContext;
 
 import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.JdbcSchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class UpdateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final SchemaManager schemaManager;
+    private final JdbcSchemaManager jdbcSchemaManager;
     private final UpdateCreatorTemplate updateCreatorTemplate;
     private final JdbcOperationService jdbcOperationService;
 
@@ -39,17 +39,17 @@ public class UpdateService {
         if(db2RestConfigProperties.getMultiTenancy().isSchemaBased()) {
             //Only relevant for schema per tenant multi tenancy
             //TODO - handle schema retrieval from request
-            dbTable = schemaManager.getOneTableV2(schemaName, tableName);
+            dbTable = jdbcSchemaManager.getOneTable(schemaName, tableName);
         }
         else{
             //get a unique table
-            dbTable = schemaManager.getTable(tableName);
+            dbTable = jdbcSchemaManager.getTable(tableName);
         }
 
         List<String> updatableColumns =
             data.keySet().stream().toList();
 
-        this.schemaManager.getDialect().processTypes(dbTable, updatableColumns, data);
+        this.jdbcSchemaManager.getDialect().processTypes(dbTable, updatableColumns, data);
 
         UpdateContext context = UpdateContext.builder()
                 .tableName(tableName)
@@ -95,7 +95,7 @@ public class UpdateService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, schemaManager.getDialect()));
+                            dbWhere, jdbcSchemaManager.getDialect()));
             context.setWhere(where);
 
         }
