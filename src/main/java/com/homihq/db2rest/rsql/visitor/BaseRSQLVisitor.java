@@ -1,10 +1,10 @@
-package com.homihq.db2rest.rsql2.visitor;
+package com.homihq.db2rest.rsql.visitor;
 
 import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbWhere;
-import com.homihq.db2rest.rsql2.operator.handler.OperatorHandler;
-import com.homihq.db2rest.rsql2.operator.handler.RSQLOperatorHandlers;
+import com.homihq.db2rest.rsql.operator.handler.OperatorHandler;
+import com.homihq.db2rest.rsql.operator.handler.RSQLOperatorHandlers;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;

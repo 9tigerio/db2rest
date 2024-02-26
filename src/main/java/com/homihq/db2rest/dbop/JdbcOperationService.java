@@ -7,6 +7,7 @@ import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.rest.read.dto.CountResponse;
 import com.homihq.db2rest.rest.read.dto.ExistsResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -20,16 +21,19 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JdbcOperationService {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public int update(Map<String, Object> paramMap, String sql) {
-        return namedParameterJdbcTemplate.update(sql,
-                paramMap);
+        return namedParameterJdbcTemplate.update(sql, paramMap);
     }
 
     public List<Map<String, Object>> read(Map<String, Object> paramMap, String sql) {
+        int hashCode = this.namedParameterJdbcTemplate.getJdbcTemplate().getDataSource().hashCode();
+        log.info("**** hashcode - {}", hashCode);
+
         return namedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
 

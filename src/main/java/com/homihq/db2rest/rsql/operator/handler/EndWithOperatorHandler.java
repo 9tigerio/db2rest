@@ -1,17 +1,17 @@
-package com.homihq.db2rest.rsql2.operator.handler;
+package com.homihq.db2rest.rsql.operator.handler;
 
 import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.model.DbColumn;
 
 import java.util.Map;
 
-public class LessThanEqualToOperatorHandler implements OperatorHandler {
+public class EndWithOperatorHandler implements OperatorHandler {
 
-   private static final String OPERATOR = " <= ";
+    private static final String OPERATOR = " like ";
 
     @Override
     public String handle(Dialect dialect, DbColumn columnName, String value, Class type, Map<String, Object> paramMap) {
-        return columnName + OPERATOR + parseValue(value, type);
+        return columnName + OPERATOR + "'%" + value + "'";
     }
 
 }
