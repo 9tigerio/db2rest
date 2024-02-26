@@ -2,8 +2,8 @@ package com.homihq.db2rest.rest.read.processor;
 
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.model.DbWhere;
-import com.homihq.db2rest.rsql2.parser.RSQLParserBuilder;
-import com.homihq.db2rest.rsql2.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
+import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;

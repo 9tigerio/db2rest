@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rsql2.operator.handler;
+package com.homihq.db2rest.rsql.operator.handler;
 
 import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.model.DbColumn;

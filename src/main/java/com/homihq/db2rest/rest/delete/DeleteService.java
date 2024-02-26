@@ -6,8 +6,8 @@ import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbWhere;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
-import com.homihq.db2rest.rsql2.parser.RSQLParserBuilder;
-import com.homihq.db2rest.rsql2.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
+import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 @Service
 @Slf4j
