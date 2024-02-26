@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.delete;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.dbop.JdbcOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbWhere;
 import com.homihq.db2rest.model.DbTable;
@@ -13,9 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -23,9 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeleteService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SchemaManager schemaManager;
     private final DeleteCreatorTemplate deleteCreatorTemplate;
+    private final JdbcOperationService jdbcOperationService;
 
     @Transactional
     public int delete(String schemaName, String tableName, String filter) {
@@ -61,13 +63,14 @@ public class DeleteService {
         log.info("{}", context.getParamMap());
 
         try {
-            return namedParameterJdbcTemplate.update(sql,
-                    context.getParamMap());
+            return jdbcOperationService.delete(context.getParamMap(), sql);
         } catch (DataAccessException e) {
             log.error("Error in delete op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
     }
+
+
 
     private void addWhere(String filter, DbTable table, DeleteContext context) {
 

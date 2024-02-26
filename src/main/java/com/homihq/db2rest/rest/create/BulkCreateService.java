@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.create;
 
+import com.homihq.db2rest.dbop.JdbcOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
@@ -11,11 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,10 +28,9 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public class BulkCreateService {
 
     private final TSIDProcessor tsidProcessor;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final CreateCreatorTemplate createCreatorTemplate;
     private final SchemaManager schemaManager;
-
+    private final JdbcOperationService jdbcOperationService;
 
     @Transactional
     public CreateBulkResponse saveBulk(String schemaName, String tableName,
@@ -62,7 +57,7 @@ public class BulkCreateService {
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
 
                 for(DbColumn pkColumn : pkColumns) {
-                    log.info("Adding primary key columns - {}", pkColumn.name());
+                    log.debug("Adding primary key columns - {}", pkColumn.name());
                     insertableColumns.add(pkColumn.name());
                 }
 
@@ -74,7 +69,7 @@ public class BulkCreateService {
             for(Map<String,Object> data : dataList)
                 this.schemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
 
-            log.info("Finally insertable columns - {}", insertableColumns);
+            log.debug("Finally insertable columns - {}", insertableColumns);
 
             CreateContext context = new CreateContext(dbTable, insertableColumns);
             String sql = createCreatorTemplate.createQuery(context);
@@ -82,14 +77,7 @@ public class BulkCreateService {
             log.info("SQL - {}", sql);
             log.info("Data - {}", dataList);
 
-            SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
-
-            int[] updateCounts;
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-
-            updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch, keyHolder, dbTable.getKeyColumnNames());
-
-            return new CreateBulkResponse(updateCounts, keyHolder.getKeyList());
+            return jdbcOperationService.batchUpdate(dataList, sql, dbTable);
         } catch (DataAccessException e) {
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
@@ -97,6 +85,7 @@ public class BulkCreateService {
 
 
     }
+
 
 
 }
