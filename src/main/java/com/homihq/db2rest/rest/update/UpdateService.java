@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.update;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.dbop.JdbcOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.model.DbWhere;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +28,9 @@ import java.util.Map;
 public class UpdateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SchemaManager schemaManager;
     private final UpdateCreatorTemplate updateCreatorTemplate;
+    private final JdbcOperationService jdbcOperationService;
 
     @Transactional
     public int patch(String schemaName, String tableName, Map<String,Object> data, String filter) {
@@ -74,13 +74,14 @@ public class UpdateService {
         log.info("{}", context.getParamMap());
 
         try {
-            return namedParameterJdbcTemplate.update(sql,
-                    context.getParamMap());
+            return jdbcOperationService.update(context.getParamMap(), sql);
         } catch (DataAccessException e) {
             log.error("Error in delete op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
     }
+
+
 
     private void addWhere(String filter, DbTable table, UpdateContext context) {
 

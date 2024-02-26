@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.create;
 
+import com.homihq.db2rest.dbop.JdbcOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
@@ -11,17 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -32,9 +28,9 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public class CreateService {
 
     private final TSIDProcessor tsidProcessor;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final CreateCreatorTemplate createCreatorTemplate;
     private final SchemaManager schemaManager;
+    private final JdbcOperationService jdbcOperationService;
 
     @Transactional
     public CreateResponse save(String schemaName, String tableName, List<String> includedColumns,
@@ -70,14 +66,7 @@ public class CreateService {
             log.info("Data - {}", data);
 
 
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-
-            int row = namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(data),
-                    keyHolder, dbTable.getKeyColumnNames()
-            );
-
-
-            return new CreateResponse(row, keyHolder.getKeys());
+            return jdbcOperationService.create(data, sql, dbTable);
 
 
         } catch (DataAccessException e) {
@@ -88,6 +77,7 @@ public class CreateService {
 
 
     }
+
 
 
 
