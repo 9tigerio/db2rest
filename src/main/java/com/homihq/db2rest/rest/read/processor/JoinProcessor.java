@@ -122,13 +122,6 @@ public class JoinProcessor implements ReadProcessor {
 
     }
 
-
-    private DbColumn createColumn(String columnName, DbTable table) {
-        Column column = table.lookupColumn(columnName);
-
-        return new DbColumn(table.name(), columnName, getJdbcType(column) , column, "", table.alias());
-    }
-
     private List<DbColumn> addColumns(DbTable table, List<String> fields) {
 
         //There are 2 possibilities

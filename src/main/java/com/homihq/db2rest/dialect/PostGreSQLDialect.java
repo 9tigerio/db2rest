@@ -37,7 +37,7 @@ public class PostGreSQLDialect implements Dialect {
         for (String columnName : insertableColumns) {
             Object value = data.get(columnName);
 
-            String columnDataTypeName = table.lookupColumn(columnName).getColumnDataType().getName();
+            String columnDataTypeName = table.getColumnDataTypeName(columnName);
 
             log.debug("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
             if (Objects.isNull(value)) continue;

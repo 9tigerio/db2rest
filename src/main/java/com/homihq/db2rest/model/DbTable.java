@@ -16,7 +16,7 @@ public record DbTable(String schema, String name, String alias, Table table) {
         return name + " " + alias;
     }
 
-    public Column lookupColumn(String columnName) {
+    private Column lookupColumn(String columnName) {
 
         return table.lookupColumn(columnName)
             .orElseThrow(()-> new InvalidColumnException(name, columnName));
@@ -69,5 +69,9 @@ public record DbTable(String schema, String name, String alias, Table table) {
                 .filter(Column::isPartOfPrimaryKey)
                 .map(Column::getName)
                 .toList().toArray(String[]::new);
+    }
+
+    public String getColumnDataTypeName(String columnName) {
+        return lookupColumn(columnName).getColumnDataType().getName();
     }
 }
