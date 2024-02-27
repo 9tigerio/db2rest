@@ -1,5 +1,7 @@
 package com.homihq.db2rest.d1;
 
+import com.homihq.db2rest.d1.model.D1PostRequest;
+import com.homihq.db2rest.d1.model.D1PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -8,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +33,7 @@ public class D1RestClient {
         HttpEntity<D1PostRequest> request =
                 new HttpEntity<D1PostRequest>(d1PostRequest, headers);
 
-        Map response = restTemplate.postForObject(uri, request, Map.class);
+        D1PostResponse response = restTemplate.postForObject(uri, request, D1PostResponse.class);
 
         log.info("response - {}", response);
     }

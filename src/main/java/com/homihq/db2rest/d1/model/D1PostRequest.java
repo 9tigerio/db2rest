@@ -1,4 +1,4 @@
-package com.homihq.db2rest.d1;
+package com.homihq.db2rest.d1.model;
 
 import java.util.List;
 
