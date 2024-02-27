@@ -7,7 +7,6 @@ server:
 
 spring:
 
-
   threads:
     virtual:
       enabled: true
@@ -36,6 +35,12 @@ db2rest:
   multiTenancy:
     enabled: ${MULTI_TENANCY_ENABLED:false}
     mode: ${MULTI_TENANCY_MODE:'NONE'}
+
+
+d1:
+  accountId: ${D1_ACCOUNT_ID}
+  dbId: ${D1_DB_ID}
+  apiKey: ${D1_API_KEY}
 
 
 logging:

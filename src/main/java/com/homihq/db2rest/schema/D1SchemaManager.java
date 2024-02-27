@@ -1,19 +1,28 @@
 package com.homihq.db2rest.schema;
 
+import com.homihq.db2rest.d1.D1RestClient;
 import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.model.DbTable;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
-@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "d1")
 public class D1SchemaManager implements SchemaManager{
+
+    private final D1RestClient d1RestClient;
+
+    @PostConstruct
+    private void reload() {
+        createSchemaCache();
+    }
+
+    private void createSchemaCache() {
+        d1RestClient.getMetaData();
+    }
+
     @Override
     public DbTable getTable(String tableName) {
         return null;
