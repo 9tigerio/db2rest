@@ -43,7 +43,7 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
 
         DbColumn dbColumn = this.dbWhere.table().buildColumn(node.getSelector());
 
-        Class<?> type = dbColumn.column().getType().getTypeMappedClass();
+        Class<?> type = dbColumn.typeMappedClass();
 
 
         OperatorHandler operatorHandler = RSQLOperatorHandlers.getOperatorHandler(op.getSymbol());

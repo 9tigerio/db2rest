@@ -2,6 +2,7 @@ package com.homihq.db2rest.schema;
 
 import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.exception.InvalidTableException;
+import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -22,6 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -35,6 +38,8 @@ public final class JdbcSchemaManager implements SchemaManager {
     private final AliasGenerator aliasGenerator;
 
     private final List<Dialect> dialects;
+
+    private final List<DbTable> dbTableList = new ArrayList<>();
 
     @Getter
     private Dialect dialect;
@@ -84,8 +89,37 @@ public final class JdbcSchemaManager implements SchemaManager {
                 tableMap.put(fullName, table);
                 tableList.add(table);
 
+                dbTableList.add(createTable(table));
+
             }
         }
+    }
+
+    private DbColumn createDbColumn(String tableName, String tableAlias, Column column) {
+
+        return new DbColumn(tableName, column.getName(),
+                "", tableAlias, column.isPartOfPrimaryKey(),
+                column.getColumnDataType().getName(),
+                column.isGenerated(), column.isAutoIncremented()
+                ,column.getType().getTypeMappedClass()
+        );
+
+    }
+
+    public List<DbColumn> buildColumns(String tableAlias, Table table) {
+        return table.getColumns()
+                .stream()
+                .map(column -> createDbColumn(table.getName(), tableAlias, column))
+                .toList();
+    }
+
+    private DbTable createTable(Table table) {
+        String tableAlias = aliasGenerator.getAlias("", 4, table.getName());
+        List<DbColumn> columnList = buildColumns(tableAlias, table);
+
+        return new DbTable(
+                getSchemaName(table), table.getName(),table.getFullName(),
+                tableAlias,columnList);
     }
 
     private String getSchemaName(Table table) {
@@ -119,10 +153,7 @@ public final class JdbcSchemaManager implements SchemaManager {
                 .filter(t -> StringUtils.equalsIgnoreCase(t.getName(), tableName))
                 .toList()
                 .stream()
-                .map(t ->
-                        new DbTable(
-                                getSchemaName(t), tableName,
-                                aliasGenerator.getAlias("", 4, tableName), t))
+                .map(this::createTable)
                 .toList();
 
     }
@@ -136,11 +167,9 @@ public final class JdbcSchemaManager implements SchemaManager {
     public DbTable getOneTable(String schemaName, String tableName) {
         Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
 
-        return new DbTable(
-                getSchemaName(table), tableName,
-                aliasGenerator.getAlias("", 4, tableName), table);
-
+        return createTable(table);
 
     }
+
 
 }

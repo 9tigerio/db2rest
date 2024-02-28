@@ -18,13 +18,13 @@ public class TSIDProcessor {
 
         for(DbColumn dbColumn : pkColumns) {
 
-            log.info("isGenerated - {}", dbColumn.column().isGenerated());
-            log.info("isAutoIncremented - {}", dbColumn.column().isAutoIncremented());
+            log.info("isGenerated - {}", dbColumn.generated());
+            log.info("isAutoIncremented - {}", dbColumn.autoIncremented());
 
-            if(!dbColumn.column().isGenerated() && !dbColumn.column().isAutoIncremented()) {
+            if(!dbColumn.generated() && !dbColumn.autoIncremented()) {
                 //detect type
 
-                log.info("detect type of the TSID column - {}", dbColumn.column().getColumnDataType().getName());
+                log.info("detect type of the TSID column - {}", dbColumn.columnDataTypeName());
 
                 if(dbColumn.isIntFamily()) {
                     log.info("PK of Int family");
