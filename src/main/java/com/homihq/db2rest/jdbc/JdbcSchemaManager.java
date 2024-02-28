@@ -1,16 +1,17 @@
-package com.homihq.db2rest.schema;
+package com.homihq.db2rest.jdbc;
 
 import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.schema.AliasGenerator;
+import com.homihq.db2rest.schema.SchemaManager;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
+
 import schemacrawler.schema.*;
 import schemacrawler.schemacrawler.*;
 import schemacrawler.tools.utility.SchemaCrawlerUtility;
@@ -23,29 +24,27 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
-
 @Slf4j
 @RequiredArgsConstructor
-@Component
-@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
 public final class JdbcSchemaManager implements SchemaManager {
 
     private final DataSource dataSource;
-    private final Map<String, Table> tableMap = new ConcurrentHashMap<>();
-    private final List<Table> tableList = new ArrayList<>();
-
     private final AliasGenerator aliasGenerator;
-
     private final List<Dialect> dialects;
 
-    private final List<DbTable> dbTableList = new ArrayList<>();
+    private Map<String, Table> tableMap;
+    private List<Table> tableList;
+
+    private List<DbTable> dbTableList;
 
     @Getter
     private Dialect dialect;
 
     @PostConstruct
     private void reload() {
+        this.tableMap = new ConcurrentHashMap<>();
+        this.tableList = new ArrayList<>();
+        this.dbTableList = new ArrayList<>();
         createSchemaCache();
     }
 

@@ -1,6 +1,5 @@
 package com.homihq.db2rest.d1;
 
-import com.homihq.db2rest.schema.D1SchemaManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

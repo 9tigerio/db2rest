@@ -1,5 +1,6 @@
-package com.homihq.db2rest.dbop;
+package com.homihq.db2rest.jdbc;
 
+import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateResponse;
@@ -20,10 +21,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
-@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
 public class JdbcOperationService implements DbOperationService {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
