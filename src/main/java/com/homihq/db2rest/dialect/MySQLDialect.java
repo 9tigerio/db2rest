@@ -21,8 +21,8 @@ public class MySQLDialect implements Dialect{
     private final ObjectMapper objectMapper;
 
     @Override
-    public boolean canSupport(DatabaseInfo databaseInfo) {
-        return StringUtils.equalsAnyIgnoreCase(databaseInfo.getDatabaseProductName(), "MYSQL");
+    public boolean canSupport(String getDbProductName) {
+        return StringUtils.equalsAnyIgnoreCase(getDbProductName, "MYSQL");
     }
 
     @Override

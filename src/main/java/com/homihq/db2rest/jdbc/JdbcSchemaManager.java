@@ -67,11 +67,14 @@ public final class JdbcSchemaManager implements SchemaManager {
 
         DatabaseInfo databaseInfo = catalog.getDatabaseInfo();
 
-        log.info("Database - {}", databaseInfo);
+        log.info("Database Product - {}", databaseInfo.getDatabaseProductName());
+        log.info("Database Product Version - {}", databaseInfo.getDatabaseProductVersion());
+        log.info("Product name - {}", databaseInfo.getProductName());
+        log.info("Product ver - {}", databaseInfo.getProductVersion());
 
         for(Dialect dialect : dialects) {
 
-            if(dialect.canSupport(databaseInfo)) {
+            if(dialect.canSupport(databaseInfo.getDatabaseProductName())) {
                 this.dialect = dialect;
                 break;
             }
