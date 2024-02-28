@@ -9,8 +9,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-@ConditionalOnProperty(name = "db2rest.unKeyDev.enabled", havingValue = "true")
+//@Configuration
+//@ConditionalOnProperty(name = "db2rest.unKeyDev.enabled", havingValue = "true")
 @Slf4j
 public class UnKeyAuthConfiguration {
 

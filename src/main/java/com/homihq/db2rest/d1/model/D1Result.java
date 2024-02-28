@@ -1,9 +1,9 @@
 package com.homihq.db2rest.d1.model;
 
-import com.homihq.db2rest.d1.model.D1Record;
 
 import java.util.List;
+import java.util.Map;
 
 
-public record D1Result(List<D1Record> results) {
+public record D1Result(List<Map<String,Object>> results) {
 }
