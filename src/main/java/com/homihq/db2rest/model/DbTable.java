@@ -2,35 +2,30 @@ package com.homihq.db2rest.model;
 
 import com.homihq.db2rest.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;
-import schemacrawler.schema.Column;
-import schemacrawler.schema.Table;
-
+import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
-import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
 
 @Slf4j
-public record DbTable(String schema, String name, String alias, Table table) {
+public record DbTable(String schema, String name, String fullName, String alias, List<DbColumn> dbColumns) {
 
     public String render() {
         return name + " " + alias;
     }
 
-    public Column lookupColumn(String columnName) {
-
-        return table.lookupColumn(columnName)
-            .orElseThrow(()-> new InvalidColumnException(name, columnName));
-    }
-
-
     public DbColumn buildColumn(String columnName) {
-        log.info("columnName - {}", columnName);
+        log.debug("columnName - {}", columnName);
 
         DbAlias dbAlias = getAlias(columnName);
 
-        Column column = lookupColumn(dbAlias.name());
+        return getDbColumn(dbAlias);
+    }
 
-        return new DbColumn(name, column.getName(), getJdbcType(column) , column, dbAlias.alias(), alias);
+    private DbColumn getDbColumn(DbAlias dbAlias) {
+        return
+        this.dbColumns.stream()
+                .filter(dbColumn -> StringUtils.equalsAnyIgnoreCase(dbAlias.name(), dbColumn.name()))
+                .findFirst().orElseThrow(() -> new InvalidColumnException(name,dbAlias.name()));
     }
 
     public DbAlias getAlias(String name) {
@@ -45,29 +40,32 @@ public record DbTable(String schema, String name, String alias, Table table) {
     }
 
     public List<DbColumn> buildColumns() {
-        return table.getColumns()
-                .stream()
-                .map(column ->
-                        new DbColumn(name, column.getName(),getJdbcType(column) , column,
-                                "", alias))
-                .toList();
+        return dbColumns;
     }
 
     public List<DbColumn> buildPkColumns() {
-        return table.getColumns()
+        return dbColumns
                 .stream()
-                .filter(Column::isPartOfPrimaryKey)
-                .map(column ->
-                        new DbColumn(name, column.getName(),getJdbcType(column) , column,
-                                "", alias))
+                .filter(DbColumn::pk)
                 .toList();
     }
 
     public String [] getKeyColumnNames() {
-        return table.getColumns()
+        return buildPkColumns()
                 .stream()
-                .filter(Column::isPartOfPrimaryKey)
-                .map(Column::getName)
+                .map(DbColumn::name)
                 .toList().toArray(String[]::new);
+    }
+
+    public String getColumnDataTypeName(String columnName) {
+        return lookupColumn(columnName).columnDataTypeName();
+    }
+
+    private DbColumn lookupColumn(String columnName) {
+
+        return dbColumns.stream()
+                .filter(dbColumn -> StringUtils.equalsAnyIgnoreCase(columnName, dbColumn.name()))
+                .findFirst()
+                .orElseThrow(()-> new InvalidColumnException(name, columnName));
     }
 }

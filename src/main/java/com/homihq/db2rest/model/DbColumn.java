@@ -1,12 +1,10 @@
 package com.homihq.db2rest.model;
 
-
 import org.apache.commons.lang3.StringUtils;
-import schemacrawler.schema.Column;
 
-import java.sql.JDBCType;
-
-public record DbColumn(String tableName, String name, JDBCType jdbcType, Column column, String alias, String tableAlias) {
+public record DbColumn(String tableName, String name, String alias, String tableAlias,
+                       boolean pk, String columnDataTypeName, boolean generated, boolean autoIncremented
+,Class<?> typeMappedClass) {
 
     public String render() {
         return tableAlias + "."+ name ;
@@ -21,27 +19,16 @@ public record DbColumn(String tableName, String name, JDBCType jdbcType, Column 
     public String getAliasedNameParam() {return tableAlias + "_"+ name;}
 
     @Deprecated
-    public boolean isPk() {
-        return column.isPartOfPrimaryKey();
-    }
-
-    @Deprecated
-    public boolean hasDefaultValue() { return column.hasDefaultValue();}
-
-    @Deprecated
-    public Object getDefaultValue() {return column.getDefaultValue();}
-
-    @Deprecated
     public boolean isDateTimeFamily() {
-        return StringUtils.equalsAnyIgnoreCase(column.getColumnDataType().getName(), "TIMESTAMP");
+        return StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "TIMESTAMP");
     }
 
     public boolean isIntFamily() {
-        return StringUtils.equalsAnyIgnoreCase(column.getColumnDataType().getName(),
+        return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
                 "SMALLINT", "int8", "BIGINT UNSIGNED");
     }
     public boolean isStringFamily() {
-        return StringUtils.equalsAnyIgnoreCase(column.getColumnDataType().getName(),
+        return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
                 "VARCHAR");
     }
 
