@@ -73,7 +73,7 @@ public class D1RestClient {
 
     }
 
-    private D1PostResponse callD1(String sql, List<Object> params) {
+    public D1PostResponse callD1(String sql, List<Object> params) {
         D1PostRequest d1PostRequest = new D1PostRequest(sql, params);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiKey); //accessToken can be the secret key you generate.

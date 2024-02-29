@@ -59,7 +59,7 @@ public class D1SchemaManager implements SchemaManager {
                                 d1Table.name(),
                                 d1Column.name(),
                                 "",
-                                "",
+                                tableAlias,
                                 d1Column.pk(),
                                 d1Column.type(),
                                 false,
@@ -106,6 +106,6 @@ public class D1SchemaManager implements SchemaManager {
 
     @Override
     public Dialect getDialect() {
-        return null;
+        return d1Dialect;
     }
 }

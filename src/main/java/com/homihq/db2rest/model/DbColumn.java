@@ -25,11 +25,11 @@ public record DbColumn(String tableName, String name, String alias, String table
 
     public boolean isIntFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
-                "SMALLINT", "int8", "BIGINT UNSIGNED");
+                "SMALLINT", "int8", "BIGINT UNSIGNED","INTEGER");
     }
     public boolean isStringFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
-                "VARCHAR");
+                "VARCHAR","TEXT");
     }
 
 }

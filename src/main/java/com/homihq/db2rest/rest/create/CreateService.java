@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -45,6 +46,7 @@ public class CreateService {
                     new ArrayList<>(includedColumns);
 
             //3. check if tsId is enabled and add those values for PK.
+            Map<String,Object> tsIdMap = null;
             if (tsIdEnabled) {
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
 
@@ -53,7 +55,7 @@ public class CreateService {
                     insertableColumns.add(pkColumn.name());
                 }
 
-                tsidProcessor.processTsId(data, pkColumns);
+                tsIdMap = tsidProcessor.processTsId(data, pkColumns);
             }
 
             this.schemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
@@ -66,9 +68,13 @@ public class CreateService {
             log.info("Data - {}", data);
 
 
-            return dbOperationService.create(data, sql, dbTable);
+            CreateResponse createResponse = dbOperationService.create(data, sql, dbTable);
 
+            if(tsIdEnabled && Objects.isNull(createResponse.keys())) {
+                return new CreateResponse(createResponse.row(), tsIdMap);
+            }
 
+            return createResponse;
         } catch (DataAccessException e) {
 
             log.error("Error", e);
