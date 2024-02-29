@@ -10,7 +10,6 @@ import com.homihq.db2rest.rest.read.dto.CountResponse;
 import com.homihq.db2rest.rest.read.dto.ExistsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -27,11 +26,23 @@ public class D1OperationService implements DbOperationService{
 
     @Override
     public int update(Map<String, Object> paramMap, String sql) {
-        return 0;
+
+        D1PostResponse response =
+                d1RestClient.callD1(sql,
+                        paramMap.values().stream().toList());
+
+        log.info("Response - {}", response);
+
+        if(!response.success()) throw new GenericDataAccessException("Error updating data from D1 service.");
+
+        return 1;
     }
+
 
     @Override
     public List<Map<String, Object>> read(Map<String, Object> paramMap, String sql) {
+        log.info("SQL - {}", sql);
+
         D1PostResponse response =
         d1RestClient.callD1(sql,
                 paramMap == null ? List.of() :
@@ -65,16 +76,20 @@ public class D1OperationService implements DbOperationService{
     }
 
     @Override
-    public int delete(Map<String, Object> params, String sql) {
-        return 0;
+    public int delete(Map<String, Object> paramMap, String sql) {
+        D1PostResponse response =
+                d1RestClient.callD1(sql,
+                        paramMap.values().stream().toList());
+
+        log.info("Response - {}", response);
+
+        if(!response.success()) throw new GenericDataAccessException("Error deleting data from D1 service.");
+
+        return 1;
     }
 
     @Override
     public CreateResponse create(Map<String, Object> paramMap, String sql, DbTable dbTable) {
-
-        for(String key : paramMap.keySet()) {
-            sql = StringUtils.replace(sql, ":" + key , "?");
-        }
 
         D1PostResponse response =
         d1RestClient.callD1(sql,

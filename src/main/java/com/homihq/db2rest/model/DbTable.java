@@ -13,6 +13,7 @@ public record DbTable(String schema, String name, String fullName, String alias,
         return name + " " + alias;
     }
 
+
     public DbColumn buildColumn(String columnName) {
         log.debug("columnName - {}", columnName);
 

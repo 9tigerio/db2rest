@@ -15,6 +15,12 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 public class D1Dialect implements Dialect{
+
+    @Override
+    public boolean supportAlias() {
+        return false;
+    }
+
     @Override
     public boolean canSupport(String getDbProductName) {
         return StringUtils.equalsAnyIgnoreCase(getDbProductName, "D1", "SQLLITE");

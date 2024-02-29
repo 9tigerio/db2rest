@@ -1,5 +1,5 @@
 UPDATE [(${rootTable})]
-SET [(${columnSets})]
-[# th:if="${rootWhere}"]WHERE
+ SET [(${columnSets})]
+[# th:if="${rootWhere}"] WHERE
     [(${rootWhere})]
 [/]

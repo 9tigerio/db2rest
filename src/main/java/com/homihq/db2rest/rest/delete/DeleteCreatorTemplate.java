@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.delete;
 
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
+import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,11 +19,18 @@ public class DeleteCreatorTemplate {
 
 
     private final SpringTemplateEngine templateEngine;
+    private final SchemaManager schemaManager;
     public String deleteQuery(DeleteContext deleteContext) {
 
         Map<String,Object> data = new HashMap<>();
 
-        data.put("rootTable", deleteContext.getTable().render());
+        if(schemaManager.getDialect().supportAlias()) {
+            data.put("rootTable", deleteContext.getTable().render());
+        }
+        else{
+            data.put("rootTable", deleteContext.getTable().name());
+        }
+
         data.put("rootWhere", deleteContext.getWhere());
 
 
