@@ -48,7 +48,7 @@ public class RootTableFieldProcessor implements ReadProcessor {
                             .toList();
             columnList.addAll(columns);
         }
-
+        log.info("Column List - {}" , columnList);
         readContext.setCols(columnList);
 
     }

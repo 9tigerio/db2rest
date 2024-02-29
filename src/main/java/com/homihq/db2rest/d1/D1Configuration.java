@@ -1,6 +1,7 @@
 package com.homihq.db2rest.d1;
 
-import com.homihq.db2rest.schema.D1SchemaManager;
+import com.homihq.db2rest.dialect.D1Dialect;
+import com.homihq.db2rest.schema.AliasGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,8 +34,8 @@ public class D1Configuration {
     }
 
     @Bean
-    public D1SchemaManager schemaManager(RestTemplateBuilder restTemplateBuilder) {
+    public D1SchemaManager schemaManager(RestTemplateBuilder restTemplateBuilder, AliasGenerator aliasGenerator, D1Dialect d1Dialect) {
         log.info("D1 schema manager.");
-        return new D1SchemaManager(db1RestClient(restTemplateBuilder));
+        return new D1SchemaManager(db1RestClient(restTemplateBuilder), aliasGenerator, d1Dialect);
     }
 }

@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.convert.StringConvert;
 import org.postgresql.util.PGobject;
 import org.springframework.stereotype.Component;
-import schemacrawler.schema.DatabaseInfo;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -27,8 +26,8 @@ public class PostGreSQLDialect implements Dialect {
     private final ObjectMapper objectMapper;
 
     @Override
-    public boolean canSupport(DatabaseInfo databaseInfo) {
-        return StringUtils.equalsAnyIgnoreCase(databaseInfo.getDatabaseProductName(), "POSTGRESQL");
+    public boolean canSupport(String getDbProductName) {
+        return StringUtils.equalsAnyIgnoreCase(getDbProductName, "POSTGRESQL");
     }
 
     @Override

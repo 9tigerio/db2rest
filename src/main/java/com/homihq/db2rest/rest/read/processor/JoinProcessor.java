@@ -15,13 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import schemacrawler.schema.Column;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.homihq.db2rest.schema.TypeMapperUtil.getJdbcType;
 
 
 @Component

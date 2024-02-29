@@ -52,6 +52,7 @@ public class BulkCreateService {
                     new ArrayList<>(includedColumns);
 
             //3. check if tsId is enabled and add those values for PK.
+            List<Map<String,Object>> tsIds = new ArrayList<>();
             if (tsIdEnabled) {
                 log.debug("Handling TSID");
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
@@ -62,7 +63,10 @@ public class BulkCreateService {
                 }
 
                 for (Map<String, Object> data : dataList) {
+                    Map<String,Object> tsIdMap =
                     tsidProcessor.processTsId(data, pkColumns);
+
+                    tsIds.add(tsIdMap);
                 }
             }
 
@@ -77,7 +81,14 @@ public class BulkCreateService {
             log.info("SQL - {}", sql);
             log.info("Data - {}", dataList);
 
-            return dbOperationService.batchUpdate(dataList, sql, dbTable);
+            CreateBulkResponse createBulkResponse = dbOperationService.batchUpdate(dataList, sql, dbTable);
+
+            if(tsIdEnabled && Objects.isNull(createBulkResponse.keys())){
+                return new CreateBulkResponse(createBulkResponse.rows(), tsIds);
+            }
+
+            return createBulkResponse;
+
         } catch (DataAccessException e) {
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());

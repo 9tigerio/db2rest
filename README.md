@@ -61,7 +61,7 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 
 [On premise / On Virtual Machines installation guide](https://db2rest.com/docs/intro).
 
-[Docker based installation guide](https://db2rest.com/docs/installation-running-with-docker).
+[Docker based installation guide](https://db2rest.com/docs/run-db2rest-on-docker).
 
 
 # Supported Databases

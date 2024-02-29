@@ -1,24 +1,25 @@
 package com.homihq.db2rest.dialect;
 
-import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
-import schemacrawler.schema.DatabaseInfo;
-import schemacrawler.schema.Table;
+
 
 import java.util.List;
 import java.util.Map;
 
 public interface Dialect {
 
-    boolean canSupport(DatabaseInfo databaseInfo);
+
+    default boolean supportAlias() {
+        return true;
+    }
+
+    boolean canSupport(String getDbProductName);
 
     void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
 
 
     default Object processValue(String value, Class<?> type, String format) {
         if (String.class == type) {
-            //return "'" + value + "'";
-
             return value;
         }
         else if (Boolean.class == type || boolean.class == type) {
