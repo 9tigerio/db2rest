@@ -1,16 +1,17 @@
-DB2Rest is an **open-source DATA API platform** that provides REST API over databases in minutes.
-It takes care of all the boilerplate data access logic and best practices, thus freeing up development team to focus on building 
-complex business logic and intuitive user interfaces. 
+DB2Rest is a modern low code data platform that makes it easy to build intelligent applications 30x faster. 
+It combines existing/new databases and data-sources with language models (LM/LLMs) and vector stores to rapidly 
+deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
+
+DB2Rest provides instant REST API to perform complex data operation, retrieval-augmentation, embeddings and prebuilt mini applications thus providing significant savings on engineering effort.
+The platform takes care of all the boilerplate data access logic and best practices, thus freeing up developers to focus
+on solving complex business logic and building intuitive user interfaces (UI)
 
 
 > [!IMPORTANT]
 > DB2Rest is transitioning. We continue to work to make DB2REST the best DATA API platform for databases.
 > However, in coming months and days, we will also work to make DB2REST your goto platform to
-> connect your data with the leading framework for LLMs. Stay tuned! :airplane:
+> connect your data with the leading LLMs and Vector stores. Stay tuned! :airplane:
 
-
-DB2Rest simplifies development of data-intensive intelligent applications. :bulb:
-It connects (traditional and ML enabled)databases and AI services(OPENAI, AWS Bedrock) to provide Web APIs to load AI models, ingest data, perform database queries with natural language, and quickly share insights and data with other applications. 
 
 :star: If you find DB2Rest useful, please consider adding a star on GitHub! Your support motivates us to add new exciting features.
 
