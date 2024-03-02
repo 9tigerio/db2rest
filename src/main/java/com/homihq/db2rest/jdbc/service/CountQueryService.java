@@ -1,47 +1,45 @@
-package com.homihq.db2rest.rest.read;
+package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.rest.read.processor.ReadProcessor;
+
+import com.homihq.db2rest.rest.read.dto.CountResponse;
+import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.rest.read.sql.QueryCreatorTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class FindOneService {
+public class CountQueryService {
 
-    private final QueryCreatorTemplate queryCreatorTemplate;
-    private final List<ReadProcessor> processorList;
     private final DbOperationService dbOperationService;
 
-    public Map<String,Object> findOne(ReadContext readContext) {
+    private final List<ReadProcessor> processorList;
+    private final QueryCreatorTemplate queryCreatorTemplate;
 
+    public CountResponse count(com.homihq.db2rest.rest.read.dto.ReadContext readContext) {
         for (ReadProcessor processor : processorList) {
             processor.process(readContext);
         }
 
-        String sql = queryCreatorTemplate.createFindOneQuery(readContext);
-        Map<String, Object> bindValues = readContext.getParamMap();
-
-        log.debug("SQL - {}", sql);
-        log.debug("Params - {}", bindValues);
+        String sql = queryCreatorTemplate.createCountQuery(readContext);
+        log.info("{}", sql);
+        log.info("{}", readContext.getParamMap());
 
         try {
-            return dbOperationService.findOne(sql, bindValues);
-        }
-        catch (DataAccessException e) {
+            return dbOperationService.count(readContext.getParamMap(), sql);
+        } catch (DataAccessException e) {
             log.error("Error in read op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
+
     }
+
 
 
 

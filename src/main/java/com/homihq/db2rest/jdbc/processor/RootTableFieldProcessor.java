@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.processor;
+package com.homihq.db2rest.jdbc.processor;
 
 
 import com.homihq.db2rest.rest.read.dto.ReadContext;
@@ -29,7 +29,7 @@ public class RootTableFieldProcessor implements ReadProcessor {
 
         fields = StringUtils.trim(fields);
 
-        log.info("Fields - {}", fields);
+        log.debug("Fields - {}", fields);
 
         if(Objects.isNull(fields)) { //most likely count query
             return;
@@ -48,7 +48,7 @@ public class RootTableFieldProcessor implements ReadProcessor {
                             .toList();
             columnList.addAll(columns);
         }
-        log.info("Column List - {}" , columnList);
+        log.debug("Column List - {}" , columnList);
         readContext.setCols(columnList);
 
     }

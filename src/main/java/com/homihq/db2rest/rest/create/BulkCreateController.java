@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.create;
 
 import com.homihq.db2rest.exception.GenericDataAccessException;
+import com.homihq.db2rest.jdbc.service.BulkCreateService;
 import com.homihq.db2rest.rest.create.bulk.DataProcessor;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,10 +1,10 @@
-package com.homihq.db2rest.rest.read;
+package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.rest.read.dto.ExistsResponse;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.rest.read.processor.ReadProcessor;
+import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.rest.read.sql.QueryCreatorTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

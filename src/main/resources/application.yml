@@ -12,6 +12,7 @@ spring:
       enabled: true
 
   datasource:
+
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
@@ -25,6 +26,7 @@ spring:
 db2rest:
   datasource:
     type: d1
+
   unKeyDev:
     enabled: ${UNKEY_DEV_ENABLED:false}
     url: ${UNKEY_DEV_URL}

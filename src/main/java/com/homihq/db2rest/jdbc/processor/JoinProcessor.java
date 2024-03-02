@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.read.processor;
+package com.homihq.db2rest.jdbc.processor;
 
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbJoin;
