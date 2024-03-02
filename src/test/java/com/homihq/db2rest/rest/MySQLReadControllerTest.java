@@ -22,27 +22,30 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     void findAllFilms() throws Exception {
 
         mockMvc.perform(get("/film")
-                        .accept(APPLICATION_JSON).accept(APPLICATION_JSON))
-                .andDo(print())
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(4)))
-                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(8))))
-                //.andExpect(jsonPath("$.isPass", anyOf(is(false),is(true))))
                 .andExpect(jsonPath("$[0].*", hasSize(13)))
                 .andDo(document("mysql-get-all-films-all-columns"));
     }
 
     @Test
-    @DisplayName("Get count")
-    void findFilmCount() throws Exception {
-        mockMvc.perform(get("/film/count")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+    @DisplayName("Test find all films - 3 columns")
+    void findAllFilmsWithThreeCols() throws Exception {
+        mockMvc.perform(get("/film")
+                        .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .param("fields", "title,description,release_year")
+                        )
                 //.andDo(print())
-                .andDo(document("mysql-get-film-count"));
-
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", hasSize(4)))
+                .andExpect(jsonPath("$[0].*", hasSize(3)))
+                .andDo(document("mysql-find-all-films-3-columns"));
     }
+
 
     @Test
     @DisplayName("Get one")

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 
 
 import java.util.Map;
@@ -47,10 +48,25 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
-                //.andExpect(jsonPath("$.*", hasSize(4)))
                 .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(8))))
                 .andExpect(jsonPath("$[0].*", hasSize(14)))
                 .andDo(document("pg-get-all-films-all-columns"));
+    }
+
+
+    @Test
+    @DisplayName("Test find all films - 3 columns")
+    void findAllFilmsWithThreeCols() throws Exception {
+        mockMvc.perform(get("/film")
+                        .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .param("fields", "title,description,release_year")
+                )
+                //.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(8))))
+                .andExpect(jsonPath("$[0].*", hasSize(3)))
+                .andDo(document("pg-find-all-films-3-columns"));
     }
 
     @Test
@@ -95,16 +111,6 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andDo(document("pg-custom-query-with-error-400"));
     }
 
-    @Test
-    @DisplayName("Test count")
-    void countAll() throws Exception {
-        mockMvc.perform(get("/film/count")
-                        .accept(APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("pg-get-film-count"));
-
-    }
 
     @Test
     @DisplayName("Test find one record")
