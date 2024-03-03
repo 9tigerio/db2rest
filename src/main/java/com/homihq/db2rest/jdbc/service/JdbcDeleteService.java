@@ -1,12 +1,13 @@
 package com.homihq.db2rest.jdbc.service;
 
-import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.service.DeleteService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
-import com.homihq.db2rest.model.DbWhere;
-import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.core.model.DbWhere;
+import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
@@ -26,6 +27,7 @@ public class JdbcDeleteService implements DeleteService {
     private final SchemaManager schemaManager;
     private final DeleteCreatorTemplate deleteCreatorTemplate;
     private final DbOperationService dbOperationService;
+    private final Dialect dialect;
 
     @Override
     @Transactional
@@ -84,7 +86,7 @@ public class JdbcDeleteService implements DeleteService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, schemaManager.getDialect()));
+                            dbWhere, dialect));
             context.setWhere(where);
 
         }

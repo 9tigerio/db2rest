@@ -1,9 +1,10 @@
 package com.homihq.db2rest.jdbc.processor;
 
-import com.homihq.db2rest.model.DbColumn;
-import com.homihq.db2rest.model.DbJoin;
-import com.homihq.db2rest.model.DbTable;
-import com.homihq.db2rest.model.DbWhere;
+import com.homihq.db2rest.core.Dialect;
+import com.homihq.db2rest.core.model.DbColumn;
+import com.homihq.db2rest.core.model.DbJoin;
+import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.core.model.DbWhere;
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
@@ -20,8 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 
-
-//@Component
 @Slf4j
 @Order(6)
 @RequiredArgsConstructor
@@ -29,6 +28,7 @@ public class JoinProcessor implements ReadProcessor {
 
     private final SchemaManager schemaManager;
     private final OperatorMap operatorMap;
+    private final Dialect dialect;
     @Override
     public void process(ReadContext readContext) {
         List<JoinDetail> joins = readContext.getJoins();
@@ -78,7 +78,7 @@ public class JoinProcessor implements ReadProcessor {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, schemaManager.getDialect()));
+                            dbWhere, dialect));
 
             join.addAdditionalWhere(where);
 

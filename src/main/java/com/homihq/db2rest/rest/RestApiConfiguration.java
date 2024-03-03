@@ -1,12 +1,12 @@
 package com.homihq.db2rest.rest;
 
-import com.homihq.db2rest.jdbc.service.JdbcBulkCreateService;
+import com.homihq.db2rest.core.service.*;
+import com.homihq.db2rest.core.service.ProcedureService;
 import com.homihq.db2rest.jdbc.service.*;
 import com.homihq.db2rest.rest.create.BulkCreateController;
 import com.homihq.db2rest.rest.create.CreateController;
 import com.homihq.db2rest.rest.create.bulk.DataProcessor;
 import com.homihq.db2rest.rest.delete.DeleteController;
-import com.homihq.db2rest.jdbc.service.JdbcDeleteService;
 import com.homihq.db2rest.rest.read.*;
 import com.homihq.db2rest.rest.rpc.FunctionController;
 import com.homihq.db2rest.rest.rpc.ProcedureController;
@@ -20,19 +20,19 @@ import java.util.List;
 public class RestApiConfiguration {
     //CREATE API
     @Bean
-    public BulkCreateController bulkCreateController(JdbcBulkCreateService jdbcBulkCreateService, List<DataProcessor> dataProcessors) {
-        return new BulkCreateController(jdbcBulkCreateService, dataProcessors);
+    public BulkCreateController bulkCreateController(BulkCreateService bulkCreateService, List<DataProcessor> dataProcessors) {
+        return new BulkCreateController(bulkCreateService, dataProcessors);
     }
 
     @Bean
-    public CreateController createController(JdbcCreateService jdbcCreateService) {
-        return new CreateController(jdbcCreateService);
+    public CreateController createController(CreateService createService) {
+        return new CreateController(createService);
     }
 
     //READ API
     @Bean
-    public CountQueryController countQueryController(JdbcCountQueryService jdbcCountQueryService) {
-        return new CountQueryController(jdbcCountQueryService);
+    public CountQueryController countQueryController(CountQueryService countQueryService) {
+        return new CountQueryController(countQueryService);
     }
 
     @Bean
@@ -46,36 +46,36 @@ public class RestApiConfiguration {
     }
 
     @Bean
-    public FindOneController findOneController(JdbcFindOneService jdbcFindOneService) {
-        return new FindOneController(jdbcFindOneService);
+    public FindOneController findOneController(FindOneService findOneService) {
+        return new FindOneController(findOneService);
     }
 
     @Bean
-    public ReadController readController(JdbcReadService jdbcReadService) {
-        return new ReadController(jdbcReadService);
+    public ReadController readController(ReadService readService) {
+        return new ReadController(readService);
     }
 
 
     //UPDATE API
     @Bean
-    public UpdateController updateController(JdbcUpdateService jdbcUpdateService) {
-        return new UpdateController(jdbcUpdateService);
+    public UpdateController updateController(UpdateService updateService) {
+        return new UpdateController(updateService);
     }
 
     //DELETE API
     @Bean
-    public DeleteController deleteController(JdbcDeleteService jdbcDeleteService) {
-        return new DeleteController(jdbcDeleteService);
+    public DeleteController deleteController(DeleteService deleteService) {
+        return new DeleteController(deleteService);
     }
 
     //RPC
     @Bean
-    public FunctionController functionController(JdbcFunctionService jdbcFunctionService) {
-        return new FunctionController(jdbcFunctionService);
+    public FunctionController functionController(FunctionService functionService) {
+        return new FunctionController(functionService);
     }
 
     @Bean
-    public ProcedureController procedureController(JdbcProcedureService jdbcProcedureService) {
-        return new ProcedureController(jdbcProcedureService);
+    public ProcedureController procedureController(ProcedureService procedureService) {
+        return new ProcedureController(procedureService);
     }
 }

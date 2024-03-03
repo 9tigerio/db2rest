@@ -1,4 +1,4 @@
-package com.homihq.db2rest.model;
+package com.homihq.db2rest.core.model;
 
 import com.homihq.db2rest.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;

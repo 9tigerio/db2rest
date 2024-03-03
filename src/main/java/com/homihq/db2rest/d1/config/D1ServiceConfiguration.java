@@ -1,32 +1,33 @@
-package com.homihq.db2rest.jdbc.config;
+package com.homihq.db2rest.d1.config;
 
 
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
-import com.homihq.db2rest.core.*;
+import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.service.*;
-import com.homihq.db2rest.core.service.ProcedureService;
+import com.homihq.db2rest.d1.D1Dialect;
+import com.homihq.db2rest.d1.service.D1FunctionService;
+import com.homihq.db2rest.d1.service.D1ProcedureService;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.service.*;
-import com.homihq.db2rest.core.service.CreateService;
 import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
-import com.homihq.db2rest.jdbc.service.JdbcDeleteService;
 import com.homihq.db2rest.rest.read.sql.QueryCreatorTemplate;
 import com.homihq.db2rest.schema.SchemaManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
+
+
 import java.util.List;
 
 
 @Configuration
-@ConditionalOnBean(DataSource.class)
-public class JdbcServiceConfiguration {
+@ConditionalOnBean(D1Dialect.class)
+public class D1ServiceConfiguration {
     //CREATE SERVICE
 
     @Bean
@@ -106,13 +107,13 @@ public class JdbcServiceConfiguration {
 
     //RPC
     @Bean
-    public FunctionService functionService(JdbcTemplate jdbcTemplate) {
-        return new JdbcFunctionService(jdbcTemplate);
+    public D1FunctionService d1FunctionService() {
+        return new D1FunctionService();
     }
 
     @Bean
-    public ProcedureService procedureService(JdbcTemplate jdbcTemplate) {
-        return new JdbcProcedureService(jdbcTemplate);
+    public D1ProcedureService d1ProcedureService() {
+        return new D1ProcedureService();
     }
 
 }

@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.read.sql;
 
-import com.homihq.db2rest.model.DbColumn;
-import com.homihq.db2rest.model.DbSort;
+import com.homihq.db2rest.core.model.DbColumn;
+import com.homihq.db2rest.core.model.DbSort;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

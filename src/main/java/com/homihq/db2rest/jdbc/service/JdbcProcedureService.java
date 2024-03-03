@@ -1,19 +1,28 @@
 package com.homihq.db2rest.jdbc.service;
 
+
+import com.homihq.db2rest.core.service.ProcedureService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
+import java.util.Map;
+
 
 @Slf4j
-public class JdbcProcedureService extends SubRoutine {
+@RequiredArgsConstructor
+public class JdbcProcedureService implements ProcedureService {
 
-    public JdbcProcedureService(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
-    }
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public SimpleJdbcCall getSimpleJdbcCall(String subRoutineName) {
         return new SimpleJdbcCall(jdbcTemplate).withProcedureName(subRoutineName);
+    }
+
+    @Override
+    public Map<String, Object> execute(String subRoutineName, Map<String, Object> inParams) {
+        return doExecute(jdbcTemplate, subRoutineName, inParams);
     }
 }

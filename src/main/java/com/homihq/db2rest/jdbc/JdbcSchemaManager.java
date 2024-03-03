@@ -1,13 +1,11 @@
 package com.homihq.db2rest.jdbc;
 
-import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.exception.InvalidTableException;
-import com.homihq.db2rest.model.DbColumn;
-import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.core.model.DbColumn;
+import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.schema.AliasGenerator;
 import com.homihq.db2rest.schema.SchemaManager;
 import jakarta.annotation.PostConstruct;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +25,6 @@ public final class JdbcSchemaManager implements SchemaManager {
 
     private final DataSource dataSource;
     private final AliasGenerator aliasGenerator;
-    private final List<Dialect> dialects;
 
     @Deprecated
     private Map<String, Table> tableMap;
@@ -36,9 +33,6 @@ public final class JdbcSchemaManager implements SchemaManager {
 
     private List<DbTable> dbTableList;
     private Map<String,DbTable> dbTableMap;
-
-    @Getter
-    private Dialect dialect;
 
     @PostConstruct
     private void reload() {
@@ -65,16 +59,6 @@ public final class JdbcSchemaManager implements SchemaManager {
         // Get the schema definition
 
         final Catalog catalog = SchemaCrawlerUtility.getCatalog(DatabaseConnectionSources.fromDataSource(dataSource), options);
-
-        DatabaseInfo databaseInfo = catalog.getDatabaseInfo();
-
-        for(Dialect dialect : dialects) {
-
-            if(dialect.canSupport(databaseInfo.getDatabaseProductName())) {
-                this.dialect = dialect;
-                break;
-            }
-        }
 
         for (final Schema schema : catalog.getSchemas()) {
 
@@ -144,17 +128,6 @@ public final class JdbcSchemaManager implements SchemaManager {
         if(Objects.isNull(table)) throw new InvalidTableException(tableName);
 
         return table;
-    }
-
-    @Override
-    public List<DbTable> findTables(String tableName) {
-        return tableList.stream()
-                .filter(t -> StringUtils.equalsIgnoreCase(t.getName(), tableName))
-                .toList()
-                .stream()
-                .map(this::createTable)
-                .toList();
-
     }
 
     private Optional<Table> getTable(String schemaName, String tableName) {

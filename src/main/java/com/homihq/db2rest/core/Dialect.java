@@ -1,6 +1,6 @@
 package com.homihq.db2rest.core;
 
-import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.core.model.DbTable;
 
 
 import java.util.List;
@@ -12,8 +12,6 @@ public interface Dialect {
     default boolean supportAlias() {
         return true;
     }
-
-    boolean canSupport(String getDbProductName);
 
     void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
 

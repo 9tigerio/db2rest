@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rsql.operator.handler;
 
 import com.homihq.db2rest.core.Dialect;
-import com.homihq.db2rest.model.DbColumn;
+import com.homihq.db2rest.core.model.DbColumn;
 
 import java.util.Arrays;
 import java.util.List;

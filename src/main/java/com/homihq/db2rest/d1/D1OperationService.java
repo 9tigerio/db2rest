@@ -3,23 +3,20 @@ package com.homihq.db2rest.d1;
 import com.homihq.db2rest.d1.model.D1PostResponse;
 import com.homihq.db2rest.core.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateResponse;
 import com.homihq.db2rest.rest.read.dto.CountResponse;
 import com.homihq.db2rest.rest.read.dto.ExistsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
+
 
 import java.util.List;
 import java.util.Map;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
-@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "d1")
 public class D1OperationService implements DbOperationService {
 
     private final D1RestClient d1RestClient;

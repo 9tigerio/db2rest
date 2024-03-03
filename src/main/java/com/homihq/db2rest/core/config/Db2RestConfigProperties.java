@@ -1,4 +1,4 @@
-package com.homihq.db2rest.config;
+package com.homihq.db2rest.core.config;
 
 import com.homihq.db2rest.exception.DeleteOpNotAllowedException;
 import com.homihq.db2rest.exception.InvalidSchemaException;

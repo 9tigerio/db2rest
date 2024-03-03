@@ -1,4 +1,4 @@
-package com.homihq.db2rest.config;
+package com.homihq.db2rest.core.config;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

@@ -3,7 +3,7 @@ package com.homihq.db2rest.jdbc.dialect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -23,11 +23,6 @@ import java.util.Objects;
 public class PostGreSQLDialect implements Dialect {
 
     private final ObjectMapper objectMapper;
-
-    @Override
-    public boolean canSupport(String getDbProductName) {
-        return StringUtils.equalsAnyIgnoreCase(getDbProductName, "POSTGRESQL");
-    }
 
     @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {

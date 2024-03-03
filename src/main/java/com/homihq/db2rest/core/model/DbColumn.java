@@ -1,4 +1,4 @@
-package com.homihq.db2rest.model;
+package com.homihq.db2rest.core.model;
 
 import org.apache.commons.lang3.StringUtils;
 

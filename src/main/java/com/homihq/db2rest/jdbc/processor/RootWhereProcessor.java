@@ -2,7 +2,7 @@ package com.homihq.db2rest.jdbc.processor;
 
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.model.DbWhere;
+import com.homihq.db2rest.core.model.DbWhere;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
 import cz.jirutka.rsql.parser.ast.Node;

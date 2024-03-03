@@ -1,10 +1,11 @@
 package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.service.BulkCreateService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.model.DbColumn;
-import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.core.model.DbColumn;
+import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
@@ -31,6 +32,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
     private final CreateCreatorTemplate createCreatorTemplate;
     private final SchemaManager schemaManager;
     private final DbOperationService dbOperationService;
+    private final Dialect dialect;
 
     @Override
     @Transactional
@@ -72,7 +74,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
             }
 
             for(Map<String,Object> data : dataList)
-                this.schemaManager.getDialect().processTypes(dbTable, insertableColumns, data);
+                this.dialect.processTypes(dbTable, insertableColumns, data);
 
             log.debug("Finally insertable columns - {}", insertableColumns);
 

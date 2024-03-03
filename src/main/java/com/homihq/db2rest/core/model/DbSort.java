@@ -1,4 +1,4 @@
-package com.homihq.db2rest.model;
+package com.homihq.db2rest.core.model;
 
 public record DbSort(String table, String tableAlias, String column, String sortDirection) {
 

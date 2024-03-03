@@ -1,13 +1,13 @@
 package com.homihq.db2rest.jdbc.service;
 
-import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.DbOperationService;
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.service.UpdateService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
-import com.homihq.db2rest.model.DbTable;
-import com.homihq.db2rest.model.DbWhere;
+import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.core.model.DbWhere;
 import com.homihq.db2rest.rest.update.dto.UpdateContext;
 
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
@@ -98,7 +98,7 @@ public class JdbcUpdateService implements UpdateService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, schemaManager.getDialect()));
+                            dbWhere, dialect));
             context.setWhere(where);
 
         }

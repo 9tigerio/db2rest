@@ -1,5 +1,9 @@
-package com.homihq.db2rest.d1;
+package com.homihq.db2rest.d1.config;
 
+import com.homihq.db2rest.d1.D1Dialect;
+import com.homihq.db2rest.d1.D1OperationService;
+import com.homihq.db2rest.d1.D1RestClient;
+import com.homihq.db2rest.d1.D1SchemaManager;
 import com.homihq.db2rest.schema.AliasGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +28,14 @@ public class D1Configuration {
     @Value("${d1.apiKey}")
     private String apiKey;
 
-    public D1Configuration() {
-        System.out.println("D1 ds configuration");
+    @Bean
+    public D1Dialect d1Dialect() {
+        return new D1Dialect();
+    }
+
+    @Bean
+    public D1OperationService d1OperationService(RestTemplateBuilder restTemplateBuilder) {
+        return new D1OperationService(db1RestClient(restTemplateBuilder));
     }
 
     @Bean
@@ -36,9 +46,11 @@ public class D1Configuration {
         return new D1RestClient(dbUrl, restTemplateBuilder.build(), apiKey);
     }
 
+
+
     @Bean
-    public D1SchemaManager schemaManager(RestTemplateBuilder restTemplateBuilder, AliasGenerator aliasGenerator, D1Dialect d1Dialect) {
+    public D1SchemaManager schemaManager(RestTemplateBuilder restTemplateBuilder, AliasGenerator aliasGenerator) {
         log.info("D1 schema manager.");
-        return new D1SchemaManager(db1RestClient(restTemplateBuilder), aliasGenerator, d1Dialect);
+        return new D1SchemaManager(db1RestClient(restTemplateBuilder), aliasGenerator);
     }
 }

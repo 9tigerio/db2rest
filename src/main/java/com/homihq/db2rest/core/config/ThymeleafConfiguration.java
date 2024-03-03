@@ -1,4 +1,4 @@
-package com.homihq.db2rest.config;
+package com.homihq.db2rest.core.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
