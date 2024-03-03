@@ -4,7 +4,7 @@ import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.schema.AliasGenerator;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RequiredArgsConstructor
-public final class JdbcSchemaManager implements SchemaManager {
+public final class JdbcSchemaCache implements SchemaCache {
 
     private final DataSource dataSource;
     private final AliasGenerator aliasGenerator;
@@ -73,6 +73,7 @@ public final class JdbcSchemaManager implements SchemaManager {
 
                 DbTable dbTable = createTable(table);
                 dbTableList.add(createTable(table));
+
                 dbTableMap.put(dbTable.name(), dbTable);
             }
         }
@@ -133,14 +134,6 @@ public final class JdbcSchemaManager implements SchemaManager {
     private Optional<Table> getTable(String schemaName, String tableName) {
         Table table = tableMap.get(schemaName + "." + tableName);
         return Optional.of(table);
-    }
-
-    @Override
-    public DbTable getOneTable(String schemaName, String tableName) {
-        Table table = getTable(schemaName, tableName).orElseThrow(() -> new InvalidTableException(tableName));
-
-        return createTable(table);
-
     }
 
 

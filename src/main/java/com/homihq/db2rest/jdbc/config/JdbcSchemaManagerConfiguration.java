@@ -2,7 +2,7 @@ package com.homihq.db2rest.jdbc.config;
 
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
-import com.homihq.db2rest.jdbc.JdbcSchemaManager;
+import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
 import com.homihq.db2rest.schema.AliasGenerator;
@@ -19,8 +19,8 @@ import javax.sql.DataSource;
 public class JdbcSchemaManagerConfiguration {
 
     @Bean
-    public JdbcSchemaManager schemaManager(DataSource dataSource, AliasGenerator aliasGenerator) {
-        return new JdbcSchemaManager(dataSource, aliasGenerator);
+    public JdbcSchemaCache schemaManager(DataSource dataSource, AliasGenerator aliasGenerator) {
+        return new JdbcSchemaCache(dataSource, aliasGenerator);
     }
 
     @Bean
@@ -29,7 +29,7 @@ public class JdbcSchemaManagerConfiguration {
     }
 
     @Bean
-    public JoinProcessor joinProcessor(JdbcSchemaManager jdbcSchemaManager, OperatorMap operatorMap, Dialect dialect) {
+    public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaManager, OperatorMap operatorMap, Dialect dialect) {
         return new JoinProcessor(jdbcSchemaManager, operatorMap, dialect);
     }
 
@@ -44,7 +44,7 @@ public class JdbcSchemaManagerConfiguration {
     }
 
     @Bean
-    public RootTableProcessor rootTableProcessor(JdbcSchemaManager jdbcSchemaManager) {
+    public RootTableProcessor rootTableProcessor(JdbcSchemaCache jdbcSchemaManager) {
         return new RootTableProcessor(jdbcSchemaManager);
     }
 
