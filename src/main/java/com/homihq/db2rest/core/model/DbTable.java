@@ -15,7 +15,7 @@ public record DbTable(String schema, String name, String fullName, String alias,
 
 
     public DbColumn buildColumn(String columnName) {
-        log.debug("columnName - {}", columnName);
+        log.info("columnName - {}", columnName);
 
         DbAlias dbAlias = getAlias(columnName);
 
@@ -26,6 +26,7 @@ public record DbTable(String schema, String name, String fullName, String alias,
         return
         this.dbColumns.stream()
                 .filter(dbColumn -> StringUtils.equalsAnyIgnoreCase(dbAlias.name(), dbColumn.name()))
+                .map(dbColumn -> dbColumn.copyWithAlias(dbAlias.alias()))
                 .findFirst().orElseThrow(() -> new InvalidColumnException(name,dbAlias.name()));
     }
 

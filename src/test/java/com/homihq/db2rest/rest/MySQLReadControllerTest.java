@@ -6,8 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -45,6 +45,23 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9))))
                 .andExpect(jsonPath("$[0].*", hasSize(3)))
                 .andDo(document("mysql-find-all-films-3-columns"));
+    }
+
+    @Test
+    @DisplayName("Test find all films - with column alias")
+    void findAllFilmsWithColumnAlias() throws Exception {
+        mockMvc.perform(get("/film")
+                        .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .param("fields", "title,description,release_year:releaseYear")
+                )
+                //.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9))))
+                .andExpect(jsonPath("$[0].title", notNullValue()))
+                .andExpect(jsonPath("$[0].description", notNullValue()))
+                .andExpect(jsonPath("$[0].releaseYear", notNullValue()))
+                .andDo(document("mysql-find-all-films-with-column-alias"));
     }
 
 

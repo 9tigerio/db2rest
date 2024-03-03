@@ -70,6 +70,23 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     }
 
     @Test
+    @DisplayName("Test find all films - with column alias")
+    void findAllFilmsWithColumnAlias() throws Exception {
+        mockMvc.perform(get("/film")
+                        .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .param("fields", "title,description,release_year:releaseYear")
+                )
+                //.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(8))))
+                .andExpect(jsonPath("$[0].title", notNullValue()))
+                .andExpect(jsonPath("$[0].description", notNullValue()))
+                .andExpect(jsonPath("$[0].releaseYear", notNullValue()))
+                .andDo(document("pg-find-all-films-with-column-alias"));
+    }
+
+    @Test
     @DisplayName("Test Custom Query with Single Result")
     void findCustomQuerySingleResult() throws Exception {
 
