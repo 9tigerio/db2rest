@@ -5,6 +5,7 @@ import com.homihq.db2rest.exception.GenericDataAccessException;
 
 import com.homihq.db2rest.rest.read.dto.CountResponse;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
+import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.rest.read.sql.QueryCreatorTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,17 +13,16 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-@Service
+//@Service
 @Slf4j
 @RequiredArgsConstructor
 public class CountQueryService {
 
     private final DbOperationService dbOperationService;
-
     private final List<ReadProcessor> processorList;
     private final QueryCreatorTemplate queryCreatorTemplate;
 
-    public CountResponse count(com.homihq.db2rest.rest.read.dto.ReadContext readContext) {
+    public CountResponse count(ReadContext readContext) {
         for (ReadProcessor processor : processorList) {
             processor.process(readContext);
         }

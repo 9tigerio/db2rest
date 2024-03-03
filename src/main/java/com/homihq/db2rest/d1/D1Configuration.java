@@ -1,6 +1,5 @@
 package com.homihq.db2rest.d1;
 
-import com.homihq.db2rest.dialect.D1Dialect;
 import com.homihq.db2rest.schema.AliasGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +23,10 @@ public class D1Configuration {
 
     @Value("${d1.apiKey}")
     private String apiKey;
+
+    public D1Configuration() {
+        System.out.println("D1 ds configuration");
+    }
 
     @Bean
     public D1RestClient db1RestClient(RestTemplateBuilder restTemplateBuilder) {

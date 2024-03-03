@@ -18,10 +18,7 @@ import schemacrawler.tools.utility.SchemaCrawlerUtility;
 import us.fatehi.utility.datasource.DatabaseConnectionSources;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -32,10 +29,13 @@ public final class JdbcSchemaManager implements SchemaManager {
     private final AliasGenerator aliasGenerator;
     private final List<Dialect> dialects;
 
+    @Deprecated
     private Map<String, Table> tableMap;
+    @Deprecated
     private List<Table> tableList;
 
     private List<DbTable> dbTableList;
+    private Map<String,DbTable> dbTableMap;
 
     @Getter
     private Dialect dialect;
@@ -45,6 +45,7 @@ public final class JdbcSchemaManager implements SchemaManager {
         this.tableMap = new ConcurrentHashMap<>();
         this.tableList = new ArrayList<>();
         this.dbTableList = new ArrayList<>();
+        this.dbTableMap = new ConcurrentHashMap<>();
         createSchemaCache();
     }
 
@@ -67,11 +68,6 @@ public final class JdbcSchemaManager implements SchemaManager {
 
         DatabaseInfo databaseInfo = catalog.getDatabaseInfo();
 
-        log.info("Database Product - {}", databaseInfo.getDatabaseProductName());
-        log.info("Database Product Version - {}", databaseInfo.getDatabaseProductVersion());
-        log.info("Product name - {}", databaseInfo.getProductName());
-        log.info("Product ver - {}", databaseInfo.getProductVersion());
-
         for(Dialect dialect : dialects) {
 
             if(dialect.canSupport(databaseInfo.getDatabaseProductName())) {
@@ -91,10 +87,12 @@ public final class JdbcSchemaManager implements SchemaManager {
                 tableMap.put(fullName, table);
                 tableList.add(table);
 
+                DbTable dbTable = createTable(table);
                 dbTableList.add(createTable(table));
-
+                dbTableMap.put(dbTable.name(), dbTable);
             }
         }
+
     }
 
     private DbColumn createDbColumn(String tableName, String tableAlias, Column column) {
@@ -140,13 +138,12 @@ public final class JdbcSchemaManager implements SchemaManager {
 
     @Override
     public DbTable getTable(String tableName) {
-        List<DbTable> tables = findTables(tableName);
 
-        log.debug("tables - {}", tables);
+        DbTable table = this.dbTableMap.get(tableName);
 
-        if(tables.size() != 1) throw new InvalidTableException(tableName);
+        if(Objects.isNull(table)) throw new InvalidTableException(tableName);
 
-        return tables.get(0);
+        return table;
     }
 
     @Override

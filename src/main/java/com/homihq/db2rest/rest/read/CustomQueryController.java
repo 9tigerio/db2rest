@@ -1,6 +1,7 @@
 package com.homihq.db2rest.rest.read;
 
 
+import com.homihq.db2rest.jdbc.service.CustomQueryService;
 import com.homihq.db2rest.rest.read.dto.QueryRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

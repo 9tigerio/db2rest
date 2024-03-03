@@ -25,7 +25,7 @@ spring:
 
 db2rest:
   datasource:
-    type: d1
+    type: ${DATASOURCE_TYPE:'jdbc'}
 
   unKeyDev:
     enabled: ${UNKEY_DEV_ENABLED:false}
@@ -59,6 +59,7 @@ logging:
           scheduler: ERROR
     org:
       springframework:
+        beans : INFO
         web: INFO
         test:
           context:

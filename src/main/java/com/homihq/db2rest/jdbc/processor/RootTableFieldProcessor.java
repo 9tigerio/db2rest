@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-@Component
+//@Component
 @Slf4j
 @Order(4)
 public class RootTableFieldProcessor implements ReadProcessor {

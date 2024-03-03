@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 @Order(12)

@@ -27,8 +27,8 @@ public class ReadService {
         }
 
         String sql = queryCreatorTemplate.createQuery(readContext);
-        log.info("{}", sql);
-        log.info("{}", readContext.getParamMap());
+        log.debug("{}", sql);
+        log.debug("{}", readContext.getParamMap());
 
         try {
             return dbOperationService.read(readContext.getParamMap(), sql);

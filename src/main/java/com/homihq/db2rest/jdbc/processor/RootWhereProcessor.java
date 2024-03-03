@@ -1,25 +1,23 @@
 package com.homihq.db2rest.jdbc.processor;
 
+import com.homihq.db2rest.dialect.Dialect;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.model.DbWhere;
-import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
-import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
+import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
 @Order(8)
 @RequiredArgsConstructor
 public class RootWhereProcessor implements ReadProcessor {
 
-    private final SchemaManager schemaManager;
-
+    private final Dialect dialect;
     @Override
     public void process(ReadContext readContext) {
         if(StringUtils.isNotBlank(readContext.getFilter())) {
@@ -29,17 +27,16 @@ public class RootWhereProcessor implements ReadProcessor {
                     readContext.getTableName(),
                     readContext.getRoot(), readContext.getCols(), readContext.getParamMap());
 
-            log.info("-Creating root where condition -");
+            log.debug("-Creating root where condition -");
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(readContext.getFilter());
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, schemaManager.getDialect()));
+                            dbWhere, dialect));
 
-            log.info("Where - {}", where);
-
-            log.info("param map - {}", readContext.getParamMap());
+            log.debug("Where - {}", where);
+            log.debug("param map - {}", readContext.getParamMap());
 
             readContext.setRootWhere(where);
 

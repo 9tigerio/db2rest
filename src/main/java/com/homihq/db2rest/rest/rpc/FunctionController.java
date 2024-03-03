@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.rpc;
 
+import com.homihq.db2rest.jdbc.service.FunctionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

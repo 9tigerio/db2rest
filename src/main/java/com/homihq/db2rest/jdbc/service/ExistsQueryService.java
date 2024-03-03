@@ -19,7 +19,6 @@ import java.util.List;
 public class ExistsQueryService {
 
 	private final DbOperationService dbOperationService;
-
 	private final List<ReadProcessor> processorList;
 	private final QueryCreatorTemplate queryCreatorTemplate;
 

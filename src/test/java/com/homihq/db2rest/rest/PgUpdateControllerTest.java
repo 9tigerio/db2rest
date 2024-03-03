@@ -69,14 +69,12 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     void updateMultipleColumns() throws Exception {
 
         mockMvc.perform(patch("/film")
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
-                        .header("Content-Profile", "public")
                         .content(ITestUtil.UPDATE_FILMS_REQUEST))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(2)))
-                .andDo(print())
                 .andDo(document("pg-update-multiple-films"));
     }
 

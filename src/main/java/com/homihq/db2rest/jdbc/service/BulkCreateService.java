@@ -4,16 +4,15 @@ import com.homihq.db2rest.dbop.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
-import com.homihq.db2rest.rest.create.CreateCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
-import com.homihq.db2rest.rest.create.tsid.TSIDProcessor;
+import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import java.util.Objects;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-@Service
+//@Service
 @Slf4j
 @RequiredArgsConstructor
 public class BulkCreateService {

@@ -6,15 +6,14 @@ import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.model.DbWhere;
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.rsql.operator.handler.OperatorMap;
-import com.homihq.db2rest.rsql.parser.RSQLParserBuilder;
-import com.homihq.db2rest.rsql.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
+import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
+import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
 import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.Objects;
 
 
 
-@Component
+//@Component
 @Slf4j
 @Order(6)
 @RequiredArgsConstructor
