@@ -10,10 +10,9 @@ import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.SchemaCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
 
     private final TSIDProcessor tsidProcessor;
     private final CreateCreatorTemplate createCreatorTemplate;
-    private final SchemaManager schemaManager;
+    private final SchemaCache schemaCache;
     private final DbOperationService dbOperationService;
     private final Dialect dialect;
 
@@ -47,8 +46,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
         try {
 
             //1. get actual table
-            DbTable dbTable = StringUtils.isNotBlank(schemaName) ?
-                    schemaManager.getOneTable(schemaName, tableName) : schemaManager.getTable(tableName);
+            DbTable dbTable = schemaCache.getTable(tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(dataList.get(0).keySet().stream().toList()) :

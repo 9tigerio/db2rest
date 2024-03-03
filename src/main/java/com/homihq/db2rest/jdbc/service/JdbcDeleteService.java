@@ -11,7 +11,7 @@ import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.SchemaCache;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcDeleteService implements DeleteService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final SchemaManager schemaManager;
+    private final SchemaCache schemaCache;
     private final DeleteCreatorTemplate deleteCreatorTemplate;
     private final DbOperationService dbOperationService;
     private final Dialect dialect;
@@ -34,16 +34,8 @@ public class JdbcDeleteService implements DeleteService {
     public int delete(String schemaName, String tableName, String filter) {
         db2RestConfigProperties.checkDeleteAllowed(filter);
 
-        DbTable dbTable;
-        if(db2RestConfigProperties.getMultiTenancy().isSchemaBased()) {
-            //Only relevant for schema per tenant multi tenancy
-            //TODO - handle schema retrieval from request
-            dbTable = schemaManager.getOneTable(schemaName, tableName);
-        }
-        else{
-            //get a unique table
-            dbTable = schemaManager.getTable(tableName);
-        }
+        DbTable dbTable = schemaCache.getTable(tableName);
+
         DeleteContext context = DeleteContext.builder()
                 .tableName(tableName)
                 .table(dbTable).build();

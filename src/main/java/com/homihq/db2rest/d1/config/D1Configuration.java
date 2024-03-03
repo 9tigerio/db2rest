@@ -3,7 +3,7 @@ package com.homihq.db2rest.d1.config;
 import com.homihq.db2rest.d1.D1Dialect;
 import com.homihq.db2rest.d1.D1OperationService;
 import com.homihq.db2rest.d1.D1RestClient;
-import com.homihq.db2rest.d1.D1SchemaManager;
+import com.homihq.db2rest.d1.D1SchemaCache;
 import com.homihq.db2rest.schema.AliasGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,8 +49,8 @@ public class D1Configuration {
 
 
     @Bean
-    public D1SchemaManager schemaManager(RestTemplateBuilder restTemplateBuilder, AliasGenerator aliasGenerator) {
+    public D1SchemaCache schemaManager(RestTemplateBuilder restTemplateBuilder, AliasGenerator aliasGenerator) {
         log.info("D1 schema manager.");
-        return new D1SchemaManager(db1RestClient(restTemplateBuilder), aliasGenerator);
+        return new D1SchemaCache(db1RestClient(restTemplateBuilder), aliasGenerator);
     }
 }

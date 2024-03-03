@@ -2,11 +2,10 @@ package com.homihq.db2rest.d1;
 
 import com.homihq.db2rest.d1.model.D1Column;
 import com.homihq.db2rest.d1.model.D1Table;
-import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.schema.AliasGenerator;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class D1SchemaManager implements SchemaManager {
+public class D1SchemaCache implements SchemaCache {
 
     private final D1RestClient d1RestClient;
     private final AliasGenerator aliasGenerator;
@@ -91,9 +90,5 @@ public class D1SchemaManager implements SchemaManager {
     }
 
 
-    @Override
-    public DbTable getOneTable(String schemaName, String tableName) {
-        return getTable(tableName);
-    }
 
 }

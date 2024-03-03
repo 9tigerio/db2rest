@@ -12,7 +12,7 @@ import com.homihq.db2rest.rest.update.dto.UpdateContext;
 
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.SchemaManager;
+import com.homihq.db2rest.schema.SchemaCache;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.Map;
 public class JdbcUpdateService implements UpdateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final SchemaManager schemaManager;
+    private final SchemaCache schemaCache;
     private final UpdateCreatorTemplate updateCreatorTemplate;
     private final DbOperationService dbOperationService;
     private final Dialect dialect;
@@ -38,16 +38,8 @@ public class JdbcUpdateService implements UpdateService {
     @Transactional
     public int patch(String schemaName, String tableName, Map<String, Object> data, String filter) {
 
-        DbTable dbTable;
-        if(db2RestConfigProperties.getMultiTenancy().isSchemaBased()) { //TODO merge fall back in schema manager
-            //Only relevant for schema per tenant multi tenancy
-            //TODO - handle schema retrieval from request
-            dbTable = schemaManager.getOneTable(schemaName, tableName);
-        }
-        else{
-            //get a unique table
-            dbTable = schemaManager.getTable(tableName);
-        }
+        DbTable dbTable = schemaCache.getTable(tableName);
+
 
         List<String> updatableColumns =
             data.keySet().stream().toList();
