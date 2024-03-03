@@ -25,7 +25,7 @@ spring:
 
 db2rest:
   datasource:
-    type: ${DATASOURCE_TYPE:'jdbc'}
+    type: ${DATASOURCE_TYPE:jdbc}
 
   unKeyDev:
     enabled: ${UNKEY_DEV_ENABLED:false}
