@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.config;
 
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaManager;
 import com.homihq.db2rest.jdbc.processor.*;

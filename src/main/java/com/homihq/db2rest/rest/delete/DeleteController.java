@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.delete;
 
-import com.homihq.db2rest.jdbc.service.DeleteService;
+import com.homihq.db2rest.core.service.DeleteService;
 import com.homihq.db2rest.rest.delete.dto.DeleteResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

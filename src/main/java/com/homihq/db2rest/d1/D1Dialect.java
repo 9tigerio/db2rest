@@ -1,12 +1,11 @@
 package com.homihq.db2rest.d1;
 
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;

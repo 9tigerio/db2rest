@@ -6,17 +6,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
-@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
-public class ProcedureService extends SubRoutine {
+public class JdbcFunctionService extends SubRoutine {
 
-    public ProcedureService(JdbcTemplate jdbcTemplate) {
+    public JdbcFunctionService(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
     }
 
     @Override
     public SimpleJdbcCall getSimpleJdbcCall(String subRoutineName) {
-        return new SimpleJdbcCall(jdbcTemplate).withProcedureName(subRoutineName);
+        return new SimpleJdbcCall(jdbcTemplate).withFunctionName(subRoutineName);
     }
 }

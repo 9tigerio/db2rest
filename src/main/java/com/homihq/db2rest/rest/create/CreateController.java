@@ -1,7 +1,7 @@
 package com.homihq.db2rest.rest.create;
 
 
-import com.homihq.db2rest.jdbc.service.CreateService;
+import com.homihq.db2rest.core.service.CreateService;
 import com.homihq.db2rest.rest.create.dto.CreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +22,6 @@ public class CreateController implements CreateRestApi {
                                List<String> includeColumns,
                                Map<String, Object> data,
                                boolean tsIdEnabled) {
-
-        log.info("includeColumns - {}", includeColumns);
 
         return createService
                 .save(null, tableName, includeColumns, data, tsIdEnabled);

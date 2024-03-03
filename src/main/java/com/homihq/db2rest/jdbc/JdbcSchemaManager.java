@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc;
 
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;

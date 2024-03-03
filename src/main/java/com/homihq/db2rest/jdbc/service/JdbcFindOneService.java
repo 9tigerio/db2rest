@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.service;
 
-import com.homihq.db2rest.dbop.DbOperationService;
+import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.service.FindOneService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
@@ -8,20 +9,19 @@ import com.homihq.db2rest.rest.read.sql.QueryCreatorTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-//@Service
 @Slf4j
 @RequiredArgsConstructor
-public class FindOneService {
+public class JdbcFindOneService implements FindOneService {
 
     private final QueryCreatorTemplate queryCreatorTemplate;
     private final List<ReadProcessor> processorList;
     private final DbOperationService dbOperationService;
 
+    @Override
     public Map<String,Object> findOne(ReadContext readContext) {
 
         for (ReadProcessor processor : processorList) {

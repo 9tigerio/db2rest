@@ -1,5 +1,6 @@
 package com.homihq.db2rest.schema;
 
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.model.DbTable;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface SchemaManager {
 
     DbTable getOneTable(String schemaName, String tableName);
 
-    com.homihq.db2rest.dialect.Dialect getDialect();
+    Dialect getDialect();
 }

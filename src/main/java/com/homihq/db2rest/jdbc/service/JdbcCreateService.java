@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.service;
 
-import com.homihq.db2rest.dbop.DbOperationService;
+import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.service.CreateService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
@@ -23,19 +24,19 @@ import java.util.Objects;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 
-//@Service
 @Slf4j
 @RequiredArgsConstructor
-public class CreateService {
+public class JdbcCreateService implements CreateService {
 
     private final TSIDProcessor tsidProcessor;
     private final CreateCreatorTemplate createCreatorTemplate;
     private final SchemaManager schemaManager;
     private final DbOperationService dbOperationService;
 
+    @Override
     @Transactional
     public CreateResponse save(String schemaName, String tableName, List<String> includedColumns,
-                                      Map<String, Object> data, boolean tsIdEnabled) {
+                               Map<String, Object> data, boolean tsIdEnabled) {
         try {
             //1. get actual table
             DbTable dbTable = StringUtils.isNotBlank(schemaName) ?

@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.rpc;
 
-import com.homihq.db2rest.jdbc.service.FunctionService;
+import com.homihq.db2rest.jdbc.service.JdbcFunctionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -16,12 +16,12 @@ import java.util.Map;
 @ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
 public class FunctionController {
 
-    private final FunctionService functionService;
+    private final JdbcFunctionService jdbcFunctionService;
 
     @PostMapping("/{funcName}")
     public ResponseEntity<Map<String, Object>> execute(@PathVariable String funcName,
                                                        @RequestBody Map<String,Object> inParams) {
         log.debug("Execute function {} with IN params {}", funcName, inParams.entrySet());
-        return ResponseEntity.ok(functionService.execute(funcName, inParams));
+        return ResponseEntity.ok(jdbcFunctionService.execute(funcName, inParams));
     }
 }

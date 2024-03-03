@@ -1,4 +1,4 @@
-package com.homihq.db2rest.dialect;
+package com.homihq.db2rest.core;
 
 import com.homihq.db2rest.model.DbTable;
 

@@ -1,8 +1,7 @@
 package com.homihq.db2rest.d1;
 
-import com.homihq.db2rest.d1.D1RestClient;
 import com.homihq.db2rest.d1.model.D1PostResponse;
-import com.homihq.db2rest.dbop.DbOperationService;
+import com.homihq.db2rest.core.DbOperationService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;

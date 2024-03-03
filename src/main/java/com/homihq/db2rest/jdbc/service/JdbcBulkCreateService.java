@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.service;
 
-import com.homihq.db2rest.dbop.DbOperationService;
+import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.service.BulkCreateService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
@@ -22,21 +23,21 @@ import java.util.Objects;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-//@Service
 @Slf4j
 @RequiredArgsConstructor
-public class BulkCreateService {
+public class JdbcBulkCreateService implements BulkCreateService {
 
     private final TSIDProcessor tsidProcessor;
     private final CreateCreatorTemplate createCreatorTemplate;
     private final SchemaManager schemaManager;
     private final DbOperationService dbOperationService;
 
+    @Override
     @Transactional
     public CreateBulkResponse saveBulk(String schemaName, String tableName,
-                                                           List<String> includedColumns,
-                                                           List<Map<String, Object>> dataList,
-                                                           boolean tsIdEnabled) {
+                                       List<String> includedColumns,
+                                       List<Map<String, Object>> dataList,
+                                       boolean tsIdEnabled) {
         if (Objects.isNull(dataList) || dataList.isEmpty()) throw new GenericDataAccessException("No data provided");
 
         log.info("** Bulk Insert **");

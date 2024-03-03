@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.service;
 
-import com.homihq.db2rest.dbop.DbOperationService;
+import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.service.ExistsQueryService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.rest.read.dto.ExistsResponse;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
@@ -16,13 +17,14 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ExistsQueryService {
+public class JdbcExistsQueryService implements ExistsQueryService {
 
 	private final DbOperationService dbOperationService;
 	private final List<ReadProcessor> processorList;
 	private final QueryCreatorTemplate queryCreatorTemplate;
 
-	public ExistsResponse exists(ReadContext readContext) {
+	@Override
+    public ExistsResponse exists(ReadContext readContext) {
 		 for (ReadProcessor processor : processorList) {
             processor.process(readContext);
         }

@@ -1,8 +1,9 @@
 package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.dbop.DbOperationService;
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.Dialect;
+import com.homihq.db2rest.core.service.UpdateService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
 import com.homihq.db2rest.model.DbTable;
@@ -23,10 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 
-//@Service
 @Slf4j
 @RequiredArgsConstructor
-public class UpdateService {
+public class JdbcUpdateService implements UpdateService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
     private final SchemaManager schemaManager;
@@ -34,8 +34,9 @@ public class UpdateService {
     private final DbOperationService dbOperationService;
     private final Dialect dialect;
 
+    @Override
     @Transactional
-    public int patch(String schemaName, String tableName, Map<String,Object> data, String filter) {
+    public int patch(String schemaName, String tableName, Map<String, Object> data, String filter) {
 
         DbTable dbTable;
         if(db2RestConfigProperties.getMultiTenancy().isSchemaBased()) { //TODO merge fall back in schema manager

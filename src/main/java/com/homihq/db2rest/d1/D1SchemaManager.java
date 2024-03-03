@@ -2,7 +2,7 @@ package com.homihq.db2rest.d1;
 
 import com.homihq.db2rest.d1.model.D1Column;
 import com.homihq.db2rest.d1.model.D1Table;
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbTable;
 import com.homihq.db2rest.schema.AliasGenerator;

@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
-import com.homihq.db2rest.jdbc.service.ReadService;
+import com.homihq.db2rest.core.service.ReadService;
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import lombok.RequiredArgsConstructor;

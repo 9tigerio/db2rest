@@ -1,7 +1,8 @@
 package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.dbop.DbOperationService;
+import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.service.DeleteService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
 import com.homihq.db2rest.model.DbWhere;
@@ -17,16 +18,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Service
 @Slf4j
 @RequiredArgsConstructor
-public class DeleteService {
+public class JdbcDeleteService implements DeleteService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
     private final SchemaManager schemaManager;
     private final DeleteCreatorTemplate deleteCreatorTemplate;
     private final DbOperationService dbOperationService;
 
+    @Override
     @Transactional
     public int delete(String schemaName, String tableName, String filter) {
         db2RestConfigProperties.checkDeleteAllowed(filter);

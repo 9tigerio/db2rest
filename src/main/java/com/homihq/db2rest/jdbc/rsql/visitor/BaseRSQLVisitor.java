@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.rsql.visitor;
 
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.RSQLOperatorHandlers;
 import com.homihq.db2rest.model.DbColumn;
 import com.homihq.db2rest.model.DbWhere;
