@@ -1,11 +1,12 @@
 package com.homihq.db2rest.rest;
 
+import com.homihq.db2rest.core.service.*;
+import com.homihq.db2rest.core.service.ProcedureService;
 import com.homihq.db2rest.jdbc.service.*;
 import com.homihq.db2rest.rest.create.BulkCreateController;
 import com.homihq.db2rest.rest.create.CreateController;
 import com.homihq.db2rest.rest.create.bulk.DataProcessor;
 import com.homihq.db2rest.rest.delete.DeleteController;
-import com.homihq.db2rest.jdbc.service.DeleteService;
 import com.homihq.db2rest.rest.read.*;
 import com.homihq.db2rest.rest.rpc.FunctionController;
 import com.homihq.db2rest.rest.rpc.ProcedureController;
@@ -35,13 +36,13 @@ public class RestApiConfiguration {
     }
 
     @Bean
-    public ExistsQueryController existsQueryController(ExistsQueryService existsQueryService) {
-        return new ExistsQueryController(existsQueryService);
+    public ExistsQueryController existsQueryController(JdbcExistsQueryService jdbcExistsQueryService) {
+        return new ExistsQueryController(jdbcExistsQueryService);
     }
 
     @Bean
-    public CustomQueryController customQueryController(CustomQueryService customQueryService) {
-        return new CustomQueryController(customQueryService);
+    public CustomQueryController customQueryController(JdbcCustomQueryService jdbcCustomQueryService) {
+        return new CustomQueryController(jdbcCustomQueryService);
     }
 
     @Bean

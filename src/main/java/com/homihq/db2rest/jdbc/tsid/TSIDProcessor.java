@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.tsid;
 
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.model.DbColumn;
+import com.homihq.db2rest.core.model.DbColumn;
 import io.hypersistence.tsid.TSID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

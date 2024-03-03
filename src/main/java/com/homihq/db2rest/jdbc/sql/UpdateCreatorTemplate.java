@@ -1,11 +1,9 @@
 package com.homihq.db2rest.jdbc.sql;
 
-import com.homihq.db2rest.rest.delete.dto.DeleteContext;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.rest.update.dto.UpdateContext;
-import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -17,14 +15,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UpdateCreatorTemplate {
 
-
     private final SpringTemplateEngine templateEngine;
-    private final SchemaManager schemaManager;
+    private final Dialect dialect;
     public String updateQuery(UpdateContext updateContext) {
 
         Map<String,Object> data = new HashMap<>();
 
-        if(schemaManager.getDialect().supportAlias()) {
+        if(dialect.supportAlias()) {
             data.put("rootTable", updateContext.getTable().render());
         }
         else{

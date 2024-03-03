@@ -1,11 +1,10 @@
 package com.homihq.db2rest.jdbc.processor;
 
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.model.DbWhere;
+import com.homihq.db2rest.core.model.DbWhere;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.SchemaManager;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

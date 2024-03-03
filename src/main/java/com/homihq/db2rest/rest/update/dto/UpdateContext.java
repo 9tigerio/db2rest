@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.update.dto;
 
-import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.core.model.DbTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

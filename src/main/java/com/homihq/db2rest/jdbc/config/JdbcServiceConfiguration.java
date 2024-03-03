@@ -1,16 +1,18 @@
 package com.homihq.db2rest.jdbc.config;
 
 
-import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.dbop.DbOperationService;
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.config.Db2RestConfigProperties;
+import com.homihq.db2rest.core.*;
+import com.homihq.db2rest.core.service.*;
+import com.homihq.db2rest.core.service.ProcedureService;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.service.*;
+import com.homihq.db2rest.core.service.CreateService;
 import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
-import com.homihq.db2rest.jdbc.service.DeleteService;
+import com.homihq.db2rest.jdbc.service.JdbcDeleteService;
 import com.homihq.db2rest.rest.read.sql.QueryCreatorTemplate;
 import com.homihq.db2rest.schema.SchemaManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -31,16 +33,16 @@ public class JdbcServiceConfiguration {
     public BulkCreateService bulkCreateService(TSIDProcessor tsidProcessor,
                                                CreateCreatorTemplate createCreatorTemplate,
                                                SchemaManager schemaManager,
-                                               DbOperationService dbOperationService) {
-        return new BulkCreateService(tsidProcessor, createCreatorTemplate, schemaManager, dbOperationService);
+                                               DbOperationService dbOperationService, Dialect dialect) {
+        return new JdbcBulkCreateService(tsidProcessor, createCreatorTemplate, schemaManager, dbOperationService, dialect);
     }
 
     @Bean
     public CreateService createService(TSIDProcessor tsidProcessor,
                                        CreateCreatorTemplate createCreatorTemplate,
                                        SchemaManager schemaManager,
-                                       DbOperationService dbOperationService) {
-        return new CreateService(tsidProcessor, createCreatorTemplate, schemaManager, dbOperationService);
+                                       DbOperationService dbOperationService, Dialect dialect) {
+        return new JdbcCreateService(tsidProcessor, createCreatorTemplate, schemaManager, dbOperationService, dialect);
     }
 
     //QUERY SERVICE
@@ -49,7 +51,7 @@ public class JdbcServiceConfiguration {
                                                QueryCreatorTemplate queryCreatorTemplate,
                                                List<ReadProcessor> processorList,
                                                DbOperationService dbOperationService) {
-        return new CountQueryService(dbOperationService, processorList, queryCreatorTemplate);
+        return new JdbcCountQueryService(dbOperationService, processorList, queryCreatorTemplate);
     }
 
     @Bean
@@ -57,7 +59,7 @@ public class JdbcServiceConfiguration {
             QueryCreatorTemplate queryCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new ExistsQueryService(dbOperationService, processorList, queryCreatorTemplate);
+        return new JdbcExistsQueryService(dbOperationService, processorList, queryCreatorTemplate);
     }
 
     @Bean
@@ -65,12 +67,12 @@ public class JdbcServiceConfiguration {
             QueryCreatorTemplate queryCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new FindOneService(queryCreatorTemplate, processorList, dbOperationService);
+        return new JdbcFindOneService(queryCreatorTemplate, processorList, dbOperationService);
     }
 
     @Bean
     public CustomQueryService customQueryService(DbOperationService dbOperationService) {
-        return new CustomQueryService(dbOperationService);
+        return new JdbcCustomQueryService(dbOperationService);
     }
 
     @Bean
@@ -78,7 +80,7 @@ public class JdbcServiceConfiguration {
             QueryCreatorTemplate queryCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new ReadService(dbOperationService, processorList, queryCreatorTemplate);
+        return new JdbcReadService(dbOperationService, processorList, queryCreatorTemplate);
     }
 
     //UPDATE SERVICE
@@ -88,7 +90,7 @@ public class JdbcServiceConfiguration {
             SchemaManager schemaManager,
             UpdateCreatorTemplate updateCreatorTemplate,
             DbOperationService dbOperationService, Dialect dialect) {
-        return new UpdateService(db2RestConfigProperties, schemaManager, updateCreatorTemplate, dbOperationService, dialect);
+        return new JdbcUpdateService(db2RestConfigProperties, schemaManager, updateCreatorTemplate, dbOperationService, dialect);
     }
 
 
@@ -98,19 +100,19 @@ public class JdbcServiceConfiguration {
             Db2RestConfigProperties db2RestConfigProperties,
     SchemaManager schemaManager,
     DeleteCreatorTemplate deleteCreatorTemplate,
-    DbOperationService dbOperationService) {
-        return new DeleteService(db2RestConfigProperties, schemaManager, deleteCreatorTemplate, dbOperationService);
+    DbOperationService dbOperationService, Dialect dialect) {
+        return new JdbcDeleteService(db2RestConfigProperties, schemaManager, deleteCreatorTemplate, dbOperationService, dialect);
     }
 
     //RPC
     @Bean
     public FunctionService functionService(JdbcTemplate jdbcTemplate) {
-        return new FunctionService(jdbcTemplate);
+        return new JdbcFunctionService(jdbcTemplate);
     }
 
     @Bean
     public ProcedureService procedureService(JdbcTemplate jdbcTemplate) {
-        return new ProcedureService(jdbcTemplate);
+        return new JdbcProcedureService(jdbcTemplate);
     }
 
 }

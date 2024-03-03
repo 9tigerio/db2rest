@@ -1,10 +1,10 @@
 package com.homihq.db2rest.jdbc.config;
 
 
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
-import com.homihq.db2rest.schema.SchemaManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,13 +23,13 @@ public class JdbcSqlCreatorConfiguration {
     }
 
     @Bean
-    public UpdateCreatorTemplate updateCreatorTemplate(SpringTemplateEngine templateEngine, SchemaManager schemaManager) {
-        return new UpdateCreatorTemplate(templateEngine, schemaManager);
+    public UpdateCreatorTemplate updateCreatorTemplate(SpringTemplateEngine templateEngine, Dialect dialect) {
+        return new UpdateCreatorTemplate(templateEngine, dialect);
     }
 
     @Bean
-    public DeleteCreatorTemplate deleteCreatorTemplate(SpringTemplateEngine templateEngine, SchemaManager schemaManager) {
-        return new DeleteCreatorTemplate(templateEngine, schemaManager);
+    public DeleteCreatorTemplate deleteCreatorTemplate(SpringTemplateEngine templateEngine, Dialect dialect) {
+        return new DeleteCreatorTemplate(templateEngine, dialect);
     }
 
 

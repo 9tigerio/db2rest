@@ -1,44 +1,33 @@
 package com.homihq.db2rest.jdbc.sql;
 
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
-import com.homihq.db2rest.schema.SchemaManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Slf4j
 @RequiredArgsConstructor
 public class DeleteCreatorTemplate {
 
-
     private final SpringTemplateEngine templateEngine;
-    private final SchemaManager schemaManager;
+    private final Dialect dialect;
     public String deleteQuery(DeleteContext deleteContext) {
 
+        String rendererTableName = dialect.supportAlias() ? deleteContext.getTable().render()
+                : deleteContext.getTable().name();
+
         Map<String,Object> data = new HashMap<>();
-
-        if(schemaManager.getDialect().supportAlias()) {
-            data.put("rootTable", deleteContext.getTable().render());
-        }
-        else{
-            data.put("rootTable", deleteContext.getTable().name());
-        }
-
+        data.put("rootTable", rendererTableName);
         data.put("rootWhere", deleteContext.getWhere());
-
 
         Context context = new Context();
         context.setVariables(data);
         return templateEngine.process("delete", context);
 
     }
-
-
-
 }

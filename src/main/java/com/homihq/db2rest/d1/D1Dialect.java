@@ -1,18 +1,17 @@
 package com.homihq.db2rest.d1;
 
-import com.homihq.db2rest.dialect.Dialect;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.model.DbTable;
+import com.homihq.db2rest.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-//@Component
+
 @Slf4j
 @RequiredArgsConstructor
 public class D1Dialect implements Dialect {
@@ -20,11 +19,6 @@ public class D1Dialect implements Dialect {
     @Override
     public boolean supportAlias() {
         return false;
-    }
-
-    @Override
-    public boolean canSupport(String getDbProductName) {
-        return StringUtils.equalsAnyIgnoreCase(getDbProductName, "D1", "SQLLITE");
     }
 
     @Override
