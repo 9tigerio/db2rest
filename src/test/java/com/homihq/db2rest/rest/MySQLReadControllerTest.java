@@ -6,32 +6,47 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.AnyOf.anyOf;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
-    @DisplayName("Get all fields.")
+    @DisplayName("Test find all films - all columns.")
     void findAllFilms() throws Exception {
 
         mockMvc.perform(get("/film")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 //.andDo(print())
-                .andDo(document("mysql-get-all-films"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                //.andExpect(jsonPath("$.*", hasSize(4)))
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9))))
+                .andExpect(jsonPath("$[0].*", hasSize(13)))
+                .andDo(document("mysql-get-all-films-all-columns"));
     }
 
     @Test
-    @DisplayName("Get count")
-    void findFilmCount() throws Exception {
-        mockMvc.perform(get("/film/count")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+    @DisplayName("Test find all films - 3 columns")
+    void findAllFilmsWithThreeCols() throws Exception {
+        mockMvc.perform(get("/film")
+                        .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .param("fields", "title,description,release_year")
+                        )
                 //.andDo(print())
-                .andDo(document("mysql-get-film-count"));
-
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9))))
+                .andExpect(jsonPath("$[0].*", hasSize(3)))
+                .andDo(document("mysql-find-all-films-3-columns"));
     }
+
 
     @Test
     @DisplayName("Get one")

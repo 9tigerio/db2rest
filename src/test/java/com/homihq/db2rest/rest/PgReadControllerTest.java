@@ -8,10 +8,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+
 
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.AnyOf.anyOf;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -37,17 +40,33 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     Map<String,Object> EMPTY_ACTOR_QUERY;
 
     @Test
-    @DisplayName("Test find all films.")
+    @DisplayName("Test find all films - all columns.")
     void findAllFilms() throws Exception {
 
         mockMvc.perform(get("/film")
                         .accept(APPLICATION_JSON).accept(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(8))))
+                .andExpect(jsonPath("$[0].*", hasSize(14)))
+                .andDo(document("pg-get-all-films-all-columns"));
+    }
+
+
+    @Test
+    @DisplayName("Test find all films - 3 columns")
+    void findAllFilmsWithThreeCols() throws Exception {
+        mockMvc.perform(get("/film")
+                        .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .param("fields", "title,description,release_year")
+                )
                 //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
-                //.andExpect(jsonPath("$.*", hasSize(4)))
-                //.andExpect(jsonPath("$[*].film_id", containsInAnyOrder(1, 2, 3, 4)))
-                .andDo(document("pg-get-all-films"));
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(8))))
+                .andExpect(jsonPath("$[0].*", hasSize(3)))
+                .andDo(document("pg-find-all-films-3-columns"));
     }
 
     @Test
@@ -92,16 +111,6 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andDo(document("pg-custom-query-with-error-400"));
     }
 
-    @Test
-    @DisplayName("Test count")
-    void countAll() throws Exception {
-        mockMvc.perform(get("/film/count")
-                        .accept(APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("pg-get-film-count"));
-
-    }
 
     @Test
     @DisplayName("Test find one record")

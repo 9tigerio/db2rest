@@ -12,6 +12,7 @@ spring:
       enabled: true
 
   datasource:
+
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
@@ -24,7 +25,8 @@ spring:
 
 db2rest:
   datasource:
-    type: d1
+    type: ${DATASOURCE_TYPE:'jdbc'}
+
   unKeyDev:
     enabled: ${UNKEY_DEV_ENABLED:false}
     url: ${UNKEY_DEV_URL}
@@ -57,6 +59,7 @@ logging:
           scheduler: ERROR
     org:
       springframework:
+        beans : INFO
         web: INFO
         test:
           context:

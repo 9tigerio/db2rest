@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.update;
 
+import com.homihq.db2rest.jdbc.service.UpdateService;
 import com.homihq.db2rest.rest.update.dto.UpdateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
