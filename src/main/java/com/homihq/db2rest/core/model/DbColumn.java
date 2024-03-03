@@ -11,6 +11,9 @@ public record DbColumn(String tableName, String name, String alias, String table
     }
 
     public String renderWithAlias() {
+        if(StringUtils.isNotBlank(alias))
+            return tableAlias + "."+ name + " as " + "\"" + alias + "\"";
+
         return tableAlias + "."+ name + " " + alias;
     }
 
@@ -32,4 +35,8 @@ public record DbColumn(String tableName, String name, String alias, String table
                 "VARCHAR","TEXT");
     }
 
+    public DbColumn copyWithAlias(String columnAlias) {
+        return new DbColumn(tableName, name, columnAlias, tableAlias,
+                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass);
+    }
 }
