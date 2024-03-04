@@ -27,6 +27,9 @@ db2rest:
   datasource:
     type: ${DATASOURCE_TYPE:jdbc}
 
+  auth:
+    type: ${AUTH_TYPE:none}
+
   unKeyDev:
     enabled: ${UNKEY_DEV_ENABLED:false}
     url: ${UNKEY_DEV_URL}
