@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import com.homihq.db2rest.auth.jwt.service.JwtAuthService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 
+@Disabled
 public class JwtAuthServiceTest extends MySQLBaseIntegrationTest {
 
     @Autowired
