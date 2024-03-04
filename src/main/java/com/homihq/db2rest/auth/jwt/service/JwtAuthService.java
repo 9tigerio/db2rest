@@ -9,10 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtAuthService {
 
-
     private final JWTVerifier jwtVerifier;
 
-    public boolean validateToken(String token) {
+    public boolean isValidToken(String token) {
 
         try {
             jwtVerifier.verify(token);

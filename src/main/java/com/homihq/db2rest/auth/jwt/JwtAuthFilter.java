@@ -20,10 +20,8 @@ import java.util.LinkedHashMap;
 @Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-
     private final JwtAuthService jwtAuthService;
     private final ObjectMapper objectMapper;
-
     final String JWT_KEY_HEADER = "Authorization";
 
     @Override
@@ -37,7 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String token = StringUtils.replace(jwtHeader, "Bearer ", "", 1);
-        if (!jwtAuthService.validateToken(token)) {
+        if (!jwtAuthService.isValidToken(token)) {
             addAuthenticationError(request, response);
             return;
         }
