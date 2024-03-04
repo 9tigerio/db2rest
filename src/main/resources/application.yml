@@ -32,6 +32,9 @@ db2rest:
     url: ${UNKEY_DEV_URL}
     rootKey: ${UNKEY_DEV_ROOT_KEY}
 
+  jwt:
+    secret: ${JWT_SECRET_KEY}
+
   allowSafeDelete : ${ALLOW_SAFE_DELETE:true}
 
   multiTenancy:
