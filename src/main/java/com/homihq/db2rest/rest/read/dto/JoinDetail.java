@@ -14,7 +14,6 @@ public record JoinDetail (String table, String withTable, List<String> fields,
                 StringUtils.upperCase(type);
 
     }
-
     public boolean hasWith() {
         return StringUtils.isNotBlank(withTable);
     }
