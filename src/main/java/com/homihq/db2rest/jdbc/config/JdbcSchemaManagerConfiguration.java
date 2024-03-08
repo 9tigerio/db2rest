@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
-
 @Configuration
 @ConditionalOnBean(DataSource.class)
 public class JdbcSchemaManagerConfiguration {
@@ -29,8 +28,9 @@ public class JdbcSchemaManagerConfiguration {
     }
 
     @Bean
-    public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaManager, OperatorMap operatorMap, Dialect dialect) {
-        return new JoinProcessor(jdbcSchemaManager, operatorMap, dialect);
+    public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaManager, OperatorMap operatorMap, Dialect dialect,
+                                       AliasGenerator aliasGenerator) {
+        return new JoinProcessor(jdbcSchemaManager, operatorMap, dialect, aliasGenerator);
     }
 
     @Bean

@@ -43,7 +43,7 @@ public class DbJoin {
             }
         }
 
-        return str;
+        return str + " \n ";
     }
 
     public void addOn(DbColumn leftColumn, String operator, DbColumn rightColumn) {

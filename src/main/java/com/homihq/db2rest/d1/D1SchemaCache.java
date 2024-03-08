@@ -49,7 +49,7 @@ public class D1SchemaCache implements SchemaCache {
     }
 
     private void addTableWithColumns(D1Table d1Table, List<D1Column> d1Columns) {
-        String tableAlias = aliasGenerator.getAlias("", 4, d1Table.name());
+        String tableAlias = aliasGenerator.getAlias(d1Table.name());
         List<DbColumn> dbColumns = 
                 d1Columns.stream()
                         .map(d1Column -> new DbColumn(
