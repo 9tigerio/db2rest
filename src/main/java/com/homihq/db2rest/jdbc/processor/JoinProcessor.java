@@ -10,6 +10,7 @@ import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.schema.AliasGenerator;
 import com.homihq.db2rest.schema.SchemaCache;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class JoinProcessor implements ReadProcessor {
     private final SchemaCache schemaCache;
     private final OperatorMap operatorMap;
     private final Dialect dialect;
+    private final AliasGenerator aliasGenerator;
     @Override
     public void process(ReadContext readContext) {
         List<JoinDetail> joins = readContext.getJoins();
@@ -39,14 +41,13 @@ public class JoinProcessor implements ReadProcessor {
 
         for(JoinDetail joinDetail : joins) {
             String tableName = joinDetail.table();
-
             DbTable table = schemaCache.getTable(tableName);
-
+            table = table.copyWithAlias(aliasGenerator.getAlias(tableName));
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
-
             readContext.addColumns(columnList);
-
             addJoin(table, rootTable, joinDetail, readContext);
+
+            rootTable = table;
         }
     }
 

@@ -39,4 +39,9 @@ public record DbColumn(String tableName, String name, String alias, String table
         return new DbColumn(tableName, name, columnAlias, tableAlias,
                 pk, columnDataTypeName, generated, autoIncremented, typeMappedClass);
     }
+
+    public DbColumn copyWithTableAlias(String tableAlias) {
+        return new DbColumn(tableName, name, alias, tableAlias,
+                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass);
+    }
 }

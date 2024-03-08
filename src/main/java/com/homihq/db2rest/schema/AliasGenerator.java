@@ -8,11 +8,13 @@ import java.util.Random;
 @Component
 public class AliasGenerator {
     private final Random random = new Random();
-    public String getAlias(String prefix, int length, String sqlIdentifier) {
+
+    public String getAlias(String sqlIdentifier) {
+        int LENGTH = 4;
         return
-        sqlIdentifier.length() > length ?
-                prefix + sqlIdentifier.substring(0,length) + "_" +random.nextInt(2000)
-            :  prefix + sqlIdentifier + "_" +random.nextInt(2000);
+        sqlIdentifier.length() > LENGTH ?
+                sqlIdentifier.substring(0, LENGTH) + "_" +random.nextInt(100)
+            :   sqlIdentifier + "_" +random.nextInt(100);
 
     }
 }

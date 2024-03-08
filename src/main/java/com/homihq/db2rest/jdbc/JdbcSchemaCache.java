@@ -26,19 +26,11 @@ public final class JdbcSchemaCache implements SchemaCache {
     private final DataSource dataSource;
     private final AliasGenerator aliasGenerator;
 
-    @Deprecated
-    private Map<String, Table> tableMap;
-    @Deprecated
-    private List<Table> tableList;
-
-    private List<DbTable> dbTableList;
     private Map<String,DbTable> dbTableMap;
 
     @PostConstruct
     private void reload() {
-        this.tableMap = new ConcurrentHashMap<>();
-        this.tableList = new ArrayList<>();
-        this.dbTableList = new ArrayList<>();
+
         this.dbTableMap = new ConcurrentHashMap<>();
         createSchemaCache();
     }
@@ -64,20 +56,21 @@ public final class JdbcSchemaCache implements SchemaCache {
 
             for (final Table table : catalog.getTables(schema)) {
                 log.debug("{}", table.getFullName());
-                String schemaName = getSchemaName(table);
-
-                String fullName = schemaName + "." + table.getName();
-
-                tableMap.put(fullName, table);
-                tableList.add(table);
 
                 DbTable dbTable = createTable(table);
-                dbTableList.add(createTable(table));
-
                 dbTableMap.put(dbTable.name(), dbTable);
             }
         }
 
+    }
+
+    private DbTable createTable(Table table) {
+        String tableAlias = aliasGenerator.getAlias(table.getName());
+        List<DbColumn> columnList = buildColumns(tableAlias, table);
+
+        return new DbTable(
+                getSchemaName(table), table.getName(),table.getFullName(),
+                tableAlias,columnList);
     }
 
     private DbColumn createDbColumn(String tableName, String tableAlias, Column column) {
@@ -91,21 +84,14 @@ public final class JdbcSchemaCache implements SchemaCache {
 
     }
 
-    public List<DbColumn> buildColumns(String tableAlias, Table table) {
+    private List<DbColumn> buildColumns(String tableAlias, Table table) {
         return table.getColumns()
                 .stream()
                 .map(column -> createDbColumn(table.getName(), tableAlias, column))
                 .toList();
     }
 
-    private DbTable createTable(Table table) {
-        String tableAlias = aliasGenerator.getAlias("", 4, table.getName());
-        List<DbColumn> columnList = buildColumns(tableAlias, table);
 
-        return new DbTable(
-                getSchemaName(table), table.getName(),table.getFullName(),
-                tableAlias,columnList);
-    }
 
     private String getSchemaName(Table table) {
         //TODO - move DB specific handling to Dialect class
@@ -129,11 +115,6 @@ public final class JdbcSchemaCache implements SchemaCache {
         if(Objects.isNull(table)) throw new InvalidTableException(tableName);
 
         return table;
-    }
-
-    private Optional<Table> getTable(String schemaName, String tableName) {
-        Table table = tableMap.get(schemaName + "." + tableName);
-        return Optional.of(table);
     }
 
 
