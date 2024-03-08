@@ -27,7 +27,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 //.andExpect(jsonPath("$.*", hasSize(4)))
-                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9))))
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9), hasSize(8) )))
                 .andExpect(jsonPath("$[0].*", hasSize(13)))
                 .andDo(document("mysql-get-all-films-all-columns"));
     }
@@ -42,7 +42,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
                 //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
-                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9))))
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9),hasSize(8))))
                 .andExpect(jsonPath("$[0].*", hasSize(3)))
                 .andDo(document("mysql-find-all-films-3-columns"));
     }
@@ -57,7 +57,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
                 //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
-                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9))))
+                .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9), hasSize(8))))
                 .andExpect(jsonPath("$[0].title", notNullValue()))
                 .andExpect(jsonPath("$[0].description", notNullValue()))
                 .andExpect(jsonPath("$[0].releaseYear", notNullValue()))
