@@ -1,4 +1,90 @@
 
+-- tops
+
+
+Insert into tops
+(top_item, color,size)
+values
+    ('sweater',	'red',	'M');
+
+Insert into tops
+(top_item, color,size)
+values
+    ('shirt',	'blue',	'M');
+
+Insert into tops
+(top_item, color,size)
+values
+    ('tank_top',	'white',	'S');
+
+
+-- bottoms
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('jeans',	'blue'	,'M');
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('skirt',	'black'	,'S');
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('shorts',	'red'	,'S');
+
+
+
+
+-- users
+-- userpreference
+
+Insert into users
+(auid, username,password, createdate, isActive)
+values
+    (1,'admin','pswrd123', curdate(), 1);
+
+Insert into userprofile
+(apid, auid, firstname, lastname, email, phone)
+values
+    (1,1,'Jack', 'Wolf', 'bettestroom@gmail.com','600075764216');
+
+Insert into users
+(auid,username,password, createdate, isActive)
+values
+    (2, 'admin1','pass506', curdate(), 1);
+
+Insert into userprofile
+(apid, auid, firstname, lastname, email, phone)
+values
+    (2, 3, 'Tom', 'Collins', 'tnkc@outlook.com','878511311054');
+
+Insert into users
+(auid, username,password, createdate, isActive)
+values
+    (4,'fox12','45@jgo0', curdate(), 1);
+
+Insert into userprofile
+(apid, auid, firstname, lastname, email, phone)
+values
+    (4,5,'Bill', 'Fonskin', 'bill_1290@gmail.com','450985764216');
+
+Insert into users
+(auid,username,password, createdate, isActive)
+values
+    (6, 'lexus1267','98hnfRT6', curdate(), 1);
+
+Insert into userprofile
+(apid, auid, firstname, lastname, email, phone)
+values
+    (7, 7, 'Ivan', 'Levchenko', 'ivan_new@outlook.com','878511311054');
+
+
+
+
+
 -- language
 
 Insert into language
@@ -115,6 +201,9 @@ Values
     ('4','AFFAIR PREJUDICE','A Fanciful Documentary of a Frisbee And a Lumberjack who must Chase a Monkey in A Shark Tank','2006','1',NULL,'5','2.99','117','26.99','G','Commentaries,Behind the Scenes','2006-02-15 05:03:42.000');
 
 
+
+
+
 -- country
 
 Insert into country
@@ -136,3 +225,7 @@ Insert into country
  (`country_id`,`country`,`last_update`)
 Values
 ('4','Angola','2006-02-15 04:44:00.000');
+
+
+--review
+INSERT INTO review (review_id , message, rating ,film_id) VALUES ('ABC123','Awesome movie', 4, 1);

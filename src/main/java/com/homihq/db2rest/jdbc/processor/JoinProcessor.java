@@ -15,11 +15,13 @@ import com.homihq.db2rest.schema.SchemaCache;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Slf4j
@@ -39,7 +41,13 @@ public class JoinProcessor implements ReadProcessor {
 
         DbTable rootTable = readContext.getRoot();
 
+        List<DbTable> allJoinTables = new ArrayList<>();
+        allJoinTables.add(rootTable);
+
         for(JoinDetail joinDetail : joins) {
+
+            rootTable = reviewRootTable(allJoinTables, joinDetail, rootTable);
+
             String tableName = joinDetail.table();
             DbTable table = schemaCache.getTable(tableName);
             table = table.copyWithAlias(aliasGenerator.getAlias(tableName));
@@ -47,8 +55,28 @@ public class JoinProcessor implements ReadProcessor {
             readContext.addColumns(columnList);
             addJoin(table, rootTable, joinDetail, readContext);
 
+
+            allJoinTables.add(rootTable);
+
             rootTable = table;
         }
+    }
+
+    private DbTable reviewRootTable(List<DbTable> allJoinTables, JoinDetail joinDetail, DbTable rootTable) {
+        if(allJoinTables.size() == 1) return rootTable;
+
+        if(joinDetail.hasWith()) {
+            //check if existing table
+            String withTable = joinDetail.withTable();
+            Optional<DbTable> newRoot = allJoinTables.stream()
+                    .filter(t -> StringUtils.equalsIgnoreCase(withTable, t.name()))
+                    .findFirst();
+
+            //look in cache
+            return newRoot.orElseGet(() -> schemaCache.getTable(withTable));
+        }
+
+        return rootTable;
     }
 
     private void addJoin(DbTable table, DbTable rootTable, JoinDetail joinDetail, ReadContext readContext) {
