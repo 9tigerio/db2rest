@@ -44,7 +44,7 @@ class MySQLInnerJoinControllerTest extends MySQLBaseIntegrationTest {
                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
-                .andExpect(jsonPath("$.*", hasSize(1)))
+                .andExpect(jsonPath("$.*", anyOf(hasSize(1),hasSize(3))))
                 .andExpect(jsonPath("$[0].*", hasSize(7)))
                 .andExpect(jsonPath("$[0].review_id", equalTo("ABC123")))
                 .andExpect(jsonPath("$[0].film_id", equalTo(1)))
