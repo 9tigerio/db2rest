@@ -25,6 +25,32 @@ USE sakila;
 -- Table structure for table `actor`
 --
 
+CREATE TABLE users (
+     auid int(10) UNSIGNED NOT NULL,
+     username varchar(100) NOT NULL,
+     password varchar(150) NOT NULL,
+     createdate datetime NOT NULL,
+     isActive tinyint(1) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `actor`
+--
+
+CREATE TABLE userprofile (
+   apid int(10) UNSIGNED NOT NULL,
+   auid int(10) UNSIGNED NOT NULL,
+   firstname varchar(50) NOT NULL,
+   lastname varchar(50) NOT NULL,
+   email varchar(100) NOT NULL,
+   phone varchar(45) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `actor`
+--
+
 CREATE TABLE actor (
   actor_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(45) NOT NULL,
