@@ -1,4 +1,43 @@
 
+-- tops
+
+
+Insert into tops
+(top_item, color,size)
+values
+    ('sweater',	'red',	'M');
+
+Insert into tops
+(top_item, color,size)
+values
+    ('shirt',	'blue',	'M');
+
+Insert into tops
+(top_item, color,size)
+values
+    ('tank_top',	'white',	'S');
+
+
+-- bottoms
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('jeans',	'blue'	,'M');
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('skirt',	'black'	,'S');
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('shorts',	'red'	,'S');
+
+
+
+
 -- users
 -- userpreference
 

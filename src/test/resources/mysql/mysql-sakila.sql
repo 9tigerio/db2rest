@@ -22,7 +22,29 @@ CREATE SCHEMA sakila;
 USE sakila;
 
 --
--- Table structure for table `actor`
+-- Table structure for table `tops`
+--
+
+CREATE TABLE tops (
+       top_item varchar(30) NOT NULL,
+       color varchar(30) NOT NULL,
+       size varchar(2) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `bottoms`
+--
+
+CREATE TABLE bottoms (
+     bottom_item varchar(30) NOT NULL,
+     color varchar(30) NOT NULL,
+     size varchar(2) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+--
+-- Table structure for table `users`
 --
 
 CREATE TABLE users (
@@ -34,7 +56,7 @@ CREATE TABLE users (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `actor`
+-- Table structure for table `userprofile`
 --
 
 CREATE TABLE userprofile (
