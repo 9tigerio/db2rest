@@ -201,6 +201,9 @@ Values
     ('4','AFFAIR PREJUDICE','A Fanciful Documentary of a Frisbee And a Lumberjack who must Chase a Monkey in A Shark Tank','2006','1',NULL,'5','2.99','117','26.99','G','Commentaries,Behind the Scenes','2006-02-15 05:03:42.000');
 
 
+
+
+
 -- country
 
 Insert into country
@@ -222,3 +225,7 @@ Insert into country
  (`country_id`,`country`,`last_update`)
 Values
 ('4','Angola','2006-02-15 04:44:00.000');
+
+
+--review
+INSERT INTO review (review_id , message, rating ,film_id) VALUES ('ABC123','Awesome movie', 4, 1);
