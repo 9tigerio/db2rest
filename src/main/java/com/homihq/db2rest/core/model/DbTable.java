@@ -25,7 +25,7 @@ public record DbTable(String schema, String name, String fullName, String alias,
     }
 
     public DbColumn buildColumn(String columnName) {
-        log.info("columnName - {}", columnName);
+        log.debug("columnName - {}", columnName);
 
         DbAlias dbAlias = getAlias(columnName);
 

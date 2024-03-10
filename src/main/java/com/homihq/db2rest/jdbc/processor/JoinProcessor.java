@@ -154,7 +154,7 @@ public class JoinProcessor implements ReadProcessor {
         // - field can be *
         // - can be set of fields from the given table
 
-        log.info("Fields - {}", fields);
+        log.debug("Fields - {}", fields);
 
         List<DbColumn> columnList = new ArrayList<>();
 
