@@ -6,13 +6,6 @@ DB2Rest provides instant REST API to perform complex data operation, retrieval-a
 The platform takes care of all the boilerplate data access logic and best practices, thus freeing up developers to focus
 on solving complex business logic and building intuitive user interfaces (UI)
 
-
-> [!IMPORTANT]
-> DB2Rest is transitioning. We continue to work to make DB2REST the best DATA API platform for databases.
-> However, in coming months and days, we will also work to make DB2REST your goto platform to
-> connect your data with the leading LLMs and Vector stores. Stay tuned! :airplane:
-
-
 :star: If you find DB2Rest useful, please consider adding a star on GitHub! Your support motivates us to add new exciting features.
 
 
@@ -67,25 +60,27 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 
 # Supported Databases
 
-- **PostgreSQL**
-- **MySQL**
-- [PostgreML](https://postgresml.org/) : March 2024 - release
+- **PostgreSQL** (Supported)
+- **MySQL** (Supported)
+- **Cloudflare D1** (Supported)
 - **Tembo** : March 2024 - release
+- [PostgreML](https://postgresml.org/) : April 2024 - release
+- TursoDB 
 - **Neon** (Planned)
 - **Nile** (Planned)
-- **MindsDB** 
+- **MindsDB**
 - [KDB](https://kdb.ai/)
 - [Zilliz](https://zilliz.com/)
 - [AstraDB](https://www.datastax.com/products/datastax-astra)
 - [Vespa](https://vespa.ai/)
-- **Oracle** (Coming soon)
-- **MariaDB** (Coming soon)
+- **Oracle** 
+- **MariaDB** 
 - **MS SQL Server** 
 - **CockroachDB**
 - **Yugabyte**
 - **AWS RDS Postgres**
 - **AWS RDS MySQL**
-- **PlanetScale**
+- **PlanetScale** 
 - **CrunchyData**
 - **Singlestore** 
 
