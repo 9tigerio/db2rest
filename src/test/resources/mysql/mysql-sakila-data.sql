@@ -202,8 +202,6 @@ Values
 
 
 
-
-
 -- country
 
 Insert into country

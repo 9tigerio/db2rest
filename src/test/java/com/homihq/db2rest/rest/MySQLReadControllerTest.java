@@ -28,7 +28,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.*").isArray())
                 //.andExpect(jsonPath("$.*", hasSize(4)))
                 .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(9), hasSize(8) )))
-                .andExpect(jsonPath("$[0].*", hasSize(13)))
+                .andExpect(jsonPath("$[0].*", hasSize(14)))
                 .andDo(document("mysql-get-all-films-all-columns"));
     }
 
