@@ -17,7 +17,7 @@ public class RootTableProcessor implements ReadProcessor {
     private final SchemaCache schemaCache;
     @Override
     public void process(ReadContext readContext) {
-        log.info("Processing root table");
+        log.debug("Processing root table");
         DbTable table =
         schemaCache.getTable(readContext.getTableName());
 

@@ -202,8 +202,6 @@ Values
 
 
 
-
-
 -- country
 
 Insert into country
@@ -229,3 +227,10 @@ Values
 
 --review
 INSERT INTO review (review_id , message, rating ,film_id) VALUES ('ABC123','Awesome movie', 4, 1);
+
+
+-- film_actor
+
+INSERT INTO film_actor
+(actor_id, film_id)
+VALUES(1, 1);

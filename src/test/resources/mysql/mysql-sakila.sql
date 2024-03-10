@@ -151,6 +151,7 @@ CREATE TABLE film (
   rating ENUM('G','PG','PG-13','R','NC-17') DEFAULT 'G',
   special_features SET('Trailers','Commentaries','Deleted Scenes','Behind the Scenes') DEFAULT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  prequel_film_id SMALLINT UNSIGNED DEFAULT NULL,
   PRIMARY KEY  (film_id),
   KEY idx_title (title),
   KEY idx_fk_language_id (language_id),
