@@ -47,7 +47,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
 
         mockMvc.perform(get("/film")
                         .accept(APPLICATION_JSON).accept(APPLICATION_JSON))
-                .andDo(print())
+               // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(8))))
@@ -140,7 +140,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                         .param("filter", "film_id==1")
                     )
                 .andExpect(status().isOk())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-get-one-film"));
     }
 }

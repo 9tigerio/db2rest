@@ -22,7 +22,7 @@ class PgCountControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(get("/film/count")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-get-film-count"));
 
     }
