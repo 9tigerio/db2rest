@@ -23,7 +23,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
                         .param("filter", "first_name==\"Alex\""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 
@@ -35,7 +35,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Invalid delete operation , safe set to true")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 
@@ -48,7 +48,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.detail",
                         containsString("Missing column director._name")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 
@@ -61,7 +61,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Cannot delete or update a parent row: a foreign key constraint fails")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 }

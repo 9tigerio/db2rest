@@ -33,7 +33,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.keys").isArray())
                 .andExpect(jsonPath("$.keys", hasSize(2)))
                 .andExpect(jsonPath("$.keys", allOf(notNullValue())))
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("pg-bulk-create-films"));
 
     }

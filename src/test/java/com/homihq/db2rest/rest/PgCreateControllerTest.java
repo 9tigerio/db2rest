@@ -51,7 +51,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST))
                 )
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys.film_id").exists())
@@ -139,7 +139,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys").exists())
@@ -154,7 +154,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .accept(APPLICATION_JSON)
                         .queryParam("fields", "title,release_year")
                         .queryParam("filter", String.format("film_id==%s", pk)))
-                .andDo(print())
+               // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title", equalTo("Dunki")))
                 .andExpect(jsonPath("$[0].release_year").doesNotExist());
@@ -204,7 +204,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .queryParam("columns", "title,description,language_id")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_MISSING_PAYLOAD))) //description is not in payload will be set to null
                 .andExpect(status().isBadRequest())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-create-a-film-missing-payload-attribute-error"))
                 .andReturn();
 
@@ -222,7 +222,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("null value in column \"language_id\" of relation \"film\" violates not-null constraint")))
-                .andDo(print())
+               // .andDo(print())
                 .andDo(document("pg-create-a-film-not-null-constraint"));
     }
 }

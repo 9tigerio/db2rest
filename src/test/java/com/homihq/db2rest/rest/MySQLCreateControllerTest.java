@@ -56,7 +56,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST))
                 )
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 //.andExpect(jsonPath("$.keys.GENERATED_KEY").exists())

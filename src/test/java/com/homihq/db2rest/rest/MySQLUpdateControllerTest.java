@@ -26,7 +26,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
                         .content(ITestUtil.UPDATE_FILM_REQUEST))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-update-existing-film"));
     }
 
@@ -40,7 +40,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
                         .content(ITestUtil.UPDATE_NON_EXISTING_FILM_REQUEST))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(0)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-update-non-existing-film"));
     }
 
@@ -53,7 +53,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
                         .param("filter", "sample_col==\"sample value 1\"")
                         .content(ITestUtil.UPDATE_NON_EXISTING_TABLE))
                 .andExpect(status().isNotFound())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-update-non-existing-table"));
     }
 
@@ -67,7 +67,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
                         .content(ITestUtil.UPDATE_FILMS_REQUEST))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(2)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-update-multiple-films"));
     }
 }

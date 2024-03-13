@@ -24,7 +24,7 @@ class MySQLDeleteAllTest extends MySQLBaseIntegrationTest {
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(4)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-delete-a-director"));
     }
 }
