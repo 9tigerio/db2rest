@@ -28,6 +28,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JdbcUpdateService implements UpdateService {
 
+    private final Db2RestConfigProperties db2RestConfigProperties;
     private final SchemaCache schemaCache;
     private final UpdateCreatorTemplate updateCreatorTemplate;
     private final DbOperationService dbOperationService;
