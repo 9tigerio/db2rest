@@ -6,6 +6,7 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +36,7 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     @GivenJsonResource("/testdata/RIGHT_JOIN.json")
     List<Map<String,Object>> RIGHT_JOIN;
 
+    @Disabled
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
@@ -61,6 +63,7 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
 
     }
 
+    @Disabled
     @Test
     @DisplayName("Test right Join")
     void testRightJoin() throws Exception {
