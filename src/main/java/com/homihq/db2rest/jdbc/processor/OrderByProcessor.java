@@ -22,7 +22,7 @@ public class OrderByProcessor implements ReadProcessor{
         if(Objects.nonNull(readContext.getSorts()) && !readContext.getSorts().isEmpty()) {
             List<DbSort> dbSortList = new ArrayList<>();
             for(String sort : readContext.getSorts()) {
-                log.info("SORT - {}", sort);
+                log.debug("SORT - {}", sort);
 
                 String [] sortParts = sort.split(";");
 

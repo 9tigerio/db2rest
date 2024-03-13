@@ -14,7 +14,7 @@ import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
-import com.homihq.db2rest.rest.read.sql.QueryCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.QueryCreatorTemplate;
 import com.homihq.db2rest.schema.SchemaCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
