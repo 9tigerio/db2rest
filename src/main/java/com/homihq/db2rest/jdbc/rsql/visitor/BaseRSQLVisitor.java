@@ -39,7 +39,7 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
     public String visit(ComparisonNode node, Object o) {
         ComparisonOperator op = node.getOperator();
 
-        log.info("Handling column - {}", node.getSelector());
+        log.debug("Handling column - {}", node.getSelector());
 
         DbColumn dbColumn = this.dbWhere.table().buildColumn(node.getSelector());
 

@@ -30,14 +30,14 @@ public class TSIDProcessor {
                 log.debug("detect type of the TSID column - {}", dbColumn.columnDataTypeName());
 
                 if(dbColumn.isIntFamily()) {
-                    log.info("PK of Int family");
+                    log.debug("PK of Int family");
                     long tsId = TSID.Factory.getTsid().toLong();
                     data.put(dbColumn.name(), tsId);
                     generatedKeys.put(dbColumn.name(),tsId);
 
                 }
                 else if(dbColumn.isStringFamily()) {
-                    log.info("PK of String family");
+                    log.debug("PK of String family");
                     String tsId = TSID.Factory.getTsid().toString();
                     data.put(dbColumn.name(), tsId);
                     generatedKeys.put(dbColumn.name(),tsId);
@@ -46,7 +46,7 @@ public class TSIDProcessor {
                     throw new GenericDataAccessException("Unable to detect data type family for TSID column.");
                 }
 
-                log.info("Data - {}", data);
+                log.debug("Data - {}", data);
             }
         }
 

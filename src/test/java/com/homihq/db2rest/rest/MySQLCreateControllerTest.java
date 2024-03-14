@@ -9,8 +9,7 @@ import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import com.homihq.db2rest.utils.ITestUtil;
 import com.jayway.jsonpath.JsonPath;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 
 import java.util.Map;
@@ -27,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(80)
 @TestWithResources
 class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
     @WithJacksonMapper
@@ -72,7 +73,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(post("/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_ERROR)))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document("mysql-create-a-film-error"));
 
@@ -145,7 +146,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
-                .andDo(print())
+               // .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys").exists())
@@ -160,7 +161,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .accept(APPLICATION_JSON)
                         .queryParam("fields", "title,release_year")
                         .queryParam("filter", String.format("film_id==%s", pk)))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title", equalTo("Dunki")))
                 .andExpect(jsonPath("$[0].release_year").doesNotExist());
@@ -177,7 +178,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys").exists())
@@ -211,7 +212,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .queryParam("columns", "title,description,language_id")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_MISSING_PAYLOAD))) //description is not in payload will be set to null
                 .andExpect(status().isBadRequest())
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-create-a-film-missing-payload-attribute-error"))
                 .andReturn();
 
@@ -229,7 +230,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                        containsString("Field 'language_id' doesn't have a default value")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("mysql-create-a-film-not-null-constraint"));
     }
 }

@@ -41,7 +41,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
                                        boolean tsIdEnabled) {
         if (Objects.isNull(dataList) || dataList.isEmpty()) throw new GenericDataAccessException("No data provided");
 
-        log.info("** Bulk Insert **");
+        log.debug("** Bulk Insert **");
 
         try {
 
@@ -79,8 +79,8 @@ public class JdbcBulkCreateService implements BulkCreateService {
             CreateContext context = new CreateContext(dbTable, insertableColumns);
             String sql = createCreatorTemplate.createQuery(context);
 
-            log.info("SQL - {}", sql);
-            log.info("Data - {}", dataList);
+            log.debug("SQL - {}", sql);
+            log.debug("Data - {}", dataList);
 
             CreateBulkResponse createBulkResponse = dbOperationService.batchUpdate(dataList, sql, dbTable);
 

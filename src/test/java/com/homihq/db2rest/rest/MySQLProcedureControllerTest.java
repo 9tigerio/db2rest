@@ -1,8 +1,7 @@
 package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 
 import java.util.Map;
@@ -15,7 +14,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(50)
 class MySQLProcedureControllerTest extends MySQLBaseIntegrationTest {
 
     @Test

@@ -54,7 +54,7 @@ d1:
 logging:
   level:
     com.homihq.db2rest:
-      rest: DEBUG
+      rest: INFO
     org.springframework.web : INFO
     schemacrawler:
       schemacrawler: ERROR
@@ -65,13 +65,13 @@ logging:
           scheduler: ERROR
     org:
       springframework:
-        beans : INFO
-        web: INFO
+        beans : ERROR
+        web: ERROR
         test:
           context:
-            jdbc: DEBUG
+            jdbc: INFO
 
         jdbc:
           datasource:
-            init: DEBUG
-          core.*: DEBUG
+            init: INFO
+          core.*: INFO

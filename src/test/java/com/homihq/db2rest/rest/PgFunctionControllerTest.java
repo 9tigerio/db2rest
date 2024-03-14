@@ -1,8 +1,7 @@
 package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 
 import java.util.Map;
@@ -16,6 +15,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(151)
 class PgFunctionControllerTest extends PostgreSQLBaseIntegrationTest {
 
     @Test

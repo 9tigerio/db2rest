@@ -31,8 +31,6 @@ public class JdbcOperationService implements DbOperationService {
 
     @Override
     public List<Map<String, Object>> read(Map<String, Object> paramMap, String sql) {
-        int hashCode = this.namedParameterJdbcTemplate.getJdbcTemplate().getDataSource().hashCode();
-        log.info("**** hashcode - {}", hashCode);
 
         return namedParameterJdbcTemplate.queryForList(sql, paramMap);
     }

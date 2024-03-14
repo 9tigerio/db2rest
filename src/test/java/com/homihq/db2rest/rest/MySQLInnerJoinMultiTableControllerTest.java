@@ -6,8 +6,7 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.test.web.servlet.ResultHandler;
 
 import java.util.List;
@@ -21,6 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(13)
 @TestWithResources
 class MySQLInnerJoinMultiTableControllerTest extends MySQLBaseIntegrationTest {
 

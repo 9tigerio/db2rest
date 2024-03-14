@@ -65,8 +65,8 @@ public class JdbcUpdateService implements UpdateService {
         String sql =
                 updateCreatorTemplate.updateQuery(context);
 
-        log.info("{}", sql);
-        log.info("{}", context.getParamMap());
+        log.debug("{}", sql);
+        log.debug("{}", context.getParamMap());
 
         try {
             return dbOperationService.update(context.getParamMap(), sql);

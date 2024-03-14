@@ -62,7 +62,7 @@ public class QueryCreatorTemplate {
 
     public String createQuery(ReadContext readContext) {
 
-        log.info("**** Preparing to render ****");
+        log.debug("**** Preparing to render ****");
 
         Map<String,Object> data = new HashMap<>();
         data.put("columns", createProjections(readContext.getCols()));

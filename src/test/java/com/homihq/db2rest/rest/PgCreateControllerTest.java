@@ -8,8 +8,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import com.jayway.jsonpath.JsonPath;
 import static org.hamcrest.Matchers.equalTo;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
+
 import java.util.Map;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(180)
 @TestWithResources
 class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
 
