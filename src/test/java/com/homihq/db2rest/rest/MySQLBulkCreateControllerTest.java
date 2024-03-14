@@ -1,9 +1,16 @@
 package com.homihq.db2rest.rest;
 
+import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
+import com.adelean.inject.resources.junit.jupiter.TestWithResources;
+import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import com.homihq.db2rest.utils.ITestUtil;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
+import java.util.List;
+import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.*;
@@ -14,7 +21,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(81)
+@TestWithResources
 class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
+
+    @WithJacksonMapper
+    ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
+
+    @GivenJsonResource("/testdata/BULK_CREATE_FILM_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_FILM_REQUEST;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_FILM_BAD_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_FILM_BAD_REQUEST;
 
     @Test
     @DisplayName("Create many films.")
@@ -22,7 +42,8 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
 
         mockMvc.perform(post("/film/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(ITestUtil.BULK_CREATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_REQUEST))
+                )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows").isArray())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
@@ -74,8 +95,7 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(post("/film/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .header("Content-Profile", "sakila")
-                        .content(ITestUtil.BULK_CREATE_FILM_BAD_REQUEST))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_BAD_REQUEST)))
                 .andExpect(status().isBadRequest())
                 // .andDo(print())
                 .andDo(document("mysql-bulk-create-films-error"));

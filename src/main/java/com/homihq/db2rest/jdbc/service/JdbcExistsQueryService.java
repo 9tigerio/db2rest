@@ -29,8 +29,8 @@ public class JdbcExistsQueryService implements ExistsQueryService {
         }
 
         String sql = queryCreatorTemplate.createExistsQuery(readContext);
-        log.info("{}", sql);
-        log.info("{}", readContext.getParamMap());
+        log.debug("{}", sql);
+        log.debug("{}", readContext.getParamMap());
 
         try {
 			return dbOperationService.exists(readContext.getParamMap(), sql);

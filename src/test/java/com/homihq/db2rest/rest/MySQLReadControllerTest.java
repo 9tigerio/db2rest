@@ -1,9 +1,7 @@
 package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 
 import static org.hamcrest.Matchers.*;
@@ -16,7 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Disabled
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(1)
 class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - all columns.")

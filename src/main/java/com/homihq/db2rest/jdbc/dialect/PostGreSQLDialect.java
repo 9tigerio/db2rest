@@ -32,7 +32,7 @@ public class PostGreSQLDialect implements Dialect {
 
             String columnDataTypeName = table.getColumnDataTypeName(columnName);
 
-            log.info("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
+            log.debug("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
             if (Objects.isNull(value)) continue;
 
             if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {

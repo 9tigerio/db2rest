@@ -2,8 +2,7 @@ package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import com.homihq.db2rest.utils.ITestUtil;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.equalTo;
@@ -14,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(70)
 class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
 
     @Test

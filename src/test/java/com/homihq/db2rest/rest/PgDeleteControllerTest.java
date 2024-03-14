@@ -2,8 +2,7 @@ package com.homihq.db2rest.rest;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -13,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(190)
 class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
 
     @Test
@@ -23,7 +24,7 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
                         .param("filter", "first_name==\"Alex\""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }
 
@@ -35,7 +36,7 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Invalid delete operation , safe set to true")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }
 
@@ -48,7 +49,7 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.detail",
                         containsString("Missing column director._name")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }
 
@@ -62,7 +63,7 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.detail",
                         containsString("ERROR: update or delete on table \"language\" violates foreign key " +
                                 "constraint \"film_language_id_fkey\" on table \"film")))
-                .andDo(print())
+                //.andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }
 }

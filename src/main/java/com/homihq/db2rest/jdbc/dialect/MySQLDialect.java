@@ -28,7 +28,7 @@ public class MySQLDialect implements Dialect {
 
                 String columnDataTypeName = table.getColumnDataTypeName(columnName);
 
-                log.info("columnDataTypeName - {}", columnDataTypeName);
+                log.debug("columnDataTypeName - {}", columnDataTypeName);
 
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
 

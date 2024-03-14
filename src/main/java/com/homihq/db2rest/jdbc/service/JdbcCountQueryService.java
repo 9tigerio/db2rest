@@ -29,8 +29,8 @@ public class JdbcCountQueryService implements CountQueryService {
         }
 
         String sql = queryCreatorTemplate.createCountQuery(readContext);
-        log.info("{}", sql);
-        log.info("{}", readContext.getParamMap());
+        log.debug("{}", sql);
+        log.debug("{}", readContext.getParamMap());
 
         try {
             return dbOperationService.count(readContext.getParamMap(), sql);

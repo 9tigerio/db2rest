@@ -52,8 +52,8 @@ public class JdbcDeleteService implements DeleteService {
         String sql =
         deleteCreatorTemplate.deleteQuery(context);
 
-        log.info("{}", sql);
-        log.info("{}", context.getParamMap());
+        log.debug("{}", sql);
+        log.debug("{}", context.getParamMap());
 
         try {
             return dbOperationService.delete(context.getParamMap(), sql);

@@ -21,8 +21,8 @@ public class ExistsQueryController {
 	public ExistsResponse exists(@PathVariable String tableName,
 	                             @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
-		log.info("tableName - {}", tableName);
-		log.info("filter - {}", filter);
+		log.debug("tableName - {}", tableName);
+		log.debug("filter - {}", filter);
 
 		ReadContext readContext = ReadContext.builder()
 				.tableName(tableName)

@@ -22,9 +22,9 @@ public class FindOneController {
                                       @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
 
-        log.info("tableName - {}", tableName);
-        log.info("fields - {}", fields);
-        log.info("filter - {}", filter);
+        log.debug("tableName - {}", tableName);
+        log.debug("fields - {}", fields);
+        log.debug("filter - {}", filter);
 
         ReadContext readContext = ReadContext.builder()
                 .tableName(tableName)
