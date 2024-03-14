@@ -71,4 +71,10 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
                 //.andDo(print())
                 .andDo(document("mysql-update-multiple-films"));
     }
+
+    //TODO - Add a test to update date field.
+
+    //TODO - Greater than, less than , equal to , between test for date
+
+
 }
