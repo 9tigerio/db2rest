@@ -1,3 +1,7 @@
+app:
+  version: @project.version@
+  name: @project.name@
+
 server:
   port: 8080
   forward-headers-strategy: framework
@@ -22,6 +26,9 @@ spring:
       pool-name: db2rest-platform-hikari-pool
       data-source-properties:
         reWriteBatchedInserts: true
+
+  banner:
+    location: classpath:banner.txt
 
 db2rest:
   datasource:

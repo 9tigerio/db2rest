@@ -266,6 +266,12 @@
 
     <build>
         <finalName>db2rest</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.asciidoctor</groupId>
