@@ -73,7 +73,7 @@ logging:
     org:
       springframework:
         beans : ERROR
-        web: ERROR
+        web: INFO
         test:
           context:
             jdbc: INFO
