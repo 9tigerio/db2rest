@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest</artifactId>
-    <version>0.2.2-RC4</version>
+    <version>0.2.3-RC1</version>
     <name>db2rest</name>
     <description>db2rest</description>
     <properties>
@@ -153,16 +153,20 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>com.ibm.db2</groupId>
             <artifactId>jcc</artifactId>
             <scope>runtime</scope>
         </dependency>
+        -->
 
+        <!--
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
         </dependency>
+        -->
 
         <dependency>
             <groupId>com.mysql</groupId>
@@ -175,11 +179,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <scope>runtime</scope>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.postgresql</groupId>
