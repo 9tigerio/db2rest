@@ -8,9 +8,9 @@
         <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.github.oracle9i</groupId>
+    <groupId>com.github</groupId>
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>0.2.3-ORCL-RC4</version>
+    <version>0.2.3-ORCL-RC5</version>
     <name>db2rest-oracle9i</name>
     <description>db2rest for legacy Oracle database</description>
     <properties>
