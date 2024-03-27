@@ -10,9 +10,9 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>0.2.3-RC1</version>
-    <name>db2rest</name>
-    <description>db2rest</description>
+    <version>0.2.3-ORCL-RC2</version>
+    <name>db2rest-oracle9i</name>
+    <description>db2rest for legacy Oracle database</description>
     <properties>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
