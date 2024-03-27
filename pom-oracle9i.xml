@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>0.2.3-RC7</version>
+    <version>0.2.3</version>
     <name>db2rest-oracle9i</name>
     <description>DB2Rest support for older Oracle databases - 9i</description>
     <properties>
