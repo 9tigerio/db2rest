@@ -61,15 +61,16 @@ d1:
 logging:
   level:
     com.homihq.db2rest:
-      rest: INFO
-    org.springframework.web : INFO
+      rest: DEBUG
+      jdbc.service: DEBUG
+    org.springframework.web : DEBUG
     schemacrawler:
-      schemacrawler: ERROR
-      crawl: ERROR
+      schemacrawler: TRACE
+      crawl: TRACE
     us:
       fatehi:
         utility:
-          scheduler: ERROR
+          scheduler: INFO
     org:
       springframework:
         beans : ERROR
@@ -80,5 +81,5 @@ logging:
 
         jdbc:
           datasource:
-            init: INFO
-          core.*: INFO
+            init: DEBUG
+          core.*: DEBUG
