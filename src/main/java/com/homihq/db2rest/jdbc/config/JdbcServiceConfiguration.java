@@ -8,7 +8,6 @@ import com.homihq.db2rest.core.service.ProcedureService;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.service.*;
 import com.homihq.db2rest.core.service.CreateService;
-import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.jdbc.service.JdbcDeleteService;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
@@ -84,11 +83,10 @@ public class JdbcServiceConfiguration {
     //UPDATE SERVICE
     @Bean
     public UpdateService updateService(
-            Db2RestConfigProperties db2RestConfigProperties,
             SchemaCache schemaCache,
-            UpdateCreatorTemplate updateCreatorTemplate,
+            SqlCreatorTemplate sqlCreatorTemplate,
             DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcUpdateService(db2RestConfigProperties, schemaCache, updateCreatorTemplate, dbOperationService, dialect);
+        return new JdbcUpdateService(schemaCache, sqlCreatorTemplate, dbOperationService, dialect);
     }
 
 

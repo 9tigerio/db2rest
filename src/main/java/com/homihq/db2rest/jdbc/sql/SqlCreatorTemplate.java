@@ -6,6 +6,7 @@ import com.homihq.db2rest.core.model.DbSort;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
+import com.homihq.db2rest.rest.update.dto.UpdateContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,27 @@ public class SqlCreatorTemplate {
 
     private final SpringTemplateEngine templateEngine;
     private final Dialect dialect;
+
+    public String updateQuery(UpdateContext updateContext) {
+
+        Map<String,Object> data = new HashMap<>();
+
+        if(dialect.supportAlias()) {
+            data.put("rootTable", updateContext.getTable().render());
+        }
+        else{
+            data.put("rootTable", updateContext.getTable().name());
+        }
+
+        data.put("rootWhere", updateContext.getWhere());
+        data.put("columnSets", updateContext.renderSetColumns());
+
+        Context context = new Context();
+        context.setVariables(data);
+        return templateEngine.process("update", context);
+
+    }
+
     public String deleteQuery(DeleteContext deleteContext) {
 
         String rendererTableName = dialect.supportAlias() ? deleteContext.getTable().render()

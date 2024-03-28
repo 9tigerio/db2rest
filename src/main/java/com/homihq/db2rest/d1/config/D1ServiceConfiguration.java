@@ -10,7 +10,6 @@ import com.homihq.db2rest.d1.service.D1FunctionService;
 import com.homihq.db2rest.d1.service.D1ProcedureService;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.service.*;
-import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.schema.SchemaCache;
@@ -85,11 +84,10 @@ public class D1ServiceConfiguration {
     //UPDATE SERVICE
     @Bean
     public UpdateService updateService(
-            Db2RestConfigProperties db2RestConfigProperties,
             SchemaCache schemaCache,
-            UpdateCreatorTemplate updateCreatorTemplate,
+            SqlCreatorTemplate sqlCreatorTemplate,
             DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcUpdateService(db2RestConfigProperties, schemaCache, updateCreatorTemplate, dbOperationService, dialect);
+        return new JdbcUpdateService(schemaCache, sqlCreatorTemplate, dbOperationService, dialect);
     }
 
 

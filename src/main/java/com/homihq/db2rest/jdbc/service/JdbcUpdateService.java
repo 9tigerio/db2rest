@@ -1,11 +1,10 @@
 package com.homihq.db2rest.jdbc.service;
 
-import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.DbOperationService;
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.service.UpdateService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.core.model.DbWhere;
 import com.homihq.db2rest.rest.update.dto.UpdateContext;
@@ -28,9 +27,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JdbcUpdateService implements UpdateService {
 
-    private final Db2RestConfigProperties db2RestConfigProperties;
     private final SchemaCache schemaCache;
-    private final UpdateCreatorTemplate updateCreatorTemplate;
+    private final SqlCreatorTemplate sqlCreatorTemplate;
     private final DbOperationService dbOperationService;
     private final Dialect dialect;
 
@@ -63,7 +61,7 @@ public class JdbcUpdateService implements UpdateService {
 
         addWhere(filter, table, context);
         String sql =
-                updateCreatorTemplate.updateQuery(context);
+                sqlCreatorTemplate.updateQuery(context);
 
         log.debug("{}", sql);
         log.debug("{}", context.getParamMap());
