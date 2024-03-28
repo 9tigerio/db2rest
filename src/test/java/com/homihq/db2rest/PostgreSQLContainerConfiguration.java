@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @TestConfiguration(proxyBeanMethods = false)
+@Profile("it-pg")
 public class PostgreSQLContainerConfiguration {
 
     private static final List<String> postgresScripts = List.of("pg/postgres-sakila.sql",

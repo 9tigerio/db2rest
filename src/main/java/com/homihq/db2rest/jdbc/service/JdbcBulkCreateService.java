@@ -6,7 +6,7 @@ import com.homihq.db2rest.core.service.BulkCreateService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
-import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.rest.create.dto.CreateContext;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
@@ -28,7 +28,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public class JdbcBulkCreateService implements BulkCreateService {
 
     private final TSIDProcessor tsidProcessor;
-    private final CreateCreatorTemplate createCreatorTemplate;
+    private final SqlCreatorTemplate sqlCreatorTemplate;
     private final SchemaCache schemaCache;
     private final DbOperationService dbOperationService;
     private final Dialect dialect;
@@ -77,7 +77,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
             log.debug("Finally insertable columns - {}", insertableColumns);
 
             CreateContext context = new CreateContext(dbTable, insertableColumns);
-            String sql = createCreatorTemplate.createQuery(context);
+            String sql = sqlCreatorTemplate.createQuery(context);
 
             log.debug("SQL - {}", sql);
             log.debug("Data - {}", dataList);

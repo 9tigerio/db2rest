@@ -65,12 +65,12 @@ logging:
       jdbc.service: DEBUG
     org.springframework.web : DEBUG
     schemacrawler:
-      schemacrawler: TRACE
-      crawl: TRACE
+      schemacrawler: ERROR
+      crawl: ERROR
     us:
       fatehi:
         utility:
-          scheduler: INFO
+          scheduler: ERROR
     org:
       springframework:
         beans : ERROR

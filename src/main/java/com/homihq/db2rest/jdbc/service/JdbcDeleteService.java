@@ -5,9 +5,9 @@ import com.homihq.db2rest.core.DbOperationService;
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.service.DeleteService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
 import com.homihq.db2rest.core.model.DbWhere;
 import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
@@ -25,7 +25,7 @@ public class JdbcDeleteService implements DeleteService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
     private final SchemaCache schemaCache;
-    private final DeleteCreatorTemplate deleteCreatorTemplate;
+    private final SqlCreatorTemplate sqlCreatorTemplate;
     private final DbOperationService dbOperationService;
     private final Dialect dialect;
 
@@ -50,7 +50,7 @@ public class JdbcDeleteService implements DeleteService {
 
         addWhere(filter, table, context);
         String sql =
-        deleteCreatorTemplate.deleteQuery(context);
+                sqlCreatorTemplate.deleteQuery(context);
 
         log.debug("{}", sql);
         log.debug("{}", context.getParamMap());
