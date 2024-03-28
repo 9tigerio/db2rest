@@ -4,7 +4,6 @@ import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.processor.*;
-import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
@@ -22,7 +21,7 @@ import javax.sql.DataSource;
 public class JdbcSchemaCacheConfiguration {
 
     @Bean
-    public JdbcSchemaCache schemaManager(DataSource dataSource) {
+    public JdbcSchemaCache schemaCache(DataSource dataSource) {
         return new JdbcSchemaCache(dataSource);
     }
 
@@ -63,8 +62,8 @@ public class JdbcSchemaCacheConfiguration {
 
     @Bean
     @DependsOn("textTemplateResolver")
-    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine) {
-        return new SqlCreatorTemplate(templateEngine);
+    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, Dialect dialect) {
+        return new SqlCreatorTemplate(templateEngine, dialect);
     }
 
 

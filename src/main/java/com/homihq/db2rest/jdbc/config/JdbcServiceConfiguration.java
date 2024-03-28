@@ -8,8 +8,6 @@ import com.homihq.db2rest.core.service.ProcedureService;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.service.*;
 import com.homihq.db2rest.core.service.CreateService;
-import com.homihq.db2rest.jdbc.sql.CreateCreatorTemplate;
-import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.jdbc.service.JdbcDeleteService;
@@ -31,18 +29,18 @@ public class JdbcServiceConfiguration {
 
     @Bean
     public BulkCreateService bulkCreateService(TSIDProcessor tsidProcessor,
-                                               CreateCreatorTemplate createCreatorTemplate,
+                                               SqlCreatorTemplate sqlCreatorTemplate,
                                                SchemaCache schemaCache,
                                                DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcBulkCreateService(tsidProcessor, createCreatorTemplate, schemaCache, dbOperationService, dialect);
+        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, schemaCache, dbOperationService, dialect);
     }
 
     @Bean
     public CreateService createService(TSIDProcessor tsidProcessor,
-                                       CreateCreatorTemplate createCreatorTemplate,
+                                       SqlCreatorTemplate sqlCreatorTemplate,
                                        SchemaCache schemaCache,
                                        DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcCreateService(tsidProcessor, createCreatorTemplate, schemaCache, dbOperationService, dialect);
+        return new JdbcCreateService(tsidProcessor, sqlCreatorTemplate, schemaCache, dbOperationService, dialect);
     }
 
     //QUERY SERVICE
@@ -98,10 +96,10 @@ public class JdbcServiceConfiguration {
     @Bean
     public DeleteService deleteService(
             Db2RestConfigProperties db2RestConfigProperties,
-    SchemaCache schemaCache,
-    DeleteCreatorTemplate deleteCreatorTemplate,
-    DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcDeleteService(db2RestConfigProperties, schemaCache, deleteCreatorTemplate, dbOperationService, dialect);
+            SchemaCache schemaCache,
+            SqlCreatorTemplate sqlCreatorTemplate,
+            DbOperationService dbOperationService, Dialect dialect) {
+        return new JdbcDeleteService(db2RestConfigProperties, schemaCache, sqlCreatorTemplate, dbOperationService, dialect);
     }
 
     //RPC
