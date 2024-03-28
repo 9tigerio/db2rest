@@ -6,7 +6,7 @@ import java.util.Random;
 
 
 public class AliasGenerator {
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     public static String getAlias(String sqlIdentifier) {
         int LENGTH = 4;

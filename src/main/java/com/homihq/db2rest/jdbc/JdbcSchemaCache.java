@@ -4,18 +4,25 @@ import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
 import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
+
+import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
 import com.homihq.db2rest.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import org.springframework.jdbc.core.metadata.GenericTableMetaDataProvider;
+import org.springframework.jdbc.core.metadata.OracleTableMetaDataProvider;
+import org.springframework.jdbc.support.JdbcUtils;
+import org.springframework.jdbc.support.MetaDataAccessException;
 import schemacrawler.schema.*;
 import schemacrawler.schemacrawler.*;
 import schemacrawler.tools.utility.SchemaCrawlerUtility;
 import us.fatehi.utility.datasource.DatabaseConnectionSources;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,6 +39,16 @@ public final class JdbcSchemaCache implements SchemaCache {
 
         this.dbTableMap = new ConcurrentHashMap<>();
         createSchemaCache();
+        //loadMetaData();
+    }
+
+    private void loadMetaData() {
+        log.info("Loading meta data");
+        try {
+            JdbcUtils.extractDatabaseMetaData(dataSource, new JdbcMetaDataProvider());
+        } catch (MetaDataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void createSchemaCache() {

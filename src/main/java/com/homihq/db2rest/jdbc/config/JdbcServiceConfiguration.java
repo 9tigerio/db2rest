@@ -22,7 +22,6 @@ import java.util.List;
 
 
 @Configuration
-@ConditionalOnBean(DataSource.class)
 public class JdbcServiceConfiguration {
     //CREATE SERVICE
 

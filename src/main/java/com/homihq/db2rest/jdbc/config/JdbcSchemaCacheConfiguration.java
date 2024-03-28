@@ -7,18 +7,20 @@ import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.jdbc.core.metadata.TableMetaDataProvider;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
 
 @Configuration
-@ConditionalOnBean(DataSource.class)
 public class JdbcSchemaCacheConfiguration {
+
 
     @Bean
     public JdbcSchemaCache schemaCache(DataSource dataSource) {
