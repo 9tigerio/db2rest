@@ -7,7 +7,7 @@ import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.core.model.DbWhere;
 import com.homihq.db2rest.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
+import static com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap.*;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
 import static com.homihq.db2rest.schema.AliasGenerator.*;
@@ -30,7 +30,6 @@ import java.util.Optional;
 public class JoinProcessor implements ReadProcessor {
 
     private final SchemaCache schemaCache;
-    private final OperatorMap operatorMap;
     private final Dialect dialect;
 
     @Override
@@ -129,8 +128,8 @@ public class JoinProcessor implements ReadProcessor {
     }
 
     private void processOn(String onExpression, int onIdx, DbTable table, DbTable rootTable, DbJoin dbJoin) {
-        String rSqlOperator = this.operatorMap.getRSQLOperator(onExpression);
-        String operator = this.operatorMap.getSQLOperator(rSqlOperator);
+        String rSqlOperator = getRSQLOperator(onExpression);
+        String operator = getSQLOperator(rSqlOperator);
 
         String left = onExpression.substring(0, onExpression.indexOf(rSqlOperator)).trim();
         String right = onExpression.substring(onExpression.indexOf(rSqlOperator) + rSqlOperator.length()).trim();

@@ -5,7 +5,7 @@ import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
-import com.homihq.db2rest.schema.AliasGenerator;
+import com.homihq.db2rest.schema.SchemaCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnBean(DataSource.class)
-public class JdbcSchemaManagerConfiguration {
+public class JdbcSchemaCacheConfiguration {
 
     @Bean
     public JdbcSchemaCache schemaManager(DataSource dataSource) {
@@ -29,7 +29,7 @@ public class JdbcSchemaManagerConfiguration {
 
     @Bean
     public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaManager, OperatorMap operatorMap, Dialect dialect) {
-        return new JoinProcessor(jdbcSchemaManager, operatorMap, dialect);
+        return new JoinProcessor(jdbcSchemaManager, dialect);
     }
 
     @Bean
@@ -43,8 +43,8 @@ public class JdbcSchemaManagerConfiguration {
     }
 
     @Bean
-    public RootTableProcessor rootTableProcessor(JdbcSchemaCache jdbcSchemaManager) {
-        return new RootTableProcessor(jdbcSchemaManager);
+    public RootTableProcessor rootTableProcessor(SchemaCache schemaCache) {
+        return new RootTableProcessor(schemaCache);
     }
 
     @Bean
