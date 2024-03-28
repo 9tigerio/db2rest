@@ -1,13 +1,11 @@
 package com.homihq.db2rest;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.ext.ScriptUtils;
 import org.testcontainers.jdbc.JdbcDatabaseDelegate;
@@ -16,6 +14,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @TestConfiguration(proxyBeanMethods = false)
+@Profile("it-mysql")
 public class MySQLContainerConfiguration {
 
     private static final List<String> mySqlScripts = List.of("mysql/mysql-sakila.sql",
