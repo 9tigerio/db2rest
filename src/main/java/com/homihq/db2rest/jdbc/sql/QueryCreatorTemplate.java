@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 
-@Component
+//@Component
 @Slf4j
 @RequiredArgsConstructor
 public class QueryCreatorTemplate {
