@@ -5,6 +5,7 @@ import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
+import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,11 @@ public class JdbcSchemaCacheConfiguration {
     @Bean
     public JdbcOperationService operationService(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         return new JdbcOperationService(namedParameterJdbcTemplate);
+    }
+
+    @Bean
+    public TSIDProcessor tsidProcessor() {
+        return new TSIDProcessor();
     }
 
     @Bean
