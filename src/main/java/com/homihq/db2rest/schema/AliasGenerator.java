@@ -1,15 +1,14 @@
 package com.homihq.db2rest.schema;
 
 
-import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
-@Component
-public class AliasGenerator {
-    private final Random random = new Random();
 
-    public String getAlias(String sqlIdentifier) {
+public class AliasGenerator {
+    private static Random random = new Random();
+
+    public static String getAlias(String sqlIdentifier) {
         int LENGTH = 4;
         return
         sqlIdentifier.length() > LENGTH ?

@@ -3,7 +3,7 @@ package com.homihq.db2rest.jdbc;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
-import com.homihq.db2rest.schema.AliasGenerator;
+import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
 import com.homihq.db2rest.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class JdbcSchemaCache implements SchemaCache {
 
     private final DataSource dataSource;
-    private final AliasGenerator aliasGenerator;
 
     private Map<String,DbTable> dbTableMap;
 
@@ -65,7 +64,7 @@ public final class JdbcSchemaCache implements SchemaCache {
     }
 
     private DbTable createTable(Table table) {
-        String tableAlias = aliasGenerator.getAlias(table.getName());
+        String tableAlias = getAlias(table.getName());
         List<DbColumn> columnList = buildColumns(tableAlias, table);
 
         return new DbTable(

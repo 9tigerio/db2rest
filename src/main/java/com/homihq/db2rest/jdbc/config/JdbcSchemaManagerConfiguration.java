@@ -18,8 +18,8 @@ import javax.sql.DataSource;
 public class JdbcSchemaManagerConfiguration {
 
     @Bean
-    public JdbcSchemaCache schemaManager(DataSource dataSource, AliasGenerator aliasGenerator) {
-        return new JdbcSchemaCache(dataSource, aliasGenerator);
+    public JdbcSchemaCache schemaManager(DataSource dataSource) {
+        return new JdbcSchemaCache(dataSource);
     }
 
     @Bean
@@ -28,9 +28,8 @@ public class JdbcSchemaManagerConfiguration {
     }
 
     @Bean
-    public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaManager, OperatorMap operatorMap, Dialect dialect,
-                                       AliasGenerator aliasGenerator) {
-        return new JoinProcessor(jdbcSchemaManager, operatorMap, dialect, aliasGenerator);
+    public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaManager, OperatorMap operatorMap, Dialect dialect) {
+        return new JoinProcessor(jdbcSchemaManager, operatorMap, dialect);
     }
 
     @Bean

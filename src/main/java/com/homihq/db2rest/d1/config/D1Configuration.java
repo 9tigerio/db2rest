@@ -49,8 +49,8 @@ public class D1Configuration {
 
 
     @Bean
-    public D1SchemaCache schemaManager(RestTemplateBuilder restTemplateBuilder, AliasGenerator aliasGenerator) {
+    public D1SchemaCache schemaManager(RestTemplateBuilder restTemplateBuilder) {
         log.info("D1 schema manager.");
-        return new D1SchemaCache(db1RestClient(restTemplateBuilder), aliasGenerator);
+        return new D1SchemaCache(db1RestClient(restTemplateBuilder));
     }
 }

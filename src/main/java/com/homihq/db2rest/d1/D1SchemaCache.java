@@ -4,7 +4,7 @@ import com.homihq.db2rest.d1.model.D1Column;
 import com.homihq.db2rest.d1.model.D1Table;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
-import com.homihq.db2rest.schema.AliasGenerator;
+import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
 import com.homihq.db2rest.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,6 @@ import java.util.Map;
 public class D1SchemaCache implements SchemaCache {
 
     private final D1RestClient d1RestClient;
-    private final AliasGenerator aliasGenerator;
     private List<DbTable> dbTableList;
     private Map<String,DbTable> dbTableMap;
 
@@ -49,7 +48,7 @@ public class D1SchemaCache implements SchemaCache {
     }
 
     private void addTableWithColumns(D1Table d1Table, List<D1Column> d1Columns) {
-        String tableAlias = aliasGenerator.getAlias(d1Table.name());
+        String tableAlias = getAlias(d1Table.name());
         List<DbColumn> dbColumns = 
                 d1Columns.stream()
                         .map(d1Column -> new DbColumn(
