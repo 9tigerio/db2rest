@@ -5,12 +5,15 @@ import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
 
@@ -34,7 +37,7 @@ public class JdbcSchemaCacheConfiguration {
     }
 
     @Bean
-    public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaManager, OperatorMap operatorMap, Dialect dialect) {
+    public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaManager, Dialect dialect) {
         return new JoinProcessor(jdbcSchemaManager, dialect);
     }
 
@@ -58,8 +61,11 @@ public class JdbcSchemaCacheConfiguration {
         return new RootWhereProcessor(dialect);
     }
 
-
-
+    @Bean
+    @DependsOn("textTemplateResolver")
+    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine) {
+        return new SqlCreatorTemplate(templateEngine);
+    }
 
 
 }

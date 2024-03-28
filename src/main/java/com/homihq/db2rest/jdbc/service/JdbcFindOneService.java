@@ -5,7 +5,7 @@ import com.homihq.db2rest.core.service.FindOneService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
-import com.homihq.db2rest.jdbc.sql.QueryCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -17,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JdbcFindOneService implements FindOneService {
 
-    private final QueryCreatorTemplate queryCreatorTemplate;
+    private final SqlCreatorTemplate sqlCreatorTemplate;
     private final List<ReadProcessor> processorList;
     private final DbOperationService dbOperationService;
 
@@ -28,7 +28,7 @@ public class JdbcFindOneService implements FindOneService {
             processor.process(readContext);
         }
 
-        String sql = queryCreatorTemplate.createFindOneQuery(readContext);
+        String sql = sqlCreatorTemplate.findOne(readContext);
         Map<String, Object> bindValues = readContext.getParamMap();
 
         log.debug("SQL - {}", sql);

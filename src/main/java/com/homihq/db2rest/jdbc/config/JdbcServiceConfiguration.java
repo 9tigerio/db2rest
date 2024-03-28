@@ -13,7 +13,7 @@ import com.homihq.db2rest.jdbc.sql.DeleteCreatorTemplate;
 import com.homihq.db2rest.jdbc.sql.UpdateCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.jdbc.service.JdbcDeleteService;
-import com.homihq.db2rest.jdbc.sql.QueryCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.schema.SchemaCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
@@ -48,26 +48,26 @@ public class JdbcServiceConfiguration {
     //QUERY SERVICE
     @Bean
     public CountQueryService countQueryService(
-                                               QueryCreatorTemplate queryCreatorTemplate,
+                                               SqlCreatorTemplate sqlCreatorTemplate,
                                                List<ReadProcessor> processorList,
                                                DbOperationService dbOperationService) {
-        return new JdbcCountQueryService(dbOperationService, processorList, queryCreatorTemplate);
+        return new JdbcCountQueryService(dbOperationService, processorList, sqlCreatorTemplate);
     }
 
     @Bean
     public ExistsQueryService existsQueryService(
-            QueryCreatorTemplate queryCreatorTemplate,
+            SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcExistsQueryService(dbOperationService, processorList, queryCreatorTemplate);
+        return new JdbcExistsQueryService(dbOperationService, processorList, sqlCreatorTemplate);
     }
 
     @Bean
     public FindOneService findOneService(
-            QueryCreatorTemplate queryCreatorTemplate,
+            SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcFindOneService(queryCreatorTemplate, processorList, dbOperationService);
+        return new JdbcFindOneService(sqlCreatorTemplate, processorList, dbOperationService);
     }
 
     @Bean
@@ -77,10 +77,10 @@ public class JdbcServiceConfiguration {
 
     @Bean
     public ReadService readService(
-            QueryCreatorTemplate queryCreatorTemplate,
+            SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcReadService(dbOperationService, processorList, queryCreatorTemplate);
+        return new JdbcReadService(dbOperationService, processorList, sqlCreatorTemplate);
     }
 
     //UPDATE SERVICE

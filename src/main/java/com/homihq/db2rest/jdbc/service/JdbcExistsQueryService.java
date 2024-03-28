@@ -6,7 +6,7 @@ import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.rest.read.dto.ExistsResponse;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
-import com.homihq.db2rest.jdbc.sql.QueryCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -20,7 +20,7 @@ public class JdbcExistsQueryService implements ExistsQueryService {
 
 	private final DbOperationService dbOperationService;
 	private final List<ReadProcessor> processorList;
-	private final QueryCreatorTemplate queryCreatorTemplate;
+	private final SqlCreatorTemplate sqlCreatorTemplate;
 
 	@Override
     public ExistsResponse exists(ReadContext readContext) {
@@ -28,7 +28,7 @@ public class JdbcExistsQueryService implements ExistsQueryService {
             processor.process(readContext);
         }
 
-        String sql = queryCreatorTemplate.createExistsQuery(readContext);
+        String sql = sqlCreatorTemplate.exists(readContext);
         log.debug("{}", sql);
         log.debug("{}", readContext.getParamMap());
 

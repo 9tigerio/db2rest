@@ -6,7 +6,6 @@ import com.homihq.db2rest.rest.read.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -16,17 +15,16 @@ import java.util.Map;
 import java.util.Objects;
 
 
-//@Component
 @Slf4j
 @RequiredArgsConstructor
-public class QueryCreatorTemplate {
+public class SqlCreatorTemplate {
 
 
     private final SpringTemplateEngine templateEngine;
 
-    public String createFindOneQuery(ReadContext readContext) {
+    public String findOne(ReadContext readContext) {
         Map<String,Object> data = new HashMap<>();
-        data.put("columns", createProjections(readContext.getCols()));
+        data.put("columns", projections(readContext.getCols()));
         data.put("rootTable", readContext.getRoot().render());
         data.put("rootWhere", readContext.getRootWhere());
 
@@ -35,7 +33,7 @@ public class QueryCreatorTemplate {
         return templateEngine.process("find-one", context);
     }
 
-    public String createCountQuery(ReadContext readContext) {
+    public String count(ReadContext readContext) {
         Map<String,Object> data = new HashMap<>();
 
         data.put("rootTable", readContext.getRoot().render());
@@ -46,7 +44,7 @@ public class QueryCreatorTemplate {
         return templateEngine.process("count", context);
     }
 
-    public String createExistsQuery(ReadContext readContext) {
+    public String exists(ReadContext readContext) {
         Map<String, Object> data = new HashMap<>();
 
         data.put("rootTable", readContext.getRoot().render());
@@ -60,18 +58,18 @@ public class QueryCreatorTemplate {
     }
 
 
-    public String createQuery(ReadContext readContext) {
+    public String query(ReadContext readContext) {
 
         log.debug("**** Preparing to render ****");
 
         Map<String,Object> data = new HashMap<>();
-        data.put("columns", createProjections(readContext.getCols()));
+        data.put("columns", projections(readContext.getCols()));
         data.put("rootTable", readContext.getRoot().render());
         data.put("rootWhere", readContext.getRootWhere());
         data.put("joins", readContext.getDbJoins());
 
         if(Objects.nonNull(readContext.getDbSortList()) && !readContext.getDbSortList().isEmpty()) {
-            data.put("sorts", createOrderBy(readContext.getDbSortList()));
+            data.put("sorts", orderBy(readContext.getDbSortList()));
         }
 
 
@@ -87,14 +85,14 @@ public class QueryCreatorTemplate {
 
     }
 
-    public String createProjections(List<DbColumn> columns) {
+    public String projections(List<DbColumn> columns) {
         List<String> columList =
         columns.stream().map(DbColumn::renderWithAlias).toList();
 
         return StringUtils.join(columList, "\n\t,");
     }
 
-    public String createOrderBy(List<DbSort> sorts) {
+    public String orderBy(List<DbSort> sorts) {
         List<String> sortList =
                 sorts.stream().map(DbSort::render).toList();
 

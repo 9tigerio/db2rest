@@ -4,7 +4,7 @@ import com.homihq.db2rest.core.DbOperationService;
 import com.homihq.db2rest.core.service.ReadService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.jdbc.sql.QueryCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class JdbcReadService implements ReadService {
 
     private final DbOperationService dbOperationService;
     private final List<ReadProcessor> processorList;
-    private final QueryCreatorTemplate queryCreatorTemplate;
+    private final SqlCreatorTemplate sqlCreatorTemplate;
 
     @Override
     public Object findAll(ReadContext readContext) {
@@ -26,7 +26,7 @@ public class JdbcReadService implements ReadService {
             processor.process(readContext);
         }
 
-        String sql = queryCreatorTemplate.createQuery(readContext);
+        String sql = sqlCreatorTemplate.query(readContext);
         log.debug("{}", sql);
         log.debug("{}", readContext.getParamMap());
 
