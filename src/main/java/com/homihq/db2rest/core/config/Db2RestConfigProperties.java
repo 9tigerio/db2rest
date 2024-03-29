@@ -21,6 +21,7 @@ import java.util.List;
 public class Db2RestConfigProperties {
 
     private boolean allowSafeDelete;
+    private DataSource datasource;
 
     @Deprecated
     private List<String> schemas; //TODO validate
@@ -28,29 +29,10 @@ public class Db2RestConfigProperties {
     private MultiTenancy multiTenancy;
 
 
-
-    @Deprecated
-    public String [] getSchemas() {
-        String[] schemaList = new String[schemas.size()];
-        schemas.toArray(schemaList);
-
-        return schemaList;
-    }
-
     public void checkDeleteAllowed(String filter) {
         if (StringUtils.isBlank(filter) && allowSafeDelete)
             throw new DeleteOpNotAllowedException(true);
     }
-
-    @Deprecated
-    public void verifySchema(String schemaName) {
-
-        if(!multiTenancy.isEnabled() && !schemas.contains(schemaName)) {
-            log.error("Invalid schema found - {}", schemaName);
-            throw new InvalidSchemaException(schemaName);
-        }
-    }
-
 
 
 }

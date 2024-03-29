@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.config;
 
 import com.homihq.db2rest.core.Dialect;
+import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.processor.*;
@@ -23,8 +24,8 @@ public class JdbcSchemaCacheConfiguration {
 
 
     @Bean
-    public JdbcSchemaCache schemaCache(DataSource dataSource) {
-        return new JdbcSchemaCache(dataSource);
+    public JdbcSchemaCache schemaCache(DataSource dataSource, Db2RestConfigProperties db2RestConfigProperties) {
+        return new JdbcSchemaCache(dataSource, db2RestConfigProperties);
     }
 
     @Bean
