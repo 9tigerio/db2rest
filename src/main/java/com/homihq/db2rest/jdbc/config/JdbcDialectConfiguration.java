@@ -25,7 +25,7 @@ public class JdbcDialectConfiguration {
     }
 
     @Bean
-    @ConditionalOnExpression("#{'${spring.datasource.url}'.contains('oracle') or '${db2rest.datasource.type}'.equals('jdbc-orcl')}")
+    @ConditionalOnExpression("#{'${spring.datasource.url}'.contains('oracle') or '${db2rest.datasource.type}'.contains('jdbc-orcl')}")
     public OracleDialect oracleDialect(ObjectMapper objectMapper) {
         return new OracleDialect(objectMapper);
     }
