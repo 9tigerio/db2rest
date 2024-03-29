@@ -10,7 +10,7 @@ import java.util.List;
 public record DbTable(String schema, String name, String fullName, String alias, List<DbColumn> dbColumns) {
 
     public String render() {
-        return name + " " + alias;
+        return fullName + " " + alias;
     }
 
     public DbTable copyWithAlias(String tableAlias) {

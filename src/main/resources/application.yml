@@ -33,6 +33,9 @@ spring:
 db2rest:
   datasource:
     type: ${DATASOURCE_TYPE:jdbc}
+    includeSchemas: ${INCLUDE_SCHEMAS:""}
+    includeTables: ${INCLUDE_TABLES:""}
+    includeCatalogs: ${INCLUDE_CATALOGS:""}
 
   auth:
     type: ${AUTH_TYPE:none}
@@ -63,23 +66,9 @@ logging:
     com.homihq.db2rest:
       rest: DEBUG
       jdbc.service: DEBUG
-    org.springframework.web : DEBUG
-    schemacrawler:
-      schemacrawler: ERROR
-      crawl: ERROR
-    us:
-      fatehi:
-        utility:
-          scheduler: ERROR
-    org:
-      springframework:
-        beans : ERROR
-        web: INFO
-        test:
-          context:
-            jdbc: INFO
+    org.springframework.web : INFO
+    org.springframework.beans : INFO
+    schemacrawler.schemacrawler: ERROR
+    schemacrawler.crawl: ERROR
+    us.fatehi.utility.scheduler: ERROR
 
-        jdbc:
-          datasource:
-            init: DEBUG
-          core.*: DEBUG

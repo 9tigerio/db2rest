@@ -80,7 +80,7 @@ public class JoinProcessor implements ReadProcessor {
 
     private void addJoin(DbTable table, DbTable rootTable, JoinDetail joinDetail, ReadContext readContext) {
         DbJoin join = new DbJoin();
-        join.setTableName(table.name());
+        join.setTableName(table.fullName());
         join.setAlias(table.alias());
         join.setJoinType(joinDetail.getJoinType());
 

@@ -1,10 +1,12 @@
 package com.homihq.db2rest.jdbc;
 
+import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.exception.InvalidTableException;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
 import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
 
+import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
 import com.homihq.db2rest.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
@@ -12,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import org.springframework.jdbc.core.metadata.GenericTableMetaDataProvider;
-import org.springframework.jdbc.core.metadata.OracleTableMetaDataProvider;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.jdbc.support.MetaDataAccessException;
 import schemacrawler.schema.*;
@@ -22,7 +22,6 @@ import schemacrawler.tools.utility.SchemaCrawlerUtility;
 import us.fatehi.utility.datasource.DatabaseConnectionSources;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,21 +30,29 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class JdbcSchemaCache implements SchemaCache {
 
     private final DataSource dataSource;
-
+    private final Db2RestConfigProperties db2RestConfigProperties;
     private Map<String,DbTable> dbTableMap;
 
     @PostConstruct
     private void reload() {
 
         this.dbTableMap = new ConcurrentHashMap<>();
-        createSchemaCache();
-        //loadMetaData();
+        //createSchemaCache();
+        loadMetaData();
     }
 
     private void loadMetaData() {
         log.info("Loading meta data");
         try {
-            JdbcUtils.extractDatabaseMetaData(dataSource, new JdbcMetaDataProvider());
+
+            DbMeta dbMeta = JdbcUtils.extractDatabaseMetaData(dataSource, new JdbcMetaDataProvider(db2RestConfigProperties));
+
+            //log.info("DbMeta - {}", dbMeta);
+
+            for (final  DbTable dbTable : dbMeta.dbTables()) {
+                dbTableMap.put(dbTable.name(), dbTable);
+            }
+
         } catch (MetaDataAccessException e) {
             throw new RuntimeException(e);
         }
@@ -78,6 +85,7 @@ public final class JdbcSchemaCache implements SchemaCache {
             }
         }
 
+
     }
 
     private DbTable createTable(Table table) {
@@ -103,6 +111,10 @@ public final class JdbcSchemaCache implements SchemaCache {
     private List<DbColumn> buildColumns(String tableAlias, Table table) {
         return table.getColumns()
                 .stream()
+                .peek(column -> log.info("Col -> {} | {} | {}",
+                        column.getName(),
+                        column.getType().getName(),
+                        column.getType().getTypeMappedClass()))
                 .map(column -> createDbColumn(table.getName(), tableAlias, column))
                 .toList();
     }
