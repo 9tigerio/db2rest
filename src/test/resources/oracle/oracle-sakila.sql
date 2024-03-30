@@ -176,6 +176,9 @@ CREATE TABLE language (
 
 CREATE SEQUENCE language_sequence;
 
+
+
+
 /*
 CREATE OR REPLACE TRIGGER language_before_trigger
 BEFORE INSERT ON language FOR EACH ROW
@@ -187,6 +190,29 @@ END IF;
   :NEW.last_update:=current_date;
 END;
 */
+
+
+
+CREATE TABLE director (
+      director_id INT NOT NULL, --- this column will be filled with TSID long value
+      first_name VARCHAR(45) NOT NULL,
+      last_name VARCHAR(45) NOT NULL,
+      last_update DATE DEFAULT sysdate,
+      CONSTRAINT pk_director PRIMARY KEY (director_id)
+
+);
+
+
+--
+-- Table structure for table `vanity_van`
+--
+
+CREATE TABLE vanity_van (
+        van_id VARCHAR(45) NOT NULL, --- this column will be filled with TSID string value
+        name VARCHAR(45) NOT NULL,
+        last_update DATE DEFAULT sysdate,
+        CONSTRAINT pk_vanity_van PRIMARY KEY (van_id)
+);
 
 CREATE OR REPLACE TRIGGER language_before_update
 BEFORE UPDATE ON language FOR EACH ROW
@@ -292,7 +318,7 @@ CREATE TABLE film (
                       replacement_cost DECIMAL(5,2) DEFAULT 19.99 NOT NULL,
                       rating VARCHAR(10) DEFAULT 'G',
                       special_features VARCHAR(100) DEFAULT NULL,
-                      last_update DATE NOT NULL,
+                      last_update DATE DEFAULT sysdate,
                       CONSTRAINT pk_film PRIMARY KEY  (film_id),
                       CONSTRAINT fk_film_language FOREIGN KEY (language_id) REFERENCES language (language_id) ,
                       CONSTRAINT fk_film_language_original FOREIGN KEY (original_language_id) REFERENCES language (language_id)
@@ -313,7 +339,7 @@ CREATE  INDEX idx_fk_original_language_id ON film(original_language_id);
 
 ---DROP SEQUENCE film_sequence;
 
-CREATE SEQUENCE film_sequence;
+CREATE SEQUENCE film_sequence INCREMENT BY 1 START WITH 6;
 
 /*
 CREATE OR REPLACE TRIGGER film_before_trigger

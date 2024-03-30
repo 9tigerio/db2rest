@@ -14,19 +14,19 @@ import java.util.Map;
 public class TSIDProcessor {
 
     public Map<String,Object> processTsId(Map<String, Object> data, List<DbColumn> pkColumns) {
-        log.debug("PK Columns - {}", pkColumns);
+        log.info("PK Columns - {}", pkColumns);
 
         Map<String,Object> generatedKeys = new HashMap<>();
 
         for(DbColumn dbColumn : pkColumns) {
 
-            log.debug("isGenerated - {}", dbColumn.generated());
-            log.debug("isAutoIncremented - {}", dbColumn.autoIncremented());
+            log.info("isGenerated - {}", dbColumn.generated());
+            log.info("isAutoIncremented - {}", dbColumn.autoIncremented());
 
             if(!dbColumn.generated() && !dbColumn.autoIncremented()) {
                 //detect type
 
-                log.debug("detect type of the TSID column - {}", dbColumn.columnDataTypeName());
+                log.info("detect type of the TSID column - {}", dbColumn.columnDataTypeName());
 
                 if(dbColumn.isIntFamily()) {
                     log.debug("PK of Int family");
