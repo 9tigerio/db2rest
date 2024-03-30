@@ -11,5 +11,5 @@ public interface BulkCreateService {
     CreateBulkResponse saveBulk(String schemaName, String tableName,
                                 List<String> includedColumns,
                                 List<Map<String, Object>> dataList,
-                                boolean tsIdEnabled);
+                                boolean tsIdEnabled, List<String> sequences);
 }

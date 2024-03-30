@@ -93,4 +93,13 @@ public class JdbcOperationService implements DbOperationService {
 
         return new CreateBulkResponse(updateCounts, keyHolder.getKeyList());
     }
+
+
+    public CreateBulkResponse batchUpdate(List<Map<String, Object>> dataList, String sql) {
+        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
+
+        int[] updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch);
+
+        return new CreateBulkResponse(updateCounts, null);
+    }
 }

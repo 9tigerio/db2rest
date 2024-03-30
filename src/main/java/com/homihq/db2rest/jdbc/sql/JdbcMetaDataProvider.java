@@ -26,17 +26,22 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
     public DbMeta processMetaData(DatabaseMetaData databaseMetaData) throws SQLException, MetaDataAccessException {
 
         log.info("Preparing database meta-data - {}", databaseMetaData);
-        log.info("Properties - {}", db2RestConfigProperties.getDatasource());
+        log.debug("Properties - {}", db2RestConfigProperties.getDatasource());
 
         String productName = databaseMetaData.getDatabaseProductName();
         String productVersion = databaseMetaData.getDatabaseProductVersion();
         String driverName = databaseMetaData.getDriverName();
         String driverVersion = databaseMetaData.getDriverVersion();
 
+        log.info("productName - {}", productName);
+        log.info("productVersion - {}", productVersion);
+        log.info("driverName - {}", driverName);
+        log.info("driverVersion - {}", driverVersion);
+
         List<DbTable> dbTables = new ArrayList<>();
 
         //String schemaPattern  = StringUtils.isEmpty(db2RestConfigProperties.getDatasource().getIncludeSchemas()) ? db2RestConfigProperties.getDatasource().getIncludeSchemas() : null;
-        log.info("schemaPattern - {}", db2RestConfigProperties.getDatasource().getSchemaPattern());
+        log.debug("schemaPattern - {}", db2RestConfigProperties.getDatasource().getSchemaPattern());
 
         try(ResultSet resultSet = databaseMetaData.getTables(
                 null,
@@ -49,7 +54,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
                 String schema = resultSet.getString("TABLE_SCHEM");
                 String tableType = resultSet.getString("TABLE_TYPE");
 
-                log.info("{} , {} , {}, {} ", catalog, schema, tableName, tableType);
+                log.debug("{} , {} , {}, {} ", catalog, schema, tableName, tableType);
 
                 String tableAlias = getAlias(tableName);
 
@@ -66,6 +71,8 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
             }
         }
+
+        log.info("Completed loading database meta-data : {} tables", dbTables.size());
 
         return new DbMeta(productName, productVersion, driverName, driverVersion, dbTables);
     }

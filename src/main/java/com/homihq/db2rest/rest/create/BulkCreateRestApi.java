@@ -14,6 +14,7 @@ public interface BulkCreateRestApi {
     )
     CreateBulkResponse save(@PathVariable String tableName,
                             @RequestParam(name = "columns", required = false) List<String> includeColumns,
+                            @RequestParam(name = "sequences", required = false) List<String> sequences,
                             @RequestParam(name = "tsIdEnabled", required = false, defaultValue = "false") boolean tsIdEnabled,
                             HttpServletRequest request) throws Exception;
 }

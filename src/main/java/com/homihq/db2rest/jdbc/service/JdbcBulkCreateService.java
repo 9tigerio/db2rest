@@ -6,6 +6,7 @@ import com.homihq.db2rest.core.service.BulkCreateService;
 import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.dto.InsertableColumn;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
@@ -38,7 +39,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
     public CreateBulkResponse saveBulk(String schemaName, String tableName,
                                        List<String> includedColumns,
                                        List<Map<String, Object>> dataList,
-                                       boolean tsIdEnabled) {
+                                       boolean tsIdEnabled, List<String> sequences) {
         if (Objects.isNull(dataList) || dataList.isEmpty()) throw new GenericDataAccessException("No data provided");
 
         log.debug("** Bulk Insert **");
@@ -71,18 +72,38 @@ public class JdbcBulkCreateService implements BulkCreateService {
                 }
             }
 
+            //4. convert to insertable column object
+            List<InsertableColumn> insertableColumnList = new ArrayList<>();
+
+            for(String colName : insertableColumns) {
+                insertableColumnList.add(new InsertableColumn(colName, null));
+            }
+
+            log.info("Sequences - {}", sequences);
+            if(Objects.nonNull(sequences)) { //handle oracle sequence
+                for(String sequence : sequences) {
+                    String [] colSeq = sequence.split(":");
+                    //Check if size = 2, else ignore, fall at insert
+                    if(colSeq.length == 2) {
+                        insertableColumnList.add(new InsertableColumn(colSeq[0], dbTable.schema() + "." + colSeq[1] + ".nextval"));
+                    }
+                }
+            }
+
             for(Map<String,Object> data : dataList)
                 this.dialect.processTypes(dbTable, insertableColumns, data);
 
             log.debug("Finally insertable columns - {}", insertableColumns);
 
-            CreateContext context = new CreateContext(dbTable, insertableColumns, null);
+            CreateContext context = new CreateContext(dbTable, insertableColumns, insertableColumnList);
             String sql = sqlCreatorTemplate.create(context);
 
             log.debug("SQL - {}", sql);
             log.debug("Data - {}", dataList);
 
-            CreateBulkResponse createBulkResponse = dbOperationService.batchUpdate(dataList, sql, dbTable);
+            CreateBulkResponse createBulkResponse =
+                    this.dialect.supportBatchReturnKeys() ?
+                    dbOperationService.batchUpdate(dataList, sql, dbTable) : dbOperationService.batchUpdate(dataList, sql);
 
             if(tsIdEnabled && Objects.isNull(createBulkResponse.keys())){
                 return new CreateBulkResponse(createBulkResponse.rows(), tsIds);
