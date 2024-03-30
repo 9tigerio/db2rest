@@ -28,18 +28,6 @@
 
     <dependencies>
 
-        <!-- TO BE REMOVED -->
-        <dependency>
-            <groupId>org.joda</groupId>
-            <artifactId>joda-convert</artifactId>
-            <version>2.2.3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,42 +60,6 @@
             <version>2.15.1</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>us.fatehi</groupId>
-            <artifactId>schemacrawler-mysql</artifactId>
-            <version>16.20.7</version>
-
-            <exclusions>
-                <exclusion>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-nop</artifactId>
-                </exclusion>
-
-            </exclusions>
-        </dependency>
-
-
-        <dependency>
-            <groupId>us.fatehi</groupId>
-            <artifactId>schemacrawler-postgresql</artifactId>
-            <version>16.20.7</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-nop</artifactId>
-                </exclusion>
-
-            </exclusions>
-        </dependency>
 
         <!-- To be removed -->
 

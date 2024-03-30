@@ -7,7 +7,6 @@ import com.homihq.db2rest.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.convert.StringConvert;
 import org.postgresql.util.PGobject;
 
 import java.time.LocalDateTime;
@@ -75,14 +74,6 @@ public class PostGreSQLDialect implements Dialect {
 
     private OffsetDateTime convertToOffsetDateTime(String value) {
         return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-    }
-
-    private Object convertToInt(Object value) {
-        if (value.getClass().isAssignableFrom(Integer.class)) {
-            return value;
-        } else {
-            return StringConvert.INSTANCE.convertFromString(Integer.class, value.toString());
-        }
     }
 
     private Object convertToJson(Object value, String columnDataTypeName) {
