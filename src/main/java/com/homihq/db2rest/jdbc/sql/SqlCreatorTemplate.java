@@ -3,7 +3,7 @@ package com.homihq.db2rest.jdbc.sql;
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbSort;
-import com.homihq.db2rest.rest.create.dto.CreateContext;
+import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.rest.update.dto.UpdateContext;
@@ -62,7 +62,7 @@ public class SqlCreatorTemplate {
 
     }
 
-    public String createQuery(CreateContext createContext) {
+    public String create(CreateContext createContext) {
 
         Map<String,Object> data = new HashMap<>();
 

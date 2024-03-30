@@ -105,4 +105,9 @@ public class D1OperationService implements DbOperationService {
     public CreateBulkResponse batchUpdate(List<Map<String, Object>> dataList, String sql, DbTable dbTable) {
         return null;
     }
+
+    @Override
+    public CreateBulkResponse batchUpdate(List<Map<String, Object>> dataList, String sql) {
+        return null;
+    }
 }

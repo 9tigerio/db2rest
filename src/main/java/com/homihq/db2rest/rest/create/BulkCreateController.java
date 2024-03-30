@@ -23,6 +23,7 @@ public class BulkCreateController implements BulkCreateRestApi {
 
     public CreateBulkResponse save( String tableName,
                                     List<String> includeColumns,
+                                    List<String> sequences,
                                     boolean tsIdEnabled,
                                     HttpServletRequest request) throws Exception{
 
@@ -36,7 +37,7 @@ public class BulkCreateController implements BulkCreateRestApi {
 
 
         return
-                bulkCreateService.saveBulk(null, tableName, includeColumns, data, tsIdEnabled);
+                bulkCreateService.saveBulk(null, tableName, includeColumns, data, tsIdEnabled, sequences);
 
     }
 }

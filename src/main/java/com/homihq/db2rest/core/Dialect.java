@@ -8,7 +8,9 @@ import java.util.Map;
 
 public interface Dialect {
 
-
+    default boolean supportBatchReturnKeys() {
+        return true;
+    }
     default boolean supportAlias() {
         return true;
     }

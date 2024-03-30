@@ -20,11 +20,12 @@ public class CreateController implements CreateRestApi {
     @Override
     public CreateResponse save(String tableName,
                                List<String> includeColumns,
+                               List<String> sequences,
                                Map<String, Object> data,
                                boolean tsIdEnabled) {
 
         return createService
-                .save(null, tableName, includeColumns, data, tsIdEnabled);
+                .save(null, tableName, includeColumns, data, tsIdEnabled, sequences);
 
     }
 

@@ -19,6 +19,11 @@ public class OracleDialect implements Dialect {
     private final ObjectMapper objectMapper;
 
     @Override
+    public boolean supportBatchReturnKeys() {
+        return false;
+    }
+
+    @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {
 
         try {

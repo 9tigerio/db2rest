@@ -24,7 +24,7 @@ public class JdbcSchemaCacheConfiguration {
 
 
     @Bean
-    public JdbcSchemaCache schemaCache(DataSource dataSource, Db2RestConfigProperties db2RestConfigProperties) {
+    public JdbcSchemaCache schemaCache(DataSource dataSource,  Db2RestConfigProperties db2RestConfigProperties) {
         return new JdbcSchemaCache(dataSource, db2RestConfigProperties);
     }
 

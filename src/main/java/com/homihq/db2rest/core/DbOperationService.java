@@ -27,4 +27,6 @@ public interface DbOperationService {
     CreateResponse create(Map<String, Object> data, String sql, DbTable dbTable);
 
     CreateBulkResponse batchUpdate(List<Map<String, Object>> dataList, String sql, DbTable dbTable);
+
+    CreateBulkResponse batchUpdate(List<Map<String, Object>> dataList, String sql);
 }

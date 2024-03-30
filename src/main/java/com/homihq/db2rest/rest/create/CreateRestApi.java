@@ -12,6 +12,7 @@ public interface CreateRestApi {
     @PostMapping("/{tableName}")
     CreateResponse save(@PathVariable String tableName,
                         @RequestParam(name = "columns", required = false) List<String> includeColumns,
+                        @RequestParam(name = "sequences", required = false) List<String> sequences,
                         @RequestBody Map<String, Object> data,
                         @RequestParam(name = "tsIdEnabled", required = false, defaultValue = "false") boolean tsIdEnabled);
 }
