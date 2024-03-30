@@ -54,7 +54,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
                 String schema = resultSet.getString("TABLE_SCHEM");
                 String tableType = resultSet.getString("TABLE_TYPE");
 
-                log.debug("{} , {} , {}, {} ", catalog, schema, tableName, tableType);
+                log.info("{} , {} , {}, {} ", catalog, schema, tableName, tableType);
 
                 String tableAlias = getAlias(tableName);
 

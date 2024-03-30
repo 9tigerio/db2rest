@@ -28,11 +28,11 @@ public record DbColumn(String tableName, String name, String alias, String table
 
     public boolean isIntFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
-                "SMALLINT", "int8", "BIGINT UNSIGNED","INTEGER");
+                "SMALLINT", "int8", "BIGINT UNSIGNED","INTEGER", "NUMBER");
     }
     public boolean isStringFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
-                "VARCHAR","TEXT");
+                "VARCHAR","TEXT", "VARCHAR2");
     }
 
     public DbColumn copyWithAlias(String columnAlias) {

@@ -60,17 +60,6 @@
             <version>2.15.1</version>
         </dependency>
 
-
-        <!-- To be removed -->
-
-        <!--
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-        </dependency>
-        -->
-
-
         <dependency>
             <groupId>io.github.nstdio</groupId>
             <artifactId>rsql-parser</artifactId>
