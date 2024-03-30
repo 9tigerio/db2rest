@@ -8,7 +8,7 @@ import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
-import com.homihq.db2rest.rest.create.dto.CreateContext;
+import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
 import lombok.RequiredArgsConstructor;
@@ -76,8 +76,8 @@ public class JdbcBulkCreateService implements BulkCreateService {
 
             log.debug("Finally insertable columns - {}", insertableColumns);
 
-            CreateContext context = new CreateContext(dbTable, insertableColumns);
-            String sql = sqlCreatorTemplate.createQuery(context);
+            CreateContext context = new CreateContext(dbTable, insertableColumns, null);
+            String sql = sqlCreatorTemplate.create(context);
 
             log.debug("SQL - {}", sql);
             log.debug("Data - {}", dataList);
