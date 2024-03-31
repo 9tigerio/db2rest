@@ -31,6 +31,7 @@ spring:
     location: classpath:banner.txt
 
 db2rest:
+  defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
   datasource:
     type: ${DATASOURCE_TYPE:jdbc}
     includeSchemas: ${INCLUDE_SCHEMAS:""}

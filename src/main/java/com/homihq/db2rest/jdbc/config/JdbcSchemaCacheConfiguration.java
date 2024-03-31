@@ -65,8 +65,8 @@ public class JdbcSchemaCacheConfiguration {
 
     @Bean
     @DependsOn("textTemplateResolver")
-    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, Dialect dialect) {
-        return new SqlCreatorTemplate(templateEngine, dialect);
+    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, Dialect dialect, Db2RestConfigProperties db2RestConfigProperties) {
+        return new SqlCreatorTemplate(templateEngine, dialect, db2RestConfigProperties);
     }
 
 

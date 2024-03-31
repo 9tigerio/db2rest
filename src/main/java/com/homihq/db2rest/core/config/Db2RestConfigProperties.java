@@ -21,11 +21,11 @@ import java.util.List;
 public class Db2RestConfigProperties {
 
     private boolean allowSafeDelete;
-    private DataSource datasource;
+    private int defaultFetchLimit;
 
     @Deprecated
     private List<String> schemas; //TODO validate
-
+    private DataSource datasource;
     private MultiTenancy multiTenancy;
 
 

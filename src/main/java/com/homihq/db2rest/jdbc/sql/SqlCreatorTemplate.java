@@ -1,15 +1,18 @@
 package com.homihq.db2rest.jdbc.sql;
 
 import com.homihq.db2rest.core.Dialect;
+import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbSort;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.rest.delete.dto.DeleteContext;
 import com.homihq.db2rest.rest.read.dto.ReadContext;
 import com.homihq.db2rest.rest.update.dto.UpdateContext;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -26,6 +29,7 @@ public class SqlCreatorTemplate {
 
     private final SpringTemplateEngine templateEngine;
     private final Dialect dialect;
+    private final Db2RestConfigProperties db2RestConfigProperties;
 
     public String updateQuery(UpdateContext updateContext) {
 
@@ -129,6 +133,8 @@ public class SqlCreatorTemplate {
 
 
         if(readContext.getLimit() > -1) data.put("limit", readContext.getLimit());
+        if(readContext.getLimit() == -1) data.put("limit", db2RestConfigProperties.getDefaultFetchLimit());
+
         if(readContext.getOffset() > -1) data.put("offset", readContext.getOffset());
 
         //log.info("data - {}", data);

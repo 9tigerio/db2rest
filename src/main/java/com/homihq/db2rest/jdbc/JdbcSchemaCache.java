@@ -31,7 +31,6 @@ public final class JdbcSchemaCache implements SchemaCache {
     private void reload() {
 
         this.dbTableMap = new ConcurrentHashMap<>();
-        //createSchemaCache();
         loadMetaData();
     }
 
@@ -40,8 +39,6 @@ public final class JdbcSchemaCache implements SchemaCache {
         try {
 
             DbMeta dbMeta = JdbcUtils.extractDatabaseMetaData(dataSource, new JdbcMetaDataProvider(db2RestConfigProperties));
-
-            //log.info("DbMeta - {}", dbMeta);
 
             for (final  DbTable dbTable : dbMeta.dbTables()) {
                 dbTableMap.put(dbTable.name(), dbTable);
