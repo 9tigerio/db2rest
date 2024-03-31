@@ -13,8 +13,8 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @TestConfiguration(proxyBeanMethods = false)
-@Profile("it-orcl10g")
-public class Oracle10gContainerConfiguration {
+@Profile("it-oracle")
+public class OracleContainerConfiguration {
 
     private static final List<String> oracleScripts = List.of("oracle/oracle-sakila.sql"
         ,"oracle/oracle-sakila-data.sql");

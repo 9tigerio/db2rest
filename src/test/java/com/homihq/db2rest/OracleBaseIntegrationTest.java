@@ -6,8 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 @Import(MySQLContainerConfiguration.class)
-@ActiveProfiles("it-orcl10g")
-public class Oracle10gBaseIntegrationTest extends BaseIntegrationTest{
+@ActiveProfiles("it-oracle")
+public class OracleBaseIntegrationTest extends BaseIntegrationTest{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

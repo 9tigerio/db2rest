@@ -15,6 +15,18 @@ public interface Dialect {
         return true;
     }
 
+    default String getProductName() {
+        return "";
+    }
+
+    default String getProductFamily() {
+        return "";
+    }
+
+    default int getMajorVersion() {
+        return -1;
+    }
+
     void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
 
 

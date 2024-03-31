@@ -2,36 +2,19 @@ package com.homihq.db2rest.jdbc.config;
 
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
-import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.jdbc.core.metadata.TableMetaDataProvider;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import javax.sql.DataSource;
 
 @Configuration
-public class JdbcSchemaCacheConfiguration {
-
-
-    @Bean
-    public JdbcSchemaCache schemaCache(DataSource dataSource,  Db2RestConfigProperties db2RestConfigProperties) {
-        return new JdbcSchemaCache(dataSource, db2RestConfigProperties);
-    }
-
-    @Bean
-    public JdbcOperationService operationService(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        return new JdbcOperationService(namedParameterJdbcTemplate);
-    }
+public class JdbcProcessorConfiguration {
 
     @Bean
     public TSIDProcessor tsidProcessor() {
@@ -65,8 +48,8 @@ public class JdbcSchemaCacheConfiguration {
 
     @Bean
     @DependsOn("textTemplateResolver")
-    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, Dialect dialect) {
-        return new SqlCreatorTemplate(templateEngine, dialect);
+    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, Dialect dialect, Db2RestConfigProperties db2RestConfigProperties) {
+        return new SqlCreatorTemplate(templateEngine, dialect, db2RestConfigProperties);
     }
 
 

@@ -29,12 +29,14 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         log.debug("Properties - {}", db2RestConfigProperties.getDatasource());
 
         String productName = databaseMetaData.getDatabaseProductName();
+        int majorVersion = databaseMetaData.getDatabaseMajorVersion();
         String productVersion = databaseMetaData.getDatabaseProductVersion();
         String driverName = databaseMetaData.getDriverName();
         String driverVersion = databaseMetaData.getDriverVersion();
 
         log.info("productName - {}", productName);
         log.info("productVersion - {}", productVersion);
+        log.info("majorVersion - {}", majorVersion);
         log.info("driverName - {}", driverName);
         log.info("driverVersion - {}", driverVersion);
 
@@ -54,7 +56,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
                 String schema = resultSet.getString("TABLE_SCHEM");
                 String tableType = resultSet.getString("TABLE_TYPE");
 
-                log.info("{} , {} , {}, {} ", catalog, schema, tableName, tableType);
+                log.debug("{} , {} , {}, {} ", catalog, schema, tableName, tableType);
 
                 String tableAlias = getAlias(tableName);
 
@@ -74,7 +76,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
         log.info("Completed loading database meta-data : {} tables", dbTables.size());
 
-        return new DbMeta(productName, productVersion, driverName, driverVersion, dbTables);
+        return new DbMeta(productName, majorVersion, driverName, driverVersion, dbTables);
     }
 
     private List<DbColumn> getAllColumns(DatabaseMetaData databaseMetaData, String catalog, String schema,

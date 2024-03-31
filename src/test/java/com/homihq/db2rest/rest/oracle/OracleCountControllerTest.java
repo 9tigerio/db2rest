@@ -1,7 +1,6 @@
-package com.homihq.db2rest.rest;
+package com.homihq.db2rest.rest.oracle;
 
-import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import com.homihq.db2rest.Oracle10gBaseIntegrationTest;
+import com.homihq.db2rest.OracleBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 
@@ -11,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(202)
-class OracleCountControllerTest extends Oracle10gBaseIntegrationTest {
+class OracleCountControllerTest extends OracleBaseIntegrationTest {
 
 
     @Test
