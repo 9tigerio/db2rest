@@ -132,17 +132,35 @@ public class SqlCreatorTemplate {
         }
 
 
+        log.info("limit - {}", readContext.getLimit());
+        log.info("offset - {}", readContext.getOffset());
+
+
         if(readContext.getLimit() > -1) data.put("limit", readContext.getLimit());
         if(readContext.getLimit() == -1) data.put("limit", db2RestConfigProperties.getDefaultFetchLimit());
 
         if(readContext.getOffset() > -1) data.put("offset", readContext.getOffset());
 
-        //log.info("data - {}", data);
+        String template = "read";
 
+        log.info("Product family - {}", this.dialect.getProductFamily());
+        log.info("Product family - {}", this.dialect.getMajorVersion());
 
+        //TODO DB specific processing must move away
+        if(StringUtils.equalsIgnoreCase(this.dialect.getProductFamily(), "Oracle")) {
+
+            if(this.dialect.getMajorVersion() >= 12) {
+                template = "read-ora-12";
+            }
+            else {
+                template = "read-ora-9";
+            }
+        }
+        log.info("template - {}", template);
+        log.info("data - {}", data);
         Context context = new Context();
         context.setVariables(data);
-        return templateEngine.process("read", context);
+        return templateEngine.process(template, context);
 
     }
 

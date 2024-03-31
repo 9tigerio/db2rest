@@ -8,9 +8,11 @@ import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
 import com.homihq.db2rest.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.jdbc.support.MetaDataAccessException;
 
@@ -26,6 +28,24 @@ public final class JdbcSchemaCache implements SchemaCache {
     private final DataSource dataSource;
     private final Db2RestConfigProperties db2RestConfigProperties;
     private Map<String,DbTable> dbTableMap;
+
+    @Getter
+    private String productName;
+
+    @Getter
+    private int productVersion;
+
+    public boolean isOracle() {
+        return StringUtils.containsIgnoreCase(productName, "Oracle");
+    }
+
+    public boolean isMySQL() {
+        return StringUtils.containsIgnoreCase(productName, "MySQL");
+    }
+
+    public boolean isPostGreSQL() {
+        return StringUtils.containsIgnoreCase(productName, "PostGreSQL");
+    }
 
     @PostConstruct
     private void reload() {
@@ -44,13 +64,13 @@ public final class JdbcSchemaCache implements SchemaCache {
                 dbTableMap.put(dbTable.name(), dbTable);
             }
 
+            this.productName = dbMeta.productName();
+            this.productVersion = dbMeta.majorVersion();
+
         } catch (MetaDataAccessException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
 
 
     @Override
