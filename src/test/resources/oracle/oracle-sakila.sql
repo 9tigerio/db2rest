@@ -1,3 +1,24 @@
+--
+-- Table structure for table `tops`
+--
+
+CREATE TABLE tops (
+          top_item varchar(30) NOT NULL,
+          color varchar(30) NOT NULL,
+          t_size varchar(2) NOT NULL
+);
+--
+-- Table structure for table `bottoms`
+--
+
+CREATE TABLE bottoms (
+     bottom_item varchar(30) NOT NULL,
+     color varchar(30) NOT NULL,
+     b_size varchar(2) NOT NULL
+);
+
+
+
 
 --
 -- Table structure for table users
