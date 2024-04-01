@@ -54,3 +54,24 @@ Insert into userprofile (apid, auid, firstname, lastname, email, phone) values (
 
 Insert into users (auid,username,password) values (6, 'lexus1267','98hnfRT6');
 Insert into userprofile (apid, auid, firstname, lastname, email, phone) values (7, 7, 'Ivan', 'Levchenko', 'ivan_new@outlook.com','878511311054');
+
+
+-- tops
+
+
+Insert into tops (top_item, color,t_size) values ('sweater',	'red',	'M');
+
+Insert into tops (top_item, color,t_size) values ('shirt',	'blue',	'M');
+
+Insert into tops (top_item, color,t_size) values ('tank_top',	'white',	'S');
+
+
+-- bottoms
+
+Insert into bottoms (bottom_item, color,b_size) values ('jeans',	'blue'	,'M');
+
+Insert into bottoms (bottom_item, color,b_size) values ('skirt',	'black'	,'S');
+
+Insert into bottoms (bottom_item, color,b_size) values ('shorts',	'red'	,'S');
+
+
