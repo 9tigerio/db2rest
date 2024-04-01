@@ -1,39 +1,37 @@
-package com.homihq.db2rest.rest;
+package com.homihq.db2rest.rest.oracle;
 
 import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.homihq.db2rest.MySQLBaseIntegrationTest;
+import com.homihq.db2rest.OracleBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.AnyOf.anyOf;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(10)
+@Order(210)
 @TestWithResources
-class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
+class OracleBasicJoinControllerTest extends OracleBaseIntegrationTest {
 
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
 
-    @GivenJsonResource("/testdata/LEFT_JOIN.json")
+    @GivenJsonResource("/testdata/LEFT_JOIN_ORACLE.json")
     List<Map<String,Object>> LEFT_JOIN;
 
-    @GivenJsonResource("/testdata/RIGHT_JOIN.json")
+    @GivenJsonResource("/testdata/RIGHT_JOIN_ORACLE.json")
     List<Map<String,Object>> RIGHT_JOIN;
 
     @Disabled
@@ -42,23 +40,23 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     void testLeftJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
-               // .andDo(print())
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(4)))
                 .andExpect(jsonPath("$[0].*", hasSize(10)))
-                .andExpect(jsonPath("$[0].auid", equalTo(1)))
-                .andExpect(jsonPath("$[0].apid", equalTo(1)))
-                .andExpect(jsonPath("$[1].auid", equalTo(2)))
-                .andExpect(jsonPath("$[1].apid", nullValue()))
-                .andExpect(jsonPath("$[3].auid", equalTo(6)))
-                .andExpect(jsonPath("$[3].apid", nullValue()))
-                .andExpect(jsonPath("$[3].firstname", nullValue()))
-                .andDo(document("mysql-left-join"));
+                .andExpect(jsonPath("$[0].AUID", equalTo(1)))
+                .andExpect(jsonPath("$[0].APID", equalTo(1)))
+                .andExpect(jsonPath("$[1].AUID", equalTo(6)))
+                .andExpect(jsonPath("$[1].APID", nullValue()))
+                .andExpect(jsonPath("$[3].AUID", equalTo(4)))
+                .andExpect(jsonPath("$[3].APID", nullValue()))
+                .andExpect(jsonPath("$[3].FIRSTNAME", nullValue()))
+                .andDo(document("oracle-left-join"));
 
 
     }
@@ -69,32 +67,32 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     void testRightJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
                 )
-                //.andDo(print())
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(4)))
                 .andExpect(jsonPath("$[0].*", hasSize(10)))
-                .andExpect(jsonPath("$[0].auid", equalTo(1)))
-                .andExpect(jsonPath("$[0].apid", equalTo(1)))
-                .andExpect(jsonPath("$[0].apid", equalTo(1)))
-                .andExpect(jsonPath("$[0].firstname", equalTo("Jack")))
+                .andExpect(jsonPath("$[0].AUID", equalTo(1)))
+                .andExpect(jsonPath("$[0].APID", equalTo(1)))
+                .andExpect(jsonPath("$[0].USERNAME", equalTo("admin")))
+                .andExpect(jsonPath("$[0].FIRSTNAME", equalTo("Jack")))
 
-                .andExpect(jsonPath("$[1].auid", equalTo(3)))
-                .andExpect(jsonPath("$[1].apid", equalTo(2)))
-                .andExpect(jsonPath("$[1].username", nullValue()))
-                .andExpect(jsonPath("$[1].firstname", equalTo("Tom")))
+                .andExpect(jsonPath("$[1].AUID", equalTo(7)))
+                .andExpect(jsonPath("$[1].APID", equalTo(7)))
+                .andExpect(jsonPath("$[1].USERNAME", nullValue()))
+                .andExpect(jsonPath("$[1].FIRSTNAME", equalTo("Ivan")))
 
 
-                .andExpect(jsonPath("$[3].auid", equalTo(7)))
-                .andExpect(jsonPath("$[3].apid", equalTo(7)))
-                .andExpect(jsonPath("$[3].username", nullValue()))
-                .andExpect(jsonPath("$[3].firstname", equalTo("Ivan")))
+                .andExpect(jsonPath("$[3].AUID", equalTo(3)))
+                .andExpect(jsonPath("$[3].APID", equalTo(2)))
+                .andExpect(jsonPath("$[3].USERNAME", nullValue()))
+                .andExpect(jsonPath("$[3].FIRSTNAME", equalTo("Tom")))
 
-                .andDo(document("mysql-right-join"));
+                .andDo(document("oracle-right-join"));
 
 
     }
