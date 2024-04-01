@@ -1,14 +1,40 @@
+
+--
+-- Table structure for table users
+--
+--DROP TABLE users;
+
+CREATE TABLE users (
+       auid INT NOT NULL ,
+       username VARCHAR(45) NOT NULL,
+       password VARCHAR(45) NOT NULL,
+       createdate DATE  DEFAULT sysdate,
+       is_active char(1) DEFAULT 'Y',
+       CONSTRAINT pk_users PRIMARY KEY  (auid)
+);
+
+
+CREATE TABLE userprofile (
+     apid INT NOT NULL,
+     auid INT NOT NULL,
+     firstname VARCHAR(50) NOT NULL,
+     lastname VARCHAR(50) NOT NULL,
+     email VARCHAR(100) NOT NULL,
+     phone VARCHAR(45) NOT NULL,
+     CONSTRAINT pk_userprofile PRIMARY KEY  (apid)
+);
+
 --
 -- Table structure for table actor
 --
 --DROP TABLE actor;
 
 CREATE TABLE actor (
-                       actor_id INT NOT NULL ,
-                       first_name VARCHAR(45) NOT NULL,
-                       last_name VARCHAR(45) NOT NULL,
-                       last_update DATE NOT NULL,
-                       CONSTRAINT pk_actor PRIMARY KEY  (actor_id)
+       actor_id INT NOT NULL ,
+       first_name VARCHAR(45) NOT NULL,
+       last_name VARCHAR(45) NOT NULL,
+       last_update DATE NOT NULL,
+       CONSTRAINT pk_actor PRIMARY KEY  (actor_id)
 );
 
 CREATE  INDEX idx_actor_last_name ON actor(last_name);
