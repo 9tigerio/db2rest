@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(80)
+@Order(280)
 @TestWithResources
 class OracleCreateControllerTest extends OracleBaseIntegrationTest {
     @WithJacksonMapper

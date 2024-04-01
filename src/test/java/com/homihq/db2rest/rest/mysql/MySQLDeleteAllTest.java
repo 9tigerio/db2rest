@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest;
+package com.homihq.db2rest.rest.mysql;
 
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
