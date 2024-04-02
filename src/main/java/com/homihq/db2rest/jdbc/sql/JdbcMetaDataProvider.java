@@ -6,8 +6,9 @@ import com.homihq.db2rest.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.support.DatabaseMetaDataCallback;
-import org.springframework.jdbc.support.MetaDataAccessException;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,12 +23,14 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
 
+    @Value("${INCLUDE_SCHEMAS}")
+    private String includedSchemas;
+
     //TODO include schemas , tables , view,  filters filters
     @Override
-    public DbMeta processMetaData(DatabaseMetaData databaseMetaData) throws SQLException, MetaDataAccessException {
+    public DbMeta processMetaData(DatabaseMetaData databaseMetaData) throws SQLException {
 
         log.info("Preparing database meta-data - {}", databaseMetaData);
-        log.debug("Properties - {}", db2RestConfigProperties.getDatasource());
 
         String productName = databaseMetaData.getDatabaseProductName();
         int majorVersion = databaseMetaData.getDatabaseMajorVersion();
@@ -41,27 +44,29 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         log.info("Driver Name - {}", driverName);
         log.info("Driver Version - {}", driverVersion);
 
+        log.info("IncludedSchemas - {}", includedSchemas);
 
-        String [] schemas = this.db2RestConfigProperties.getDatasource().getSchemas();
 
         List<DbTable> dbTables = new ArrayList<>();
 
-        if(Objects.isNull(schemas)) {
+        if(StringUtils.isBlank(includedSchemas)) {
+            log.info("Fetching all schema meta data.");
             List<DbTable> tables = getDbTables(databaseMetaData, null, productName, majorVersion);
 
             dbTables.addAll(tables);
         }
         else{
+            String [] schemas = StringUtils.split(includedSchemas, ",");
+
             for(String schema : schemas) {
 
-                log.info("Loading schema meta data - {}", schema);
+                log.info("Loading meta data for schema - {}", schema);
 
                 List<DbTable> tables = getDbTables(databaseMetaData, schema, productName, majorVersion);
 
                 dbTables.addAll(tables);
             }
         }
-
 
 
         log.info("Completed loading database meta-data : {} tables", dbTables.size());

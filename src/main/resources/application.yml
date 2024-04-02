@@ -35,8 +35,8 @@ db2rest:
   datasource:
     type: ${DATASOURCE_TYPE:jdbc}
     includeSchemas: ${INCLUDE_SCHEMAS}
-    includeTables: ${INCLUDE_TABLES:""}
-    includeCatalogs: ${INCLUDE_CATALOGS:""}
+    includeTables: ${INCLUDE_TABLES:#{null}}
+    includeCatalogs: ${INCLUDE_CATALOGS:#{null}}
 
   auth:
     type: ${AUTH_TYPE:none}

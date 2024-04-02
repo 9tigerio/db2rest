@@ -9,15 +9,14 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github</groupId>
-    <artifactId>db2rest</artifactId>
+    <artifactId>db2rest-oracle9i</artifactId>
     <version>0.2.5-SNAPSHOT</version>
-    <name>db2rest</name>
-    <description>db2rest</description>
+    <name>db2rest-oracle9i</name>
+    <description>DB2Rest support for older Oracle9i database.</description>
     <properties>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
     </properties>
-
 
     <distributionManagement>
         <repository>
@@ -116,10 +115,9 @@
 
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <scope>runtime</scope>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.4</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -224,7 +222,7 @@
     </dependencies>
 
     <build>
-        <finalName>db2rest</finalName>
+        <finalName>db2rest-oracle9i</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
