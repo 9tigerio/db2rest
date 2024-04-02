@@ -35,10 +35,9 @@ public class Db2RestConfigProperties {
             return true;
         }
         else{
-            return
-            includeSchemas.stream()
-                    .anyMatch(i -> !StringUtils.equals(i,""));
+            return includeSchemas.size() == 1 && includeSchemas.get(0).equals("#{null}");
         }
+
     }
 
 

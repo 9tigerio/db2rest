@@ -37,7 +37,7 @@ db2rest:
 
     includeTables: ${INCLUDE_TABLES:}
     includeCatalogs: ${INCLUDE_CATALOGS:#{null}}
-  includeSchemas: ${INCLUDE_SCHEMAS:''}
+  includeSchemas: ${INCLUDE_SCHEMAS:#{null}}
 
   auth:
     type: ${AUTH_TYPE:none}
