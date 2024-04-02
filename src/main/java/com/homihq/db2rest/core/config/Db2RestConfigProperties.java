@@ -23,6 +23,8 @@ public class Db2RestConfigProperties {
     private boolean allowSafeDelete;
     private int defaultFetchLimit;
 
+    private List<String> includeSchemas;
+
     private MultiTenancy multiTenancy;
 
 
