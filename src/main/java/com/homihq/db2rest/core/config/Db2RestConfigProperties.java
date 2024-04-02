@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -23,7 +24,22 @@ public class Db2RestConfigProperties {
     private boolean allowSafeDelete;
     private int defaultFetchLimit;
 
+    private List<String> includeSchemas;
+
     private MultiTenancy multiTenancy;
+
+
+    public boolean isAllSchema() {
+
+        if(Objects.isNull(includeSchemas)) {
+            return true;
+        }
+        else{
+            return
+            includeSchemas.stream()
+                    .anyMatch(i -> !StringUtils.equals(i,""));
+        }
+    }
 
 
     public void checkDeleteAllowed(String filter) {

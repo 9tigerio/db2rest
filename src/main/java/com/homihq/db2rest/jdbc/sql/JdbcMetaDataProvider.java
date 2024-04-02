@@ -6,7 +6,6 @@ import com.homihq.db2rest.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.support.DatabaseMetaDataCallback;
 
 
@@ -22,9 +21,6 @@ import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
 public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-
-    @Value("${INCLUDE_SCHEMAS}")
-    private String includedSchemas;
 
     //TODO include schemas , tables , view,  filters filters
     @Override
@@ -44,21 +40,21 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         log.info("Driver Name - {}", driverName);
         log.info("Driver Version - {}", driverVersion);
 
-        log.info("IncludedSchemas - {}", includedSchemas);
 
+        log.info("IncludedSchemas - {}", db2RestConfigProperties.getIncludeSchemas());
 
         List<DbTable> dbTables = new ArrayList<>();
 
-        if(StringUtils.isBlank(includedSchemas)) {
+        if(db2RestConfigProperties.isAllSchema()) {
             log.info("Fetching all schema meta data.");
             List<DbTable> tables = getDbTables(databaseMetaData, null, productName, majorVersion);
 
             dbTables.addAll(tables);
         }
         else{
-            String [] schemas = StringUtils.split(includedSchemas, ",");
+            log.info("Fetching meta data for selected schemas.");
 
-            for(String schema : schemas) {
+            for(String schema : db2RestConfigProperties.getIncludeSchemas()) {
 
                 log.info("Loading meta data for schema - {}", schema);
 
