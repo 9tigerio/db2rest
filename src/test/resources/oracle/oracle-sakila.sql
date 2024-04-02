@@ -388,6 +388,20 @@ CREATE  INDEX idx_fk_original_language_id ON film(original_language_id);
 
 CREATE SEQUENCE film_sequence INCREMENT BY 1 START WITH 6;
 
+
+--
+-- Table structure for table `review`
+--
+
+CREATE TABLE review (
+        review_id VARCHAR(20) NOT NULL, --- this column will be filled with TSID string value
+        message VARCHAR(100) NOT NULL,
+        rating INT NOT NULL,
+        film_id INT NOT NULL,
+        last_update DATE DEFAULT sysdate,
+        CONSTRAINT pk_review PRIMARY KEY  (review_id)
+);
+
 /*
 CREATE OR REPLACE TRIGGER film_before_trigger
 BEFORE INSERT ON film FOR EACH ROW
@@ -716,3 +730,5 @@ ALTER TABLE inventory ADD CONSTRAINT fk_inventory_store FOREIGN KEY (store_id) R
 ALTER TABLE staff ADD CONSTRAINT fk_staff_store FOREIGN KEY (store_id) REFERENCES store (store_id);
 
 ALTER TABLE payment ADD CONSTRAINT fk_payment_rental FOREIGN KEY (rental_id) REFERENCES rental (rental_id) ON DELETE SET NULL;
+
+
