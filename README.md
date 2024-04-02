@@ -1,13 +1,8 @@
-DB2Rest is a modern low code data platform that makes it easy to build intelligent applications 30x faster. 
+DB2Rest is a modern low code REST DATA API platform that makes it easy to build intelligent applications 30x faster. 
 It combines existing/new databases and data-sources with language models (LM/LLMs) and vector stores to rapidly 
 deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
-DB2Rest provides instant REST API to perform complex data operation, retrieval-augmentation, embeddings and prebuilt mini applications thus providing significant savings on engineering effort.
-The platform takes care of all the boilerplate data access logic and best practices, thus freeing up developers to focus
-on solving complex business logic and building intuitive user interfaces (UI)
-
 :star: If you find DB2Rest useful, please consider adding a star on GitHub! Your support motivates us to add new exciting features.
-
 
 
 ![Number of GitHub contributors](https://img.shields.io/github/contributors/kdhrubo/db2rest)
@@ -22,10 +17,16 @@ on solving complex business logic and building intuitive user interfaces (UI)
 ![Docker Pulls](https://img.shields.io/docker/pulls/kdhrubo/db2rest)
 [![Follow us on X, formerly Twitter](https://img.shields.io/twitter/follow/db2rest?style=social)](https://twitter.com/db2rest)
 
+# Website
 
-# How does it work?
+[DB2Rest](https://db2rest.com)
 
-![DB2Rest- How it works?](assets/db2rest-how-it-works.gif "DB2Rest")
+
+# Quick start guides
+
+[On premise / On Virtual Machines installation guide](https://db2rest.com/docs/intro).
+
+[Docker based installation guide](https://db2rest.com/docs/run-db2rest-on-docker).
 
 
 # Use Cases 
@@ -35,11 +36,9 @@ on solving complex business logic and building intuitive user interfaces (UI)
 DB2Rest provides instant REST API(no code generation) to boost development by 30x. Low code and best practices are built-in saving engineering teams
 months of effort and cost. 
 
-## Faster Innovation with Secure AI Gateway
+## Faster innovation with Gen AI
 
-DB2Rest works hand in glove with modern AI powered databases, LLM implementations to provide consistent Web APIs to deliver smart applications.
-Low code AI integration, natural language query and visualization, ability to execute tasks allows faster innovation. DB2Rest can function 
-as centralized AI gateway providing governance, metrics 
+DB2Rest works hand in glove with modern vector databases and LLM implementations to provide consistent Web APIs to deliver smart applications.
 
 ## Simplify Integration
 
@@ -51,19 +50,14 @@ Complex and maintenance-heavy file-based data exchange can be replaced with DB2R
 Evolve database structures at speed with DB2Rest DML support. DB2Rest provides database visualization, diagramming, linting and diff.
 
 
-# Installation 
-
-[On premise / On Virtual Machines installation guide](https://db2rest.com/docs/intro).
-
-[Docker based installation guide](https://db2rest.com/docs/run-db2rest-on-docker).
-
 
 # Supported Databases
 
 - **PostgreSQL** (Supported)
 - **MySQL** (Supported)
 - **Cloudflare D1** (Supported)
-- **Tembo** : March 2024 - release
+- **Tembo** (Supported)
+- **Oracle** : (Supported)
 - [PostgreML](https://postgresml.org/) : April 2024 - release
 - TursoDB 
 - **Neon** (Planned)
@@ -73,7 +67,6 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - [Zilliz](https://zilliz.com/)
 - [AstraDB](https://www.datastax.com/products/datastax-astra)
 - [Vespa](https://vespa.ai/)
-- **Oracle** 
 - **MariaDB** 
 - **MS SQL Server** 
 - **CockroachDB**
