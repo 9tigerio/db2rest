@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.MetaDataAccessException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
 
@@ -34,20 +35,46 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         String driverName = databaseMetaData.getDriverName();
         String driverVersion = databaseMetaData.getDriverVersion();
 
-        log.info("productName - {}", productName);
-        log.info("productVersion - {}", productVersion);
-        log.info("majorVersion - {}", majorVersion);
-        log.info("driverName - {}", driverName);
-        log.info("driverVersion - {}", driverVersion);
+        log.info("Product - {}", productName);
+        log.info("Version - {}", productVersion);
+        log.info("Major Version - {}", majorVersion);
+        log.info("Driver Name - {}", driverName);
+        log.info("Driver Version - {}", driverVersion);
+
+
+        String [] schemas = this.db2RestConfigProperties.getDatasource().getSchemas();
 
         List<DbTable> dbTables = new ArrayList<>();
 
-        //String schemaPattern  = StringUtils.isEmpty(db2RestConfigProperties.getDatasource().getIncludeSchemas()) ? db2RestConfigProperties.getDatasource().getIncludeSchemas() : null;
-        log.debug("schemaPattern - {}", db2RestConfigProperties.getDatasource().getSchemaPattern());
+        if(Objects.isNull(schemas)) {
+            List<DbTable> tables = getDbTables(databaseMetaData, null, productName, majorVersion);
+
+            dbTables.addAll(tables);
+        }
+        else{
+            for(String schema : schemas) {
+
+                log.info("Loading schema meta data - {}", schema);
+
+                List<DbTable> tables = getDbTables(databaseMetaData, schema, productName, majorVersion);
+
+                dbTables.addAll(tables);
+            }
+        }
+
+
+
+        log.info("Completed loading database meta-data : {} tables", dbTables.size());
+
+        return new DbMeta(productName, majorVersion, driverName, driverVersion, dbTables);
+    }
+
+    private List<DbTable> getDbTables(DatabaseMetaData databaseMetaData, String schemaPattern, String productName, int majorVersion) throws SQLException {
+        List<DbTable> dbTables = new ArrayList<>();
 
         try(ResultSet resultSet = databaseMetaData.getTables(
                 null,
-                null,
+                schemaPattern,
                 null,
                 new String[]{"TABLE"})){
             while(resultSet.next()) {
@@ -61,7 +88,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
                 String tableAlias = getAlias(tableName);
 
                 List<DbColumn> columns =
-                        getAllColumns(databaseMetaData, catalog, schema, tableName, tableAlias);
+                        getAllColumns(databaseMetaData, catalog, schema, tableName, tableAlias, productName, majorVersion);
 
                 String schemaName = StringUtils.isNotBlank(schema) ? schema : catalog;
 
@@ -73,21 +100,18 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
             }
         }
-
-        log.info("Completed loading database meta-data : {} tables", dbTables.size());
-
-        return new DbMeta(productName, majorVersion, driverName, driverVersion, dbTables);
+        return dbTables;
     }
 
     private List<DbColumn> getAllColumns(DatabaseMetaData databaseMetaData, String catalog, String schema,
-                               String tableName, String tableAlias) throws SQLException, MetaDataAccessException {
+                               String tableName, String tableAlias, String productName, int majorVersion) throws SQLException {
 
         List<String> pkColumns = new ArrayList<>();
 
         try(ResultSet primaryKeys = databaseMetaData.getPrimaryKeys(catalog, schema, tableName)){
             while(primaryKeys.next()){
                 String primaryKeyColumnName = primaryKeys.getString("COLUMN_NAME");
-                String primaryKeyName = primaryKeys.getString("PK_NAME");
+                //String primaryKeyName = primaryKeys.getString("PK_NAME");
 
                 pkColumns.add(primaryKeyColumnName);
             }
@@ -99,11 +123,17 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
                 .getColumns(catalog,schema, tableName, null)){
             while(columns.next()) {
                 String columnName = columns.getString("COLUMN_NAME");
-                String columnSize = columns.getString("COLUMN_SIZE");
+                //String columnSize = columns.getString("COLUMN_SIZE");
                 int datatype = columns.getInt("DATA_TYPE");
                 String isNullable = columns.getString("IS_NULLABLE");
                 String isAutoIncrement = columns.getString("IS_AUTOINCREMENT");
-                String isGenerated = columns.getString("IS_GENERATEDCOLUMN");
+
+                //Note workaround for oracle 9i - change to strategy classes later?
+                String isGenerated = "N";
+                if(!(StringUtils.equalsIgnoreCase(productName, "Oracle") && majorVersion == 9)) {
+                    isGenerated = columns.getString("IS_GENERATEDCOLUMN");
+                }
+
                 String typeName = columns.getString("TYPE_NAME");
 
                 Class<?> javaType = JdbcTypeJavaClassMappings.INSTANCE.determineJavaClassForJdbcTypeCode(datatype);

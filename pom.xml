@@ -10,13 +10,52 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest</artifactId>
-    <version>0.2.4</version>
+    <version>0.2.5-SNAPSHOT</version>
     <name>db2rest</name>
     <description>db2rest</description>
     <properties>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>oracle9i</id>
+
+            <dependencies>
+
+                <dependency>
+                    <groupId>com.oracle.database.jdbc</groupId>
+                    <artifactId>ojdbc6</artifactId>
+                    <version>11.2.0.4</version>
+                </dependency>
+
+            </dependencies>
+
+            <build>
+                <finalName>db2rest-oracle9i</finalName>
+            </build>
+        </profile>
+
+        <profile>
+            <id>db2rest</id>
+            <dependencies>
+
+                <dependency>
+                    <groupId>com.oracle.database.jdbc</groupId>
+                    <artifactId>ojdbc11</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+
+            </dependencies>
+
+            <build>
+                <finalName>db2rest</finalName>
+            </build>
+        </profile>
+
+
+    </profiles>
 
     <distributionManagement>
         <repository>
@@ -114,11 +153,8 @@
             <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+
+
 
         <!--
         <dependency>
