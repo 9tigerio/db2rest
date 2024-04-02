@@ -45,7 +45,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
         List<DbTable> dbTables = new ArrayList<>();
 
-        if(Objects.isNull(db2RestConfigProperties.getIncludeSchemas())) {
+        if(db2RestConfigProperties.isAllSchema()) {
             log.info("Fetching all schema meta data.");
             List<DbTable> tables = getDbTables(databaseMetaData, null, productName, majorVersion);
 
@@ -53,6 +53,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         }
         else{
             log.info("Fetching meta data for selected schemas.");
+
             for(String schema : db2RestConfigProperties.getIncludeSchemas()) {
 
                 log.info("Loading meta data for schema - {}", schema);
