@@ -61,7 +61,12 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - **MySQL** (Supported)
 - **Cloudflare D1** (Supported)
 - **Tembo** (Supported)
-- **Oracle** : (Supported)
+- **Oracle**  (Supported)
+- **DigitalOcean PostgreSQL**  (Supported)
+- **DigitalOcean MySQL**  (Supported)
+- **AWS RDS Postgres**
+- **AWS RDS MySQL**
+- MongoDB - (Work in progress)
 - [PostgreML](https://postgresml.org/) : April 2024 - release
 - TursoDB 
 - **Neon** (Planned)
@@ -75,8 +80,6 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - **MS SQL Server** 
 - **CockroachDB**
 - **Yugabyte**
-- **AWS RDS Postgres**
-- **AWS RDS MySQL**
 - **PlanetScale** 
 - **CrunchyData**
 - **Singlestore** 
