@@ -428,7 +428,7 @@ END;
 CREATE TABLE film_actor (
             actor_id INT NOT NULL,
             film_id  INT NOT NULL,
-            last_update DATE NOT NULL,
+            last_update DATE DEFAULT sysdate,
             CONSTRAINT pk_film_actor PRIMARY KEY  (actor_id,film_id),
             CONSTRAINT fk_film_actor_actor FOREIGN KEY (actor_id) REFERENCES actor (actor_id),
             CONSTRAINT fk_film_actor_film FOREIGN KEY (film_id) REFERENCES film (film_id)
