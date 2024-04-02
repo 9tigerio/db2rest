@@ -46,7 +46,7 @@ class OracleInnerJoinMultiTableControllerTest extends OracleBaseIntegrationTest 
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(1)))
-                .andExpect(jsonPath("$[0].*", hasSize(16)))
+                .andExpect(jsonPath("$[0].*", hasSize(17)))
                 .andExpect(jsonPath("$[0].FILM_ID", equalTo(1)))
                 .andExpect(jsonPath("$[0].LANGUAGE_ID", equalTo(1)))
                 .andExpect(jsonPath("$[0].ACTOR_ID", equalTo(1)))
