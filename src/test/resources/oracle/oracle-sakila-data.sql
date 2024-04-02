@@ -75,3 +75,5 @@ Insert into bottoms (bottom_item, color,b_size) values ('skirt',	'black'	,'S');
 Insert into bottoms (bottom_item, color,b_size) values ('shorts',	'red'	,'S');
 
 
+--review
+INSERT INTO review (review_id , message, rating ,film_id) VALUES ('ABC123','Awesome movie', 4, 1);
