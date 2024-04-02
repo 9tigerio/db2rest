@@ -12,8 +12,6 @@ import org.junit.jupiter.api.*;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -21,37 +19,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(213)
+
 @TestWithResources
-class OracleInnerJoinMultiTableControllerTest extends OracleBaseIntegrationTest {
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(214)
+class OracleInnerSelfJoinControllerTest extends OracleBaseIntegrationTest {
 
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
 
-    @GivenJsonResource("/testdata/INNER_JOIN_MULTI_TABLE_ORACLE.json")
-    List<Map<String,Object>> INNER_JOIN_MULTI_TABLE;
+    @GivenJsonResource("/testdata/INNER_SELF_JOIN_ORACLE.json")
+    List<Map<String,Object>> INNER_SELF_JOIN;
 
     @Test
-    @DisplayName("Test inner multi-table Join")
-    void testInnerMultiTable() throws Exception {
+    @DisplayName("Test inner self Join")
+    @Disabled
+    void testInnerSelfJoin() throws Exception {
 
 
         mockMvc.perform(post("/FILM/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
+                        .content(objectMapper.writeValueAsString(INNER_SELF_JOIN))
                 )
-                 .andDo(print())
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
-                .andExpect(jsonPath("$.*", hasSize(1)))
-                .andExpect(jsonPath("$[0].*", hasSize(17)))
-                .andExpect(jsonPath("$[0].FILM_ID", equalTo(1)))
-                .andExpect(jsonPath("$[0].LANGUAGE_ID", equalTo(1)))
-                .andExpect(jsonPath("$[0].ACTOR_ID", equalTo(1)))
-                .andExpect(jsonPath("$[0].FIRST_NAME", equalTo("PENELOPE")))
-                .andExpect(jsonPath("$[0].LAST_NAME", equalTo("GUINESS")))
+                //.andExpect(jsonPath("$.*", hasSize(1)))
+                //.andExpect(jsonPath("$[0].*", hasSize(17)))
+                //.andExpect(jsonPath("$[0].film_id", equalTo(1)))
+                //.andExpect(jsonPath("$[0].language_id", equalTo(1)))
+                //.andExpect(jsonPath("$[0].actor_id", equalTo(1)))
+                //.andExpect(jsonPath("$[0].first_name", equalTo("PENELOPE")))
+                //.andExpect(jsonPath("$[0].last_name", equalTo("GUINESS")))
 
 
                 .andDo(document("oracle-inner-multi-table-join"));

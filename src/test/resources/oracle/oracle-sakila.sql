@@ -353,22 +353,23 @@ END;
 --
 
 CREATE TABLE film (
-                      film_id INT NOT NULL,
-                      title VARCHAR(255) NOT NULL,
-                      description CLOB DEFAULT NULL,
-                      release_year VARCHAR(4) DEFAULT NULL,
-                      language_id INT NOT NULL,
-                      original_language_id INT DEFAULT NULL,
-                      rental_duration SMALLINT  DEFAULT 3 NOT NULL,
-                      rental_rate DECIMAL(4,2) DEFAULT 4.99 NOT NULL,
-                      length SMALLINT DEFAULT NULL,
-                      replacement_cost DECIMAL(5,2) DEFAULT 19.99 NOT NULL,
-                      rating VARCHAR(10) DEFAULT 'G',
-                      special_features VARCHAR(100) DEFAULT NULL,
-                      last_update DATE DEFAULT sysdate,
-                      CONSTRAINT pk_film PRIMARY KEY  (film_id),
-                      CONSTRAINT fk_film_language FOREIGN KEY (language_id) REFERENCES language (language_id) ,
-                      CONSTRAINT fk_film_language_original FOREIGN KEY (original_language_id) REFERENCES language (language_id)
+      film_id INT NOT NULL,
+      title VARCHAR(255) NOT NULL,
+      description CLOB DEFAULT NULL,
+      release_year VARCHAR(4) DEFAULT NULL,
+      language_id INT NOT NULL,
+      original_language_id INT DEFAULT NULL,
+      rental_duration SMALLINT  DEFAULT 3 NOT NULL,
+      rental_rate DECIMAL(4,2) DEFAULT 4.99 NOT NULL,
+      length SMALLINT DEFAULT NULL,
+      replacement_cost DECIMAL(5,2) DEFAULT 19.99 NOT NULL,
+      rating VARCHAR(10) DEFAULT 'G',
+      special_features VARCHAR(100) DEFAULT NULL,
+      last_update DATE DEFAULT sysdate,
+      prequel_film_id INT DEFAULT NULL,
+      CONSTRAINT pk_film PRIMARY KEY  (film_id),
+      CONSTRAINT fk_film_language FOREIGN KEY (language_id) REFERENCES language (language_id) ,
+      CONSTRAINT fk_film_language_original FOREIGN KEY (original_language_id) REFERENCES language (language_id)
 );
 
 ALTER TABLE film ADD CONSTRAINT CHECK_special_features CHECK(special_features is null or
