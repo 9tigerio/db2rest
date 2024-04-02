@@ -40,10 +40,14 @@ months of effort and cost.
 
 DB2Rest works hand in glove with modern vector databases and LLM implementations to provide consistent Web APIs to deliver smart applications.
 
+## Secure Database Gateway
+
+DB2Rest works as a secure database gateway. This helps enterprises to open up data to internal developers and partners in a safe and agile way which was not possible earlier.
+
 ## Simplify Integration
 
-DB2Rest works as a secure database gateway. This helps enterprises to open up data to internal developers and partners in a safe and agile way which was not possible earlier. 
-Complex and maintenance-heavy file-based data exchange can be replaced with DB2Rest. Applications can be loosely coupled by reducing direct database based integration. 
+Complex, error-prone maintenance-heavy file-based data exchange can be replaced with DB2Rest. Integrations can be loosely coupled by reducing direct database based integration.
+
 
 ## Easy Database DevOps and Documentation
 
