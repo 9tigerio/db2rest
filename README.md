@@ -1,3 +1,9 @@
+<picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://db2rest.com/img/logo-db2rest.svg">
+ <source media="(prefers-color-scheme: light)" srcset="https://db2rest.com/img/logo-db2rest.svg">
+ <img width="75" height="75" alt="DB2Rest Logo" src="https://db2rest.com/img/logo-db2rest.svg">
+</picture>
+
 DB2Rest is a modern low code REST DATA API platform that makes it easy to build intelligent applications 30x faster. 
 It combines existing/new databases and data-sources with language models (LM/LLMs) and vector stores to rapidly 
 deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
