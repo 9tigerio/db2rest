@@ -9,6 +9,7 @@ import com.homihq.db2rest.jdbc.dialect.MySQLDialect;
 import com.homihq.db2rest.jdbc.dialect.OracleDialect;
 import com.homihq.db2rest.jdbc.dialect.PostGreSQLDialect;
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,6 +17,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import javax.sql.DataSource;
 
 @Configuration
+@ConditionalOnBean(DataSource.class)
 public class JdbcCacheConfiguration {
 
     @Bean
