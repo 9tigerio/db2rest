@@ -7,13 +7,17 @@ import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import javax.sql.DataSource;
+
 
 @Configuration
+@ConditionalOnBean(DataSource.class)
 public class JdbcProcessorConfiguration {
 
     @Bean
