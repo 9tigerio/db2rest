@@ -1,4 +1,4 @@
-package com.homihq.db2rest.mongodb;
+package com.homihq.db2rest.mongo.dialect;
 
 import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.model.DbTable;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class MongodbDialect implements Dialect {
+public class MongoDialect implements Dialect {
     @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {
         //TODO : To be implemented
