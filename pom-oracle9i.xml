@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>0.2.7-SNAPSHOT-1</version>
+    <version>0.2.7-SNAPSHOT-2</version>
     <name>db2rest-oracle9i</name>
     <description>DB2Rest support for older Oracle9i database.</description>
     <properties>
@@ -32,6 +32,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
 
