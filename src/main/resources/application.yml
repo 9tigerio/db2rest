@@ -29,11 +29,13 @@ spring:
 
   data:
     mongodb:
-      host: ${MONGODB_HOST}
-      port: ${MONGODB_PORT}
-      database: ${MONGODB_DB_NAME}
-      username: ${MONGODB_USER}
-      password: ${MONGODB_PASSWORD}
+      uri: ${MONGO_URI}
+      database: ${MONGO_DB_NAME}
+      #host: ${MONGODB_HOST}
+     # port: ${MONGODB_PORT}
+      #database: ${MONGODB_DB_NAME}
+      #username: ${MONGODB_USER}
+      #password: ${MONGODB_PASSWORD}
 
   banner:
     location: classpath:banner.txt
