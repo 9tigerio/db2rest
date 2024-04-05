@@ -1,6 +1,6 @@
 package com.homihq.db2rest.core.service;
 
-import com.homihq.db2rest.exception.RpcException;
+import com.homihq.db2rest.core.exception.RpcException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

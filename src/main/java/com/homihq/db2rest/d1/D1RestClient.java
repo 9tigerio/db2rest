@@ -4,7 +4,7 @@ import com.homihq.db2rest.d1.model.D1Column;
 import com.homihq.db2rest.d1.model.D1PostRequest;
 import com.homihq.db2rest.d1.model.D1PostResponse;
 import com.homihq.db2rest.d1.model.D1Table;
-import com.homihq.db2rest.exception.GenericDataAccessException;
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;

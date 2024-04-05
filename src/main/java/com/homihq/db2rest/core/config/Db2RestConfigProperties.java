@@ -1,7 +1,6 @@
 package com.homihq.db2rest.core.config;
 
-import com.homihq.db2rest.exception.DeleteOpNotAllowedException;
-import com.homihq.db2rest.exception.InvalidSchemaException;
+import com.homihq.db2rest.core.exception.DeleteOpNotAllowedException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

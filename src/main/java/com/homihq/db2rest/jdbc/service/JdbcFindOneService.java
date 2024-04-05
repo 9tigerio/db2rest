@@ -1,9 +1,9 @@
 package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.service.FindOneService;
-import com.homihq.db2rest.exception.GenericDataAccessException;
-import com.homihq.db2rest.rest.read.dto.ReadContext;
+import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import lombok.RequiredArgsConstructor;

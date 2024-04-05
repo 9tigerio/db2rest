@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc;
 
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
-import com.homihq.db2rest.exception.InvalidTableException;
+import com.homihq.db2rest.core.exception.InvalidTableException;
 import com.homihq.db2rest.core.model.DbTable;
 
 import com.homihq.db2rest.jdbc.sql.DbMeta;

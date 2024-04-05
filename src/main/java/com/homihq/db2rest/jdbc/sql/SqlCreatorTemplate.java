@@ -5,9 +5,9 @@ import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbSort;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
-import com.homihq.db2rest.rest.delete.dto.DeleteContext;
-import com.homihq.db2rest.rest.read.dto.ReadContext;
-import com.homihq.db2rest.rest.update.dto.UpdateContext;
+import com.homihq.db2rest.jdbc.dto.DeleteContext;
+import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
+import com.homihq.db2rest.jdbc.rest.update.dto.UpdateContext;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

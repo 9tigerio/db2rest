@@ -1,7 +1,7 @@
 package com.homihq.db2rest.mongo.repository;
 
 import com.homihq.db2rest.mongo.dialect.MongoDialect;
-import com.homihq.db2rest.rest.create.dto.CreateResponse;
+import com.homihq.db2rest.core.dto.CreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;

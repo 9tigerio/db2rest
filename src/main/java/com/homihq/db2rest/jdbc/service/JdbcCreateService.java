@@ -2,14 +2,14 @@ package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.core.DbOperationService;
 import com.homihq.db2rest.core.Dialect;
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.service.CreateService;
-import com.homihq.db2rest.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.jdbc.dto.InsertableColumn;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
-import com.homihq.db2rest.rest.create.dto.CreateResponse;
+import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
 import lombok.RequiredArgsConstructor;

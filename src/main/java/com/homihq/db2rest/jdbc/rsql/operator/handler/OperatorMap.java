@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rsql.operator.handler;
 
 
-import com.homihq.db2rest.exception.InvalidOperatorException;
+import com.homihq.db2rest.core.exception.InvalidOperatorException;
 import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 
