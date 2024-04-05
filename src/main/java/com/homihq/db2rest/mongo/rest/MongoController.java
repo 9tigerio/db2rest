@@ -3,7 +3,7 @@ package com.homihq.db2rest.mongo.rest;
 
 import com.homihq.db2rest.mongo.repository.MongoRepository;
 import com.homihq.db2rest.mongo.rest.api.MongoRestApi;
-import com.homihq.db2rest.rest.create.dto.CreateResponse;
+import com.homihq.db2rest.core.dto.CreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

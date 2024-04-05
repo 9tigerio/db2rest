@@ -1,6 +1,6 @@
 package com.homihq.db2rest.mongo.rest.api;
 
-import com.homihq.db2rest.rest.create.dto.CreateResponse;
+import com.homihq.db2rest.core.dto.CreateResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package com.homihq.db2rest.d1.service;
 
 import com.homihq.db2rest.core.service.FunctionService;
-import com.homihq.db2rest.exception.GenericDataAccessException;
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import java.util.Map;

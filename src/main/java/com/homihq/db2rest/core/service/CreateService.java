@@ -1,6 +1,6 @@
 package com.homihq.db2rest.core.service;
 
-import com.homihq.db2rest.rest.create.dto.CreateResponse;
+import com.homihq.db2rest.core.dto.CreateResponse;
 import java.util.List;
 import java.util.Map;
 

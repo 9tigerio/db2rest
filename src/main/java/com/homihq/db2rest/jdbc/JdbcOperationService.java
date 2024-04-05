@@ -2,10 +2,10 @@ package com.homihq.db2rest.jdbc;
 
 import com.homihq.db2rest.core.DbOperationService;
 import com.homihq.db2rest.core.model.DbTable;
-import com.homihq.db2rest.rest.create.dto.CreateBulkResponse;
-import com.homihq.db2rest.rest.create.dto.CreateResponse;
-import com.homihq.db2rest.rest.read.dto.CountResponse;
-import com.homihq.db2rest.rest.read.dto.ExistsResponse;
+import com.homihq.db2rest.core.dto.CreateBulkResponse;
+import com.homihq.db2rest.core.dto.CreateResponse;
+import com.homihq.db2rest.jdbc.rest.read.dto.CountResponse;
+import com.homihq.db2rest.jdbc.rest.read.dto.ExistsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

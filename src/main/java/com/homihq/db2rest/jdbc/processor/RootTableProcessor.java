@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.processor;
 
 
-import com.homihq.db2rest.rest.read.dto.ReadContext;
+import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
 import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.schema.SchemaCache;
 import lombok.RequiredArgsConstructor;

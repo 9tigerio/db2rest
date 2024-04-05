@@ -1,6 +1,6 @@
 package com.homihq.db2rest.core.model;
 
-import com.homihq.db2rest.exception.InvalidColumnException;
+import com.homihq.db2rest.core.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import java.util.List;
