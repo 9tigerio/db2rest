@@ -33,8 +33,7 @@ public class MySQLContainerConfiguration {
     }
 
 
-    @Bean("mySQLDataSource")
-    @ConditionalOnProperty(prefix = "db2rest.datasource", name="type" , havingValue = "jdbc-mysql")
+    @Bean
     public DataSource dataSource() {
         var dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");

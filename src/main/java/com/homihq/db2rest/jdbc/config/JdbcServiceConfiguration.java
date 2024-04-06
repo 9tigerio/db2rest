@@ -1,29 +1,34 @@
 package com.homihq.db2rest.jdbc.config;
 
-
+import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
-import com.homihq.db2rest.core.*;
 import com.homihq.db2rest.core.service.*;
-import com.homihq.db2rest.core.service.ProcedureService;
-import com.homihq.db2rest.jdbc.processor.ReadProcessor;
+import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.service.*;
-import com.homihq.db2rest.core.service.CreateService;
-import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
-import com.homihq.db2rest.jdbc.service.JdbcDeleteService;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
+import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.schema.SchemaCache;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.util.List;
 
-
-@Configuration
+@Slf4j
+//@Configuration
 @ConditionalOnBean(DataSource.class)
 public class JdbcServiceConfiguration {
+
+    /*
+    public JdbcServiceConfiguration() {
+        log.info("Loading RDBMS services.");
+    }
+
     //CREATE SERVICE
 
     @Bean
@@ -45,9 +50,9 @@ public class JdbcServiceConfiguration {
     //QUERY SERVICE
     @Bean
     public CountQueryService countQueryService(
-                                               SqlCreatorTemplate sqlCreatorTemplate,
-                                               List<ReadProcessor> processorList,
-                                               DbOperationService dbOperationService) {
+            SqlCreatorTemplate sqlCreatorTemplate,
+            List<ReadProcessor> processorList,
+            DbOperationService dbOperationService) {
         return new JdbcCountQueryService(dbOperationService, processorList, sqlCreatorTemplate);
     }
 
@@ -110,5 +115,8 @@ public class JdbcServiceConfiguration {
     public ProcedureService procedureService(JdbcTemplate jdbcTemplate) {
         return new JdbcProcedureService(jdbcTemplate);
     }
+
+
+     */
 
 }
