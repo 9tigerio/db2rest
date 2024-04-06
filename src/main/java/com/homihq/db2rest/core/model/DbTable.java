@@ -7,7 +7,7 @@ import java.util.List;
 
 
 @Slf4j
-public record DbTable(String schema, String name, String fullName, String alias, List<DbColumn> dbColumns) {
+public record DbTable(String schema, String name, String fullName, String alias, List<DbColumn> dbColumns, String type) {
 
     public String render() {
         return fullName + " " + alias;
@@ -20,7 +20,7 @@ public record DbTable(String schema, String name, String fullName, String alias,
                 .toList();
 
         return new DbTable(
-                schema, name, fullName, tableAlias,  columns
+                schema, name, fullName, tableAlias,  columns, type
         );
     }
 

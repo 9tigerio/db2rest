@@ -35,6 +35,7 @@ public final class JdbcSchemaCache implements SchemaCache {
     @Getter
     private int productVersion;
 
+
     public boolean isOracle() {
         return StringUtils.containsIgnoreCase(productName, "Oracle");
     }
@@ -52,6 +53,13 @@ public final class JdbcSchemaCache implements SchemaCache {
 
         this.dbTableMap = new ConcurrentHashMap<>();
         loadMetaData();
+    }
+
+    public List<DbTable> getTables() {
+        return
+        this.dbTableMap.values()
+                .stream()
+                .toList();
     }
 
     private void loadMetaData() {

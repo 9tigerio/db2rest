@@ -77,7 +77,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
                 null,
                 schemaPattern,
                 null,
-                new String[]{"TABLE"})){
+                new String[]{"TABLE", "VIEW"})){
             while(resultSet.next()) {
                 String tableName = resultSet.getString("TABLE_NAME");
                 String catalog = resultSet.getString("TABLE_CAT");
@@ -95,7 +95,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
                 DbTable dbTable = new DbTable(
                         schema, tableName ,schemaName + "." + tableName,
-                        tableAlias,columns);
+                        tableAlias,columns, tableType);
 
                 dbTables.add(dbTable);
 
