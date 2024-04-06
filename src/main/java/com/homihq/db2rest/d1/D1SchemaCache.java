@@ -64,7 +64,7 @@ public class D1SchemaCache implements SchemaCache {
                         )).toList();
         
         DbTable dbTable = new DbTable(d1Table.schema()
-            , d1Table.name(), d1Table.name(), tableAlias,dbColumns);
+            , d1Table.name(), d1Table.name(), tableAlias,dbColumns, null);
 
         this.dbTableList.add(dbTable);
         this.dbTableMap.put(d1Table.name(), dbTable);

@@ -18,6 +18,7 @@ import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
 import com.homihq.db2rest.jdbc.rest.read.*;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
+import com.homihq.db2rest.jdbc.rest.system.SchemaController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 import com.homihq.db2rest.jdbc.service.*;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
@@ -299,6 +300,12 @@ public class DataSourceConfiguration {
     @ConditionalOnBean(ProcedureService.class)
     public ProcedureController procedureController(ProcedureService procedureService) {
         return new ProcedureController(procedureService);
+    }
+
+    @Bean
+    @ConditionalOnBean(JdbcSchemaCache.class)
+    public SchemaController schemaController(JdbcSchemaCache jdbcSchemaCache) {
+        return new SchemaController(jdbcSchemaCache);
     }
 
     //END ::: API
