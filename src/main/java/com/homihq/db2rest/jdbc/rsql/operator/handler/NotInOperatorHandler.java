@@ -19,8 +19,12 @@ public class NotInOperatorHandler implements OperatorHandler {
 
     @Override
     public String handle(Dialect dialect, DbColumn columnName, List<String> values, Class type, Map<String, Object> paramMap) {
+        return "";
+        /*
         return columnName + " not in (" +
             values.stream().map(value -> parseValue(value, type)).collect(Collectors.joining(",")) + ")";
+
+         */
     }
 
 }

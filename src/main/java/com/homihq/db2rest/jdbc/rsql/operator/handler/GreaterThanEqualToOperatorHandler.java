@@ -14,9 +14,15 @@ public class GreaterThanEqualToOperatorHandler implements OperatorHandler {
 
         Object vo = parseValue(value, type);
 
-        paramMap.put(column.getAliasedNameParam(), vo);
+        if(dialect.supportAlias()) {
 
-        return column.getAliasedName() + OPERATOR + PREFIX + column.getAliasedNameParam();
+            paramMap.put(column.getAliasedNameParam(), vo);
+            return column.getAliasedName() + OPERATOR + PREFIX + column.getAliasedNameParam();
+        }
+        else{
+            paramMap.put(column.name(), vo);
+            return column.name() + OPERATOR + PREFIX + column.name();
+        }
     }
 
 }
