@@ -32,8 +32,7 @@ public class PostgreSQLContainerConfiguration {
         postgresScripts.forEach(initScript -> ScriptUtils.runInitScript(containerDelegate, initScript));
     }
 
-    @Bean("postgresDataSource")
-    @ConditionalOnProperty(prefix = "db2rest.datasource", name="type" , havingValue = "jdbc-pg")
+    @Bean
     public DataSource dataSource() {
         var dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("org.postgresql.Driver");

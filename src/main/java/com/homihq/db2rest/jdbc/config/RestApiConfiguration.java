@@ -10,14 +10,22 @@ import com.homihq.db2rest.jdbc.rest.read.*;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@Configuration
+//@Configuration
+@Slf4j
 public class RestApiConfiguration {
+
+    public RestApiConfiguration() {
+       log.info("Loading rest apis for RDBMS.");
+    }
+
+
     //CREATE API
 
 

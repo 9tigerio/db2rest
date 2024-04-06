@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.processor;
 
 
+import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
 import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.schema.SchemaCache;
@@ -13,12 +14,12 @@ import org.springframework.core.annotation.Order;
 @Order(1)
 public class RootTableProcessor implements ReadProcessor {
 
-    private final SchemaCache schemaCache;
+    private final JdbcSchemaCache jdbcSchemaCache;
     @Override
     public void process(ReadContext readContext) {
         log.debug("Processing root table");
         DbTable table =
-        schemaCache.getTable(readContext.getTableName());
+                jdbcSchemaCache.getTable(readContext.getTableName());
 
         readContext.setRoot(table);
     }

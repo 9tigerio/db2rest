@@ -8,20 +8,33 @@ import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.dialect.MySQLDialect;
 import com.homihq.db2rest.jdbc.dialect.OracleDialect;
 import com.homihq.db2rest.jdbc.dialect.PostGreSQLDialect;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
 
-@Configuration
+
+//@Configuration
+@Slf4j
 @ConditionalOnBean(DataSource.class)
 public class JdbcCacheConfiguration {
 
+    /*
+    public JdbcCacheConfiguration() {
+        log.info("Loading RDBMS schema cache.");
+    }
+
     @Bean
-    public JdbcSchemaCache schemaCache(DataSource dataSource,  Db2RestConfigProperties db2RestConfigProperties) {
+    public JdbcSchemaCache jdbcSchemaCache(DataSource dataSource,  Db2RestConfigProperties db2RestConfigProperties) {
+        log.info("JDBC Schema cache is being cached.");
         return new JdbcSchemaCache(dataSource, db2RestConfigProperties);
     }
 
@@ -46,4 +59,10 @@ public class JdbcCacheConfiguration {
         }
     }
 
+    @Bean
+    @DependsOn("textTemplateResolver")
+    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, Dialect dialect, Db2RestConfigProperties db2RestConfigProperties) {
+        return new SqlCreatorTemplate(templateEngine, dialect, db2RestConfigProperties);
+    }
+    */
 }

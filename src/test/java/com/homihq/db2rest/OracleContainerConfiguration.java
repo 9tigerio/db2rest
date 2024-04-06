@@ -31,8 +31,7 @@ public class OracleContainerConfiguration {
         oracleScripts.forEach(initScript -> ScriptUtils.runInitScript(containerDelegate, initScript));
     }
 
-    @Bean("oracle10gDataSource")
-    @ConditionalOnProperty(prefix = "db2rest.datasource", name="type" , havingValue = "jdbc-orcl10g")
+    @Bean
     public DataSource dataSource() {
 
         var dataSourceBuilder = DataSourceBuilder.create();
