@@ -44,9 +44,9 @@ import java.util.List;
 @Slf4j
 @Configuration
 @ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
-public class DataSourceConfiguration {
+public class JdbcConfiguration {
 
-    public DataSourceConfiguration() {
+    public JdbcConfiguration() {
         log.info("Loading datasource configuration.");
     }
 
