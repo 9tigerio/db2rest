@@ -25,8 +25,13 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 Quickly download the executable jars from links below:
 
-    - [DB2Rest-0.2.7](https://download.db2rest.com/db2rest-oracle9i-0.2.7.jar)
-    - [DB2Rest-Oracle9i-0.2.7](https://download.db2rest.com/db2rest-oracle9i-0.2.7.jar)
+## DB2Rest - 0.2.7
+
+[DB2Rest](https://download.db2rest.com/db2rest-oracle9i-0.2.7.jar)
+
+## DB2Rest-Oracle9i - 0.2.7
+
+[DB2Rest-Oracle9i](https://download.db2rest.com/db2rest-oracle9i-0.2.7.jar)
 
 # Quick start guides
 
