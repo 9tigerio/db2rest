@@ -31,16 +31,17 @@ spring:
     mongodb:
       uri: ${MONGO_URI}
       database: ${MONGO_DB_NAME}
-      #host: ${MONGODB_HOST}
-     # port: ${MONGODB_PORT}
-      #database: ${MONGODB_DB_NAME}
-      #username: ${MONGODB_USER}
-      #password: ${MONGODB_PASSWORD}
 
   banner:
     location: classpath:banner.txt
 
 db2rest:
+  dateTime:
+    useDefault: ${USE_DEFAULT_DATETIME_FORMAT:true}
+    timeFormat: ${TIME_FORMAT:HH:mm:ss}
+    dateFormat: ${DATE_FORMAT:yyyy-MM-dd}
+    dateTimeFormat: ${DATE_TIME_FORMAT:yyyy-MM-dd HH:mm:ss}
+
   defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
   datasource:
     type: ${DATASOURCE_TYPE:jdbc}

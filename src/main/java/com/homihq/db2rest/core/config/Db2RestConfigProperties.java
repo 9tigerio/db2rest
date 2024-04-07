@@ -27,6 +27,7 @@ public class Db2RestConfigProperties {
 
     private MultiTenancy multiTenancy;
 
+    private DateTimeConfigProperties dateTime;
 
     public boolean isAllSchema() {
 
