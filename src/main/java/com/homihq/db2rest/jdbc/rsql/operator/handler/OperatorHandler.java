@@ -18,10 +18,19 @@ public interface OperatorHandler {
         return handle(dialect,column, value.get(0), type, paramMap);
     }
 
+    default List<Object> parseListValues(List<String> values, Class type) {
+        return
+        values.stream()
+                .map(v -> parseValue(v, type))
+                .toList();
+    }
+
+    //TODO use Spring converter
     default Object parseValue(String value, Class type) {
         System.out.println("Type - "  + type);
         if (String.class == type) {
-            return "'" + value + "'";
+            //return "'" + value + "'";
+            return value;
         }
         else if (Boolean.class == type || boolean.class == type) {
             Boolean aBoolean = Boolean.valueOf(value);

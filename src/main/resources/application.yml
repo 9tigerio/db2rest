@@ -83,4 +83,4 @@ logging:
     schemacrawler.schemacrawler: ERROR
     schemacrawler.crawl: ERROR
     us.fatehi.utility.scheduler: ERROR
-
+    org.springframework.jdbc: DEBUG
