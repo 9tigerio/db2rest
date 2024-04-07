@@ -10,8 +10,20 @@ public class EndWithOperatorHandler implements OperatorHandler {
     private static final String OPERATOR = " like ";
 
     @Override
-    public String handle(Dialect dialect, DbColumn columnName, String value, Class type, Map<String, Object> paramMap) {
-        return columnName + OPERATOR + "'%" + value + "'";
+    public String handle(Dialect dialect, DbColumn column, String value, Class type, Map<String, Object> paramMap) {
+
+        //Always a string
+        Object vo = "%" + value;
+
+        if(dialect.supportAlias()) {
+
+            paramMap.put(column.getAliasedNameParam(), vo);
+            return column.getAliasedName() + OPERATOR + PREFIX + column.getAliasedNameParam();
+        }
+        else{
+            paramMap.put(column.name(), vo);
+            return column.name() + OPERATOR + PREFIX + column.name() ;
+        }
     }
 
 }

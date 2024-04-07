@@ -32,7 +32,7 @@ public class JdbcOperationService implements DbOperationService {
     @Override
     public List<Map<String, Object>> read(Map<String, Object> paramMap, String sql) {
 
-        return namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        return namedParameterJdbcTemplate.queryForList(sql, new MapSqlParameterSource(paramMap));
     }
 
     @Override
