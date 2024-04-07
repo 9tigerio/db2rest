@@ -65,21 +65,31 @@ Complex, error-prone maintenance-heavy file-based data exchange can be replaced 
 Evolve database structures at speed with DB2Rest DML support. DB2Rest provides database visualization, diagramming, linting and diff.
 
 
-
 # Supported Databases
 
-- **PostgreSQL** (Supported)
-- **MySQL** (Supported)
-- **Cloudflare D1** (Supported)
-- **Tembo** (Supported)
-- **Oracle**  (Supported)
-- **DigitalOcean PostgreSQL**  (Supported)
-- **DigitalOcean MySQL**  (Supported)
-- **AWS RDS Postgres**
-- **AWS RDS MySQL**
+- **PostgreSQL** 
+- **MySQL**
+- **Tembo** 
+- **Oracle**  (Including 9i, 10g)
+- **DigitalOcean PostgreSQL** 
+- **DigitalOcean MySQL** 
+- **AWS RDS Postgres** - (Work in progress)
+- **AWS RDS MySQL** - (Work in progress)
 - MongoDB - (Work in progress)
-- [PostgreML](https://postgresml.org/) : April 2024 - release
-- TursoDB 
+- MariaDB  (Work in progress)
+- **Cloudflare D1**
+
+
+# Planned Database Support
+
+- [PostgreML](https://postgresml.org/) : May-June 2024
+- **MS SQL Server**
+- TursoDB
+- **CockroachDB**
+- **Yugabyte**
+- **PlanetScale**
+- **CrunchyData**
+- **Singlestore**
 - **Neon** (Planned)
 - **Nile** (Planned)
 - **MindsDB**
@@ -87,13 +97,8 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - [Zilliz](https://zilliz.com/)
 - [AstraDB](https://www.datastax.com/products/datastax-astra)
 - [Vespa](https://vespa.ai/)
-- **MariaDB** 
-- **MS SQL Server** 
-- **CockroachDB**
-- **Yugabyte**
-- **PlanetScale** 
-- **CrunchyData**
-- **Singlestore** 
+- Amazon Lightsail PostgreSQL
+- Amazon Lightsail MySQL
 
 # Support
 
