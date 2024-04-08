@@ -37,7 +37,7 @@ spring:
 
 db2rest:
   dateTime:
-    useDefault: ${USE_DEFAULT_DATETIME_FORMAT:true}
+    enableDataTimeFormatting: ${ENABLE_DATETIME_FORMATTING:false}
     timeFormat: ${TIME_FORMAT:HH:mm:ss}
     dateFormat: ${DATE_FORMAT:yyyy-MM-dd}
     dateTimeFormat: ${DATE_TIME_FORMAT:yyyy-MM-dd HH:mm:ss}
@@ -77,11 +77,11 @@ d1:
 logging:
   level:
     com.homihq.db2rest:
-      rest: DEBUG
-      jdbc.service: DEBUG
+      rest: INFO
+      jdbc.service: INFO
     org.springframework.web : INFO
     org.springframework.beans : INFO
     schemacrawler.schemacrawler: ERROR
     schemacrawler.crawl: ERROR
     us.fatehi.utility.scheduler: ERROR
-    org.springframework.jdbc: DEBUG
+    org.springframework.jdbc: INFO
