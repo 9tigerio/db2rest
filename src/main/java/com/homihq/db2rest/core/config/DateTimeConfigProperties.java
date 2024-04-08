@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class DateTimeConfigProperties {
-    boolean useDefault;
+    boolean enableDataTimeFormatting;
     String timeFormat;
     String dateFormat;
     String dateTimeFormat;

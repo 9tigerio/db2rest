@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-@ConditionalOnProperty(prefix = "db2rest.dateTime", name = "useDefault", havingValue = "false")
+@ConditionalOnProperty(prefix = "db2rest.dateTime", name = "enableDataTimeFormatting", havingValue = "true")
 public class DateTimeConfiguration {
 
     @Bean
