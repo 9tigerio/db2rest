@@ -14,13 +14,12 @@ public class LessThanEqualToOperatorHandler implements OperatorHandler {
         Object vo = parseValue(value, type);
 
         if(dialect.supportAlias()) {
-
-            paramMap.put(column.getAliasedNameParam(), vo);
-            return column.getAliasedName() + OPERATOR + PREFIX + column.getAliasedNameParam();
+            String key = reviewAndSetParam(column.getAliasedNameParam(), vo, paramMap);
+            return column.getAliasedName() + OPERATOR + PREFIX + key;
         }
         else{
-            paramMap.put(column.name(), vo);
-            return column.name() + OPERATOR + PREFIX + column.name();
+            String key = reviewAndSetParam(column.name(), vo, paramMap);
+            return column.name() + OPERATOR + PREFIX + key;
         }
     }
 
