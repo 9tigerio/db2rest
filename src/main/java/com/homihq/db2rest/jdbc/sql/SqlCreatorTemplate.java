@@ -132,8 +132,8 @@ public class SqlCreatorTemplate {
         }
 
 
-        log.info("limit - {}", readContext.getLimit());
-        log.info("offset - {}", readContext.getOffset());
+        log.debug("limit - {}", readContext.getLimit());
+        log.debug("offset - {}", readContext.getOffset());
 
 
         if(readContext.getLimit() > -1) data.put("limit", readContext.getLimit());
@@ -143,8 +143,8 @@ public class SqlCreatorTemplate {
 
         String template = "read";
 
-        log.info("Product family - {}", this.dialect.getProductFamily());
-        log.info("Product family - {}", this.dialect.getMajorVersion());
+        log.debug("Product family - {}", this.dialect.getProductFamily());
+        log.debug("Product family - {}", this.dialect.getMajorVersion());
 
         //TODO DB specific processing must move away
         if(StringUtils.equalsIgnoreCase(this.dialect.getProductFamily(), "Oracle")) {
@@ -156,8 +156,8 @@ public class SqlCreatorTemplate {
                 template = "read-ora-9";
             }
         }
-        log.info("template - {}", template);
-        log.info("data - {}", data);
+        log.debug("template - {}", template);
+        log.debug("data - {}", data);
         Context context = new Context();
         context.setVariables(data);
         return templateEngine.process(template, context);
