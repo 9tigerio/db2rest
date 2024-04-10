@@ -12,16 +12,15 @@ public class GreaterThanEqualToOperatorHandler implements OperatorHandler {
     @Override
     public String handle(Dialect dialect, DbColumn column, String value, Class type, Map<String, Object> paramMap) {
 
-        Object vo = parseValue(value, type);
+        Object vo = dialect.processValue(value, type,null);
 
         if(dialect.supportAlias()) {
-
-            paramMap.put(column.getAliasedNameParam(), vo);
-            return column.getAliasedName() + OPERATOR + PREFIX + column.getAliasedNameParam();
+            String key = reviewAndSetParam(column.getAliasedNameParam(), vo, paramMap);
+            return column.getAliasedName() + OPERATOR + PREFIX + key;
         }
         else{
-            paramMap.put(column.name(), vo);
-            return column.name() + OPERATOR + PREFIX + column.name();
+            String key = reviewAndSetParam(column.name(), vo, paramMap);
+            return column.name() + OPERATOR + PREFIX + key;
         }
     }
 
