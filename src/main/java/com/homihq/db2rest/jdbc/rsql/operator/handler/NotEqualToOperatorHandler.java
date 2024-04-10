@@ -10,8 +10,17 @@ public class NotEqualToOperatorHandler implements OperatorHandler {
    private static final String OPERATOR = " != ";
 
     @Override
-    public String handle(Dialect dialect, DbColumn columnName, String value, Class type, Map<String, Object> paramMap) {
-        return columnName + OPERATOR + parseValue(value, type);
+    public String handle(Dialect dialect, DbColumn column, String value, Class type, Map<String, Object> paramMap) {
+        Object vo = dialect.processValue(value, type, null);
+
+        if(dialect.supportAlias()) {
+            String key = reviewAndSetParam(column.getAliasedNameParam(), vo, paramMap);
+            return column.getAliasedName() + OPERATOR + PREFIX + key;
+        }
+        else{
+            String key = reviewAndSetParam(column.name(), vo, paramMap);
+            return column.name() + OPERATOR + PREFIX + key;
+        }
     }
 
 }

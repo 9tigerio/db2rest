@@ -11,7 +11,7 @@ public class LessThanEqualToOperatorHandler implements OperatorHandler {
 
     @Override
     public String handle(Dialect dialect, DbColumn column, String value, Class type, Map<String, Object> paramMap) {
-        Object vo = parseValue(value, type);
+        Object vo = dialect.processValue(value, type,null);
 
         if(dialect.supportAlias()) {
             String key = reviewAndSetParam(column.getAliasedNameParam(), vo, paramMap);

@@ -29,17 +29,32 @@ public interface Dialect {
 
     void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
 
+    default List<Object> parseListValues(List<String> values, Class type) {
+        return
+                values.stream()
+                        .map(v -> processValue(v, type, null))
+                        .toList();
+    }
 
+    //TODO use Spring converter
     default Object processValue(String value, Class<?> type, String format) {
+        System.out.println("type " + type);
         if (String.class == type) {
+            //return "'" + value + "'";
             return value;
         }
         else if (Boolean.class == type || boolean.class == type) {
-            return Boolean.valueOf(value);
-
+            Boolean aBoolean = Boolean.valueOf(value);
+            return aBoolean ? "1" : "0";
         }
         else if (Integer.class == type || int.class == type) {
             return Integer.valueOf(value);
+        }
+        else if (Long.class == type || long.class == type) {
+            return Long.valueOf(value);
+        }
+        else if (Short.class == type || short.class == type) {
+            return Short.valueOf(value);
         }
         else {
             return value;

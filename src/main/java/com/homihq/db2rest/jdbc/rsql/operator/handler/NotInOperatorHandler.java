@@ -21,20 +21,17 @@ public class NotInOperatorHandler implements OperatorHandler {
 
     @Override
     public String handle(Dialect dialect, DbColumn column, List<String> values, Class type, Map<String, Object> paramMap) {
-        log.info("column - {}", column.name());
-        log.info("values - {}", values);
-        log.info("type - {}", type);
 
-        List<Object> dataItems = parseListValues(values, type);
+        List<Object> vo = dialect.parseListValues(values, type);
 
         if(dialect.supportAlias()) {
 
-            paramMap.put(column.getAliasedNameParam(), dataItems);
-            return column.getAliasedName() + OPERATOR +" ( "+ PREFIX + column.getAliasedNameParam() + " ) ";
+            String key = reviewAndSetParam(column.getAliasedNameParam(), vo, paramMap);
+            return column.getAliasedName() + OPERATOR +" ( "+ PREFIX + key + " ) ";
         }
         else{
-            paramMap.put(column.name(), dataItems);
-            return column.name() + OPERATOR + " ( " + PREFIX + column.name() + " ) ";
+            String key = reviewAndSetParam(column.name(), vo, paramMap);
+            return column.name() + OPERATOR + " ( " + PREFIX + key + " ) ";
         }
     }
 

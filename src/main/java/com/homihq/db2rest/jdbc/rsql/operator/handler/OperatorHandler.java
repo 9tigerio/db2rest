@@ -34,14 +34,19 @@ public interface OperatorHandler {
         return handle(dialect,column, value.get(0), type, paramMap);
     }
 
-    default List<Object> parseListValues(List<String> values, Class type) {
+    /*
+    default List<Object> parseListValues(Dialect dialect, List<String> values, Class type) {
         return
         values.stream()
-                .map(v -> parseValue(v, type))
+                .map(v -> dialect.processValue(v, type, null))
                 .toList();
     }
 
+     */
+
     //TODO use Spring converter
+
+    /*
     default Object parseValue(String value, Class type) {
         System.out.println("Type - "  + type);
         if (String.class == type) {
@@ -61,5 +66,7 @@ public interface OperatorHandler {
         }
 
     }
+
+     */
 
 }
