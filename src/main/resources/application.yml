@@ -5,9 +5,7 @@ app:
 server:
   port: ${SERVER_PORT:8080}
   forward-headers-strategy: framework
-  servlet:
-    session:
-      timeout: 90m
+
 
 spring:
 
@@ -45,9 +43,6 @@ db2rest:
   defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
   datasource:
     type: ${DATASOURCE_TYPE:jdbc}
-
-    includeTables: ${INCLUDE_TABLES:}
-    includeCatalogs: ${INCLUDE_CATALOGS:#{null}}
   includeSchemas: ${INCLUDE_SCHEMAS:#{null}}
 
   auth:
@@ -81,7 +76,4 @@ logging:
       jdbc.service: INFO
     org.springframework.web : INFO
     org.springframework.beans : INFO
-    schemacrawler.schemacrawler: ERROR
-    schemacrawler.crawl: ERROR
-    us.fatehi.utility.scheduler: ERROR
     org.springframework.jdbc: INFO
