@@ -1,12 +1,13 @@
 package com.homihq.db2rest.rest.oracle;
 
 import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
+import com.adelean.inject.resources.junit.jupiter.GivenTextResource;
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.OracleBaseIntegrationTest;
-import com.homihq.db2rest.utils.ITestUtil;
+
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -37,6 +38,22 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
     @GivenJsonResource("/testdata/BULK_CREATE_FILM_BAD_REQUEST.json")
     List<Map<String,Object>> BULK_CREATE_FILM_BAD_REQUEST;
 
+    @GivenTextResource("/testdata/CREATE_FILM_REQUEST_CSV.csv")
+    String CREATE_FILM_REQUEST_CSV;
+
+    @GivenTextResource("/testdata/CREATE_FILM_BAD_REQUEST_CSV.csv")
+    String CREATE_FILM_BAD_REQUEST_CSV;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_DIRECTOR_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_DIRECTOR_REQUEST;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_DIRECTOR_BAD_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_DIRECTOR_BAD_REQUEST;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_REVIEW_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_REVIEW_REQUEST;
+
+
     @Test
     @DisplayName("Create many films.")
     void create() throws Exception {
@@ -66,7 +83,7 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post("/FILM/bulk")
                         .queryParam("sequences", "film_id:film_sequence")
                         .contentType("text/csv").accept(APPLICATION_JSON)
-                        .content(ITestUtil.CREATE_FILM_REQUEST_CSV))
+                        .content(CREATE_FILM_REQUEST_CSV))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
@@ -85,7 +102,7 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
                         .queryParam("sequences", "film_id:film_sequence")
                         .contentType("text/csv")
                         .accept(APPLICATION_JSON)
-                        .content(ITestUtil.CREATE_FILM_BAD_REQUEST_CSV))
+                        .content(CREATE_FILM_BAD_REQUEST_CSV))
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
                 .andDo(document("oracle-bulk-create-films-csv-error"));
@@ -114,7 +131,8 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post("/DIRECTOR/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(ITestUtil.BULK_CREATE_DIRECTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_REQUEST))
+                )
                 .andExpect(status().isCreated())
                 //.andDo(print())
                 .andDo(document("oracle-bulk-create-directors"));
@@ -132,7 +150,8 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
                         .param("tsid", "director_id")
                         .param("tsidType", "string")
                         .header("Content-Profile", "sakila")
-                        .content(ITestUtil.BULK_CREATE_DIRECTOR_BAD_REQUEST))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_BAD_REQUEST))
+                )
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
                 .andDo(document("oracle-bulk-create-directors-with-wrong-tsid-type"));
@@ -146,7 +165,8 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post("/REVIEW/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(ITestUtil.BULK_CREATE_REVIEW_REQUEST))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_REVIEW_REQUEST))
+                )
                 .andExpect(status().isCreated())
                 //.andDo(print())
                 .andDo(document("oracle-bulk-create-reviews-with-default-tsid-type"));
