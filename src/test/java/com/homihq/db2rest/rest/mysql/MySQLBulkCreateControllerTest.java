@@ -95,7 +95,8 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(post("/film/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_BAD_REQUEST)))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_BAD_REQUEST))
+                )
                 .andExpect(status().isBadRequest())
                 // .andDo(print())
                 .andDo(document("mysql-bulk-create-films-error"));
