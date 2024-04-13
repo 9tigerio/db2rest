@@ -1,8 +1,14 @@
 package com.homihq.db2rest.rest;
 
+import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
+import com.adelean.inject.resources.junit.jupiter.TestWithResources;
+import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
-import com.homihq.db2rest.utils.ITestUtil;
 import org.junit.jupiter.api.*;
+
+import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.equalTo;
@@ -15,7 +21,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(170)
+@TestWithResources
 class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
+
+    @WithJacksonMapper
+    ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
+
+    @GivenJsonResource("/testdata/UPDATE_FILM_REQUEST.json")
+    Map<String,Object> UPDATE_FILM_REQUEST;
+
+    @GivenJsonResource("/testdata/UPDATE_NON_EXISTING_FILM_REQUEST.json")
+    Map<String,Object> UPDATE_NON_EXISTING_FILM_REQUEST;
+
+    @GivenJsonResource("/testdata/UPDATE_NON_EXISTING_TABLE.json")
+    Map<String,Object> UPDATE_NON_EXISTING_TABLE;
+
+    @GivenJsonResource("/testdata/UPDATE_FILMS_REQUEST.json")
+    Map<String,Object> UPDATE_FILMS_REQUEST;
+
+
 
     @Test
     @DisplayName("Update an existing film")
@@ -26,7 +51,8 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "title==\"ACADEMY DINOSAUR\"")
-                        .content(ITestUtil.UPDATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(UPDATE_FILM_REQUEST))
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
                 //.andDo(print())
@@ -42,7 +68,8 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "title==\"BAAHUBALI\"")
-                        .content(ITestUtil.UPDATE_NON_EXISTING_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_FILM_REQUEST))
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(0)))
                 //.andDo(print())
@@ -57,7 +84,8 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
-                        .content(ITestUtil.UPDATE_NON_EXISTING_TABLE))
+                        .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_TABLE))
+                )
                 .andExpect(status().isNotFound())
                 //.andDo(print())
                 .andDo(document("pg-update-non-existing-table"));
@@ -67,10 +95,12 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Updating multiple films")
     void updateMultipleColumns() throws Exception {
 
+
         mockMvc.perform(patch("/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
-                        .content(ITestUtil.UPDATE_FILMS_REQUEST))
+                        .content(objectMapper.writeValueAsString(UPDATE_FILMS_REQUEST))
+                )
                 //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(2)))
