@@ -6,7 +6,7 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.OracleBaseIntegrationTest;
-import com.homihq.db2rest.utils.ITestUtil;
+
 import org.junit.jupiter.api.*;
 
 import java.util.Map;
