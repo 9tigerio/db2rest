@@ -1,10 +1,16 @@
 package com.homihq.db2rest.rest.pg;
 
+import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
+import com.adelean.inject.resources.junit.jupiter.GivenTextResource;
+import com.adelean.inject.resources.junit.jupiter.TestWithResources;
+import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
-import com.homihq.db2rest.utils.ITestUtil;
 import org.junit.jupiter.api.*;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.util.List;
+import java.util.Map;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -15,7 +21,36 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(181)
+@TestWithResources
 class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
+
+    @WithJacksonMapper
+    ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
+
+    @GivenJsonResource("/testdata/BULK_CREATE_FILM_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_FILM_REQUEST;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_FILM_BAD_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_FILM_BAD_REQUEST;
+
+
+    @GivenTextResource("/testdata/CREATE_FILM_REQUEST_CSV.csv")
+    String CREATE_FILM_REQUEST_CSV;
+
+    @GivenTextResource("/testdata/CREATE_FILM_BAD_REQUEST_CSV.csv")
+    String CREATE_FILM_BAD_REQUEST_CSV;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_DIRECTOR_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_DIRECTOR_REQUEST;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_DIRECTOR_BAD_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_DIRECTOR_BAD_REQUEST;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_REVIEW_REQUEST.json")
+    List<Map<String,Object>> BULK_CREATE_REVIEW_REQUEST;
+
+
 
     @Test
     @DisplayName("Create many films.")
@@ -24,7 +59,8 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post("/film/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(ITestUtil.BULK_CREATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_REQUEST))
+                )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows").isArray())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
@@ -45,7 +81,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post("/film/bulk")
                         .contentType("text/csv")
                         .accept(APPLICATION_JSON)
-                        .content(ITestUtil.CREATE_FILM_REQUEST_CSV))
+                        .content(CREATE_FILM_REQUEST_CSV))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
@@ -63,7 +99,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post("/film/bulk")
                         .contentType("text/csv")
                         .accept(APPLICATION_JSON)
-                        .content(ITestUtil.CREATE_FILM_BAD_REQUEST_CSV))
+                        .content(CREATE_FILM_BAD_REQUEST_CSV))
                 .andExpect(status().isNotFound())
                 //.andDo(print())
                 .andDo(document("pg-bulk-create-films-csv-error"));
@@ -77,7 +113,8 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post("/film/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(ITestUtil.BULK_CREATE_FILM_BAD_REQUEST))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_BAD_REQUEST))
+                )
                 .andExpect(status().isNotFound())
                 // .andDo(print())
                 .andDo(document("pg-bulk-create-films-error"));
@@ -91,7 +128,8 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post("/director/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(ITestUtil.BULK_CREATE_DIRECTOR_REQUEST))
+                    .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_REQUEST))
+                )
                 .andExpect(status().isCreated())
                 //.andDo(print())
                 .andDo(document("pg-bulk-create-directors"));
@@ -105,7 +143,8 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post("/director/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(ITestUtil.BULK_CREATE_DIRECTOR_BAD_REQUEST)) //TODO - review
+                    .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_BAD_REQUEST))
+                )
                 .andExpect(status().isCreated())
                 //.andDo(print())
                 .andDo(document("pg-bulk-create-directors-with-int-tsid-type"));
@@ -119,7 +158,8 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post("/review/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(ITestUtil.BULK_CREATE_REVIEW_REQUEST))
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_REVIEW_REQUEST))
+                )
                 .andExpect(status().isCreated())
                 //.andDo(print())
                 .andDo(document("pg-bulk-create-reviews-with-string-tsid-type"));

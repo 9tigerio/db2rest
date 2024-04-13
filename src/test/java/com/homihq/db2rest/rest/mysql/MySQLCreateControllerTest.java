@@ -6,15 +6,11 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import com.homihq.db2rest.utils.ITestUtil;
-import com.jayway.jsonpath.JsonPath;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.*;
-import org.springframework.http.MediaType;
 
+import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.*;
 import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
