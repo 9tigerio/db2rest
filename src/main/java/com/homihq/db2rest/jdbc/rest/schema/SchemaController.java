@@ -56,7 +56,7 @@ public class SchemaController implements SchemaRestApi{
 
         String [] fragments = filter.split("==");
 
-        if(fragments.length != 2) throw new GenericDataAccessException("Invalid filter condition. Only == supported for schema filter with a single condition only.");
+        if(fragments.length != 2) throw new GenericDataAccessException("Invalid filter condition. Only == supported for schema filter using a single value only.");
 
         return new SchemaFilter(fragments[0], fragments[1]);
 
