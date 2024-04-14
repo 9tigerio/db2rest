@@ -1,17 +1,16 @@
 package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.core.DbOperationService;
-import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.service.CreateService;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.dto.InsertableColumn;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
-import com.homihq.db2rest.schema.SchemaCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -31,9 +30,9 @@ public class JdbcCreateService implements CreateService {
 
     private final TSIDProcessor tsidProcessor;
     private final SqlCreatorTemplate sqlCreatorTemplate;
-    private final SchemaCache schemaCache;
+    private final JdbcSchemaCache jdbcSchemaCache;
     private final DbOperationService dbOperationService;
-    private final Dialect dialect;
+
 
     @Override
     @Transactional
@@ -41,7 +40,7 @@ public class JdbcCreateService implements CreateService {
                                Map<String, Object> data, boolean tsIdEnabled, List<String> sequences) {
         try {
             //1. get actual table
-            DbTable dbTable = schemaCache.getTable(tableName);
+            DbTable dbTable = jdbcSchemaCache.getTable(tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(data.keySet().stream().toList()) :
@@ -78,7 +77,7 @@ public class JdbcCreateService implements CreateService {
                 }
             }
 
-            this.dialect.processTypes(dbTable, insertableColumns, data);
+            this.jdbcSchemaCache.getDialect().processTypes(dbTable, insertableColumns, data);
 
             CreateContext context = new CreateContext(dbTable, insertableColumns, insertableColumnList);
             String sql = sqlCreatorTemplate.create(context);

@@ -1,10 +1,10 @@
 package com.homihq.db2rest.jdbc.service;
 
 import com.homihq.db2rest.core.DbOperationService;
-import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.service.UpdateService;
 
+import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.core.model.DbTable;
 import com.homihq.db2rest.core.model.DbWhere;
@@ -12,7 +12,6 @@ import com.homihq.db2rest.jdbc.rest.update.dto.UpdateContext;
 
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
-import com.homihq.db2rest.schema.SchemaCache;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,22 +27,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JdbcUpdateService implements UpdateService {
 
-    private final SchemaCache schemaCache;
+    private final JdbcSchemaCache jdbcSchemaCache;
     private final SqlCreatorTemplate sqlCreatorTemplate;
     private final DbOperationService dbOperationService;
-    private final Dialect dialect;
 
     @Override
     @Transactional
     public int patch(String schemaName, String tableName, Map<String, Object> data, String filter) {
 
-        DbTable dbTable = schemaCache.getTable(tableName);
+        DbTable dbTable = jdbcSchemaCache.getTable(tableName);
 
 
         List<String> updatableColumns =
             data.keySet().stream().toList();
 
-        this.dialect.processTypes(dbTable, updatableColumns, data);
+        jdbcSchemaCache.getDialect().processTypes(dbTable, updatableColumns, data);
 
         UpdateContext context = UpdateContext.builder()
                 .tableName(tableName)
@@ -89,7 +87,7 @@ public class JdbcUpdateService implements UpdateService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, dialect));
+                            dbWhere, jdbcSchemaCache.getDialect()));
             context.setWhere(where);
 
         }

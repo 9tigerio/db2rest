@@ -32,7 +32,7 @@ public class D1ServiceConfiguration {
                                                SqlCreatorTemplate sqlCreatorTemplate,
                                                SchemaCache schemaCache,
                                                DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, schemaCache, dbOperationService, dialect);
+        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, null, dbOperationService);
     }
 
     @Bean
@@ -40,7 +40,7 @@ public class D1ServiceConfiguration {
                                        SqlCreatorTemplate sqlCreatorTemplate,
                                        SchemaCache schemaCache,
                                        DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcCreateService(tsidProcessor, sqlCreatorTemplate, schemaCache, dbOperationService, dialect);
+        return new JdbcCreateService(tsidProcessor, sqlCreatorTemplate, null, dbOperationService);
     }
 
     //QUERY SERVICE
@@ -87,7 +87,7 @@ public class D1ServiceConfiguration {
             SchemaCache schemaCache,
             SqlCreatorTemplate sqlCreatorTemplate,
             DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcUpdateService(schemaCache, sqlCreatorTemplate, dbOperationService, dialect);
+        return new JdbcUpdateService(null, sqlCreatorTemplate, dbOperationService);
     }
 
 
@@ -98,7 +98,7 @@ public class D1ServiceConfiguration {
     SchemaCache schemaCache,
     SqlCreatorTemplate sqlCreatorTemplate,
     DbOperationService dbOperationService, Dialect dialect) {
-        return new JdbcDeleteService(db2RestConfigProperties, schemaCache, sqlCreatorTemplate, dbOperationService, dialect);
+        return new JdbcDeleteService(db2RestConfigProperties, null, sqlCreatorTemplate, dbOperationService);
     }
 
     //RPC
