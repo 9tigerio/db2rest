@@ -1,10 +1,10 @@
 package com.homihq.db2rest.jdbc.rest.read.dto;
 
 
-import com.homihq.db2rest.core.model.DbColumn;
-import com.homihq.db2rest.core.model.DbJoin;
-import com.homihq.db2rest.core.model.DbSort;
-import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
+import com.homihq.db2rest.jdbc.core.model.DbJoin;
+import com.homihq.db2rest.jdbc.core.model.DbSort;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,9 +1,8 @@
 package com.homihq.db2rest.jdbc.sql;
 
-import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
-import com.homihq.db2rest.core.model.DbColumn;
-import com.homihq.db2rest.core.model.DbSort;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
+import com.homihq.db2rest.jdbc.core.model.DbSort;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.jdbc.dto.DeleteContext;

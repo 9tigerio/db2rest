@@ -1,10 +1,9 @@
 package com.homihq.db2rest.jdbc.rsql.operator.handler;
 
-import com.homihq.db2rest.core.Dialect;
-import com.homihq.db2rest.core.model.DbColumn;
+import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
 
 import java.util.Map;
-import java.util.Random;
 
 public class GreaterThanOperatorHandler implements OperatorHandler {
 

@@ -1,8 +1,8 @@
 package com.homihq.db2rest.d1;
 
-import com.homihq.db2rest.core.Dialect;
+import com.homihq.db2rest.jdbc.core.Dialect;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.processor;
 
-import com.homihq.db2rest.core.model.DbSort;
+import com.homihq.db2rest.jdbc.core.model.DbSort;
 import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

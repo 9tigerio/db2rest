@@ -27,8 +27,6 @@ import java.util.Calendar;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
-
 
 import lombok.extern.slf4j.Slf4j;
 

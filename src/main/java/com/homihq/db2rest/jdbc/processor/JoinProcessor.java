@@ -1,16 +1,16 @@
 package com.homihq.db2rest.jdbc.processor;
 
-import com.homihq.db2rest.core.model.DbColumn;
-import com.homihq.db2rest.core.model.DbJoin;
-import com.homihq.db2rest.core.model.DbTable;
-import com.homihq.db2rest.core.model.DbWhere;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
+import com.homihq.db2rest.jdbc.core.model.DbJoin;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
+import com.homihq.db2rest.jdbc.core.model.DbWhere;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
 import static com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap.*;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
-import static com.homihq.db2rest.schema.AliasGenerator.*;
+import static com.homihq.db2rest.jdbc.core.schema.AliasGenerator.*;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

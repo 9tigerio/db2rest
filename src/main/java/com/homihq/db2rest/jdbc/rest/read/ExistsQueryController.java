@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.rest.read;
 
-import com.homihq.db2rest.core.service.ExistsQueryService;
+import com.homihq.db2rest.jdbc.core.service.ExistsQueryService;
 import com.homihq.db2rest.jdbc.rest.read.dto.ExistsResponse;
 import com.homihq.db2rest.jdbc.rest.read.dto.JoinDetail;
 import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;

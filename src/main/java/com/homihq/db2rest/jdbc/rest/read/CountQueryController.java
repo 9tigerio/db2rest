@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.rest.read;
 
-import com.homihq.db2rest.core.service.CountQueryService;
+import com.homihq.db2rest.jdbc.core.service.CountQueryService;
 import com.homihq.db2rest.jdbc.rest.read.dto.CountResponse;
 import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.sql;
 
 
-import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.DatabaseMetaData;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
+import static com.homihq.db2rest.jdbc.core.schema.AliasGenerator.getAlias;
 
 public interface MetaDataExtraction {
     boolean canHandle(String database);
