@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest;
+package com.homihq.db2rest.rest.pg;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.hamcrest.Matchers;

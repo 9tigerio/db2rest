@@ -214,6 +214,62 @@ CREATE TABLE film_actor (
 
 ALTER TABLE public.film_actor OWNER TO postgres;
 
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE users (
+           auid integer NOT NULL,
+           username varchar(100) NOT NULL,
+           password varchar(150) NOT NULL,
+           createdate timestamp without time zone DEFAULT now() NOT NULL,
+           isActive boolean NOT NULL default true
+);
+
+ALTER TABLE public.users OWNER TO postgres;
+
+
+--
+-- Table structure for table `userprofile`
+--
+
+CREATE TABLE userprofile (
+                 apid integer NOT NULL,
+                 auid integer NOT NULL,
+                 firstname varchar(50) NOT NULL,
+                 lastname varchar(50) NOT NULL,
+                 email varchar(100) NOT NULL,
+                 phone varchar(45) NOT NULL
+);
+
+ALTER TABLE public.userprofile OWNER TO postgres;
+
+
+--
+-- Table structure for table `tops`
+--
+
+CREATE TABLE tops (
+      top_item varchar(30) NOT NULL,
+      color varchar(30) NOT NULL,
+      size varchar(2) NOT NULL
+);
+
+ALTER TABLE public.tops OWNER TO postgres;
+
+--
+-- Table structure for table `bottoms`
+--
+
+CREATE TABLE bottoms (
+     bottom_item varchar(30) NOT NULL,
+     color varchar(30) NOT NULL,
+     size varchar(2) NOT NULL
+);
+
+ALTER TABLE public.bottoms OWNER TO postgres;
+
 --
 -- Name: film_category; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
 --
