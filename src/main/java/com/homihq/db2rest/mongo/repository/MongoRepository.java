@@ -8,6 +8,7 @@ import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,5 +32,10 @@ public class MongoRepository {
 
     public Object find(Query query, String collectionName) {
         return mongoTemplate.find(query, Object.class, collectionName);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> findOne(Query query, String collectionName) {
+        return mongoTemplate.findOne(query, LinkedHashMap.class, collectionName);
     }
 }

@@ -29,7 +29,6 @@ public class MongoController implements MongoRestApi {
     public CreateResponse save(String collectionName,
                                List<String> includeFields,
                                Map<String, Object> data) {
-
         return mongoRepository
                 .save(collectionName, includeFields, data);
 
@@ -54,29 +53,46 @@ public class MongoController implements MongoRestApi {
             query.skip(offset);
         }
 
-        if (StringUtils.isNotBlank(filter)) {
-            query.addCriteria(rsqlMongodbAdapter.getCriteria(filter, Object.class));
-        }
-
-        if (!StringUtils.equals("*", fields)) {
-            query.fields().include(fields.split(","));
-        }
-
-        sortDirection(sorts).ifPresent(columnSort ->
-                query.with(Sort.by(columnSort.sortDirection, columnSort.column)));
+        addCriteria(filter, query);
+        includeFields(fields, query);
+        sortDirection(sorts).ifPresent(fieldSort -> sortFields(fieldSort, query));
 
         return mongoRepository.find(query, collectionName);
     }
 
-    private static Optional<ColumnSort> sortDirection(List<String> sorts) {
+    private static Optional<FieldSort> sortDirection(List<String> sorts) {
         return sorts.stream()
                 .map(sort -> sort.split(";"))
                 .filter(sortParts -> sortParts.length == 2)
-                .map(sortParts -> new ColumnSort(sortParts[0], sortParts[1].equalsIgnoreCase("DESC") ?
+                .map(sortParts -> new FieldSort(sortParts[0], sortParts[1].equalsIgnoreCase("DESC") ?
                         Sort.Direction.DESC : Sort.Direction.ASC))
                 .findFirst();
     }
 
-    private record ColumnSort(String column, Sort.Direction sortDirection) {
+    private record FieldSort(String field, Sort.Direction sortDirection) {
+    }
+
+    @Override
+    public Map<String, Object> findOne(String collectionName, String fields, String filter) {
+        var query = new Query();
+        addCriteria(filter, query);
+        includeFields(fields, query);
+        return mongoRepository.findOne(query, collectionName);
+    }
+
+    private void addCriteria(String filter, Query query) {
+        if (StringUtils.isNotBlank(filter)) {
+            query.addCriteria(rsqlMongodbAdapter.getCriteria(filter, Object.class));
+        }
+    }
+
+    private void includeFields(String fields, Query query) {
+        if (!StringUtils.equals("*", fields)) {
+            query.fields().include(fields.split(","));
+        }
+    }
+
+    private void sortFields(FieldSort fieldSort, Query query) {
+        query.with(Sort.by(fieldSort.sortDirection, fieldSort.field));
     }
 }
