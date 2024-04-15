@@ -3,8 +3,7 @@ package com.homihq.db2rest.jdbc.processor;
 
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
-import com.homihq.db2rest.core.model.DbTable;
-import com.homihq.db2rest.schema.SchemaCache;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;

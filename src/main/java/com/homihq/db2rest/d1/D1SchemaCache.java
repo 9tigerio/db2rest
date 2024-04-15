@@ -2,10 +2,10 @@ package com.homihq.db2rest.d1;
 
 import com.homihq.db2rest.d1.model.D1Column;
 import com.homihq.db2rest.d1.model.D1Table;
-import com.homihq.db2rest.core.model.DbColumn;
-import com.homihq.db2rest.core.model.DbTable;
-import static com.homihq.db2rest.schema.AliasGenerator.getAlias;
-import com.homihq.db2rest.schema.SchemaCache;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
+import static com.homihq.db2rest.jdbc.core.schema.AliasGenerator.getAlias;
+import com.homihq.db2rest.jdbc.core.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

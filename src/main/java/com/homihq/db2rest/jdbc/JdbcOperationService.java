@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc;
 
-import com.homihq.db2rest.core.DbOperationService;
-import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.core.DbOperationService;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.jdbc.rest.read.dto.CountResponse;

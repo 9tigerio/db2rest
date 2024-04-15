@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.sql;
 
-import com.homihq.db2rest.core.model.DbColumn;
-import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

@@ -4,7 +4,6 @@ import com.homihq.db2rest.d1.D1Dialect;
 import com.homihq.db2rest.d1.D1OperationService;
 import com.homihq.db2rest.d1.D1RestClient;
 import com.homihq.db2rest.d1.D1SchemaCache;
-import com.homihq.db2rest.schema.AliasGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

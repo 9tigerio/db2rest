@@ -1,17 +1,17 @@
 package com.homihq.db2rest.jdbc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.core.Dialect;
+import com.homihq.db2rest.jdbc.core.Dialect;
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.exception.InvalidTableException;
-import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.core.model.DbTable;
 
 import com.homihq.db2rest.jdbc.dialect.MySQLDialect;
 import com.homihq.db2rest.jdbc.dialect.OracleDialect;
 import com.homihq.db2rest.jdbc.dialect.PostGreSQLDialect;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
-import com.homihq.db2rest.schema.SchemaCache;
+import com.homihq.db2rest.jdbc.core.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.jdbc.support.MetaDataAccessException;
 

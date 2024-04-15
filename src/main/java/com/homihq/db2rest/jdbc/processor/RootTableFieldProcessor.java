@@ -2,7 +2,7 @@ package com.homihq.db2rest.jdbc.processor;
 
 
 import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
-import com.homihq.db2rest.core.model.DbColumn;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;

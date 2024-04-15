@@ -1,12 +1,13 @@
 package com.homihq.db2rest.jdbc.config;
 
 
-import com.homihq.db2rest.core.DbOperationService;
+import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.core.bulk.DataProcessor;
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
-import com.homihq.db2rest.core.service.*;
+
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.core.service.*;
 import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
@@ -16,7 +17,7 @@ import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
 import com.homihq.db2rest.jdbc.rest.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
-import com.homihq.db2rest.jdbc.service.*;
+
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,13 +1,12 @@
 package com.homihq.db2rest.jdbc.rsql.operator.handler;
 
-import com.homihq.db2rest.core.Dialect;
-import com.homihq.db2rest.core.model.DbColumn;
+import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class NotInOperatorHandler implements OperatorHandler {

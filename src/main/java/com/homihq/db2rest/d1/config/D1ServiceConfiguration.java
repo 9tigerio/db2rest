@@ -2,17 +2,18 @@ package com.homihq.db2rest.d1.config;
 
 
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
-import com.homihq.db2rest.core.DbOperationService;
-import com.homihq.db2rest.core.Dialect;
-import com.homihq.db2rest.core.service.*;
+import com.homihq.db2rest.jdbc.core.DbOperationService;
+import com.homihq.db2rest.jdbc.core.Dialect;
+
 import com.homihq.db2rest.d1.D1Dialect;
 import com.homihq.db2rest.d1.service.D1FunctionService;
 import com.homihq.db2rest.d1.service.D1ProcedureService;
+import com.homihq.db2rest.jdbc.core.service.*;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
-import com.homihq.db2rest.jdbc.service.*;
+
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
-import com.homihq.db2rest.schema.SchemaCache;
+import com.homihq.db2rest.jdbc.core.schema.SchemaCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

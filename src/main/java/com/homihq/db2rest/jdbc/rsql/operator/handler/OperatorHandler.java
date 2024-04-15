@@ -1,8 +1,7 @@
 package com.homihq.db2rest.jdbc.rsql.operator.handler;
 
-import com.homihq.db2rest.core.Dialect;
-import com.homihq.db2rest.core.model.DbColumn;
-import lombok.extern.slf4j.Slf4j;
+import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
 
 import java.util.List;
 import java.util.Map;
