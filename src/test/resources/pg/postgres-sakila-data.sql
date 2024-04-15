@@ -1,3 +1,7 @@
+INSERT INTO review (review_id , message, rating ,film_id) VALUES ('ABC123','Awesome movie', 4, 1);
+
+
+
 -- tops
 
 
