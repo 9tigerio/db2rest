@@ -1,4 +1,4 @@
-package com.homihq.db2rest.rest.mysql;
+package com.homihq.db2rest.rest.pg;
 
 import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
@@ -6,6 +6,7 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
+import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -21,8 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestWithResources
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(14)
-class MySQLInnerSelfJoinControllerTest extends MySQLBaseIntegrationTest {
+@Order(114)
+class PgInnerSelfJoinControllerTest extends PostgreSQLBaseIntegrationTest {
 
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
@@ -53,7 +54,7 @@ class MySQLInnerSelfJoinControllerTest extends MySQLBaseIntegrationTest {
                 //.andExpect(jsonPath("$[0].last_name", equalTo("GUINESS")))
 
 
-                .andDo(document("mysql-inner-multi-table-join"));
+                .andDo(document("pg-inner-multi-table-join"));
 
 
     }
