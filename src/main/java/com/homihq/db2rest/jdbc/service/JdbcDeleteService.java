@@ -7,6 +7,7 @@ import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.service.DeleteService;
 import com.homihq.db2rest.core.model.DbWhere;
 import com.homihq.db2rest.core.model.DbTable;
+import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
@@ -24,17 +25,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcDeleteService implements DeleteService {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
-    private final SchemaCache schemaCache;
+    private final JdbcSchemaCache jdbcSchemaCache;
     private final SqlCreatorTemplate sqlCreatorTemplate;
     private final DbOperationService dbOperationService;
-    private final Dialect dialect;
+
 
     @Override
     @Transactional
     public int delete(String schemaName, String tableName, String filter) {
         db2RestConfigProperties.checkDeleteAllowed(filter);
 
-        DbTable dbTable = schemaCache.getTable(tableName);
+        DbTable dbTable = jdbcSchemaCache.getTable(tableName);
 
         DeleteContext context = DeleteContext.builder()
                 .tableName(tableName)
@@ -78,7 +79,7 @@ public class JdbcDeleteService implements DeleteService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, dialect));
+                            dbWhere, jdbcSchemaCache.getDialect()));
             context.setWhere(where);
 
         }

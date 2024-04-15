@@ -4,6 +4,7 @@ import com.homihq.db2rest.core.Dialect;
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.model.DbColumn;
 import com.homihq.db2rest.core.model.DbSort;
+import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.jdbc.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
@@ -28,14 +29,14 @@ public class SqlCreatorTemplate {
 
 
     private final SpringTemplateEngine templateEngine;
-    private final Dialect dialect;
+    private final JdbcSchemaCache jdbcSchemaCache;
     private final Db2RestConfigProperties db2RestConfigProperties;
 
     public String updateQuery(UpdateContext updateContext) {
 
         Map<String,Object> data = new HashMap<>();
 
-        if(dialect.supportAlias()) {
+        if(jdbcSchemaCache.getDialect().supportAlias()) {
             data.put("rootTable", updateContext.getTable().render());
         }
         else{
@@ -53,7 +54,7 @@ public class SqlCreatorTemplate {
 
     public String deleteQuery(DeleteContext deleteContext) {
 
-        String rendererTableName = dialect.supportAlias() ? deleteContext.getTable().render()
+        String rendererTableName = jdbcSchemaCache.getDialect().supportAlias() ? deleteContext.getTable().render()
                 : deleteContext.getTable().name();
 
         Map<String,Object> data = new HashMap<>();
@@ -143,13 +144,13 @@ public class SqlCreatorTemplate {
 
         String template = "read";
 
-        log.debug("Product family - {}", this.dialect.getProductFamily());
-        log.debug("Product family - {}", this.dialect.getMajorVersion());
+        log.debug("Product family - {}", this.jdbcSchemaCache.getDialect().getProductFamily());
+        log.debug("Product family - {}", this.jdbcSchemaCache.getDialect().getMajorVersion());
 
         //TODO DB specific processing must move away
-        if(StringUtils.equalsIgnoreCase(this.dialect.getProductFamily(), "Oracle")) {
+        if(StringUtils.equalsIgnoreCase(this.jdbcSchemaCache.getDialect().getProductFamily(), "Oracle")) {
 
-            if(this.dialect.getMajorVersion() >= 12) {
+            if(this.jdbcSchemaCache.getDialect().getMajorVersion() >= 12) {
                 template = "read-ora-12";
             }
             else {
