@@ -16,10 +16,16 @@ public interface MongoRestApi {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{collectionName}")
-    public Object findAll(@PathVariable String collectionName,
-                          @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
-                          @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
-                          @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
-                          @RequestParam(name = "limit", required = false, defaultValue = "-1") int limit,
-                          @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset);
+    Object findAll(@PathVariable String collectionName,
+                   @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
+                   @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
+                   @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
+                   @RequestParam(name = "limit", required = false, defaultValue = "-1") int limit,
+                   @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{collectionName}/one")
+    Map<String,Object> findOne(@PathVariable String collectionName,
+                               @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
+                               @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 }
