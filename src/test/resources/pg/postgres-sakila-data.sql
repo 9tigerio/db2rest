@@ -1,3 +1,88 @@
+-- tops
+
+
+Insert into tops
+(top_item, color,size)
+values
+    ('sweater',	'red',	'M');
+
+Insert into tops
+(top_item, color,size)
+values
+    ('shirt',	'blue',	'M');
+
+Insert into tops
+(top_item, color,size)
+values
+    ('tank_top',	'white',	'S');
+
+
+-- bottoms
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('jeans',	'blue'	,'M');
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('skirt',	'black'	,'S');
+
+Insert into bottoms
+(bottom_item, color,size)
+values
+    ('shorts',	'red'	,'S');
+
+
+
+
+
+-- users
+-- userpreference
+
+Insert into users
+(auid, username,password)
+values
+    (1,'admin','pswrd123');
+
+Insert into userprofile
+(apid, auid, firstname, lastname, email, phone)
+values
+    (1,1,'Jack', 'Wolf', 'bettestroom@gmail.com','600075764216');
+
+Insert into users
+(auid,username,password)
+values
+    (2, 'admin1','pass506');
+
+Insert into userprofile
+(apid, auid, firstname, lastname, email, phone)
+values
+    (2, 3, 'Tom', 'Collins', 'tnkc@outlook.com','878511311054');
+
+Insert into users
+(auid, username,password)
+values
+    (4,'fox12','45@jgo0');
+
+Insert into userprofile
+(apid, auid, firstname, lastname, email, phone)
+values
+    (4,5,'Bill', 'Fonskin', 'bill_1290@gmail.com','450985764216');
+
+Insert into users
+(auid,username,password)
+values
+    (6, 'lexus1267','98hnfRT6');
+
+Insert into userprofile
+(apid, auid, firstname, lastname, email, phone)
+values
+    (7, 7, 'Ivan', 'Levchenko', 'ivan_new@outlook.com','878511311054');
+
+
+
 
 -- language
 
