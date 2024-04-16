@@ -60,11 +60,11 @@ public class D1SchemaCache implements SchemaCache {
                                 d1Column.type(),
                                 false,
                                 false, 
-                                getTypedClass(d1Column.type())
+                                getTypedClass(d1Column.type()), "\""
                         )).toList();
         
         DbTable dbTable = new DbTable(d1Table.schema()
-            , d1Table.name(), d1Table.name(), tableAlias,dbColumns, null);
+            , d1Table.name(), d1Table.name(), tableAlias,dbColumns, null, "\"");
 
         this.dbTableList.add(dbTable);
         this.dbTableMap.put(d1Table.name(), dbTable);
