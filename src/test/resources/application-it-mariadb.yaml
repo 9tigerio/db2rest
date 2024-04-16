@@ -1,0 +1,3 @@
+db2rest:
+  datasource:
+    type: jdbc-mariadb
