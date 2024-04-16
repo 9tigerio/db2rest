@@ -1,10 +1,11 @@
 package com.homihq.db2rest;
 
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-
+import org.springframework.context.annotation.Profile;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.ext.ScriptUtils;
 import org.testcontainers.jdbc.JdbcDatabaseDelegate;
@@ -13,6 +14,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @TestConfiguration(proxyBeanMethods = false)
+@Profile("it-mariadb")
 public class MariaDBContainerConfiguration {
 
     private static final List<String> mariaDbScripts = List.of("mariadb/mariadb-sakila.sql",
@@ -31,8 +33,7 @@ public class MariaDBContainerConfiguration {
     }
 
 
-    @Bean("mariaDBDataSource")
-    @ConditionalOnProperty(prefix = "db2rest.datasource", name="type" , havingValue = "jdbc-mariadb")
+    @Bean
     public DataSource dataSource() {
         var dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("org.mariadb.jdbc.Driver");

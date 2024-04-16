@@ -17,7 +17,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
     private final Db2RestConfigProperties db2RestConfigProperties;
 
     List<MetaDataExtraction> exclusions = List.of(new OracleMetaDataExtraction(),
-        new PostgreSQLDataExclusion(), new MySQLDataExtraction());
+        new PostgreSQLDataExclusion(), new MySQLDataExtraction(), new MariaDBDataExtraction());
 
     //TODO include schemas , tables , view,  filters filters
     @Override
