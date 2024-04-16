@@ -45,7 +45,7 @@ class PgInnerJoinMultiTableControllerTest extends PostgreSQLBaseIntegrationTest 
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(1)))
-                .andExpect(jsonPath("$[0].*", hasSize(17)))
+                .andExpect(jsonPath("$[0].*", hasSize(18)))
                 .andExpect(jsonPath("$[0].film_id", equalTo(1)))
                 .andExpect(jsonPath("$[0].language_id", equalTo(1)))
                 .andExpect(jsonPath("$[0].actor_id", equalTo(1)))
