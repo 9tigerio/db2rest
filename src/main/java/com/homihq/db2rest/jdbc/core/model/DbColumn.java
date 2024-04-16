@@ -4,18 +4,28 @@ import org.apache.commons.lang3.StringUtils;
 
 public record DbColumn(String tableName, String name, String alias, String tableAlias,
                        boolean pk, String columnDataTypeName, boolean generated, boolean autoIncremented
-,Class<?> typeMappedClass) {
+                        ,Class<?> typeMappedClass , String coverChar) {
+
+    private String getQuotedName() {
+        return coverChar + name + coverChar;
+    }
+
+    private String getQuotedAlias() {
+        return coverChar + alias + coverChar;
+    }
 
     public String render() {
-        return tableAlias + "."+ name ;
+        return tableAlias + "."+ getQuotedName() ;
     }
 
     public String renderWithAlias() {
         if(StringUtils.isNotBlank(alias))
-            return tableAlias + "."+ name + " as " + "\"" + alias + "\"";
+            return tableAlias + "."+ getQuotedName() + " as " + getQuotedAlias();
 
-        return tableAlias + "."+ name + " " + alias;
+        return tableAlias + "."+ getQuotedName() + " " + alias;
     }
+
+
 
     public String getAliasedName() {return tableAlias + "."+ name;}
 
@@ -37,11 +47,11 @@ public record DbColumn(String tableName, String name, String alias, String table
 
     public DbColumn copyWithAlias(String columnAlias) {
         return new DbColumn(tableName, name, columnAlias, tableAlias,
-                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass);
+                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass, coverChar);
     }
 
     public DbColumn copyWithTableAlias(String tableAlias) {
         return new DbColumn(tableName, name, alias, tableAlias,
-                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass);
+                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass, coverChar);
     }
 }

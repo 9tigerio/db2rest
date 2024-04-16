@@ -85,7 +85,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
                                 typeName,
                                 StringUtils.equalsAnyIgnoreCase(isGenerated,"YES"),
                                 StringUtils.equalsAnyIgnoreCase(isAutoIncrement,"YES"),
-                                javaType
+                                javaType, "`"
                         );
 
                 dbColumns.add(dbColumn);
@@ -109,7 +109,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
 
             return new DbTable(
                     schemaName, metaDataTable.tableName() ,schemaName + "." + metaDataTable.tableName(),
-                    metaDataTable.tableAlias(),columns, metaDataTable.tableType());
+                    metaDataTable.tableAlias(),columns, metaDataTable.tableType(),"`");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
