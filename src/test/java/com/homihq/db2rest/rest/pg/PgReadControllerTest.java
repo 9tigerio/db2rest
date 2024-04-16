@@ -50,7 +50,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", anyOf(hasSize(4),hasSize(8))))
-                .andExpect(jsonPath("$[0].*", hasSize(14)))
+                .andExpect(jsonPath("$[0].*", hasSize(15)))
                 .andDo(document("pg-get-all-films-all-columns"));
     }
 

@@ -195,7 +195,8 @@ CREATE TABLE film (
                       rating varchar(100) DEFAULT 'G',
                       last_update timestamp without time zone DEFAULT now() NOT NULL,
                       special_features varchar(300),
-                      fulltext tsvector
+                      fulltext tsvector,
+                      prequel_film_id integer DEFAULT NULL
 );
 
 
