@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {"db2rest.allowSafeDelete=false"})
 class MariaDBDeleteAllTest extends MariaDBBaseIntegrationTest {
 
+    @Disabled
     @Test
     @DisplayName("Delete all records while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {

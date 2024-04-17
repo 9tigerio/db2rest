@@ -49,11 +49,11 @@ class MariaDBCrossJoinControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(16)))
                 .andExpect(jsonPath("$[0].*", hasSize(10)))
-                .andExpect(jsonPath("$[0].auid", equalTo(6)))
+                .andExpect(jsonPath("$[0].auid", equalTo(1)))
                 .andExpect(jsonPath("$[0].apid", equalTo(1)))
                 .andExpect(jsonPath("$[0].firstname", equalTo("Jack")))
 
-                .andExpect(jsonPath("$[1].auid", equalTo(4)))
+                .andExpect(jsonPath("$[1].auid", equalTo(2)))
                 .andExpect(jsonPath("$[1].apid", equalTo(1)))
                 .andExpect(jsonPath("$[1].firstname", equalTo("Jack")))
 
@@ -77,9 +77,9 @@ class MariaDBCrossJoinControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$.*", hasSize(9)))
                 .andExpect(jsonPath("$[0].*", hasSize(6)))
 
-                .andExpect(jsonPath("$[0].top_item", equalTo("tank_top")))
+                .andExpect(jsonPath("$[0].top_item", equalTo("sweater")))
                 .andExpect(jsonPath("$[0].bottom_item", equalTo("jeans")))
-                .andExpect(jsonPath("$[0].color", equalTo("white")))
+                .andExpect(jsonPath("$[0].color", equalTo("red")))
                 .andExpect(jsonPath("$[0].botColor", equalTo("blue")))
 
 

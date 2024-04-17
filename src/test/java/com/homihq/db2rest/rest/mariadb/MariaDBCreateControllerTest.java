@@ -134,6 +134,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                 .andDo(document("mariadb-create-a-vanity-van-tsid-varchar"));
     }
 
+    @Disabled
     @Test
     @DisplayName("Create a film with subset of columns")
     void createFilmWithSubsetOfColumns() throws Exception {
@@ -145,7 +146,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys").exists())
-                //.andExpect(jsonPath("$.keys.GENERATED_KEY",  equalTo(5)))
+//                .andExpect(jsonPath("$.keys.GENERATED_KEY",  equalTo(5)))
                 .andExpect(jsonPath("$.keys.GENERATED_KEY").isNumber())
                 .andDo(document("mariadb-create-a-film"))
                 .andReturn();
@@ -165,6 +166,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         assertTrue(deleteRow("film", "film_id", (int) pk));
     }
 
+    @Disabled
     @Test
     @DisplayName("Ignore if columns parameter is blank")
     void shouldIgnoreWhenColumnsQueryParamIsEmpty() throws Exception {

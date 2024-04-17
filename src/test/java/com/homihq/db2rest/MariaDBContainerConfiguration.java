@@ -20,7 +20,7 @@ public class MariaDBContainerConfiguration {
     private static final List<String> mariaDbScripts = List.of("mariadb/mariadb-sakila.sql",
             "mariadb/mariadb-sakila-data.sql");
 
-    private static final MariaDBContainer mariaDbContainer = (MariaDBContainer) new MariaDBContainer("mariadb:11.0.3")
+    private static final MariaDBContainer mariaDbContainer = (MariaDBContainer) new MariaDBContainer("mariadb:11.0")
             .withDatabaseName("sakila")
             .withUsername("maria")
             .withPassword("test")

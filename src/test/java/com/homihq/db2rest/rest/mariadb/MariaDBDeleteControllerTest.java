@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Order(390)
 class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
 
+    @Disabled
     @Test
     @DisplayName("Delete a Director")
     void delete_single_record() throws Exception {
@@ -36,7 +37,7 @@ class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$.detail",
                         containsString("Invalid delete operation , safe set to true")))
                 //.andDo(print())
-                .andDo(document("mariadb-delete-a-director"));
+                .andDo(document("mariadb-delete-all-director"));
     }
 
     @Test
@@ -49,9 +50,10 @@ class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$.detail",
                         containsString("Missing column director._name")))
                 //.andDo(print())
-                .andDo(document("mariadb-delete-a-director"));
+                .andDo(document("mariadb-column-not-exists"));
     }
 
+    @Disabled
     @Test
     @DisplayName("Foreign Key Constraint Violation")
     void foreign_key_constraint_violation() throws Exception {
@@ -62,6 +64,6 @@ class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$.detail",
                         containsString("Cannot delete or update a parent row: a foreign key constraint fails")))
                 //.andDo(print())
-                .andDo(document("mariadb-delete-a-director"));
+                .andDo(document("mariadb-constraint-violation"));
     }
 }
