@@ -30,7 +30,7 @@ Quickly download the executable jars from links below:
 
 [DB2Rest](https://download.db2rest.com/db2rest-0.3.0.jar)
 
-## DB2Rest-Oracle9i - 0.2.9
+## DB2Rest-Oracle9i - 0.3.0
 
 [DB2Rest-Oracle9i](https://download.db2rest.com/db2rest-oracle9i-0.3.0.jar)
 
@@ -91,12 +91,12 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - **AWS RDS MySQL** - (Work in progress)
 - MongoDB - (Work in progress)
 - MariaDB  (Work in progress)
-- **Cloudflare D1**
+- **Cloudflare D1** [Deprecated]
 
 
 # Planned Database Support
 
-- [PostgreML](https://postgresml.org/) : May-June 2024
+- [PostgreML](https://postgresml.org/) 
 - **MS SQL Server**
 - TursoDB
 - **CockroachDB**
