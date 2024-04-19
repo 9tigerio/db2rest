@@ -91,7 +91,7 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - **AWS RDS MySQL** - (Work in progress)
 - MongoDB - (Work in progress)
 - MariaDB  (Work in progress)
-- **Cloudflare D1** [Deprecated]
+- ~Cloudflare D1~ [Deprecated]
 
 
 # Planned Database Support
