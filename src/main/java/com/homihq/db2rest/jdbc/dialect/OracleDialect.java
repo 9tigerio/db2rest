@@ -22,6 +22,8 @@ public class OracleDialect implements Dialect {
     @Getter
     private final int productVersion;
 
+    private String coverChar = "\"";
+
 
     public OracleDialect(ObjectMapper objectMapper, String productName, int productVersion) {
         this.objectMapper = objectMapper;
@@ -35,10 +37,7 @@ public class OracleDialect implements Dialect {
         return "Oracle";
     }
 
-    @Override
-    public String getProductName() {
-        return this.productName;
-    }
+
 
     @Override
     public int getMajorVersion() {
@@ -72,6 +71,17 @@ public class OracleDialect implements Dialect {
             throw new GenericDataAccessException(exception.getMessage());
         }
 
+    }
+
+
+
+    private String getQuotedName(String name) {
+        return coverChar + name + coverChar;
+    }
+
+    @Override
+    public String renderableTableName(DbTable table) {
+        return getQuotedName(table.fullName()) + " as " + table.alias();
     }
 
 }

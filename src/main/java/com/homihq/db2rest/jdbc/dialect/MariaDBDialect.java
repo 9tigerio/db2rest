@@ -18,6 +18,8 @@ public class MariaDBDialect implements Dialect {
 
     private final ObjectMapper objectMapper;
 
+    private String coverChar = "`";
+
     @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {
 
@@ -40,6 +42,15 @@ public class MariaDBDialect implements Dialect {
             throw new GenericDataAccessException(exception.getMessage());
         }
 
+    }
+
+    private String getQuotedName(String name) {
+        return coverChar + name + coverChar;
+    }
+
+    @Override
+    public String renderableTableName(DbTable table) {
+        return getQuotedName(table.fullName()) + " as " + table.alias();
     }
 
 }

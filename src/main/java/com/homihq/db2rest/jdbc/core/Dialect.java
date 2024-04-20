@@ -15,9 +15,6 @@ public interface Dialect {
         return true;
     }
 
-    default String getProductName() {
-        return "";
-    }
 
     default String getProductFamily() {
         return "";
@@ -28,6 +25,8 @@ public interface Dialect {
     }
 
     void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
+
+    String renderableTableName(DbTable table);
 
     default List<Object> parseListValues(List<String> values, Class type) {
         return

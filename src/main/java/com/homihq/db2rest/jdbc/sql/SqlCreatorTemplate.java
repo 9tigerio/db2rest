@@ -53,8 +53,11 @@ public class SqlCreatorTemplate {
 
     public String deleteQuery(DeleteContext deleteContext) {
 
-        String rendererTableName = jdbcSchemaCache.getDialect().supportAlias() ? deleteContext.getTable().render()
+        String rendererTableName = jdbcSchemaCache.getDialect().supportAlias()
+                ? deleteContext.getTable().render()
                 : deleteContext.getTable().name();
+
+        log.info("rendererTableName - {}", rendererTableName);
 
         Map<String,Object> data = new HashMap<>();
         data.put("rootTable", rendererTableName);
