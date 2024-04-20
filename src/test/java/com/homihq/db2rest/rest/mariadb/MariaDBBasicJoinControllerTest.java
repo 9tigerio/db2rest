@@ -33,7 +33,7 @@ class MariaDBBasicJoinControllerTest extends MariaDBBaseIntegrationTest {
     @GivenJsonResource("/testdata/RIGHT_JOIN.json")
     List<Map<String,Object>> RIGHT_JOIN;
 
-    @Disabled
+
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
@@ -60,7 +60,7 @@ class MariaDBBasicJoinControllerTest extends MariaDBBaseIntegrationTest {
 
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Test right Join")
     void testRightJoin() throws Exception {

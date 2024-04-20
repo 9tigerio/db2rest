@@ -3,7 +3,7 @@ package com.homihq.db2rest.jdbc.dialect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
 import com.homihq.db2rest.jdbc.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,7 @@ public class MariaDBDialect implements Dialect {
     private final ObjectMapper objectMapper;
 
     private String coverChar = "`";
+
 
     @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {
@@ -49,8 +50,30 @@ public class MariaDBDialect implements Dialect {
     }
 
     @Override
-    public String renderableTableName(DbTable table) {
-        return getQuotedName(table.fullName()) + " as " + table.alias();
+    public String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp) {
+
+        if(containsWhere && !deleteOp) {
+            return getQuotedName(table.schema()) + "." + getQuotedName(table.name()) + " AS " + table.alias();
+        }
+        else {
+            return this.renderTableNameWithoutAlias(table);
+        }
+
     }
+
+    @Override
+    public String renderTableNameWithoutAlias(DbTable table) {
+        return getQuotedName(table.schema()) + "." + getQuotedName(table.name());
+    }
+
+    @Override
+    public String getAliasedName(DbColumn dbColumn, boolean deleteOp) {
+        if(deleteOp) {
+            return dbColumn.name();
+        }
+
+        return dbColumn.tableAlias() + "."+ dbColumn.name();
+    }
+
 
 }

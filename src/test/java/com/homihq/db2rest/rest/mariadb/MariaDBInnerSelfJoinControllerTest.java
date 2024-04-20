@@ -32,7 +32,6 @@ class MariaDBInnerSelfJoinControllerTest extends MariaDBBaseIntegrationTest {
 
     @Test
     @DisplayName("Test inner self Join")
-    @Disabled
     void testInnerSelfJoin() throws Exception {
 
 

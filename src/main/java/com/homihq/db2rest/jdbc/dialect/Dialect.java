@@ -1,5 +1,6 @@
-package com.homihq.db2rest.jdbc.core;
+package com.homihq.db2rest.jdbc.dialect;
 
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
 import com.homihq.db2rest.jdbc.core.model.DbTable;
 
 
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface Dialect {
+
+
 
     default boolean supportBatchReturnKeys() {
         return true;
@@ -24,9 +27,25 @@ public interface Dialect {
         return -1;
     }
 
+    default String getProductName() {
+        return "";
+    }
+
     void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
 
-    String renderableTableName(DbTable table);
+    String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp);
+
+    String renderTableNameWithoutAlias(DbTable table);
+
+    default String getAliasedName(DbColumn dbColumn, boolean deleteOp) {
+        return dbColumn.tableAlias() + "."+ dbColumn.name();
+    }
+
+    default String getAliasedNameParam(DbColumn dbColumn, boolean deleteOp) {
+        return dbColumn.tableAlias() + "_"+ dbColumn.name();
+    }
+
+
 
     default List<Object> parseListValues(List<String> values, Class type) {
         return

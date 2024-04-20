@@ -1,6 +1,7 @@
-package com.homihq.db2rest.rest.mariadb;
+package com.homihq.db2rest.rest.pg;
 
-import com.homihq.db2rest.MariaDBBaseIntegrationTest;
+import com.homihq.db2rest.MySQLBaseIntegrationTest;
+import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.test.context.TestPropertySource;
@@ -13,10 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(391)
+@Order(191)
 @TestPropertySource(properties = {"db2rest.allowSafeDelete=false"})
-class MariaDBDeleteAllTest extends MariaDBBaseIntegrationTest {
-
+class PgDeleteAllTest extends PostgreSQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Delete all records while allowSafeDelete=false")
@@ -26,6 +26,6 @@ class MariaDBDeleteAllTest extends MariaDBBaseIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(4)))
-                .andDo(document("mariadb-delete-a-director"));
+                .andDo(document("pg-delete-all-countries"));
     }
 }

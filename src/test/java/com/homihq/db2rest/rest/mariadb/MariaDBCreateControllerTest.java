@@ -18,6 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -126,7 +127,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
                         .content(objectMapper.writeValueAsString(CREATE_VANITY_VAN_REQUEST)))
-                //.andDo(print())
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 //.andExpect(jsonPath("$.keys.vanity_van_id").exists())
@@ -134,7 +135,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                 .andDo(document("mariadb-create-a-vanity-van-tsid-varchar"));
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Create a film with subset of columns")
     void createFilmWithSubsetOfColumns() throws Exception {
@@ -142,16 +143,16 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
-               // .andDo(print())
+               .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys").exists())
 //                .andExpect(jsonPath("$.keys.GENERATED_KEY",  equalTo(5)))
-                .andExpect(jsonPath("$.keys.GENERATED_KEY").isNumber())
+                .andExpect(jsonPath("$.keys.insert_id").isNumber())
                 .andDo(document("mariadb-create-a-film"))
                 .andReturn();
 
-        var pk = JsonPath.read(result.getResponse().getContentAsString(), "$.keys.GENERATED_KEY");
+        var pk = JsonPath.read(result.getResponse().getContentAsString(), "$.keys.insert_id");
 
         mockMvc.perform(get("/film")
                         .accept(APPLICATION_JSON)
@@ -166,7 +167,6 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         assertTrue(deleteRow("film", "film_id", (int) pk));
     }
 
-    @Disabled
     @Test
     @DisplayName("Ignore if columns parameter is blank")
     void shouldIgnoreWhenColumnsQueryParamIsEmpty() throws Exception {
@@ -183,7 +183,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                 .andDo(document("mariadb-create-a-film"))
                 .andReturn();
 
-        var pk = JsonPath.read(result.getResponse().getContentAsString(), "$.keys.GENERATED_KEY");
+        var pk = JsonPath.read(result.getResponse().getContentAsString(), "$.keys.insert_id");
 
         mockMvc.perform(get("/film")
                         .accept(APPLICATION_JSON)

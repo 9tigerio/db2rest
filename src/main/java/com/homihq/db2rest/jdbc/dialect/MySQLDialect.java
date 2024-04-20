@@ -2,8 +2,8 @@ package com.homihq.db2rest.jdbc.dialect;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.jdbc.core.Dialect;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
 import com.homihq.db2rest.jdbc.core.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +20,8 @@ public class MySQLDialect implements Dialect {
     private final ObjectMapper objectMapper;
 
     private String coverChar = "`";
+
+
 
     @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {
@@ -50,8 +52,16 @@ public class MySQLDialect implements Dialect {
     }
 
     @Override
-    public String renderableTableName(DbTable table) {
-        return getQuotedName(table.fullName()) + " as " + table.alias();
+    public String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp) {
+        return getQuotedName(table.schema()) + "." + getQuotedName(table.name()) + " " + table.alias();
     }
+
+    @Override
+    public String renderTableNameWithoutAlias(DbTable table) {
+        return getQuotedName(table.schema()) + "." + getQuotedName(table.name());
+    }
+
+
+
 
 }
