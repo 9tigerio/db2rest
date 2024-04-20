@@ -15,7 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Order(390)
 class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
 
-    @Disabled
     @Test
     @DisplayName("Delete a Director")
     void delete_single_record() throws Exception {
@@ -53,7 +52,7 @@ class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
                 .andDo(document("mariadb-column-not-exists"));
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Foreign Key Constraint Violation")
     void foreign_key_constraint_violation() throws Exception {

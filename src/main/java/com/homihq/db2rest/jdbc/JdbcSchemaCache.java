@@ -1,15 +1,10 @@
 package com.homihq.db2rest.jdbc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.dialect.*;
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.exception.InvalidTableException;
 import com.homihq.db2rest.jdbc.core.model.DbTable;
 
-import com.homihq.db2rest.jdbc.dialect.MariaDBDialect;
-import com.homihq.db2rest.jdbc.dialect.MySQLDialect;
-import com.homihq.db2rest.jdbc.dialect.OracleDialect;
-import com.homihq.db2rest.jdbc.dialect.PostGreSQLDialect;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
 import com.homihq.db2rest.jdbc.core.schema.SchemaCache;
@@ -18,8 +13,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.jdbc.support.MetaDataAccessException;
 
@@ -37,29 +30,17 @@ public final class JdbcSchemaCache implements SchemaCache {
     private Map<String,DbTable> dbTableMap;
 
     @Getter
+    @Deprecated
     private String productName;
 
     @Getter
+    @Deprecated
     private int productVersion;
 
     @Getter
     private Dialect dialect;
 
 
-    public boolean isOracle() {
-        return StringUtils.containsIgnoreCase(productName, "Oracle");
-    }
-    public boolean isMariaDB() {
-        return StringUtils.containsIgnoreCase(productName, "MariaDB");
-    }
-
-    public boolean isMySQL() {
-        return StringUtils.containsIgnoreCase(productName, "MySQL");
-    }
-
-    public boolean isPostGreSQL() {
-        return StringUtils.containsIgnoreCase(productName, "PostGreSQL");
-    }
 
     @PostConstruct
     private void reload() {
@@ -88,23 +69,8 @@ public final class JdbcSchemaCache implements SchemaCache {
             this.productName = dbMeta.productName();
             this.productVersion = dbMeta.majorVersion();
 
-            ObjectMapper objectMapper = new ObjectMapper();
+            dialect = DialectFactory.getDialect(this.productName, this.productVersion);
 
-            if(isMySQL()) {
-                dialect = new MySQLDialect(objectMapper);
-            }
-            else if(isPostGreSQL()) {
-                dialect = new PostGreSQLDialect(objectMapper);
-            }
-            else if(isOracle()) {
-                dialect = new OracleDialect(objectMapper, getProductName(), getProductVersion());
-            }
-            else if(isMariaDB()) {
-                dialect = new MariaDBDialect(objectMapper);
-            }
-            else {
-                throw new BeanCreationException("Unable to create database dialect.");
-            }
 
 
         } catch (MetaDataAccessException e) {

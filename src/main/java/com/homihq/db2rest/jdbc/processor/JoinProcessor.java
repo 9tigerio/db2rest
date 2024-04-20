@@ -97,7 +97,7 @@ public class JoinProcessor implements ReadProcessor {
 
             DbWhere dbWhere = new DbWhere(
                     table.name(),
-                    table,table.buildColumns(), readContext.getParamMap());
+                    table,table.buildColumns(), readContext.getParamMap(), "read");
 
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(joinDetail.filter());

@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.rsql.operator.handler;
 
-import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.core.model.DbWhere;
+import com.homihq.db2rest.jdbc.dialect.Dialect;
 import com.homihq.db2rest.jdbc.core.model.DbColumn;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface OperatorHandler {
 
     String PREFIX = ":";
 
-    String handle(Dialect dialect, DbColumn column, String value, Class type, Map<String, Object> paramMap);
+    String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap);
 
     default String reviewAndSetParam(String key, Object value, Map<String,Object> paramMap) {
         Random random = new Random();
@@ -29,43 +30,10 @@ public interface OperatorHandler {
         }
     }
 
-    default String handle(Dialect dialect, DbColumn column, List<String> value, Class type, Map<String, Object> paramMap) {
-        return handle(dialect,column, value.get(0), type, paramMap);
+    default String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, List<String> value, Class type, Map<String, Object> paramMap) {
+        return handle(dialect,column, dbWhere, value.get(0), type, paramMap);
     }
 
-    /*
-    default List<Object> parseListValues(Dialect dialect, List<String> values, Class type) {
-        return
-        values.stream()
-                .map(v -> dialect.processValue(v, type, null))
-                .toList();
-    }
 
-     */
-
-    //TODO use Spring converter
-
-    /*
-    default Object parseValue(String value, Class type) {
-        System.out.println("Type - "  + type);
-        if (String.class == type) {
-            //return "'" + value + "'";
-            return value;
-        }
-        else if (Boolean.class == type || boolean.class == type) {
-            Boolean aBoolean = Boolean.valueOf(value);
-            return aBoolean ? "1" : "0";
-        }
-        else if (Short.class == type || short.class == type) {
-            return Short.valueOf(value);
-
-        }
-        else {
-            return value;
-        }
-
-    }
-
-     */
 
 }

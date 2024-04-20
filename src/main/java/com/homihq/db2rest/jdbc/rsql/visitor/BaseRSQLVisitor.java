@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.rsql.visitor;
 
-import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.dialect.Dialect;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.RSQLOperatorHandlers;
 import com.homihq.db2rest.jdbc.core.model.DbColumn;
 import com.homihq.db2rest.jdbc.core.model.DbWhere;
@@ -52,10 +52,10 @@ public class BaseRSQLVisitor implements RSQLVisitor<String, Object> {
         }
 
         if (op.isMultiValue()) {
-            return operatorHandler.handle(dialect, dbColumn, node.getArguments(), type, this.dbWhere.paramMap());
+            return operatorHandler.handle(dialect, dbColumn,this.dbWhere, node.getArguments(), type, this.dbWhere.paramMap());
         }
         else {
-            return operatorHandler.handle(dialect,dbColumn, node.getArguments().get(0), type, this.dbWhere.paramMap());
+            return operatorHandler.handle(dialect,dbColumn,this.dbWhere, node.getArguments().get(0), type, this.dbWhere.paramMap());
         }
 
     }

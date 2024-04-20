@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.rsql.operator.handler;
 
-import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.core.model.DbWhere;
+import com.homihq.db2rest.jdbc.dialect.Dialect;
 import com.homihq.db2rest.jdbc.core.model.DbColumn;
 
 import java.util.Map;
@@ -10,12 +11,12 @@ public class GreaterThanOperatorHandler implements OperatorHandler {
    private static final String OPERATOR = " > ";
 
     @Override
-    public String handle(Dialect dialect, DbColumn column, String value, Class type, Map<String, Object> paramMap) {
+    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
         Object vo = dialect.processValue(value, type,null);
 
         if(dialect.supportAlias()) {
-            String key = reviewAndSetParam(column.getAliasedNameParam(), vo, paramMap);
-            return column.getAliasedName() + OPERATOR + PREFIX + key;
+            String key = reviewAndSetParam(dialect.getAliasedNameParam(column, dbWhere.isDelete()), vo, paramMap);
+            return dialect.getAliasedName(column, dbWhere.isDelete()) + OPERATOR + PREFIX + key;
         }
         else{
 

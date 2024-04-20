@@ -2,7 +2,7 @@ package com.homihq.db2rest.jdbc.dialect;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.jdbc.core.Dialect;
+import com.homihq.db2rest.jdbc.core.model.DbColumn;
 import com.homihq.db2rest.jdbc.core.model.DbTable;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import lombok.Getter;
@@ -31,6 +31,8 @@ public class OracleDialect implements Dialect {
         this.productVersion = productVersion;
 
     }
+
+
 
     @Override
     public String getProductFamily() {
@@ -80,8 +82,15 @@ public class OracleDialect implements Dialect {
     }
 
     @Override
-    public String renderableTableName(DbTable table) {
-        return getQuotedName(table.fullName()) + " as " + table.alias();
+    public String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp) {
+        return getQuotedName(table.schema()) + "." + getQuotedName(table.name()) + " " + table.alias();
     }
+
+    @Override
+    public String renderTableNameWithoutAlias(DbTable table) {
+        return getQuotedName(table.schema()) + "." + getQuotedName(table.name());
+    }
+
+
 
 }

@@ -24,7 +24,7 @@ public class RootWhereProcessor implements ReadProcessor {
 
             DbWhere dbWhere = new DbWhere(
                     readContext.getTableName(),
-                    readContext.getRoot(), readContext.getCols(), readContext.getParamMap());
+                    readContext.getRoot(), readContext.getCols(), readContext.getParamMap(), "read");
 
             log.debug("-Creating root where condition -");
 

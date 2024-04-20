@@ -70,7 +70,7 @@ public class JdbcDeleteService implements DeleteService {
 
             DbWhere dbWhere = new DbWhere(
                     context.getTableName(),
-                    table, null ,context.getParamMap());
+                    table, null ,context.getParamMap(), "delete");
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(filter);
 

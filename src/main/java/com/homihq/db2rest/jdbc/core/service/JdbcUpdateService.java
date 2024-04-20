@@ -80,7 +80,7 @@ public class JdbcUpdateService implements UpdateService {
 
             DbWhere dbWhere = new DbWhere(
                     context.getTableName(),
-                    table, null ,context.getParamMap());
+                    table, null ,context.getParamMap(), "update");
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(filter);
 

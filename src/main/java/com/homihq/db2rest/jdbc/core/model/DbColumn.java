@@ -6,18 +6,22 @@ public record DbColumn(String tableName, String name, String alias, String table
                        boolean pk, String columnDataTypeName, boolean generated, boolean autoIncremented
                         ,Class<?> typeMappedClass , String coverChar) {
 
+    @Deprecated
     private String getQuotedName() {
         return coverChar + name + coverChar;
     }
 
+    @Deprecated
     private String getQuotedAlias() {
         return coverChar + alias + coverChar;
     }
 
+    @Deprecated
     public String render() {
         return tableAlias + "."+ getQuotedName() ;
     }
 
+    @Deprecated
     public String renderWithAlias() {
         if(StringUtils.isNotBlank(alias))
             return tableAlias + "."+ getQuotedName() + " as " + getQuotedAlias();
@@ -26,9 +30,10 @@ public record DbColumn(String tableName, String name, String alias, String table
     }
 
 
-
+    @Deprecated
     public String getAliasedName() {return tableAlias + "."+ name;}
 
+    @Deprecated
     public String getAliasedNameParam() {return tableAlias + "_"+ name;}
 
     @Deprecated
@@ -36,10 +41,12 @@ public record DbColumn(String tableName, String name, String alias, String table
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "TIMESTAMP");
     }
 
+    @Deprecated
     public boolean isIntFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
                 "SMALLINT", "int8", "BIGINT UNSIGNED","INTEGER", "NUMBER");
     }
+    @Deprecated
     public boolean isStringFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
                 "VARCHAR","TEXT", "VARCHAR2");
