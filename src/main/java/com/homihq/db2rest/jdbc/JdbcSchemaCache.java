@@ -6,6 +6,7 @@ import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.exception.InvalidTableException;
 import com.homihq.db2rest.jdbc.core.model.DbTable;
 
+import com.homihq.db2rest.jdbc.dialect.MariaDBDialect;
 import com.homihq.db2rest.jdbc.dialect.MySQLDialect;
 import com.homihq.db2rest.jdbc.dialect.OracleDialect;
 import com.homihq.db2rest.jdbc.dialect.PostGreSQLDialect;
@@ -47,6 +48,9 @@ public final class JdbcSchemaCache implements SchemaCache {
 
     public boolean isOracle() {
         return StringUtils.containsIgnoreCase(productName, "Oracle");
+    }
+    public boolean isMariaDB() {
+        return StringUtils.containsIgnoreCase(productName, "MariaDB");
     }
 
     public boolean isMySQL() {
@@ -94,6 +98,9 @@ public final class JdbcSchemaCache implements SchemaCache {
             }
             else if(isOracle()) {
                 dialect = new OracleDialect(objectMapper, getProductName(), getProductVersion());
+            }
+            else if(isMariaDB()) {
+                dialect = new MariaDBDialect(objectMapper);
             }
             else {
                 throw new BeanCreationException("Unable to create database dialect.");
