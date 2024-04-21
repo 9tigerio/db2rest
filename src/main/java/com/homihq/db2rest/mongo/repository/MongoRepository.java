@@ -1,7 +1,9 @@
 package com.homihq.db2rest.mongo.repository;
 
 import com.homihq.db2rest.core.dto.CreateResponse;
+import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.mongo.dialect.MongoDialect;
+import com.mongodb.client.result.DeleteResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
@@ -28,6 +30,13 @@ public class MongoRepository {
         var savedDocument = mongoTemplate.save(document, collectionName);
         return new CreateResponse(1, savedDocument.getObjectId("_id"));
 
+    }
+
+    public DeleteResponse delete(Query query, String collectionName) {
+        DeleteResult deleteResult = mongoTemplate.remove(query, collectionName);
+        var rows = deleteResult.getDeletedCount();
+        log.debug("Number of documents deleted - {}", rows);
+        return DeleteResponse.builder().rows((int)rows).build();
     }
 
     public Object find(Query query, String collectionName) {

@@ -6,9 +6,13 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MongodbContainerConfiguration;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,12 +28,14 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.data.mongodb.core.query.Query.query;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,7 +45,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("it-mongo")
 @TestWithResources
-class MongoControllerTest extends MongodbContainerConfiguration {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class MongoDBControllerTest extends MongodbContainerConfiguration {
 
     @Autowired
     private MockMvc mockMvc;
@@ -66,9 +73,9 @@ class MongoControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
+    @Order(1)
     @DisplayName("Create an actor")
     void create() throws Exception {
-
         mockMvc.perform(post("/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
@@ -86,6 +93,7 @@ class MongoControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
+    @Order(2)
     @DisplayName("Test find all actors - all fields")
     void findAllActors() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -98,6 +106,7 @@ class MongoControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
+    @Order(3)
     @DisplayName("Test find all actors - 2 fields")
     void findAllActorsWithTwoFields() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -114,6 +123,7 @@ class MongoControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
+    @Order(4)
     @DisplayName("Test find all actors with filter")
     void findAllActorsWithFilter() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -130,6 +140,7 @@ class MongoControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
+    @Order(5)
     @DisplayName("Test find all actors with sorting")
     void findAllActorsWithSorting() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -147,6 +158,7 @@ class MongoControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
+    @Order(6)
     @DisplayName("Test find all actors with pagination")
     void findAllActorsWithPagination() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -166,6 +178,7 @@ class MongoControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
+    @Order(7)
     @DisplayName("Find one actor - 2 fields")
     void findOneActor() throws Exception {
         mockMvc.perform(get("/Sakila_actors/one")
@@ -178,6 +191,30 @@ class MongoControllerTest extends MongodbContainerConfiguration {
                 .andExpect(jsonPath("$.FirstName", equalTo("PENELOPE")))
                 .andExpect(jsonPath("$.LastName", equalTo("GUINESS")))
                 .andDo(document("mongodb-get-one-actor"));
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("Delete all documents while allowSafeDelete=true")
+    void delete_all_documents_with_allow_safe_delete_true() throws Exception {
+        mockMvc.perform(delete("/Sakila_actors")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail",
+                        containsString("Invalid delete operation , safe set to true")))
+                .andDo(document("mongodb-delete-an-actor"));
+    }
+
+    @Test
+    @Order(9)
+    @DisplayName("Delete an actor")
+    void delete_single_record() throws Exception {
+        mockMvc.perform(delete("/Sakila_actors")
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "FirstName==BETTE"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", Matchers.equalTo(1)))
+                .andDo(document("mongodb-delete-an-actor"));
     }
 
 }
