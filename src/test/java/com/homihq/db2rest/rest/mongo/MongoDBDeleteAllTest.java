@@ -3,8 +3,11 @@ package com.homihq.db2rest.rest.mongo;
 import com.homihq.db2rest.MongodbContainerConfiguration;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.ClassOrderer;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("it-mongo")
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(491)
 @TestPropertySource(properties = {"db2rest.allowSafeDelete=false"})
 class MongoDBDeleteAllTest extends MongodbContainerConfiguration {
 
