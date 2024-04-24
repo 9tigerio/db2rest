@@ -32,7 +32,7 @@ public class JdbcDeleteService implements DeleteService {
     public int delete(String schemaName, String tableName, String filter) {
         db2RestConfigProperties.checkDeleteAllowed(filter);
 
-        DbTable dbTable = jdbcSchemaCache.getTable(tableName);
+        DbTable dbTable = jdbcSchemaCache.getTable(schemaName,tableName);
 
         DeleteContext context = DeleteContext.builder()
                 .tableName(tableName)

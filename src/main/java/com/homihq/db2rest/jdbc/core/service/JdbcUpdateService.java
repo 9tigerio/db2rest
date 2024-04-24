@@ -34,7 +34,7 @@ public class JdbcUpdateService implements UpdateService {
     @Transactional
     public int patch(String schemaName, String tableName, Map<String, Object> data, String filter) {
 
-        DbTable dbTable = jdbcSchemaCache.getTable(tableName);
+        DbTable dbTable = jdbcSchemaCache.getTable(schemaName, tableName);
 
 
         List<String> updatableColumns =

@@ -46,7 +46,7 @@ public class JoinProcessor implements ReadProcessor {
             rootTable = reviewRootTable(allJoinTables, joinDetail, rootTable);
 
             String tableName = joinDetail.table();
-            DbTable table = jdbcSchemaCache.getTable(tableName);
+            DbTable table = jdbcSchemaCache.getTable(readContext.getSchemaName(), tableName);
             table = table.copyWithAlias(getAlias(tableName));
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
             readContext.addColumns(columnList);
@@ -70,7 +70,7 @@ public class JoinProcessor implements ReadProcessor {
                     .findFirst();
 
             //look in cache
-            return newRoot.orElseGet(() -> jdbcSchemaCache.getTable(withTable));
+            return newRoot.orElseGet(() -> jdbcSchemaCache.getTable(joinDetail.schemaName(), withTable));
         }
 
         return rootTable;

@@ -18,7 +18,7 @@ import java.util.List;
 public class MySQLContainerConfiguration {
 
     private static final List<String> mySqlScripts = List.of("mysql/mysql-sakila.sql",
-            "mysql/mysql-sakila-data.sql");
+            "mysql/mysql-sakila-data.sql", "mysql/mysql-wakila-all.sql");
 
     private static final MySQLContainer mySQLContainer = (MySQLContainer) new MySQLContainer("mysql:8.2")
             .withDatabaseName("sakila")

@@ -18,7 +18,9 @@ public class RootTableProcessor implements ReadProcessor {
     public void process(ReadContext readContext) {
         log.debug("Processing root table");
         DbTable table =
-                jdbcSchemaCache.getTable(readContext.getTableName());
+                jdbcSchemaCache.getTable(
+                        readContext.getSchemaName(),
+                        readContext.getTableName());
 
         readContext.setRoot(table);
     }
