@@ -40,7 +40,6 @@ public class Db2RestConfigProperties {
 
     }
 
-
     public void checkDeleteAllowed(String filter) {
         if (StringUtils.isBlank(filter) && allowSafeDelete)
             throw new DeleteOpNotAllowedException(true);

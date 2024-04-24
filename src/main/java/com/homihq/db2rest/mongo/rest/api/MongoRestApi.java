@@ -1,6 +1,7 @@
 package com.homihq.db2rest.mongo.rest.api;
 
 import com.homihq.db2rest.core.dto.CreateResponse;
+import com.homihq.db2rest.core.dto.DeleteResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,10 @@ public interface MongoRestApi {
     CreateResponse save(@PathVariable String collectionName,
                         @RequestParam(name = "fields", required = false) List<String> includeFields,
                         @RequestBody Map<String, Object> data);
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{collectionName}")
+    DeleteResponse delete(@PathVariable String collectionName,
+                          @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{collectionName}")

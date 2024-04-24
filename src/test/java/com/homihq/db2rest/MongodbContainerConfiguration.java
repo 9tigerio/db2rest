@@ -12,7 +12,6 @@ import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
 @Testcontainers
-@Profile("it-mongo")
 @ExtendWith({RestDocumentationExtension.class})
 public class MongodbContainerConfiguration {
     @Container
