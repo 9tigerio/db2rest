@@ -82,7 +82,8 @@ values
     (7, 7, 'Ivan', 'Levchenko', 'ivan_new@outlook.com','878511311054');
 
 
-
+Insert into employee (emp_id, first_name, last_name, create_date, is_active) values (1, 'Ivan', 'Levchenko', curdate(), 1);
+Insert into employee (emp_id, first_name, last_name, create_date, is_active) values (2, 'Roger', 'Federer', curdate(), 1);
 
 
 -- language

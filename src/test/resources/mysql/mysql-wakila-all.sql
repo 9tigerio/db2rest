@@ -79,3 +79,18 @@ values
     (7, 7, 'Ivan', 'Levchenko', 'ivan_new@outlook.com','878511311054');
 
 
+--
+-- Table structure for table `employee`
+--
+
+CREATE TABLE employee (
+           emp_id int(10) UNSIGNED NOT NULL,
+           first_name varchar(100) NOT NULL,
+           last_name varchar(150) NOT NULL,
+           create_date datetime NOT NULL,
+           is_active tinyint(1) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+Insert into employee (emp_id, first_name, last_name, create_date, is_active) values (1, 'Ivan', 'Levchenko', curdate(), 1);
+Insert into employee (emp_id, first_name, last_name, create_date, is_active) values (2, 'Roger', 'Federer', curdate(), 1);

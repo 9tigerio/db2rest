@@ -14,10 +14,12 @@ public class DeleteController implements DeleteRestApi {
     private final DeleteService deleteService;
 
     @Override
-    public DeleteResponse delete(String tableName,
+    public DeleteResponse delete(
+            String schemaName,
+            String tableName,
                                  String filter) {
-        //TODO - Handle multi tenancy
-        int rows = deleteService.delete(null, tableName, filter);
+
+        int rows = deleteService.delete(schemaName, tableName, filter);
         log.debug("Number of rows deleted - {}", rows);
         return DeleteResponse.builder().rows(rows).build();
     }
