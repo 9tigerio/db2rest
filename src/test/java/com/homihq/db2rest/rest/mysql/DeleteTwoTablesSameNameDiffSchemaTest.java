@@ -3,7 +3,6 @@ package com.homihq.db2rest.rest.mysql;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -14,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(92)
-class MySQLDeleteSameTableDifferentSchemaControllerTest extends MySQLBaseIntegrationTest {
+class DeleteTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Delete Employee Same table different database")

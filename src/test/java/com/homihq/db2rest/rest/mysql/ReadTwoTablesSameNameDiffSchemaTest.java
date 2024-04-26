@@ -2,7 +2,6 @@ package com.homihq.db2rest.rest.mysql;
 
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import org.junit.jupiter.api.*;
-import org.springframework.http.MediaType;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
@@ -16,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(3)
-class MySQLReadTwoTablesSameNameTest extends MySQLBaseIntegrationTest {
+class ReadTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - all columns - different schemas.")
     void findUsersInTwoSchemas() throws Exception {

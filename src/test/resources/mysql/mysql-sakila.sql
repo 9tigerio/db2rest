@@ -27,11 +27,12 @@ USE sakila;
 --
 
 CREATE TABLE employee (
-      emp_id int(10) UNSIGNED NOT NULL,
-      first_name varchar(100) NOT NULL,
-      last_name varchar(150) NOT NULL,
-      create_date datetime NOT NULL,
-      is_active tinyint(1) NOT NULL
+          emp_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+          first_name varchar(100) NOT NULL,
+          last_name varchar(150) NOT NULL,
+          create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          is_active tinyint(1) DEFAULT 1,
+          PRIMARY KEY (emp_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

@@ -84,13 +84,14 @@ values
 --
 
 CREATE TABLE employee (
-           emp_id int(10) UNSIGNED NOT NULL,
-           first_name varchar(100) NOT NULL,
-           last_name varchar(150) NOT NULL,
-           create_date datetime NOT NULL,
-           is_active tinyint(1) NOT NULL
+          emp_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+          first_name varchar(100) NOT NULL,
+          last_name varchar(150) NOT NULL,
+          create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          is_active tinyint(1) DEFAULT 1,
+          PRIMARY KEY (emp_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-Insert into employee (emp_id, first_name, last_name, create_date, is_active) values (1, 'Ivan', 'Levchenko', curdate(), 1);
-Insert into employee (emp_id, first_name, last_name, create_date, is_active) values (2, 'Roger', 'Federer', curdate(), 1);
+Insert into employee (first_name, last_name) values ('Ivan', 'Levchenko');
+Insert into employee (first_name, last_name) values ('Roger', 'Federer');
