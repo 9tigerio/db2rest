@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>0.3.1</version>
+    <version>0.3.1-FIXED</version>
     <name>db2rest-oracle9i</name>
     <description>DB2Rest support for older Oracle9i database.</description>
     <properties>
@@ -193,6 +193,17 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>oracle-xe</artifactId>
             <version>1.19.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mariadb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
             <scope>test</scope>
         </dependency>
 
