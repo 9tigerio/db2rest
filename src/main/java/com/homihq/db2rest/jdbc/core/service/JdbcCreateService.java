@@ -39,7 +39,7 @@ public class JdbcCreateService implements CreateService {
                                Map<String, Object> data, boolean tsIdEnabled, List<String> sequences) {
         try {
             //1. get actual table
-            DbTable dbTable = jdbcSchemaCache.getTable(tableName);
+            DbTable dbTable = jdbcSchemaCache.getTable(schemaName, tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(data.keySet().stream().toList()) :

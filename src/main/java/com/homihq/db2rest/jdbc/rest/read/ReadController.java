@@ -18,6 +18,7 @@ public class ReadController {
 
     @GetMapping(value = "/{tableName}" , produces = "application/json")
     public Object findAll(@PathVariable String tableName,
+                          @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                           @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                           @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
                           @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
@@ -25,6 +26,7 @@ public class ReadController {
                           @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset) {
 
         ReadContext readContext = ReadContext.builder()
+                .schemaName(schemaName)
                 .tableName(tableName)
                 .fields(fields)
                 .filter(filter)

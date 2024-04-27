@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Objects;
 
 
-public record JoinDetail (String table, String withTable, List<String> fields,
+public record JoinDetail (
+        String schemaName,
+        String table, String withTable, List<String> fields,
                           List<String> on, String filter, String type){
 
     public String getJoinType() {

@@ -1,5 +1,6 @@
 package com.homihq.db2rest.jdbc;
 
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.dialect.*;
 import com.homihq.db2rest.core.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.exception.InvalidTableException;
@@ -7,15 +8,14 @@ import com.homihq.db2rest.jdbc.core.model.DbTable;
 
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
-import com.homihq.db2rest.jdbc.core.schema.SchemaCache;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.jdbc.support.MetaDataAccessException;
-
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -23,23 +23,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RequiredArgsConstructor
-public final class JdbcSchemaCache implements SchemaCache {
+public final class JdbcSchemaCache {
 
     private final DataSource dataSource;
     private final Db2RestConfigProperties db2RestConfigProperties;
     private Map<String,DbTable> dbTableMap;
 
-    @Getter
-    @Deprecated
-    private String productName;
-
-    @Getter
-    @Deprecated
-    private int productVersion;
+    private DbMeta dbMeta;
 
     @Getter
     private Dialect dialect;
-
 
 
     @PostConstruct
@@ -60,17 +53,14 @@ public final class JdbcSchemaCache implements SchemaCache {
         log.info("Loading meta data");
         try {
 
-            DbMeta dbMeta = JdbcUtils.extractDatabaseMetaData(dataSource, new JdbcMetaDataProvider(db2RestConfigProperties));
+            this.dbMeta = JdbcUtils.extractDatabaseMetaData(dataSource, new JdbcMetaDataProvider(db2RestConfigProperties));
 
             for (final  DbTable dbTable : dbMeta.dbTables()) {
                 dbTableMap.put(dbTable.name(), dbTable);
             }
 
-            this.productName = dbMeta.productName();
-            this.productVersion = dbMeta.majorVersion();
 
-            dialect = DialectFactory.getDialect(this.productName, this.productVersion);
-
+            dialect = DialectFactory.getDialect(dbMeta.productName(), dbMeta.majorVersion());
 
 
         } catch (MetaDataAccessException e) {
@@ -78,15 +68,30 @@ public final class JdbcSchemaCache implements SchemaCache {
         }
     }
 
+    public DbTable getTable(String schemaName, String tableName) {
 
-    @Override
-    public DbTable getTable(String tableName) {
+        if(StringUtils.isNotBlank(schemaName)) return findBySchemaNameAndTableName(schemaName, tableName);
 
         DbTable table = this.dbTableMap.get(tableName);
+
+        log.info("Table retrieved - {}", table);
 
         if(Objects.isNull(table)) throw new InvalidTableException(tableName);
 
         return table;
+    }
+
+    private DbTable findBySchemaNameAndTableName(String schemaName, String tableName) {
+        return
+        dbMeta.dbTables()
+                .stream()
+                .filter(dbTable ->
+                        StringUtils.equalsIgnoreCase(dbTable.schema(), schemaName)
+                            &&
+                                StringUtils.equalsIgnoreCase(dbTable.name(), tableName)
+                ).findFirst()
+                .orElseThrow(()->
+                        new GenericDataAccessException("Missing table - schema : " + schemaName + " , table : " + tableName));
     }
 
 

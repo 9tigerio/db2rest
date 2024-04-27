@@ -82,8 +82,12 @@ values
     (7, 7, 'Ivan', 'Levchenko', 'ivan_new@outlook.com','878511311054');
 
 
+Insert into employee (first_name, last_name) values ('Ivan', 'Levchenko');
+Insert into employee (first_name, last_name) values ('Roger', 'Federer');
 
 
+Insert into department (name) values ('Marketing');
+Insert into department (name) values ('Sales');
 
 -- language
 

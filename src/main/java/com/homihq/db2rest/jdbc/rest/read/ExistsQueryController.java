@@ -19,12 +19,14 @@ public class ExistsQueryController {
 
 	@GetMapping(value = "/{tableName}/exists", produces = "application/json")
 	public ExistsResponse exists(@PathVariable String tableName,
+								 @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                                  @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
 		log.debug("tableName - {}", tableName);
 		log.debug("filter - {}", filter);
 
 		ReadContext readContext = ReadContext.builder()
+				.schemaName(schemaName)
 				.tableName(tableName)
 				.filter(filter)
 				.build();

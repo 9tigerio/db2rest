@@ -21,6 +21,35 @@ DROP SCHEMA IF EXISTS sakila;
 CREATE SCHEMA sakila;
 USE sakila;
 
+
+--
+-- Table structure for table `employee`
+--
+
+CREATE TABLE employee (
+          emp_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+          first_name varchar(100) NOT NULL,
+          last_name varchar(150) NOT NULL,
+          create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          is_active tinyint(1) DEFAULT 1,
+          PRIMARY KEY (emp_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `department`
+--
+
+CREATE TABLE department (
+        dept_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+        name varchar(100) NOT NULL,
+        create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        is_active tinyint(1) DEFAULT 1,
+        PRIMARY KEY (dept_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 --
 -- Table structure for table `tops`
 --

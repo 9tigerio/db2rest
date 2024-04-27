@@ -45,7 +45,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
         try {
 
             //1. get actual table
-            DbTable dbTable = jdbcSchemaCache.getTable(tableName);
+            DbTable dbTable = jdbcSchemaCache.getTable(schemaName, tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(dataList.get(0).keySet().stream().toList()) :
