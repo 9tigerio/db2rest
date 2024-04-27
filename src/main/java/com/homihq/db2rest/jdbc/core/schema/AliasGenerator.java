@@ -13,7 +13,7 @@ public class AliasGenerator {
         return
         sqlIdentifier.length() > LENGTH ?
                 sqlIdentifier.substring(0, LENGTH) + "_" +random.nextInt(100)
-            :   sqlIdentifier + "_" +random.nextInt(100);
+            :   sqlIdentifier + "_" +random.nextInt(1000);
 
     }
 }

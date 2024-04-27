@@ -47,7 +47,10 @@ public class JoinProcessor implements ReadProcessor {
 
             String tableName = joinDetail.table();
             DbTable table = jdbcSchemaCache.getTable(readContext.getSchemaName(), tableName);
+
+
             table = table.copyWithAlias(getAlias(tableName));
+
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
             readContext.addColumns(columnList);
             addJoin(table, rootTable, joinDetail, readContext);

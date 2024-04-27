@@ -74,6 +74,8 @@ public final class JdbcSchemaCache {
 
         DbTable table = this.dbTableMap.get(tableName);
 
+        log.info("Table retrieved - {}", table);
+
         if(Objects.isNull(table)) throw new InvalidTableException(tableName);
 
         return table;
