@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.*;
 public class CountQueryController {
     private final CountQueryService countQueryService;
     @GetMapping("/{tableName}/count")
-    public CountResponse count(@PathVariable String tableName
-                                    , @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
+    public CountResponse count(@PathVariable String tableName,
+                               @RequestHeader(name="Accept-Profile", required = false) String schemaName,
+                               @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
         log.debug("tableName - {}", tableName);
         log.debug("filter - {}", filter);
 
         ReadContext readContext = ReadContext.builder()
+                .schemaName(schemaName)
                 .tableName(tableName)
                 .filter(filter)
                 .build();

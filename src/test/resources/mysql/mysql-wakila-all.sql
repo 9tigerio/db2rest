@@ -95,3 +95,20 @@ CREATE TABLE employee (
 
 Insert into employee (first_name, last_name) values ('Ivan', 'Levchenko');
 Insert into employee (first_name, last_name) values ('Roger', 'Federer');
+
+
+--
+-- Table structure for table `department`
+--
+
+CREATE TABLE department (
+      dept_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+      name varchar(100) NOT NULL,
+      create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      is_active tinyint(1) DEFAULT 1,
+      PRIMARY KEY (dept_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+Insert into department (name) values ('Marketing');
+Insert into department (name) values ('Sales');

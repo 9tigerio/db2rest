@@ -86,6 +86,9 @@ Insert into employee (first_name, last_name) values ('Ivan', 'Levchenko');
 Insert into employee (first_name, last_name) values ('Roger', 'Federer');
 
 
+Insert into department (name) values ('Marketing');
+Insert into department (name) values ('Sales');
+
 -- language
 
 Insert into language
