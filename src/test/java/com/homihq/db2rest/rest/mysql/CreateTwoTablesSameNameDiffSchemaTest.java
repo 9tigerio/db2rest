@@ -18,6 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,12 +45,26 @@ class CreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                         .header("Content-Profile", "sakila")
                         .content(objectMapper.writeValueAsString(CREATE_EMP_REQUEST))
                 )
-                //.andDo(print())
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
-                //.andExpect(jsonPath("$.keys.GENERATED_KEY").exists())
-                //.andExpect(jsonPath("$.keys.GENERATED_KEY", equalTo(5)))
+                .andExpect(jsonPath("$.keys.GENERATED_KEY").exists())
+                .andExpect(jsonPath("$.keys.GENERATED_KEY", equalTo(3)))
                 .andDo(document("mysql-create-emp-sakila"));
+
+
+        mockMvc.perform(post("/employee")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .header("Content-Profile", "wakila")
+                        .content(objectMapper.writeValueAsString(CREATE_EMP_REQUEST))
+                )
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.row", equalTo(1)))
+                .andExpect(jsonPath("$.keys.GENERATED_KEY").exists())
+                .andExpect(jsonPath("$.keys.GENERATED_KEY", equalTo(4)))
+                .andDo(document("mysql-create-emp-wakila"));
 
     }
 
