@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>api-rest</artifactId>
-    <version>{parent.version}</version>
+    <version>0.3.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>api-rest</name>
     <description>api-rest</description>
