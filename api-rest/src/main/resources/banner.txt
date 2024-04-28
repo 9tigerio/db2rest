@@ -1,0 +1,12 @@
+
+${AnsiColor.RED}    ____  ____  ____ ____  ____  _____ ____ _____  ____
+${AnsiColor.BLUE}   / / / |  _ \| __ )___ \|  _ \| ____/ ___|_   _| \ \ \
+${AnsiColor.YELLOW}  | | |  | | | |  _ \ __) | |_) |  _| \___ \ | |    | | |
+${AnsiColor.GREEN} < < <   | |_| | |_) / __/|  _ <| |___ ___) || |     > > >
+${AnsiColor.MAGENTA}  | | |  |____/|____/_____|_| \_\_____|____/ |_|    | | |
+${AnsiColor.BRIGHT_GREEN}   \_\_\ ========================================= /_/_/
+   ${AnsiColor.DEFAULT}+---------------------------------------------------+
+   |${AnsiColor.GREEN}:: ${app.name} version ::     ${AnsiColor.DEFAULT}v${app.version}               |
+   |${AnsiColor.GREEN}:: Spring-Boot version ::     ${AnsiColor.DEFAULT}v${spring-boot.version}               |
+   |${AnsiColor.GREEN}:: Visit ${app.name} website :: ${AnsiColor.DEFAULT}[https://db2rest.com/] |
+   ${AnsiColor.DEFAULT}+---------------------------------------------------+

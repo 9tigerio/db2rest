@@ -1,0 +1,7 @@
+{
+  "sql": "SELECT FIRST_NAME,LAST_NAME FROM ACTOR WHERE ACTOR_ID = :id",
+  "params" : {
+    "id" : 1
+  },
+  "single" : true
+}

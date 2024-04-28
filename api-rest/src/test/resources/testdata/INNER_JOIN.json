@@ -1,0 +1,11 @@
+[
+  {
+    "table": "film",
+
+    "fields" : ["title","release_year"],
+    "type" : "INNER",
+
+    "on" : ["film_id==film_id"]
+  }
+]
+
