@@ -6,9 +6,8 @@
         <groupId>com.github</groupId>
         <artifactId>db2rest-parent</artifactId>
         <version>0.3.2-SNAPSHOT</version>
-        <!--
-        <relativePath/>
-        -->
+        <relativePath>../pom.xml</relativePath>
+
         <!-- lookup parent from repository -->
     </parent>
 

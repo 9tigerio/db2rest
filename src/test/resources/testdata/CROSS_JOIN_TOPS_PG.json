@@ -1,7 +1,0 @@
-[
-  {
-    "table": "bottoms",
-    "fields": ["bottom_item","color:botColor","size:botSize"],
-    "type" : "CROSS"
-  }
-]
