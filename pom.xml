@@ -22,6 +22,7 @@
     <modules>
         <module>api-rest</module>
         <module>db2rest-common</module>
+        <module>db2rest-rdbms</module>
     </modules>
 
     <distributionManagement>

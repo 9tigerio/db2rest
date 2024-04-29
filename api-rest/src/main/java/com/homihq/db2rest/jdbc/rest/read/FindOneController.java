@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.read;
 
 import com.homihq.db2rest.jdbc.core.service.FindOneService;
-import com.homihq.db2rest.jdbc.rest.read.dto.ReadContext;
+import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,7 @@ public class FindOneController {
         log.debug("filter - {}", filter);
 
         ReadContext readContext = ReadContext.builder()
+                .defaultFetchLimit(100) //todo update with config
                 .schemaName(schemaName)
                 .tableName(tableName)
                 .filter(filter)
