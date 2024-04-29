@@ -1,4 +1,4 @@
-package com.homihq.db2rest.core;
+package com.homihq.db2rest.exception;
 
 import com.homihq.db2rest.core.exception.*;
 import org.springframework.http.*;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestControllerAdvice
-public class GlobalRESTExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DeleteOpNotAllowedException.class)
     ProblemDetail handleDeleteOpNotAllowedException(DeleteOpNotAllowedException e) {

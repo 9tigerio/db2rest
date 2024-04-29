@@ -1,4 +1,4 @@
-package com.homihq.db2rest.core.config;
+package com.homihq.db2rest.config;
 
 public enum TenancyMode {
     TENANT_ID,

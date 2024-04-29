@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.core.service;
 
-import com.homihq.db2rest.core.config.Db2RestConfigProperties;
+import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.core.model.DbWhere;

@@ -1,7 +1,5 @@
 package com.homihq.db2rest.core.exception;
 
-
-
 public class InvalidOperatorException extends RuntimeException {
 
 

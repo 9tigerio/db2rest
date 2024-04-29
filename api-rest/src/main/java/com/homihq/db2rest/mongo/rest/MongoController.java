@@ -1,7 +1,7 @@
 package com.homihq.db2rest.mongo.rest;
 
 
-import com.homihq.db2rest.core.config.Db2RestConfigProperties;
+import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.mongo.repository.MongoRepository;
