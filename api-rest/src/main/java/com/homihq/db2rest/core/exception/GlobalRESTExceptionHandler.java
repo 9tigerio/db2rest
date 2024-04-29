@@ -1,10 +1,6 @@
 package com.homihq.db2rest.core.exception;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
+import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,7 +15,29 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalRESTExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(GenericDataAccessException.class)
+    ProblemDetail handleGenericDataAccessException(GenericDataAccessException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("Generic Data Access Error");
+        problemDetail.setType(URI.create("https://github.com/kdhrubo/db2rest/generic-error"));
+        problemDetail.setProperty("errorCategory", "Data-access-error");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+
+    }
+
+    @ExceptionHandler(InvalidColumnException.class)
+    ProblemDetail handleInvalidColumnException(InvalidColumnException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Missing Column Error");
+        problemDetail.setType(URI.create("https://db2rest.com/error/missing-column"));
+        problemDetail.setProperty("errorCategory", "Missing-Column");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
