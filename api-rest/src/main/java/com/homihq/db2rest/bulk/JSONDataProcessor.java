@@ -1,4 +1,4 @@
-package com.homihq.db2rest.core.bulk;
+package com.homihq.db2rest.bulk;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

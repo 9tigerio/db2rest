@@ -1,4 +1,4 @@
-package com.homihq.db2rest.core.bulk;
+package com.homihq.db2rest.bulk;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;

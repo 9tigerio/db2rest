@@ -1,4 +1,4 @@
-package com.homihq.db2rest.core.config;
+package com.homihq.db2rest.config;
 
 import com.homihq.db2rest.core.exception.DeleteOpNotAllowedException;
 import lombok.Getter;

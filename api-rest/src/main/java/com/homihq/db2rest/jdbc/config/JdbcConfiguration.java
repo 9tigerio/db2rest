@@ -2,8 +2,8 @@ package com.homihq.db2rest.jdbc.config;
 
 
 import com.homihq.db2rest.jdbc.core.DbOperationService;
-import com.homihq.db2rest.core.bulk.DataProcessor;
-import com.homihq.db2rest.core.config.Db2RestConfigProperties;
+import com.homihq.db2rest.bulk.DataProcessor;
+import com.homihq.db2rest.config.Db2RestConfigProperties;
 
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;

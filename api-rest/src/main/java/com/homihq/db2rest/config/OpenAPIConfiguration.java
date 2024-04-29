@@ -1,4 +1,4 @@
-package com.homihq.db2rest.core.config;
+package com.homihq.db2rest.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;

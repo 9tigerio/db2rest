@@ -2,7 +2,6 @@ package com.homihq.db2rest.jdbc.dialect;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.jdbc.core.model.DbColumn;
 import com.homihq.db2rest.jdbc.core.model.DbTable;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.homihq.db2rest.mongo.config;
 
-import com.homihq.db2rest.core.config.Db2RestConfigProperties;
+import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.mongo.dialect.MongoDialect;
 import com.homihq.db2rest.mongo.repository.MongoRepository;
 import com.homihq.db2rest.mongo.rest.MongoController;
