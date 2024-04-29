@@ -8,10 +8,10 @@ import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.core.service.*;
-import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
+import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rest.read.*;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
@@ -65,7 +65,7 @@ public class JdbcConfiguration {
     @Bean
     public JdbcSchemaCache jdbcSchemaCache(DataSource dataSource, Db2RestConfigProperties db2RestConfigProperties) {
         log.info("JDBC Schema cache is being cached.");
-        return new JdbcSchemaCache(dataSource, db2RestConfigProperties);
+        return new JdbcSchemaCache(dataSource, db2RestConfigProperties.isAllSchema(), db2RestConfigProperties.getIncludeSchemas());
     }
 
     @Bean
@@ -74,11 +74,11 @@ public class JdbcConfiguration {
     }
 
 
-
     @Bean
     @DependsOn("textTemplateResolver")
-    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, JdbcSchemaCache jdbcSchemaCache, Db2RestConfigProperties db2RestConfigProperties) {
-        return new SqlCreatorTemplate(templateEngine, jdbcSchemaCache, db2RestConfigProperties);
+    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, JdbcSchemaCache jdbcSchemaCache
+                                                 ) {
+        return new SqlCreatorTemplate(templateEngine, jdbcSchemaCache);
     }
 
 
@@ -190,7 +190,7 @@ public class JdbcConfiguration {
             JdbcSchemaCache jdbcSchemaCache,
             SqlCreatorTemplate sqlCreatorTemplate,
             DbOperationService dbOperationService) {
-        return new JdbcDeleteService(db2RestConfigProperties, jdbcSchemaCache, sqlCreatorTemplate, dbOperationService);
+        return new JdbcDeleteService(jdbcSchemaCache, sqlCreatorTemplate, dbOperationService);
     }
 
     //RPC
@@ -266,8 +266,8 @@ public class JdbcConfiguration {
     //DELETE API
     @Bean
     @ConditionalOnBean(DeleteService.class)
-    public DeleteController deleteController(DeleteService deleteService) {
-        return new DeleteController(deleteService);
+    public DeleteController deleteController(DeleteService deleteService, Db2RestConfigProperties configProperties) {
+        return new DeleteController(deleteService, configProperties);
     }
 
     //RPC
