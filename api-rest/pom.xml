@@ -31,7 +31,12 @@
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/org.checkerframework/checker-qual -->
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>db2rest-common</artifactId>
+            <version>0.3.2-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>

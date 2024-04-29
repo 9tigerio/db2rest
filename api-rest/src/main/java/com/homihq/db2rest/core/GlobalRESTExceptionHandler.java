@@ -1,5 +1,6 @@
-package com.homihq.db2rest.core.exception;
+package com.homihq.db2rest.core;
 
+import com.homihq.db2rest.core.exception.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
