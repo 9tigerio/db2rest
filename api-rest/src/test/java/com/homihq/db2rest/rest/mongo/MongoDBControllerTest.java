@@ -39,6 +39,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,6 +65,9 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
 
     @GivenJsonResource("/testdata/CREATE_ACTOR_REQUEST.json")
     Map<String, Object> CREATE_ACTOR_REQUEST;
+
+    @GivenJsonResource("/testdata/UPDATE_ACTOR_REQUEST.json")
+    Map<String, Object> UPDATE_ACTOR_REQUEST;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext,
@@ -98,6 +102,66 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
 
     @Test
     @Order(2)
+    @DisplayName("Update an existing Actor")
+    void updateExistingActor() throws Exception {
+        mockMvc.perform(patch("/Sakila_actors")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "FirstName==PENELOPE")
+                        .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", equalTo(1)))
+                .andDo(document("mongodb-update-existing-actor"));
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Update a non-existing Actor")
+    void updateNonExistingActor() throws Exception {
+        mockMvc.perform(patch("/Sakila_actors")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "FirstName==Michael")
+                        .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", equalTo(0)))
+                .andDo(document("mongodb-update-non-existing-actor"));
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Update non-existing Collection")
+    void updateNonExistingCollection() throws Exception {
+        mockMvc.perform(patch("/unknown_collection")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "FirstName==Michael")
+                        .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", equalTo(0)))
+                .andDo(document("mongodb-update-non-existing-collection"));
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Update multiple Actors")
+    void updateExistingActors() throws Exception {
+        mockMvc.perform(patch("/Sakila_actors")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "LastName==ZELLWEGER")
+                        .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", equalTo(2)))
+                .andDo(document("mongodb-update-existing-actors"));
+    }
+
+    @Test
+    @Order(6)
     @DisplayName("Test find all actors - all fields")
     void findAllActors() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -110,7 +174,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(3)
+    @Order(7)
     @DisplayName("Test find all actors - 2 fields")
     void findAllActorsWithTwoFields() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -127,7 +191,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(4)
+    @Order(8)
     @DisplayName("Test find all actors with filter")
     void findAllActorsWithFilter() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -144,7 +208,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(5)
+    @Order(9)
     @DisplayName("Test find all actors with sorting")
     void findAllActorsWithSorting() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -162,7 +226,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(6)
+    @Order(10)
     @DisplayName("Test find all actors with pagination")
     void findAllActorsWithPagination() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -182,7 +246,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(7)
+    @Order(11)
     @DisplayName("Find one actor - 2 fields")
     void findOneActor() throws Exception {
         mockMvc.perform(get("/Sakila_actors/one")
@@ -198,7 +262,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(8)
+    @Order(12)
     @DisplayName("Delete all documents while allowSafeDelete=true")
     void delete_all_documents_with_allow_safe_delete_true() throws Exception {
         mockMvc.perform(delete("/Sakila_actors")
@@ -210,7 +274,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(9)
+    @Order(13)
     @DisplayName("Delete an actor")
     void delete_single_record() throws Exception {
         mockMvc.perform(delete("/Sakila_actors")

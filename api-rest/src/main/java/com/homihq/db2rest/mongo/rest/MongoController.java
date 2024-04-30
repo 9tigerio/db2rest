@@ -4,6 +4,7 @@ package com.homihq.db2rest.mongo.rest;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
+import com.homihq.db2rest.jdbc.dto.UpdateResponse;
 import com.homihq.db2rest.mongo.repository.MongoRepository;
 import com.homihq.db2rest.mongo.rest.api.MongoRestApi;
 import com.homihq.db2rest.mongo.rsql.RsqlMongodbAdapter;
@@ -36,6 +37,14 @@ public class MongoController implements MongoRestApi {
         return mongoRepository
                 .save(collectionName, includeFields, data);
 
+    }
+
+    @Override
+    public UpdateResponse patch(String collectionName, Map<String, Object> data, String filter) {
+        log.debug("Filter - {}", filter);
+        var query = new Query();
+        addCriteria(filter, query);
+        return mongoRepository.patch(query, collectionName, data);
     }
 
     @Override
