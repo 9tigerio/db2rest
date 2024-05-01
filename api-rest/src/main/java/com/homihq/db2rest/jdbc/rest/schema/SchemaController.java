@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.schema;
 
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.config.JdbcSchemaCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
