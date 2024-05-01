@@ -1,25 +1,29 @@
 package com.homihq.db2rest.jdbc.config;
 
 
-import com.homihq.db2rest.jdbc.core.DbOperationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.homihq.db2rest.jdbc.config.JdbcOperationService;
+import com.homihq.db2rest.jdbc.config.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.config.core.service.*;
+import com.homihq.db2rest.jdbc.config.dialect.*;
+import com.homihq.db2rest.jdbc.config.processor.*;
+import com.homihq.db2rest.jdbc.config.tsid.TSIDProcessor;
+import com.homihq.db2rest.jdbc.config.core.DbOperationService;
 import com.homihq.db2rest.bulk.DataProcessor;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 
-import com.homihq.db2rest.jdbc.JdbcOperationService;
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
-import com.homihq.db2rest.jdbc.core.service.*;
+
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
-import com.homihq.db2rest.jdbc.processor.*;
+
 import com.homihq.db2rest.jdbc.rest.read.*;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
 import com.homihq.db2rest.jdbc.rest.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 
-import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
-import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
+import com.homihq.db2rest.jdbc.config.sql.SqlCreatorTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -63,9 +67,19 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    public JdbcSchemaCache jdbcSchemaCache(DataSource dataSource, Db2RestConfigProperties db2RestConfigProperties) {
+    public JdbcSchemaCache jdbcSchemaCache(DataSource dataSource, Db2RestConfigProperties db2RestConfigProperties
+        , ObjectMapper objectMapper) {
         log.info("JDBC Schema cache is being cached.");
-        return new JdbcSchemaCache(dataSource, db2RestConfigProperties.isAllSchema(), db2RestConfigProperties.getIncludeSchemas());
+
+        List<Dialect> dialects = List.of(
+                new PostGreSQLDialect(objectMapper)
+                ,new MySQLDialect(objectMapper)
+                ,new MariaDBDialect(objectMapper)
+                ,new OracleDialect(objectMapper)
+        );
+
+        return new JdbcSchemaCache(dataSource, db2RestConfigProperties.isAllSchema(),
+                db2RestConfigProperties.getIncludeSchemas(), dialects);
     }
 
     @Bean

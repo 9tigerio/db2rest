@@ -76,7 +76,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
-    @ExceptionHandler(GenericDataAccessException.class)
+    @ExceptionHandler({GenericDataAccessException.class, RuntimeException.class})
     ProblemDetail handleGenericDataAccessException(GenericDataAccessException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Generic Data Access Error");

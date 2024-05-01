@@ -1,6 +1,6 @@
 package com.homihq.db2rest.mongo.dialect;
 
-import com.homihq.db2rest.jdbc.core.model.DbTable;
+import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

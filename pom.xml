@@ -15,14 +15,22 @@
     <name>db2rest-parent</name>
     <description>db2rest-parent</description>
     <properties>
+        <db2rest.version>0.3.2-SNAPSHOT</db2rest.version>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
     </properties>
 
     <modules>
         <module>api-rest</module>
+        <module>pg-dialect</module>
+        <module>mysql-dialect</module>
+        <module>mariadb-dialect</module>
+        <module>oracle-dialect</module>
+        <module>oracle9i-dialect</module>
+        <module>rdbms-common</module>
         <module>db2rest-common</module>
-        <module>db2rest-rdbms</module>
+        <module>rdbms-support</module>
+        <module>rdbms-spring-boot-starter</module>
     </modules>
 
     <distributionManagement>
@@ -41,11 +49,32 @@
             <optional>true</optional>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
 
     </dependencies>
 
