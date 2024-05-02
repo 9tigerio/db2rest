@@ -10,19 +10,21 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest-parent</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>${db2rest.version}</version>
     <packaging>pom</packaging>
     <name>db2rest-parent</name>
     <description>db2rest-parent</description>
     <properties>
-        <db2rest.version>0.3.2-SNAPSHOT</db2rest.version>
+        <db2rest.version>0.3.2-RC1</db2rest.version>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
     </properties>
 
     <modules>
         <module>api-rest</module>
+        <module>auth</module>
         <module>mongo-support</module>
+        <module>rest-common</module>
         <module>pg-dialect</module>
         <module>mysql-dialect</module>
         <module>mariadb-dialect</module>
@@ -43,6 +45,12 @@
     </distributionManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+            <version>2.16.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -75,6 +83,14 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>io.github.nstdio</groupId>

@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.rest.rpc;
 
-import com.homihq.db2rest.jdbc.config.core.service.FunctionService;
+import com.homihq.db2rest.jdbc.core.service.FunctionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

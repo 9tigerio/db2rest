@@ -2,17 +2,18 @@ package com.homihq.db2rest.jdbc.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.jdbc.config.JdbcOperationService;
-import com.homihq.db2rest.jdbc.config.JdbcSchemaCache;
-import com.homihq.db2rest.jdbc.config.core.service.*;
+import com.homihq.db2rest.jdbc.JdbcOperationService;
+import com.homihq.db2rest.jdbc.JdbcSchemaCache;
 import com.homihq.db2rest.jdbc.config.dialect.*;
-import com.homihq.db2rest.jdbc.config.processor.*;
-import com.homihq.db2rest.jdbc.config.tsid.TSIDProcessor;
-import com.homihq.db2rest.jdbc.config.core.DbOperationService;
+
+import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
+import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.bulk.DataProcessor;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 
 
+import com.homihq.db2rest.jdbc.core.service.*;
+import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
@@ -23,7 +24,7 @@ import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
 import com.homihq.db2rest.jdbc.rest.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 
-import com.homihq.db2rest.jdbc.config.sql.SqlCreatorTemplate;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
