@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.config.core;
 
-import com.homihq.db2rest.jdbc.config.dto.CountResponse;
-import com.homihq.db2rest.jdbc.config.dto.ExistsResponse;
+import com.homihq.db2rest.core.dto.CountResponse;
+import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;

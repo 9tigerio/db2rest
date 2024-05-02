@@ -31,6 +31,13 @@
 
     <dependencies>
 
+
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>mongo-support</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-support</artifactId>
@@ -62,10 +69,7 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springdoc</groupId>

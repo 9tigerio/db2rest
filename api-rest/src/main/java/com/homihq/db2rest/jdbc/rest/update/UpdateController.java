@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.update;
 
 import com.homihq.db2rest.jdbc.config.core.service.UpdateService;
-import com.homihq.db2rest.jdbc.config.dto.UpdateResponse;
+import com.homihq.db2rest.core.dto.UpdateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

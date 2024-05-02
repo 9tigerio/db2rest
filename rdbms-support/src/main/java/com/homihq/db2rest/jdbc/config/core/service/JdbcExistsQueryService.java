@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.config.core.service;
 
 import com.homihq.db2rest.jdbc.config.core.DbOperationService;
-import com.homihq.db2rest.jdbc.config.dto.ExistsResponse;
+import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.jdbc.config.dto.ReadContext;
 import com.homihq.db2rest.jdbc.config.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.config.sql.SqlCreatorTemplate;
