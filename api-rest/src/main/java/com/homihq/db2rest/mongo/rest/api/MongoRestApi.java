@@ -2,7 +2,7 @@ package com.homihq.db2rest.mongo.rest.api;
 
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
-import com.homihq.db2rest.jdbc.dto.UpdateResponse;
+import com.homihq.db2rest.core.dto.UpdateResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

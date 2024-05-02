@@ -1,9 +1,9 @@
-package com.homihq.db2rest.mongo.repository;
+package com.homihq.db2test.mongo.repository;
 
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
-import com.homihq.db2rest.jdbc.dto.UpdateResponse;
-import com.homihq.db2rest.mongo.dialect.MongoDialect;
+import com.homihq.db2rest.core.dto.UpdateResponse;
+import com.homihq.db2test.mongo.dialect.MongoDialect;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ import java.util.Map;
 public class MongoRepository {
 
     private final MongoTemplate mongoTemplate;
-    private final MongoDialect dialect;
 
 
     public CreateResponse save(String collectionName, List<String> includedFields,

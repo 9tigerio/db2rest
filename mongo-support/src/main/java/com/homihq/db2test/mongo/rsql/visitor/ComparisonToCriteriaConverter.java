@@ -1,13 +1,13 @@
-package com.homihq.db2rest.mongo.rsql.visitor;
+package com.homihq.db2test.mongo.rsql.visitor;
 
-import com.homihq.db2rest.mongo.rsql.argconverters.EntityFieldTypeConverter;
-import com.homihq.db2rest.mongo.rsql.argconverters.FieldSpecificConverter;
-import com.homihq.db2rest.mongo.rsql.argconverters.NoOpConverter;
-import com.homihq.db2rest.mongo.rsql.argconverters.OperatorSpecificConverter;
-import com.homihq.db2rest.mongo.rsql.argconverters.StringToQueryValueConverter;
-import com.homihq.db2rest.mongo.rsql.operator.Operator;
-import com.homihq.db2rest.mongo.rsql.structs.ConversionInfo;
-import com.homihq.db2rest.mongo.utils.LazyUtils;
+import com.homihq.db2test.mongo.rsql.argconverters.EntityFieldTypeConverter;
+import com.homihq.db2test.mongo.rsql.argconverters.FieldSpecificConverter;
+import com.homihq.db2test.mongo.rsql.argconverters.NoOpConverter;
+import com.homihq.db2test.mongo.rsql.argconverters.OperatorSpecificConverter;
+import com.homihq.db2test.mongo.rsql.argconverters.StringToQueryValueConverter;
+import com.homihq.db2test.mongo.rsql.operator.Operator;
+import com.homihq.db2test.mongo.rsql.structs.ConversionInfo;
+import com.homihq.db2test.mongo.utils.LazyUtils;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,16 +55,16 @@ public class ComparisonToCriteriaConverter {
 
     private static Criteria makeCriteria(String selector, Operator operator, List<Object> arguments) {
         return switch (operator) {
-            case EQUAL -> where(selector).is(getFirst(operator, arguments));
-            case NOT_EQUAL -> where(selector).ne(getFirst(operator, arguments));
-            case GREATER_THAN -> where(selector).gt(getFirst(operator, arguments));
-            case GREATER_THAN_OR_EQUAL -> where(selector).gte(getFirst(operator, arguments));
-            case LESS_THAN -> where(selector).lt(getFirst(operator, arguments));
-            case LESS_THAN_OR_EQUAL -> where(selector).lte(getFirst(operator, arguments));
-            case REGEX -> where(selector).regex((String) getFirst(operator, arguments));
-            case EXISTS -> where(selector).exists((Boolean) getFirst(operator, arguments));
-            case IN -> where(selector).in(arguments);
-            case NOT_IN -> where(selector).nin(arguments);
+            case EQUAL -> Criteria.where(selector).is(getFirst(operator, arguments));
+            case NOT_EQUAL -> Criteria.where(selector).ne(getFirst(operator, arguments));
+            case GREATER_THAN -> Criteria.where(selector).gt(getFirst(operator, arguments));
+            case GREATER_THAN_OR_EQUAL -> Criteria.where(selector).gte(getFirst(operator, arguments));
+            case LESS_THAN -> Criteria.where(selector).lt(getFirst(operator, arguments));
+            case LESS_THAN_OR_EQUAL -> Criteria.where(selector).lte(getFirst(operator, arguments));
+            case REGEX -> Criteria.where(selector).regex((String) getFirst(operator, arguments));
+            case EXISTS -> Criteria.where(selector).exists((Boolean) getFirst(operator, arguments));
+            case IN -> Criteria.where(selector).in(arguments);
+            case NOT_IN -> Criteria.where(selector).nin(arguments);
         };
     }
 

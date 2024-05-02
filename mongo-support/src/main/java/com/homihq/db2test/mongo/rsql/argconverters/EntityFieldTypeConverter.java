@@ -1,7 +1,7 @@
-package com.homihq.db2rest.mongo.rsql.argconverters;
+package com.homihq.db2test.mongo.rsql.argconverters;
 
-import com.homihq.db2rest.mongo.rsql.structs.ConversionInfo;
-import com.homihq.db2rest.mongo.rsql.structs.Lazy;
+import com.homihq.db2test.mongo.rsql.structs.ConversionInfo;
+import com.homihq.db2test.mongo.rsql.structs.Lazy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;

@@ -1,4 +1,4 @@
-package com.homihq.db2rest.mongo.rsql.structs;
+package com.homihq.db2test.mongo.rsql.structs;
 
 import java.util.function.Supplier;
 

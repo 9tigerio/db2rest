@@ -1,13 +1,14 @@
 package com.homihq.db2rest.mongo.config;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.mongo.dialect.MongoDialect;
-import com.homihq.db2rest.mongo.repository.MongoRepository;
+
 import com.homihq.db2rest.mongo.rest.MongoController;
-import com.homihq.db2rest.mongo.rsql.RsqlMongodbAdapter;
-import com.homihq.db2rest.mongo.rsql.argconverters.NoOpConverter;
-import com.homihq.db2rest.mongo.rsql.argconverters.StringToQueryValueConverter;
-import com.homihq.db2rest.mongo.rsql.visitor.ComparisonToCriteriaConverter;
+
+import com.homihq.db2test.mongo.repository.MongoRepository;
+import com.homihq.db2test.mongo.rsql.RsqlMongodbAdapter;
+import com.homihq.db2test.mongo.rsql.argconverters.NoOpConverter;
+import com.homihq.db2test.mongo.rsql.argconverters.StringToQueryValueConverter;
+import com.homihq.db2test.mongo.rsql.visitor.ComparisonToCriteriaConverter;
 import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,14 +39,10 @@ public class MongoConfiguration {
         return new MongoTemplate(simpleMongoClientDatabaseFactory);
     }
 
-    @Bean
-    public MongoDialect mongodbDialect() {
-        return new MongoDialect();
-    }
 
     @DependsOn("mongoTemplate")
     public MongoRepository mongoRepository() {
-        return new MongoRepository(mongoTemplate(), mongodbDialect());
+        return new MongoRepository(mongoTemplate());
     }
 
     @Bean

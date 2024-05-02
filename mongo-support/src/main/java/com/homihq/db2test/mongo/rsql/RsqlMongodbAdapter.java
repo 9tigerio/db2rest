@@ -1,8 +1,8 @@
-package com.homihq.db2rest.mongo.rsql;
+package com.homihq.db2test.mongo.rsql;
 
-import com.homihq.db2rest.mongo.rsql.operator.Operator;
-import com.homihq.db2rest.mongo.rsql.visitor.ComparisonToCriteriaConverter;
-import com.homihq.db2rest.mongo.rsql.visitor.CriteriaBuildingVisitor;
+import com.homihq.db2test.mongo.rsql.operator.Operator;
+import com.homihq.db2test.mongo.rsql.visitor.ComparisonToCriteriaConverter;
+import com.homihq.db2test.mongo.rsql.visitor.CriteriaBuildingVisitor;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;

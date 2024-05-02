@@ -22,6 +22,7 @@
 
     <modules>
         <module>api-rest</module>
+        <module>mongo-support</module>
         <module>pg-dialect</module>
         <module>mysql-dialect</module>
         <module>mariadb-dialect</module>
@@ -75,6 +76,11 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.nstdio</groupId>
+            <artifactId>rsql-parser</artifactId>
+            <version>2.2.1</version>
+        </dependency>
 
     </dependencies>
 

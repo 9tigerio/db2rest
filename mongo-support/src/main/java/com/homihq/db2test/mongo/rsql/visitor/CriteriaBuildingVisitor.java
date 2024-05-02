@@ -1,4 +1,4 @@
-package com.homihq.db2rest.mongo.rsql.visitor;
+package com.homihq.db2test.mongo.rsql.visitor;
 
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;

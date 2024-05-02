@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.read;
 
 import com.homihq.db2rest.jdbc.config.core.service.ExistsQueryService;
-import com.homihq.db2rest.jdbc.config.dto.ExistsResponse;
+import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.jdbc.config.dto.JoinDetail;
 import com.homihq.db2rest.jdbc.config.dto.ReadContext;
 import lombok.RequiredArgsConstructor;

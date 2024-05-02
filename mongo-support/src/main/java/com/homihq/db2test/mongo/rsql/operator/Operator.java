@@ -1,4 +1,4 @@
-package com.homihq.db2rest.mongo.rsql.operator;
+package com.homihq.db2test.mongo.rsql.operator;
 
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;

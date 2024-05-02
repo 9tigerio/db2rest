@@ -4,10 +4,13 @@ package com.homihq.db2rest.mongo.rest;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
-import com.homihq.db2rest.jdbc.dto.UpdateResponse;
-import com.homihq.db2rest.mongo.repository.MongoRepository;
+
+
+import com.homihq.db2rest.core.dto.UpdateResponse;
 import com.homihq.db2rest.mongo.rest.api.MongoRestApi;
-import com.homihq.db2rest.mongo.rsql.RsqlMongodbAdapter;
+
+import com.homihq.db2test.mongo.repository.MongoRepository;
+import com.homihq.db2test.mongo.rsql.RsqlMongodbAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

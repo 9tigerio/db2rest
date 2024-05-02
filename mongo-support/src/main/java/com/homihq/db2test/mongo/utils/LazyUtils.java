@@ -1,6 +1,6 @@
-package com.homihq.db2rest.mongo.utils;
+package com.homihq.db2test.mongo.utils;
 
-import com.homihq.db2rest.mongo.rsql.structs.Lazy;
+import com.homihq.db2test.mongo.rsql.structs.Lazy;
 
 import java.util.List;
 
