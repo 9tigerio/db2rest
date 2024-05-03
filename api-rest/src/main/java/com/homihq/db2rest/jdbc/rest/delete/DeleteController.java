@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.delete;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.jdbc.config.core.service.DeleteService;
+import com.homihq.db2rest.jdbc.core.service.DeleteService;
 import com.homihq.db2rest.core.dto.DeleteResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -26,9 +26,9 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Build with Maven
-        run: ./mvnw -B package --file pom-oracle9i.xml -DskipTests
+        run: ./mvnw -B package --file api-rest/pom-oracle9i.xml -DskipTests
 
       - name: Publish to GitHub Packages Apache Maven
-        run: ./mvnw deploy -s $GITHUB_WORKSPACE/settings.xml --file pom-oracle9i.xml -DskipTests
+        run: ./mvnw deploy -s $GITHUB_WORKSPACE/settings.xml --file api-rest/pom-oracle9i.xml -DskipTests
         env:
           GITHUB_TOKEN: ${{ github.token }}

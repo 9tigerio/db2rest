@@ -1,8 +1,8 @@
 package com.homihq.db2rest.jdbc.rest.read;
 
-import com.homihq.db2rest.jdbc.config.core.service.ReadService;
-import com.homihq.db2rest.jdbc.config.dto.JoinDetail;
-import com.homihq.db2rest.jdbc.config.dto.ReadContext;
+import com.homihq.db2rest.jdbc.core.service.ReadService;
+import com.homihq.db2rest.jdbc.dto.JoinDetail;
+import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

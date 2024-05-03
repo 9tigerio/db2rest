@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.create;
 
 
-import com.homihq.db2rest.jdbc.config.core.service.CreateService;
+import com.homihq.db2rest.jdbc.core.service.CreateService;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
