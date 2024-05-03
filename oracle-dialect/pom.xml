@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>oracle-dialect</artifactId>
-    <version>${parent.version}</version>
+    <version>${db2rest.version}</version>
     <name>oracle-dialect</name>
     <description>oracle-dialect</description>
     <properties>

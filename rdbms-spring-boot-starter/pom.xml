@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>rdbms-spring-boot-starter</artifactId>
-    <version>${parent.version}</version>
+    <version>${db2rest.version}</version>
     <name>rdbms-support-spring-starter</name>
     <description>rdbms-support-spring-starter</description>
     <properties>

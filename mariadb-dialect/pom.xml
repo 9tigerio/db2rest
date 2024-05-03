@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>mariadb-dialect</artifactId>
-    <version>${parent.version}</version>
+    <version>${db2rest.version}</version>
     <name>mariadb-dialect</name>
     <description>mariadb-dialect</description>
     <properties>

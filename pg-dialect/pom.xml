@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>pg-dialect</artifactId>
-    <version>${parent.version}</version>
+    <version>${db2rest.version}</version>
     <name>pg-dialect</name>
     <description>pg-dialect</description>
     <properties>

@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>db2rest-common</artifactId>
-    <version>${parent.version}</version>
+    <version>${db2rest.version}</version>
     <name>db2rest-common</name>
     <description>db2rest-common</description>
     <properties>

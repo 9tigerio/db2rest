@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>rdbms-common</artifactId>
-    <version>${parent.version}</version>
+    <version>${db2rest.version}</version>
     <name>rdbms-common</name>
     <description>rdbms-common</description>
     <properties>

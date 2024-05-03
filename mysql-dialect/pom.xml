@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>mysql-dialect</artifactId>
-    <version>${parent.version}</version>
+    <version>${db2rest.version}</version>
     <name>mysql-dialect</name>
     <description>mysql-dialect</description>
     <properties>

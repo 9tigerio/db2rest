@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>mongo-support</artifactId>
-    <version>${parent.version}</version>
+    <version>${db2rest.version}</version>
     <name>mongo-support</name>
     <description>mongo-support</description>
     <properties>
