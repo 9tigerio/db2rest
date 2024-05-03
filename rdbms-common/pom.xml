@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>db2rest-common</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
     </dependencies>

@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>pg-dialect</artifactId>
-    <version>${db2rest.version}</version>
+    <version>${parent.version}</version>
     <name>pg-dialect</name>
     <description>pg-dialect</description>
     <properties>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-common</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
 
 

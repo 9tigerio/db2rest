@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>rdbms-support</artifactId>
-    <version>${db2rest.version}</version>
+    <version>${parent.version}</version>
     <name>db2rest-rdbms</name>
     <description>db2rest-rdbms</description>
     <properties>
@@ -23,13 +23,13 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>db2rest-common</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-common</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>

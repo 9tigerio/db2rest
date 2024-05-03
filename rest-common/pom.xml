@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>rest-common</artifactId>
-    <version>${db2rest.version}</version>
+    <version>${parent.version}</version>
     <name>rest-common</name>
     <description>rest-common</description>
     <properties>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>db2rest-common</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>

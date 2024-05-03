@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>rdbms-spring-boot-starter</artifactId>
-    <version>${db2rest.version}</version>
+    <version>${parent.version}</version>
     <name>rdbms-support-spring-starter</name>
     <description>rdbms-support-spring-starter</description>
     <properties>
@@ -24,31 +24,31 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-support</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>oracle-dialect</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>pg-dialect</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>mysql-dialect</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>mariadb-dialect</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
 

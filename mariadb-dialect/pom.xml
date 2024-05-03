@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>mariadb-dialect</artifactId>
-    <version>${db2rest.version}</version>
+    <version>${parent.version}</version>
     <name>mariadb-dialect</name>
     <description>mariadb-dialect</description>
     <properties>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-common</artifactId>
-            <version>${db2rest.version}</version>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 
