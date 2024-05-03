@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
     <packaging>jar</packaging>
     <name>db2rest-oracle9i</name>
     <description>db2rest-oracle9i</description>
@@ -33,25 +33,25 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rest-common</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>mongo-support</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-support</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>oracle9i-dialect</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
