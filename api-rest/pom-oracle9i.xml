@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>0.3.2-RC4</version>
+        <version>0.3.2-RC5</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
@@ -45,6 +45,25 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-support</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!--TODO - Remove -->
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>pg-dialect</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>mysql-dialect</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>mariadb-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
