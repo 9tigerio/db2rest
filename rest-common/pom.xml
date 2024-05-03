@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>0.3.2-RC5</version>
+        <version>0.3.2</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
@@ -15,9 +15,11 @@
     <version>${project.parent.version}</version>
     <name>rest-common</name>
     <description>rest-common</description>
+
     <properties>
         <java.version>21</java.version>
     </properties>
+
     <dependencies>
 
         <dependency>
