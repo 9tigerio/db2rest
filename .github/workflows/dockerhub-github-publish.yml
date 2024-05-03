@@ -34,6 +34,12 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
 
+      - name: Publish to GitHub Packages Apache Maven - Oracle9i
+        run: ./mvnw deploy -s $GITHUB_WORKSPACE/settings.xml --file api-rest/pom-oracle9i.xml -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
