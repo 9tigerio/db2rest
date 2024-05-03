@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.github</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>0.3.2-RC1</version>
+        <version>0.3.2-RC2</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
     </parent>
 
     <artifactId>mongo-support</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
     <name>mongo-support</name>
     <description>mongo-support</description>
     <properties>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>db2rest-common</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
     </dependencies>

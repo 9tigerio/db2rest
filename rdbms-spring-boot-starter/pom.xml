@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.github</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>0.3.2-RC1</version>
+        <version>0.3.2-RC2</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
     </parent>
 
     <artifactId>rdbms-spring-boot-starter</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
     <name>rdbms-support-spring-starter</name>
     <description>rdbms-support-spring-starter</description>
     <properties>
@@ -24,31 +24,31 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-support</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>oracle-dialect</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>pg-dialect</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>mysql-dialect</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>mariadb-dialect</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
 

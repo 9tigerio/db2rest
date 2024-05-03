@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.github</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>0.3.2-RC1</version>
+        <version>0.3.2-RC2</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
     </parent>
 
     <artifactId>rest-common</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
     <name>rest-common</name>
     <description>rest-common</description>
     <properties>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>db2rest-common</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>

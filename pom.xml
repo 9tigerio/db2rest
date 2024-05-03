@@ -10,12 +10,12 @@
     </parent>
     <groupId>com.github</groupId>
     <artifactId>db2rest-parent</artifactId>
-    <version>0.3.2-RC1</version>
+    <version>0.3.2-RC2</version>
     <packaging>pom</packaging>
     <name>db2rest-parent</name>
     <description>db2rest-parent</description>
     <properties>
-        <db2rest.version>0.3.2-RC1</db2rest.version>
+        <db2rest.version>0.3.2-RC2</db2rest.version>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
     </properties>
