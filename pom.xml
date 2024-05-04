@@ -8,12 +8,42 @@
         <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.github</groupId>
     <artifactId>db2rest-parent</artifactId>
     <version>0.3.2</version>
     <packaging>pom</packaging>
-    <name>db2rest-parent</name>
-    <description>db2rest-parent</description>
+    <name>DB2Rest parent</name>
+    <description>An Open Source instant REST Data API for databases. This is the DB2Rest parent Maven project.</description>
+
+    <!-- PROJECT ORGANIZATION METADATA -->
+
+    <organization>
+        <name>DB2Rest</name>
+        <url>https://db2rest.com</url>
+    </organization>
+    <url>https://db2rest.com</url>
+    <inceptionYear>2023</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:git://github.com//kdhrubo/db2rest.git</connection>
+        <developerConnection>scm:git:https://github.com/kdhrubo/db2rest</developerConnection>
+        <url>https://github.com/kdhrubo/db2rest</url>
+        <tag>HEAD</tag>
+    </scm>
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/kdhrubo/db2rest/issues</url>
+    </issueManagement>
+
+    <!-- BEGIN MODULE LAYOUT -->
+
     <properties>
         <db2rest.version>0.3.2</db2rest.version>
         <java.version>21</java.version>
@@ -99,7 +129,5 @@
         </dependency>
 
     </dependencies>
-
-
 
 </project>
