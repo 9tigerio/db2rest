@@ -2,13 +2,11 @@ package com.homihq.db2rest.mongo.rest;
 
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
-
-
 import com.homihq.db2rest.core.dto.UpdateResponse;
 import com.homihq.db2rest.mongo.rest.api.MongoRestApi;
-
 import com.homihq.db2test.mongo.repository.MongoRepository;
 import com.homihq.db2test.mongo.rsql.RsqlMongodbAdapter;
 import lombok.RequiredArgsConstructor;
@@ -103,6 +101,13 @@ public class MongoController implements MongoRestApi {
         addCriteria(filter, query);
         includeFields(fields, query);
         return mongoRepository.findOne(query, collectionName);
+    }
+
+    @Override
+    public CountResponse count(String collectionName, String filter) {
+        var query = new Query();
+        addCriteria(filter, query);
+        return mongoRepository.count(query, collectionName);
     }
 
     private void addCriteria(String filter, Query query) {

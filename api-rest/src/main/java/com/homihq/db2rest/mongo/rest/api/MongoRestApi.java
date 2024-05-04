@@ -1,5 +1,6 @@
 package com.homihq.db2rest.mongo.rest.api;
 
+import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.core.dto.UpdateResponse;
@@ -48,4 +49,9 @@ public interface MongoRestApi {
     Map<String, Object> findOne(@PathVariable String collectionName,
                                 @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                                 @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{collectionName}/count")
+    CountResponse count(@PathVariable String collectionName,
+                        @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 }

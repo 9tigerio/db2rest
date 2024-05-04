@@ -1,9 +1,9 @@
 package com.homihq.db2test.mongo.repository;
 
+import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.core.dto.UpdateResponse;
-import com.homihq.db2test.mongo.dialect.MongoDialect;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import lombok.RequiredArgsConstructor;
@@ -38,14 +38,14 @@ public class MongoRepository {
         var updateDefinition = new Update();
         data.forEach(updateDefinition::set);
         UpdateResult updateResult = mongoTemplate.updateMulti(query, updateDefinition, collectionName);
-        return new UpdateResponse((int)updateResult.getModifiedCount());
+        return new UpdateResponse((int) updateResult.getModifiedCount());
     }
 
     public DeleteResponse delete(Query query, String collectionName) {
         DeleteResult deleteResult = mongoTemplate.remove(query, collectionName);
         var rows = deleteResult.getDeletedCount();
         log.debug("Number of documents deleted - {}", rows);
-        return DeleteResponse.builder().rows((int)rows).build();
+        return DeleteResponse.builder().rows((int) rows).build();
     }
 
     public Object find(Query query, String collectionName) {
@@ -55,5 +55,10 @@ public class MongoRepository {
     @SuppressWarnings("unchecked")
     public Map<String, Object> findOne(Query query, String collectionName) {
         return mongoTemplate.findOne(query, LinkedHashMap.class, collectionName);
+    }
+
+    public CountResponse count(Query query, String collectionName) {
+        var count = mongoTemplate.count(query, collectionName);
+        return new CountResponse(count);
     }
 }

@@ -263,6 +263,31 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
 
     @Test
     @Order(12)
+    @DisplayName("Total number of Actors")
+    void countAll() throws Exception {
+        mockMvc.perform(get("/Sakila_actors/count")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", equalTo(8)))
+                .andDo(document("mongodb-get-actor-count"));
+    }
+
+    @Test
+    @Order(13)
+    @DisplayName("Number of Actors by LastName")
+    void countActorsByLastName() throws Exception {
+        mockMvc.perform(get("/Sakila_actors/count")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "LastName==ZELLWEGER"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", equalTo(2)))
+                .andDo(document("mongodb-get-actor-count-by-LastName"));
+    }
+
+    @Test
+    @Order(14)
     @DisplayName("Delete all documents while allowSafeDelete=true")
     void delete_all_documents_with_allow_safe_delete_true() throws Exception {
         mockMvc.perform(delete("/Sakila_actors")
@@ -274,7 +299,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(13)
+    @Order(15)
     @DisplayName("Delete an actor")
     void delete_single_record() throws Exception {
         mockMvc.perform(delete("/Sakila_actors")
