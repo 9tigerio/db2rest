@@ -3,6 +3,7 @@ package com.homihq.db2test.mongo.repository;
 import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
+import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.core.dto.UpdateResponse;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -60,5 +61,9 @@ public class MongoRepository {
     public CountResponse count(Query query, String collectionName) {
         var count = mongoTemplate.count(query, collectionName);
         return new CountResponse(count);
+    }
+
+    public ExistsResponse exists(Query query, String collectionName) {
+        return new ExistsResponse(mongoTemplate.exists(query, collectionName));
     }
 }

@@ -5,7 +5,9 @@ import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
+import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.core.dto.UpdateResponse;
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.mongo.rest.api.MongoRestApi;
 import com.homihq.db2test.mongo.repository.MongoRepository;
 import com.homihq.db2test.mongo.rsql.RsqlMongodbAdapter;
@@ -108,6 +110,16 @@ public class MongoController implements MongoRestApi {
         var query = new Query();
         addCriteria(filter, query);
         return mongoRepository.count(query, collectionName);
+    }
+
+    @Override
+    public ExistsResponse exists(String collectionName, String filter) {
+        if (StringUtils.isBlank(filter)) {
+            throw new GenericDataAccessException("Required parameter 'filter' is not present.");
+        }
+        var query = new Query();
+        addCriteria(filter, query);
+        return mongoRepository.exists(query, collectionName);
     }
 
     private void addCriteria(String filter, Query query) {
