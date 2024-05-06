@@ -3,6 +3,7 @@ package com.homihq.db2rest.mongo.rest.api;
 import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
+import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.core.dto.UpdateResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,4 +55,9 @@ public interface MongoRestApi {
     @GetMapping("/{collectionName}/count")
     CountResponse count(@PathVariable String collectionName,
                         @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/{collectionName}/exists")
+    ExistsResponse exists(@PathVariable String collectionName,
+                          @RequestParam(name = "filter", defaultValue = "") String filter);
 }

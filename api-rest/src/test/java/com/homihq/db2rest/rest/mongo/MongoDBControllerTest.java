@@ -33,6 +33,7 @@ import java.util.Map;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasToString;
 import static org.springframework.data.mongodb.core.query.Query.query;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -288,6 +289,45 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
 
     @Test
     @Order(14)
+    @DisplayName("Actor exists By FirstName")
+    void existsByLastName() throws Exception {
+        mockMvc.perform(get("/Sakila_actors/exists")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "FirstName==JENNIFER"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exists", equalTo(true)))
+                .andDo(document("mongodb-actor-exists-by-LastName"));
+    }
+
+    @Test
+    @Order(15)
+    @DisplayName("Actor exists By unknown name")
+    void existsByUnknownName() throws Exception {
+        mockMvc.perform(get("/Sakila_actors/exists")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "FirstName==Unknown"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exists", equalTo(false)))
+                .andDo(document("mongodb-actor-exists-by-unknown-name"));
+    }
+
+    @Test
+    @Order(16)
+    @DisplayName("Actor exists throws exception when 'filter' is not present")
+    void existsThrowsException() throws Exception {
+        mockMvc.perform(get("/Sakila_actors/exists")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail",
+                        hasToString("Required parameter 'filter' is not present.")))
+                .andDo(document("mongodb-actor-exists-filter-is-not-present"));
+    }
+
+    @Test
+    @Order(17)
     @DisplayName("Delete all documents while allowSafeDelete=true")
     void delete_all_documents_with_allow_safe_delete_true() throws Exception {
         mockMvc.perform(delete("/Sakila_actors")
@@ -299,7 +339,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(15)
+    @Order(18)
     @DisplayName("Delete an actor")
     void delete_single_record() throws Exception {
         mockMvc.perform(delete("/Sakila_actors")
