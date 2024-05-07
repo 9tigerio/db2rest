@@ -3,9 +3,14 @@ package com.homihq.db2rest.jdbc.config.dialect;
 
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+
 
 public interface Dialect {
 
@@ -71,6 +76,10 @@ public interface Dialect {
         else if (Short.class == type || short.class == type) {
             return Short.valueOf(value);
         }
+        else if (java.sql.Date.class == type) {
+            return LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
+        }
+
         else {
             return value;
         }
