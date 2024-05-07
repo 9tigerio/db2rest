@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +59,7 @@ public interface Dialect {
     }
 
     //TODO use Spring converter
+    @Deprecated
     default Object processValue(String value, Class<?> type, String format) {
         System.out.println("type " + type);
         if (String.class == type) {
@@ -79,7 +82,9 @@ public interface Dialect {
         else if (java.sql.Date.class == type) {
             return LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
         }
-
+        else if(java.sql.Timestamp.class == type) {
+            return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        }
         else {
             return value;
         }

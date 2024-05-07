@@ -23,6 +23,7 @@ public class PostGreSQLDialect implements Dialect {
     private final ObjectMapper objectMapper;
     private String coverChar = "\"";
 
+    //Use during insert, bulk-insert, update
     @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {
 
@@ -45,9 +46,6 @@ public class PostGreSQLDialect implements Dialect {
                 OffsetDateTime v = convertToOffsetDateTime((String) value);
                 data.put(columnName, v);
 
-            } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamptz")) {
-                OffsetDateTime v = convertToOffsetDateTime((String) value);
-                data.put(columnName, v);
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timetz")) {
                 OffsetTime v = convertToOffsetTime((String) value);
                 data.put(columnName, v);
