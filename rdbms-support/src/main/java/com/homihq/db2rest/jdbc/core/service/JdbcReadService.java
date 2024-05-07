@@ -27,7 +27,7 @@ public class JdbcReadService implements ReadService {
 
         String sql = sqlCreatorTemplate.query(readContext);
         log.info("{}", sql);
-        log.debug("{}", readContext.getParamMap());
+        log.info("{}", readContext.getParamMap());
 
         try {
             return dbOperationService.read(readContext.getParamMap(), sql);

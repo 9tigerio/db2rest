@@ -3,6 +3,7 @@ package com.homihq.db2rest.jdbc.config.dialect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PGobject;
 
@@ -16,11 +17,13 @@ import java.util.Objects;
 
 
 @RequiredArgsConstructor
+@Slf4j
 public class PostGreSQLDialect implements Dialect {
 
     private final ObjectMapper objectMapper;
     private String coverChar = "\"";
 
+    //Use during insert, bulk-insert, update
     @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {
 
@@ -29,7 +32,7 @@ public class PostGreSQLDialect implements Dialect {
 
             String columnDataTypeName = table.getColumnDataTypeName(columnName);
 
-            //log.debug("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
+            log.info("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
             if (Objects.isNull(value)) continue;
 
             if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
@@ -43,9 +46,6 @@ public class PostGreSQLDialect implements Dialect {
                 OffsetDateTime v = convertToOffsetDateTime((String) value);
                 data.put(columnName, v);
 
-            } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamptz")) {
-                OffsetDateTime v = convertToOffsetDateTime((String) value);
-                data.put(columnName, v);
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timetz")) {
                 OffsetTime v = convertToOffsetTime((String) value);
                 data.put(columnName, v);
