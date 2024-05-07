@@ -90,21 +90,19 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - **AWS RDS Postgres** - (Work in progress)
 - **AWS RDS MySQL** - (Work in progress)
 - MongoDB - (Work in progress)
-- MariaDB  (Work in progress)
-- ~Cloudflare D1~ [Deprecated]
-
+- **MariaDB**  
+- **CockroachDB**
+- **Neon**
 
 # Planned Database Support
 
 - [PostgreML](https://postgresml.org/) 
 - **MS SQL Server**
 - TursoDB
-- **CockroachDB**
 - **Yugabyte**
 - **PlanetScale**
 - **CrunchyData**
 - **Singlestore**
-- **Neon** (Planned)
 - **Nile** (Planned)
 - **MindsDB**
 - [KDB](https://kdb.ai/)
@@ -118,7 +116,7 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 
 *Connect on Discord*
 
-[![](https://dcbadge.vercel.app/api/server/gytFPNW656?theme=discord)](https://discord.gg/gytFPNW656)
+[![](https://dcbadge.vercel.app/api/server/deQgNkgt8b?theme=discord)](https://discord.gg/gytFPNW656)
 
 
 # Contact
