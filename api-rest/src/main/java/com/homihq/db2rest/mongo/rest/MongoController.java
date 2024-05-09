@@ -3,6 +3,7 @@ package com.homihq.db2rest.mongo.rest;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.dto.CountResponse;
+import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.core.dto.ExistsResponse;
@@ -40,6 +41,13 @@ public class MongoController implements MongoRestApi {
         return mongoRepository
                 .save(collectionName, includeFields, data);
 
+    }
+
+    @Override
+    public CreateBulkResponse saveAll(String collectionName,
+                                      List<String> includeFields,
+                                      List<Map<String, Object>> dataList) {
+        return mongoRepository.saveAll(collectionName, includeFields, dataList);
     }
 
     @Override

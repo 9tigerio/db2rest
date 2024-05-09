@@ -28,12 +28,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.data.mongodb.core.query.Query.query;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -66,6 +70,9 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
 
     @GivenJsonResource("/testdata/CREATE_ACTOR_REQUEST.json")
     Map<String, Object> CREATE_ACTOR_REQUEST;
+
+    @GivenJsonResource("/testdata/BULK_CREATE_ACTOR_REQUEST.json")
+    List<Map<String, Object>> BULK_CREATE_ACTOR_REQUEST;
 
     @GivenJsonResource("/testdata/UPDATE_ACTOR_REQUEST.json")
     Map<String, Object> UPDATE_ACTOR_REQUEST;
@@ -103,6 +110,86 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
 
     @Test
     @Order(2)
+    @DisplayName("Create an actor with with include fields")
+    void createWithIncludeFields() throws Exception {
+        mockMvc.perform(post("/Sakila_actors")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("fields", "FirstName, LastName")
+                        .content(objectMapper.writeValueAsString(CREATE_ACTOR_REQUEST))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.row", equalTo(1)))
+                .andExpect(jsonPath("$.keys.timestamp").exists())
+                .andDo(document("mongodb-create-an-actor-with-include-fields"));
+
+        mongoTemplate.remove(query(Criteria
+                        .where("FirstName")
+                        .is("KEVIN")),
+                "Sakila_actors");
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Create many actors")
+    void createBulk() throws Exception {
+        mockMvc.perform(post("/Sakila_actors/bulk")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_ACTOR_REQUEST))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.rows").isArray())
+                .andExpect(jsonPath("$.rows", hasSize(2)))
+                .andExpect(jsonPath("$.rows", hasItem(1)))
+
+                .andExpect(jsonPath("$.keys").isArray())
+                .andExpect(jsonPath("$.keys", hasSize(2)))
+                .andExpect(jsonPath("$.keys", allOf(notNullValue())))
+                .andDo(document("mongodb-bulk-create-actors"));
+
+        mongoTemplate.remove(query(Criteria
+                        .where("FirstName")
+                        .is("VIVIEN")),
+                "Sakila_actors");
+        mongoTemplate.remove(query(Criteria
+                        .where("FirstName")
+                        .is("CUBA")),
+                "Sakila_actors");
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Create many actors with include fields")
+    void createBulkWithIncludeFields() throws Exception {
+        mockMvc.perform(post("/Sakila_actors/bulk")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("fields", "FirstName, LastName")
+                        .content(objectMapper.writeValueAsString(BULK_CREATE_ACTOR_REQUEST))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.rows").isArray())
+                .andExpect(jsonPath("$.rows", hasSize(2)))
+                .andExpect(jsonPath("$.rows", hasItem(1)))
+
+                .andExpect(jsonPath("$.keys").isArray())
+                .andExpect(jsonPath("$.keys", hasSize(2)))
+                .andExpect(jsonPath("$.keys", allOf(notNullValue())))
+                .andDo(document("mongodb-bulk-create-actors-with-include-fields"));
+
+        mongoTemplate.remove(query(Criteria
+                        .where("FirstName")
+                        .is("VIVIEN")),
+                "Sakila_actors");
+        mongoTemplate.remove(query(Criteria
+                        .where("FirstName")
+                        .is("CUBA")),
+                "Sakila_actors");
+    }
+
+    @Test
+    @Order(5)
     @DisplayName("Update an existing Actor")
     void updateExistingActor() throws Exception {
         mockMvc.perform(patch("/Sakila_actors")
@@ -117,7 +204,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(3)
+    @Order(6)
     @DisplayName("Update a non-existing Actor")
     void updateNonExistingActor() throws Exception {
         mockMvc.perform(patch("/Sakila_actors")
@@ -132,7 +219,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(4)
+    @Order(7)
     @DisplayName("Update non-existing Collection")
     void updateNonExistingCollection() throws Exception {
         mockMvc.perform(patch("/unknown_collection")
@@ -147,7 +234,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(5)
+    @Order(8)
     @DisplayName("Update multiple Actors")
     void updateExistingActors() throws Exception {
         mockMvc.perform(patch("/Sakila_actors")
@@ -162,7 +249,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(6)
+    @Order(9)
     @DisplayName("Test find all actors - all fields")
     void findAllActors() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -175,7 +262,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(7)
+    @Order(10)
     @DisplayName("Test find all actors - 2 fields")
     void findAllActorsWithTwoFields() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -192,7 +279,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(8)
+    @Order(11)
     @DisplayName("Test find all actors with filter")
     void findAllActorsWithFilter() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -209,7 +296,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(9)
+    @Order(12)
     @DisplayName("Test find all actors with sorting")
     void findAllActorsWithSorting() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -227,7 +314,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(10)
+    @Order(13)
     @DisplayName("Test find all actors with pagination")
     void findAllActorsWithPagination() throws Exception {
         mockMvc.perform(get("/Sakila_actors")
@@ -247,7 +334,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(11)
+    @Order(14)
     @DisplayName("Find one actor - 2 fields")
     void findOneActor() throws Exception {
         mockMvc.perform(get("/Sakila_actors/one")
@@ -263,7 +350,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(12)
+    @Order(15)
     @DisplayName("Total number of Actors")
     void countAll() throws Exception {
         mockMvc.perform(get("/Sakila_actors/count")
@@ -275,7 +362,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(13)
+    @Order(16)
     @DisplayName("Number of Actors by LastName")
     void countActorsByLastName() throws Exception {
         mockMvc.perform(get("/Sakila_actors/count")
@@ -288,7 +375,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(14)
+    @Order(17)
     @DisplayName("Actor exists By FirstName")
     void existsByLastName() throws Exception {
         mockMvc.perform(get("/Sakila_actors/exists")
@@ -301,7 +388,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(15)
+    @Order(18)
     @DisplayName("Actor exists By unknown name")
     void existsByUnknownName() throws Exception {
         mockMvc.perform(get("/Sakila_actors/exists")
@@ -314,7 +401,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(16)
+    @Order(19)
     @DisplayName("Actor exists throws exception when 'filter' is not present")
     void existsThrowsException() throws Exception {
         mockMvc.perform(get("/Sakila_actors/exists")
@@ -327,7 +414,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(17)
+    @Order(20)
     @DisplayName("Delete all documents while allowSafeDelete=true")
     void delete_all_documents_with_allow_safe_delete_true() throws Exception {
         mockMvc.perform(delete("/Sakila_actors")
@@ -339,7 +426,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     }
 
     @Test
-    @Order(18)
+    @Order(21)
     @DisplayName("Delete an actor")
     void delete_single_record() throws Exception {
         mockMvc.perform(delete("/Sakila_actors")
