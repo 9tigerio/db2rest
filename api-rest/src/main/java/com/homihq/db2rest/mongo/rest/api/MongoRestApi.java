@@ -1,6 +1,7 @@
 package com.homihq.db2rest.mongo.rest.api;
 
 import com.homihq.db2rest.core.dto.CountResponse;
+import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.core.dto.ExistsResponse;
@@ -24,6 +25,12 @@ public interface MongoRestApi {
     CreateResponse save(@PathVariable String collectionName,
                         @RequestParam(name = "fields", required = false) List<String> includeFields,
                         @RequestBody Map<String, Object> data);
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{collectionName}/bulk")
+    CreateBulkResponse saveAll(@PathVariable String collectionName,
+                               @RequestParam(name = "fields", required = false) List<String> includeFields,
+                               @RequestBody List<Map<String, Object>> dataList);
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{collectionName}")
