@@ -43,7 +43,7 @@ class OracleUpdateControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Update an existing film")
     void updateExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/FILM")
+        mockMvc.perform(patch("/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"ACADEMY DINOSAUR\"")
                         .content(objectMapper.writeValueAsString(UPDATE_FILM_REQUEST))
@@ -58,7 +58,7 @@ class OracleUpdateControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Update a non-existing film")
     void updateNonExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/FILM")
+        mockMvc.perform(patch("/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"BAAHUBALI\"")
                         .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_FILM_REQUEST))
@@ -73,7 +73,7 @@ class OracleUpdateControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Update non-existing table")
     void updateNonExistingTable() throws Exception {
 
-        mockMvc.perform(patch("/unknown_table")
+        mockMvc.perform(patch("/oradb/unknown_table")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
                         .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_TABLE))
@@ -87,7 +87,7 @@ class OracleUpdateControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Updating multiple films")
     void updateMultipleColumns() throws Exception {
 
-        mockMvc.perform(patch("/FILM")
+        mockMvc.perform(patch("/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
                         .content(objectMapper.writeValueAsString(UPDATE_FILMS_REQUEST))

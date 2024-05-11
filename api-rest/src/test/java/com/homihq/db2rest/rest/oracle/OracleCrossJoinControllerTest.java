@@ -41,7 +41,7 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
     void testCrossJoin() throws Exception {
 
 
-        mockMvc.perform(post("/USERS/_expand")
+        mockMvc.perform(post("/oradb/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN))
                 )
@@ -68,7 +68,7 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
     void testCrossJoinTops() throws Exception {
 
 
-        mockMvc.perform(post("/TOPS/_expand")
+        mockMvc.perform(post("/oradb/TOPS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
                 )
