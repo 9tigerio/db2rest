@@ -36,13 +36,12 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     @GivenJsonResource("/testdata/RIGHT_JOIN.json")
     List<Map<String,Object>> RIGHT_JOIN;
 
-    @Disabled
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/mysqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
@@ -63,13 +62,12 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
 
     }
 
-    @Disabled
     @Test
     @DisplayName("Test right Join")
     void testRightJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/mysqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
                 )

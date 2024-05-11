@@ -16,8 +16,10 @@ public class ReadController {
 
     private final ReadService readService;
 
-    @GetMapping(value = "/{tableName}" , produces = "application/json")
-    public Object findAll(@PathVariable String tableName,
+    @GetMapping(value = "/{dbName}/{tableName}" , produces = "application/json")
+    public Object findAll(
+                @PathVariable String dbName,
+                        @PathVariable String tableName,
                           @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                           @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                           @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
@@ -26,6 +28,7 @@ public class ReadController {
                           @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset) {
 
         ReadContext readContext = ReadContext.builder()
+                .dbName(dbName)
                 .schemaName(schemaName)
                 .tableName(tableName)
                 .fields(fields)
@@ -39,8 +42,11 @@ public class ReadController {
         return readService.findAll(readContext);
     }
 
-    @PostMapping(value = "/{tableName}/_expand" , produces = "application/json")
-    public Object find(@PathVariable String tableName,
+    @PostMapping(value = "/{dbName}/{tableName}/_expand" , produces = "application/json")
+    public Object find(
+            @PathVariable String dbName,
+            @PathVariable String tableName,
+            @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                        @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                        @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
                        @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
@@ -50,6 +56,8 @@ public class ReadController {
     ) {
 
         ReadContext readContext = ReadContext.builder()
+                .dbName(dbName)
+                .schemaName(schemaName)
                 .tableName(tableName)
                 .fields(fields)
                 .filter(filter)

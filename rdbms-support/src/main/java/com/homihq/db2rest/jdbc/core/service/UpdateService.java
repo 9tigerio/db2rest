@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface UpdateService {
     @Transactional
-    int patch(String schemaName, String tableName, Map<String, Object> data, String filter);
+    int patch(String dbName, String schemaName, String tableName, Map<String, Object> data, String filter);
 }

@@ -21,7 +21,9 @@ public class BulkCreateController implements BulkCreateRestApi {
     private final List<DataProcessor> dataProcessors;
 
 
-    public CreateBulkResponse save(String tableName,
+    public CreateBulkResponse save(
+            String dbName, String schemaName,
+            String tableName,
                                    List<String> includeColumns,
                                    List<String> sequences,
                                    boolean tsIdEnabled,
@@ -37,7 +39,7 @@ public class BulkCreateController implements BulkCreateRestApi {
 
 
         return
-                bulkCreateService.saveBulk(null, tableName, includeColumns, data, tsIdEnabled, sequences);
+                bulkCreateService.saveBulk(dbName, schemaName, tableName, includeColumns, data, tsIdEnabled, sequences);
 
     }
 }

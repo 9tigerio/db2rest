@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.sql;
 
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.jdbc.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
@@ -27,14 +27,14 @@ public class SqlCreatorTemplate {
 
 
     private final SpringTemplateEngine templateEngine;
-    private final JdbcSchemaCache jdbcSchemaCache;
+    private final JdbcManager jdbcManager;
 
 
     public String updateQuery(UpdateContext updateContext) {
 
         Map<String,Object> data = new HashMap<>();
 
-        if(jdbcSchemaCache.getDialect().supportAlias()) {
+        if(jdbcManager.getDialect(updateContext.getDbName()).supportAlias()) {
             data.put("rootTable", updateContext.getTable().render());
         }
         else{
@@ -53,7 +53,7 @@ public class SqlCreatorTemplate {
     public String deleteQuery(DeleteContext deleteContext) {
 
         String rendererTableName =
-                jdbcSchemaCache.getDialect()
+                jdbcManager.getDialect(deleteContext.getDbName())
                         .renderTableName(deleteContext.getTable(),
                                 StringUtils.isNotBlank(deleteContext.getWhere()),
                                 true
@@ -149,13 +149,11 @@ public class SqlCreatorTemplate {
 
         String template = "read";
 
-        log.debug("Product family - {}", this.jdbcSchemaCache.getDialect().getProductFamily());
-        log.debug("Product family - {}", this.jdbcSchemaCache.getDialect().getMajorVersion());
 
         //TODO DB specific processing must move away
-        if(StringUtils.equalsIgnoreCase(this.jdbcSchemaCache.getDialect().getProductFamily(), "Oracle")) {
+        if(StringUtils.equalsIgnoreCase(this.jdbcManager.getDialect(readContext.getDbName()).getProductFamily(), "Oracle")) {
 
-            if(this.jdbcSchemaCache.getDialect().getMajorVersion() >= 12) {
+            if(this.jdbcManager.getDialect(readContext.getDbName()).getMajorVersion() >= 12) {
                 template = "read-ora-12";
             }
             else {

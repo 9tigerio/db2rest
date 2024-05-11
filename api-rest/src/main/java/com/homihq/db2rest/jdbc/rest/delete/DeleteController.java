@@ -17,13 +17,14 @@ public class DeleteController implements DeleteRestApi {
 
     @Override
     public DeleteResponse delete(
+            String dbName,
             String schemaName,
             String tableName,
                                  String filter) {
 
         db2RestConfigProperties.checkDeleteAllowed(filter);
 
-        int rows = deleteService.delete(schemaName, tableName, filter);
+        int rows = deleteService.delete(dbName, schemaName, tableName, filter);
         log.debug("Number of rows deleted - {}", rows);
         return DeleteResponse.builder().rows(rows).build();
     }

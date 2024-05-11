@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.core.service;
 
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
@@ -17,7 +18,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class JdbcCountQueryService implements CountQueryService {
-
+    private final JdbcManager jdbcManager;
     private final DbOperationService dbOperationService;
     private final List<ReadProcessor> processorList;
     private final SqlCreatorTemplate sqlCreatorTemplate;
@@ -33,7 +34,10 @@ public class JdbcCountQueryService implements CountQueryService {
         log.debug("{}", readContext.getParamMap());
 
         try {
-            return dbOperationService.count(readContext.getParamMap(), sql);
+            return dbOperationService.count(
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
+                    readContext.getParamMap(),
+                    sql);
         } catch (DataAccessException e) {
             log.error("Error in read op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());

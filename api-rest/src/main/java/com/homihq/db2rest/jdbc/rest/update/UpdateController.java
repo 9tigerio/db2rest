@@ -14,12 +14,15 @@ import java.util.Map;
 public class UpdateController {
 
     private final UpdateService updateService;
-    @PatchMapping("/{tableName}")
-    public UpdateResponse save(@PathVariable String tableName,
+    @PatchMapping("/{dbName}/{tableName}")
+    public UpdateResponse save(@PathVariable String dbName,
+                               @PathVariable String tableName,
+                               @RequestHeader(name="Content-Profile", required = false) String schemaName,
                                @RequestBody Map<String,Object> data
         , @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
-        int rows = updateService.patch(null, tableName, data, filter);
+
+        int rows = updateService.patch(dbName,schemaName, tableName, data, filter);
         return new UpdateResponse(rows);
     }
 }

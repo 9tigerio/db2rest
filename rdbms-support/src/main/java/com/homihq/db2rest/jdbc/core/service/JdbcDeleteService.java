@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.core.service;
 
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
@@ -20,31 +20,32 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JdbcDeleteService implements DeleteService {
 
-    private final JdbcSchemaCache jdbcSchemaCache;
+    private final JdbcManager jdbcManager;
     private final SqlCreatorTemplate sqlCreatorTemplate;
     private final DbOperationService dbOperationService;
 
 
     @Override
     @Transactional
-    public int delete(String schemaName, String tableName, String filter) {
+    public int delete(String dbName,String schemaName, String tableName, String filter) {
 
 
-        DbTable dbTable = jdbcSchemaCache.getTable(schemaName,tableName);
+        DbTable dbTable = jdbcManager.getTable(dbName, schemaName,tableName);
 
         DeleteContext context = DeleteContext.builder()
+                .dbName(dbName)
                 .tableName(tableName)
                 .table(dbTable).build();
 
 
 
-        return executeDelete(filter, dbTable, context);
+        return executeDelete(dbName, filter, dbTable, context);
 
     }
 
-    private int executeDelete(String filter, DbTable table, DeleteContext context) {
+    private int executeDelete(String dbName, String filter, DbTable table, DeleteContext context) {
 
-        addWhere(filter, table, context);
+        addWhere(dbName, filter, table, context);
         String sql =
                 sqlCreatorTemplate.deleteQuery(context);
 
@@ -52,7 +53,10 @@ public class JdbcDeleteService implements DeleteService {
         log.info("{}", context.getParamMap());
 
         try {
-            return dbOperationService.delete(context.getParamMap(), sql);
+            return dbOperationService.delete(
+                    jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                    context.getParamMap(),
+                    sql);
         } catch (DataAccessException e) {
             log.error("Error in delete op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
@@ -61,7 +65,7 @@ public class JdbcDeleteService implements DeleteService {
 
 
 
-    private void addWhere(String filter, DbTable table, DeleteContext context) {
+    private void addWhere(String dbName, String filter, DbTable table, DeleteContext context) {
 
         if(StringUtils.isNotBlank(filter)) {
             context.createParamMap();
@@ -74,7 +78,7 @@ public class JdbcDeleteService implements DeleteService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcSchemaCache.getDialect()));
+                            dbWhere, jdbcManager.getDialect(dbName)));
             context.setWhere(where);
 
         }

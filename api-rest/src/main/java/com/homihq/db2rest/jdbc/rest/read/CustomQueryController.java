@@ -18,11 +18,13 @@ public class CustomQueryController {
 
     private final CustomQueryService customQueryService;
 
-    @PostMapping(value = "/query", consumes = MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(value = "/{dbName}/query", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findByCustomQuery(@RequestBody @Valid QueryRequest queryRequest) {
+    public ResponseEntity<Object> findByCustomQuery(
+            String dbName,
+            @RequestBody @Valid QueryRequest queryRequest) {
         log.debug("Execute SQL statement {} with params {}", queryRequest.sql(), queryRequest.params());
-        return ResponseEntity.ok(customQueryService.find(queryRequest));
+        return ResponseEntity.ok(customQueryService.find(dbName, queryRequest));
     }
 
 

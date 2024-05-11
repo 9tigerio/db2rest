@@ -1,16 +1,16 @@
 package com.homihq.db2rest.jdbc.config;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.config.dialect.*;
 
+import com.homihq.db2rest.jdbc.multidb.DatabaseProperties;
+import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.bulk.DataProcessor;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-
 
 import com.homihq.db2rest.jdbc.core.service.*;
 import com.homihq.db2rest.jdbc.processor.*;
@@ -25,52 +25,70 @@ import com.homihq.db2rest.jdbc.rest.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 @ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
 public class JdbcConfiguration {
 
-    public JdbcConfiguration() {
-        log.info("Loading datasource configuration.");
-    }
 
-    @Bean
-    @ConfigurationProperties("spring.datasource")
-    @ConditionalOnMissingBean(DataSource.class)
-    public DataSourceProperties dataSourceProperties() {
-        return new DataSourceProperties();
-    }
-
+    private final DatabaseProperties databaseProperties;
+    private final ObjectMapper objectMapper;
     @Bean
     @ConditionalOnMissingBean(DataSource.class)
     public DataSource dataSource() {
-        log.info("Returning datasource.");
-        return dataSourceProperties()
-                .initializeDataSourceBuilder()
-                .build();
+        final Map<Object, Object> dataSources = this.buildDataSources();
 
+        final RoutingDataSource routingDataSource = new RoutingDataSource();
+        routingDataSource.setTargetDataSources(dataSources);
+        //routingDataSource.setDefaultTargetDataSource(dataSources.get(DataSourceType.PRIMARY));
+
+        return routingDataSource;
+    }
+
+    private Map<Object, Object> buildDataSources() {
+        final Map<Object, Object> result = new HashMap<>();
+
+        for (Map<String,String> db : databaseProperties.getDatabases()) {
+            result.put(db.get("name"), this.buildDataSource(db));
+            log.info("db - {}", db);
+        }
+
+        return result;
+    }
+
+
+    private DataSource buildDataSource(Map<String, String> db) {
+        final HikariConfig config = new HikariConfig();
+
+        config.setJdbcUrl(db.get("url"));
+        config.setUsername(db.get("username"));
+        config.setPassword(db.get("password"));
+
+        config.setAutoCommit(false);
+        return new HikariDataSource(config);
     }
 
     @Bean
-    public JdbcSchemaCache jdbcSchemaCache(DataSource dataSource, Db2RestConfigProperties db2RestConfigProperties
-        , ObjectMapper objectMapper) {
-        log.info("JDBC Schema cache is being cached.");
+    public JdbcManager jdbcManager() {
 
         List<Dialect> dialects = List.of(
                 new PostGreSQLDialect(objectMapper)
@@ -79,21 +97,20 @@ public class JdbcConfiguration {
                 ,new OracleDialect(objectMapper)
         );
 
-        return new JdbcSchemaCache(dataSource, db2RestConfigProperties.isAllSchema(),
-                db2RestConfigProperties.getIncludeSchemas(), dialects);
+        return new JdbcManager(dataSource(), databaseProperties, dialects);
     }
 
     @Bean
-    public JdbcOperationService operationService(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        return new JdbcOperationService(namedParameterJdbcTemplate);
+    public JdbcOperationService operationService() {
+        return new JdbcOperationService();
     }
 
 
     @Bean
     @DependsOn("textTemplateResolver")
-    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, JdbcSchemaCache jdbcSchemaCache
+    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, JdbcManager jdbcManager
                                                  ) {
-        return new SqlCreatorTemplate(templateEngine, jdbcSchemaCache);
+        return new SqlCreatorTemplate(templateEngine, jdbcManager);
     }
 
 
@@ -104,8 +121,8 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    public JoinProcessor joinProcessor(JdbcSchemaCache jdbcSchemaCache) {
-        return new JoinProcessor(jdbcSchemaCache);
+    public JoinProcessor joinProcessor(JdbcManager jdbcManager) {
+        return new JoinProcessor(jdbcManager);
     }
 
     @Bean
@@ -119,13 +136,13 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    public RootTableProcessor rootTableProcessor(JdbcSchemaCache jdbcSchemaCache) {
-        return new RootTableProcessor(jdbcSchemaCache);
+    public RootTableProcessor rootTableProcessor(JdbcManager jdbcManager) {
+        return new RootTableProcessor(jdbcManager);
     }
 
     @Bean
-    public RootWhereProcessor rootWhereProcessor(JdbcSchemaCache jdbcSchemaCache) {
-        return new RootWhereProcessor(jdbcSchemaCache);
+    public RootWhereProcessor rootWhereProcessor(JdbcManager jdbcManager) {
+        return new RootWhereProcessor(jdbcManager);
     }
 
     //END ::: Processors
@@ -137,75 +154,80 @@ public class JdbcConfiguration {
     @Bean
     public BulkCreateService bulkCreateService(TSIDProcessor tsidProcessor,
                                                SqlCreatorTemplate sqlCreatorTemplate,
-                                               JdbcSchemaCache jdbcSchemaCache,
+                                               JdbcManager jdbcManager,
                                                DbOperationService dbOperationService) {
-        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcSchemaCache, dbOperationService);
+        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService);
     }
 
     @Bean
     public CreateService createService(TSIDProcessor tsidProcessor,
                                        SqlCreatorTemplate sqlCreatorTemplate,
-                                       JdbcSchemaCache jdbcSchemaCache,
+                                       JdbcManager jdbcManager,
                                        DbOperationService dbOperationService) {
-        return new JdbcCreateService(tsidProcessor, sqlCreatorTemplate, jdbcSchemaCache, dbOperationService);
+        return new JdbcCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService);
     }
 
     //QUERY SERVICE
     @Bean
     public CountQueryService countQueryService(
+            JdbcManager jdbcManager,
             SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcCountQueryService(dbOperationService, processorList, sqlCreatorTemplate);
+        return new JdbcCountQueryService(
+                jdbcManager,
+                dbOperationService, processorList, sqlCreatorTemplate);
     }
 
     @Bean
     public ExistsQueryService existsQueryService(
+            JdbcManager jdbcManager,
             SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcExistsQueryService(dbOperationService, processorList, sqlCreatorTemplate);
+        return new JdbcExistsQueryService(jdbcManager,dbOperationService, processorList, sqlCreatorTemplate);
     }
 
     @Bean
     public FindOneService findOneService(
+            JdbcManager jdbcManager,
             SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcFindOneService(sqlCreatorTemplate, processorList, dbOperationService);
+        return new JdbcFindOneService(jdbcManager,sqlCreatorTemplate, processorList, dbOperationService);
     }
 
     @Bean
-    public CustomQueryService customQueryService(DbOperationService dbOperationService) {
-        return new JdbcCustomQueryService(dbOperationService);
+    public CustomQueryService customQueryService(JdbcManager jdbcManager,DbOperationService dbOperationService) {
+        return new JdbcCustomQueryService(jdbcManager, dbOperationService);
     }
 
     @Bean
     public ReadService readService(
+            JdbcManager jdbcManager,
             SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcReadService(dbOperationService, processorList, sqlCreatorTemplate);
+        return new JdbcReadService(jdbcManager, dbOperationService, processorList, sqlCreatorTemplate);
     }
 
     //UPDATE SERVICE
     @Bean
     public UpdateService updateService(
-            JdbcSchemaCache jdbcSchemaCache,
+            JdbcManager jdbcManager,
             SqlCreatorTemplate sqlCreatorTemplate,
             DbOperationService dbOperationService) {
-        return new JdbcUpdateService(jdbcSchemaCache, sqlCreatorTemplate, dbOperationService);
+        return new JdbcUpdateService(jdbcManager, sqlCreatorTemplate, dbOperationService);
     }
 
 
     //DELETE SERVICE
     @Bean
     public DeleteService deleteService(
-            Db2RestConfigProperties db2RestConfigProperties,
-            JdbcSchemaCache jdbcSchemaCache,
+            JdbcManager jdbcManager,
             SqlCreatorTemplate sqlCreatorTemplate,
             DbOperationService dbOperationService) {
-        return new JdbcDeleteService(jdbcSchemaCache, sqlCreatorTemplate, dbOperationService);
+        return new JdbcDeleteService(jdbcManager, sqlCreatorTemplate, dbOperationService);
     }
 
     //RPC
@@ -299,9 +321,9 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    @ConditionalOnBean(JdbcSchemaCache.class)
-    public SchemaController schemaController(JdbcSchemaCache jdbcSchemaCache) {
-        return new SchemaController(jdbcSchemaCache);
+    @ConditionalOnBean(JdbcManager.class)
+    public SchemaController schemaController(JdbcManager jdbcManager) {
+        return new SchemaController(jdbcManager);
     }
 
     //END ::: API

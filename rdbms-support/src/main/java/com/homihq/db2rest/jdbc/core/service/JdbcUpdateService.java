@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.core.service;
 
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.UpdateContext;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
@@ -26,23 +26,22 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JdbcUpdateService implements UpdateService {
 
-    private final JdbcSchemaCache jdbcSchemaCache;
+    private final JdbcManager jdbcManager;
     private final SqlCreatorTemplate sqlCreatorTemplate;
     private final DbOperationService dbOperationService;
 
     @Override
     @Transactional
-    public int patch(String schemaName, String tableName, Map<String, Object> data, String filter) {
+    public int patch(String dbName, String schemaName, String tableName, Map<String, Object> data, String filter) {
 
-        DbTable dbTable = jdbcSchemaCache.getTable(schemaName, tableName);
+        DbTable dbTable = jdbcManager.getTable(dbName, schemaName, tableName);
 
+        List<String> updatableColumns = data.keySet().stream().toList();
 
-        List<String> updatableColumns =
-            data.keySet().stream().toList();
-
-        jdbcSchemaCache.getDialect().processTypes(dbTable, updatableColumns, data);
+        jdbcManager.getDialect(dbName).processTypes(dbTable, updatableColumns, data);
 
         UpdateContext context = UpdateContext.builder()
+                .dbName(dbName)
                 .tableName(tableName)
                 .table(dbTable)
                 .updatableColumns(updatableColumns)
@@ -50,12 +49,12 @@ public class JdbcUpdateService implements UpdateService {
 
         context.createParamMap(data);
 
-        return executeUpdate(filter, dbTable, context);
+        return executeUpdate(dbName, filter, dbTable, context);
 
 
     }
 
-    private int executeUpdate(String filter, DbTable table, UpdateContext context) {
+    private int executeUpdate(String dbName,String filter, DbTable table, UpdateContext context) {
 
         addWhere(filter, table, context);
         String sql =
@@ -65,7 +64,9 @@ public class JdbcUpdateService implements UpdateService {
         log.debug("{}", context.getParamMap());
 
         try {
-            return dbOperationService.update(context.getParamMap(), sql);
+            return dbOperationService.update(
+                    jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                    context.getParamMap(), sql);
         } catch (DataAccessException e) {
             log.error("Error in delete op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
@@ -86,7 +87,7 @@ public class JdbcUpdateService implements UpdateService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcSchemaCache.getDialect()));
+                            dbWhere, jdbcManager.getDialect(context.getDbName())));
             context.setWhere(where);
 
         }

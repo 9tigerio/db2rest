@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.core.service;
 
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.jdbc.dto.InsertableColumn;
@@ -29,17 +29,19 @@ public class JdbcCreateService implements CreateService {
 
     private final TSIDProcessor tsidProcessor;
     private final SqlCreatorTemplate sqlCreatorTemplate;
-    private final JdbcSchemaCache jdbcSchemaCache;
+    private final JdbcManager jdbcManager;
     private final DbOperationService dbOperationService;
 
 
     @Override
     @Transactional
-    public CreateResponse save(String schemaName, String tableName, List<String> includedColumns,
+    public CreateResponse save(
+            String dbName,
+            String schemaName, String tableName, List<String> includedColumns,
                                Map<String, Object> data, boolean tsIdEnabled, List<String> sequences) {
         try {
             //1. get actual table
-            DbTable dbTable = jdbcSchemaCache.getTable(schemaName, tableName);
+            DbTable dbTable = jdbcManager.getTable(dbName, schemaName, tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(data.keySet().stream().toList()) :
@@ -76,17 +78,18 @@ public class JdbcCreateService implements CreateService {
                 }
             }
 
-            this.jdbcSchemaCache.getDialect().processTypes(dbTable, insertableColumns, data);
+            this.jdbcManager.getDialect(dbName).processTypes(dbTable, insertableColumns, data);
 
             CreateContext context = new CreateContext(dbTable, insertableColumns, insertableColumnList);
             String sql = sqlCreatorTemplate.create(context);
-
 
             log.info("SQL - {}", sql);
             log.info("Data - {}", data);
 
 
-            CreateResponse createResponse = dbOperationService.create(data, sql, dbTable);
+            CreateResponse createResponse = dbOperationService.create(
+                    jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                    data, sql, dbTable);
 
             if(tsIdEnabled && Objects.isNull(createResponse.keys())) {
                 return new CreateResponse(createResponse.row(), tsIdMap);

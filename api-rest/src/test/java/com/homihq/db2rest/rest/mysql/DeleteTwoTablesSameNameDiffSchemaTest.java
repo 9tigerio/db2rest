@@ -18,7 +18,7 @@ class DeleteTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Delete Employee Same table different database")
     void deleteFromTableWithSameNameDifferentSchema() throws Exception {
-        mockMvc.perform(delete("/employee")
+        mockMvc.perform(delete("/mysqldb/employee")
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "sakila")
                         .param("filter", "emp_id==1"))
@@ -27,7 +27,7 @@ class DeleteTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.rows", equalTo(1)))
                 .andDo(document("mysql-delete-emp-sakila"));
 
-        mockMvc.perform(delete("/employee")
+        mockMvc.perform(delete("/mysqldb/employee")
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "wakila")
                         .param("filter", "emp_id==1"))

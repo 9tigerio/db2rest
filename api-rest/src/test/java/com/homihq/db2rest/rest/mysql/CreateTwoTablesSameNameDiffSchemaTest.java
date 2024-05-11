@@ -39,7 +39,7 @@ class CreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @DisplayName("Create emp diff schema")
     void create() throws Exception {
 
-        mockMvc.perform(post("/employee")
+        mockMvc.perform(post("/mysqldb/employee")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "sakila")
@@ -53,7 +53,7 @@ class CreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                 .andDo(document("mysql-create-emp-sakila"));
 
 
-        mockMvc.perform(post("/employee")
+        mockMvc.perform(post("/mysqldb/employee")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "wakila")
@@ -63,7 +63,7 @@ class CreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys.GENERATED_KEY").exists())
-                .andExpect(jsonPath("$.keys.GENERATED_KEY", equalTo(4)))
+                .andExpect(jsonPath("$.keys.GENERATED_KEY", equalTo(3)))
                 .andDo(document("mysql-create-emp-wakila"));
 
     }

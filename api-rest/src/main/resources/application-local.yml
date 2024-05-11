@@ -1,0 +1,20 @@
+#DB1
+app:
+  databases:
+    - name: DB1
+      url: jdbc:postgresql://localhost:5432/homidb
+      username: homi2022
+      password: homi2022
+
+    - name: DB2
+      url: jdbc:postgresql://localhost:5432/homidb
+      username: homi2022
+      password: homi2022
+
+    - name: DB3
+      url: jdbc:postgresql://localhost:5432/homidb
+      username: homi2022
+      password: homi2022
+
+
+
