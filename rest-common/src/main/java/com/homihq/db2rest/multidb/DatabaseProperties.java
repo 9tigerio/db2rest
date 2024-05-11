@@ -1,4 +1,4 @@
-package com.homihq.db2rest.jdbc.multidb;
+package com.homihq.db2rest.multidb;
 
 import lombok.Getter;
 import lombok.Setter;

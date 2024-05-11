@@ -21,30 +21,30 @@ import java.util.Map;
 
 public interface MongoRestApi {
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{collectionName}")
+    @PostMapping("/{dbName}/{collectionName}")
     CreateResponse save(@PathVariable String collectionName,
                         @RequestParam(name = "fields", required = false) List<String> includeFields,
                         @RequestBody Map<String, Object> data);
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{collectionName}/bulk")
+    @PostMapping("/{dbName}/{collectionName}/bulk")
     CreateBulkResponse saveAll(@PathVariable String collectionName,
                                @RequestParam(name = "fields", required = false) List<String> includeFields,
                                @RequestBody List<Map<String, Object>> dataList);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{collectionName}")
+    @PatchMapping("/{dbName}/{collectionName}")
     UpdateResponse patch(@PathVariable String collectionName,
                          @RequestBody Map<String, Object> data,
                          @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{collectionName}")
+    @DeleteMapping("/{dbName}/{collectionName}")
     DeleteResponse delete(@PathVariable String collectionName,
                           @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{collectionName}")
+    @GetMapping("/{dbName}/{collectionName}")
     Object findAll(@PathVariable String collectionName,
                    @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                    @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
@@ -53,18 +53,18 @@ public interface MongoRestApi {
                    @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{collectionName}/one")
+    @GetMapping("/{dbName}/{collectionName}/one")
     Map<String, Object> findOne(@PathVariable String collectionName,
                                 @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                                 @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{collectionName}/count")
+    @GetMapping("/{dbName}/{collectionName}/count")
     CountResponse count(@PathVariable String collectionName,
                         @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{collectionName}/exists")
+    @GetMapping(value = "/{dbName}/{collectionName}/exists")
     ExistsResponse exists(@PathVariable String collectionName,
                           @RequestParam(name = "filter", defaultValue = "") String filter);
 }

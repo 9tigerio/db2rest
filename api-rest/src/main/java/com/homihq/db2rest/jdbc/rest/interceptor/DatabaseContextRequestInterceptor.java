@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.interceptor;
 
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.multidb.DatabaseContextHolder;
+import com.homihq.db2rest.multidb.DatabaseContextHolder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

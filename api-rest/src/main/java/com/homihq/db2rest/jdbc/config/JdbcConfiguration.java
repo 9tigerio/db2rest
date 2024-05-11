@@ -5,7 +5,7 @@ import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.config.dialect.*;
 
-import com.homihq.db2rest.jdbc.multidb.DatabaseProperties;
+import com.homihq.db2rest.multidb.DatabaseProperties;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
@@ -35,7 +35,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
@@ -52,9 +51,12 @@ public class JdbcConfiguration {
 
     private final DatabaseProperties databaseProperties;
     private final ObjectMapper objectMapper;
+
+
     @Bean
     @ConditionalOnMissingBean(DataSource.class)
     public DataSource dataSource() {
+
         final Map<Object, Object> dataSources = this.buildDataSources();
 
         final RoutingDataSource routingDataSource = new RoutingDataSource();
@@ -69,7 +71,6 @@ public class JdbcConfiguration {
 
         for (Map<String,String> db : databaseProperties.getDatabases()) {
             result.put(db.get("name"), this.buildDataSource(db));
-            log.info("db - {}", db);
         }
 
         return result;
@@ -97,7 +98,7 @@ public class JdbcConfiguration {
                 ,new OracleDialect(objectMapper)
         );
 
-        return new JdbcManager(dataSource(), databaseProperties, dialects);
+        return new JdbcManager(dataSource(), dialects);
     }
 
     @Bean
