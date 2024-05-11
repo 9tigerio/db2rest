@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.processor;
 
 
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +13,13 @@ import org.springframework.core.annotation.Order;
 @Order(1)
 public class RootTableProcessor implements ReadProcessor {
 
-    private final JdbcSchemaCache jdbcSchemaCache;
+    private final JdbcManager jdbcManager;
     @Override
     public void process(ReadContext readContext) {
         log.debug("Processing root table");
         DbTable table =
-                jdbcSchemaCache.getTable(
+                jdbcManager.getTable(
+                        readContext.getDbName(),
                         readContext.getSchemaName(),
                         readContext.getTableName());
 

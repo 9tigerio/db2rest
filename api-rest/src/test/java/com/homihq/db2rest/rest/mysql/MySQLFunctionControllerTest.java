@@ -14,6 +14,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(51)
@@ -27,16 +28,16 @@ class MySQLFunctionControllerTest extends MySQLBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/function/GetMovieRentalRateFunc")
+        mockMvc.perform(post("/mysqldb/function/GetMovieRentalRateFunc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(json))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", instanceOf(Map.class)))
                 .andExpect(jsonPath("$.*", hasSize(1)))
                 .andExpect(jsonPath("$.return", equalTo(0.99)))
-                //.andDo(print())
                 .andDo(document("mysql-execute-function"));
     }
 }

@@ -20,7 +20,7 @@ class ReadTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @DisplayName("Test find all films - all columns - different schemas.")
     void findUsersInTwoSchemas() throws Exception {
 
-        mockMvc.perform(get("/users")
+        mockMvc.perform(get("/mysqldb/users")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .header("Accept-Profile", "sakila")
                 )
@@ -32,7 +32,7 @@ class ReadTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                 .andDo(document("mysql-get-all-users-diff-schemas-sakila"));
 
 
-        mockMvc.perform(get("/users")
+        mockMvc.perform(get("/mysqldb/users")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .header("Accept-Profile", "wakila")
 

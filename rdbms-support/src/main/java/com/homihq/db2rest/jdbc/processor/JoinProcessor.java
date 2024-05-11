@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.processor;
 
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbJoin;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
@@ -30,7 +30,7 @@ import static com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap.getSQLOp
 @RequiredArgsConstructor
 public class JoinProcessor implements ReadProcessor {
 
-    private final JdbcSchemaCache jdbcSchemaCache;
+    private final JdbcManager jdbcManager;
 
     @Override
     public void process(ReadContext readContext) {
@@ -45,10 +45,10 @@ public class JoinProcessor implements ReadProcessor {
 
         for(JoinDetail joinDetail : joins) {
 
-            rootTable = reviewRootTable(allJoinTables, joinDetail, rootTable);
+            rootTable = reviewRootTable(readContext.getDbName(), allJoinTables, joinDetail, rootTable);
 
             String tableName = joinDetail.table();
-            DbTable table = jdbcSchemaCache.getTable(readContext.getSchemaName(), tableName);
+            DbTable table = jdbcManager.getTable(readContext.getDbName(), readContext.getSchemaName(), tableName);
 
 
             table = table.copyWithAlias(getAlias(tableName));
@@ -64,7 +64,7 @@ public class JoinProcessor implements ReadProcessor {
         }
     }
 
-    private DbTable reviewRootTable(List<DbTable> allJoinTables, JoinDetail joinDetail, DbTable rootTable) {
+    private DbTable reviewRootTable(String dbName, List<DbTable> allJoinTables, JoinDetail joinDetail, DbTable rootTable) {
         if(allJoinTables.size() == 1) return rootTable;
 
         if(joinDetail.hasWith()) {
@@ -75,7 +75,7 @@ public class JoinProcessor implements ReadProcessor {
                     .findFirst();
 
             //look in cache
-            return newRoot.orElseGet(() -> jdbcSchemaCache.getTable(joinDetail.schemaName(), withTable));
+            return newRoot.orElseGet(() -> jdbcManager.getTable(dbName, joinDetail.schemaName(), withTable));
         }
 
         return rootTable;
@@ -109,7 +109,7 @@ public class JoinProcessor implements ReadProcessor {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcSchemaCache.getDialect()));
+                            dbWhere, jdbcManager.getDialect(readContext.getDbName())));
 
             join.addAdditionalWhere(where);
 

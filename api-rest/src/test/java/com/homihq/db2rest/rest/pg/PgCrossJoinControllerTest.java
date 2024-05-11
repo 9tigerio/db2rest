@@ -43,7 +43,7 @@ class PgCrossJoinControllerTest extends PostgreSQLBaseIntegrationTest {
     void testCrossJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/pgsqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN))
                 )
@@ -70,7 +70,7 @@ class PgCrossJoinControllerTest extends PostgreSQLBaseIntegrationTest {
     void testCrossJoinTops() throws Exception {
 
 
-        mockMvc.perform(post("/tops/_expand")
+        mockMvc.perform(post("/pgsqldb/tops/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
                 )

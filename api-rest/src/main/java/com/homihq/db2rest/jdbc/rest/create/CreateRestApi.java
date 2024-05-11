@@ -9,8 +9,10 @@ import java.util.Map;
 
 public interface CreateRestApi {
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{tableName}")
-    CreateResponse save(@PathVariable String tableName,
+    @PostMapping("/{dbName}/{tableName}")
+    CreateResponse save(@PathVariable String dbName,
+                        @RequestHeader(name="Content-Profile", required = false) String schemaName,
+                        @PathVariable String tableName,
                         @RequestParam(name = "columns", required = false) List<String> includeColumns,
                         @RequestParam(name = "sequences", required = false) List<String> sequences,
                         @RequestBody Map<String, Object> data,

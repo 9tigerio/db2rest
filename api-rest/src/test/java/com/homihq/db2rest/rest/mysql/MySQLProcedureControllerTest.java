@@ -27,7 +27,7 @@ class MySQLProcedureControllerTest extends MySQLBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/procedure/GetMovieRentalRateProc")
+        mockMvc.perform(post("/mysqldb/procedure/GetMovieRentalRateProc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

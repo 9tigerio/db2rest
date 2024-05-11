@@ -20,7 +20,7 @@ class MySQLDeleteAllTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {
-        mockMvc.perform(delete("/country")
+        mockMvc.perform(delete("/mysqldb/country")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

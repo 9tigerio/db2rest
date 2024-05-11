@@ -36,7 +36,7 @@ class MariaDBInnerJoinMultiTableControllerTest extends MariaDBBaseIntegrationTes
     void testInnerMultiTable() throws Exception {
 
 
-        mockMvc.perform(post("/film/_expand")
+        mockMvc.perform(post("/mariadb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
                 )

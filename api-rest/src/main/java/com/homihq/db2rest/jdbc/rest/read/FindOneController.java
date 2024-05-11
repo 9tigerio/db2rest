@@ -16,8 +16,9 @@ public class FindOneController {
 
     private final FindOneService findOneService;
 
-    @GetMapping("/{tableName}/one")
-    public Map<String,Object> findOne(@PathVariable String tableName,
+    @GetMapping("/{dbName}/{tableName}/one")
+    public Map<String,Object> findOne(@PathVariable String dbName,
+                                        @PathVariable String tableName,
                                       @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                                       @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                                       @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
@@ -28,6 +29,7 @@ public class FindOneController {
         log.debug("filter - {}", filter);
 
         ReadContext readContext = ReadContext.builder()
+                .dbName(dbName)
                 .defaultFetchLimit(100) //todo update with config
                 .schemaName(schemaName)
                 .tableName(tableName)

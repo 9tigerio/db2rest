@@ -1,5 +1,6 @@
 package com.homihq.db2rest;
 
+import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -11,6 +12,7 @@ import org.testcontainers.jdbc.JdbcDatabaseDelegate;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 @TestConfiguration(proxyBeanMethods = false)
 @Profile("it-oracle")
@@ -39,7 +41,13 @@ public class OracleContainerConfiguration {
         dataSourceBuilder.url(testOracle10g.getJdbcUrl());
         dataSourceBuilder.username(testOracle10g.getUsername());
         dataSourceBuilder.password(testOracle10g.getPassword());
-        return dataSourceBuilder.build();
+        DataSource dataSource = dataSourceBuilder.build();
+
+        final RoutingDataSource routingDataSource = new RoutingDataSource();
+        routingDataSource.setTargetDataSources(Map.of("oradb", dataSource));
+        routingDataSource.setDefaultTargetDataSource(dataSource);
+
+        return routingDataSource;
     }
 
 }

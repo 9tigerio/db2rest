@@ -16,7 +16,7 @@ class OracleCountControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Get count")
     void findFilmCount() throws Exception {
-        mockMvc.perform(get("/FILM/count")
+        mockMvc.perform(get("/oradb/FILM/count")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andDo(print())

@@ -1,5 +1,6 @@
 package com.homihq.db2rest.jdbc.core.service;
 
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
@@ -16,6 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JdbcFindOneService implements FindOneService {
 
+    private final JdbcManager jdbcManager;
     private final SqlCreatorTemplate sqlCreatorTemplate;
     private final List<ReadProcessor> processorList;
     private final DbOperationService dbOperationService;
@@ -34,7 +36,9 @@ public class JdbcFindOneService implements FindOneService {
         log.debug("Params - {}", bindValues);
 
         try {
-            return dbOperationService.findOne(sql, bindValues);
+            return dbOperationService.findOne(
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
+                    sql, bindValues);
         }
         catch (DataAccessException e) {
             log.error("Error in read op : " , e);

@@ -39,7 +39,7 @@ class OracleInnerJoinControllerTest extends OracleBaseIntegrationTest {
     void testInnerJoin() throws Exception {
 
 
-        mockMvc.perform(post("/REVIEW/_expand")
+        mockMvc.perform(post("/oradb/REVIEW/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_JOIN))
                 )

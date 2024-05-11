@@ -34,13 +34,12 @@ class OracleBasicJoinControllerTest extends OracleBaseIntegrationTest {
     @GivenJsonResource("/testdata/RIGHT_JOIN_ORACLE.json")
     List<Map<String,Object>> RIGHT_JOIN;
 
-    @Disabled
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
 
 
-        mockMvc.perform(post("/USERS/_expand")
+        mockMvc.perform(post("/oradb/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
@@ -61,13 +60,13 @@ class OracleBasicJoinControllerTest extends OracleBaseIntegrationTest {
 
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Test right Join")
     void testRightJoin() throws Exception {
 
 
-        mockMvc.perform(post("/USERS/_expand")
+        mockMvc.perform(post("/oradb/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
                 )

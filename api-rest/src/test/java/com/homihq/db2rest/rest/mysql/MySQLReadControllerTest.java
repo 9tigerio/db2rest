@@ -21,7 +21,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Test find all films - all columns.")
     void findAllFilms() throws Exception {
 
-        mockMvc.perform(get("/film")
+        mockMvc.perform(get("/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 //.andDo(print())
                 .andExpect(status().isOk())
@@ -35,7 +35,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - 3 columns")
     void findAllFilmsWithThreeCols() throws Exception {
-        mockMvc.perform(get("/film")
+        mockMvc.perform(get("/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .param("fields", "title,description,release_year")
                         )
@@ -50,7 +50,7 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - with column alias")
     void findAllFilmsWithColumnAlias() throws Exception {
-        mockMvc.perform(get("/film")
+        mockMvc.perform(get("/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .param("fields", "title,description,release_year:releaseYear")
                 )
@@ -68,12 +68,12 @@ class MySQLReadControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Get one")
     void findOneFilm() throws Exception {
-        mockMvc.perform(get("/film/one")
+        mockMvc.perform(get("/mysqldb/film/one")
                         .accept(MediaType.APPLICATION_JSON)
                 .param("fields", "title")
                 .param("filter", "film_id==1"))
                 .andExpect(status().isOk())
-                //.andDo(print())
+                .andDo(print())
                 .andDo(document("mysql-get-on-film"));
     }
 }

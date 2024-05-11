@@ -40,7 +40,7 @@ class MariaDBCrossJoinControllerTest extends MariaDBBaseIntegrationTest {
     void testCrossJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/mariadb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN))
                 )
@@ -67,7 +67,7 @@ class MariaDBCrossJoinControllerTest extends MariaDBBaseIntegrationTest {
     void testCrossJoinTops() throws Exception {
 
 
-        mockMvc.perform(post("/tops/_expand")
+        mockMvc.perform(post("/mariadb/tops/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
                 )

@@ -20,7 +20,7 @@ class PgCountControllerTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @DisplayName("Test count")
     void countAll() throws Exception {
-        mockMvc.perform(get("/film/count")
+        mockMvc.perform(get("/pgsqldb/film/count")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andDo(print())

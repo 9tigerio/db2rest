@@ -28,7 +28,7 @@ class PgFunctionControllerTest extends PostgreSQLBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/function/GetMovieRentalRateFunc")
+        mockMvc.perform(post("/pgsqldb/function/GetMovieRentalRateFunc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

@@ -21,7 +21,7 @@ class OracleReadControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Test find all films - all columns.")
     void findAllFilms() throws Exception {
 
-        mockMvc.perform(get("/FILM")
+        mockMvc.perform(get("/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 //.andDo(print())
                 .andExpect(status().isOk())
@@ -35,7 +35,7 @@ class OracleReadControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - 3 columns")
     void findAllFilmsWithThreeCols() throws Exception {
-        mockMvc.perform(get("/FILM")
+        mockMvc.perform(get("/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .param("fields", "title,description,release_year")
                         )
@@ -50,7 +50,7 @@ class OracleReadControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - with column alias")
     void findAllFilmsWithColumnAlias() throws Exception {
-        mockMvc.perform(get("/FILM")
+        mockMvc.perform(get("/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .param("fields", "title,description,release_year:releaseYear")
                 )
@@ -68,7 +68,7 @@ class OracleReadControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Get one")
     void findOneFilm() throws Exception {
-        mockMvc.perform(get("/FILM/one")
+        mockMvc.perform(get("/oradb/FILM/one")
                         .accept(MediaType.APPLICATION_JSON)
                 .param("fields", "title")
                 .param("filter", "film_id==1"))

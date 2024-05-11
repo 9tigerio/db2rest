@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CountQueryController {
     private final CountQueryService countQueryService;
-    @GetMapping("/{tableName}/count")
-    public CountResponse count(@PathVariable String tableName,
+    @GetMapping("/{dbName}/{tableName}/count")
+    public CountResponse count(@PathVariable String dbName,
+                                @PathVariable String tableName,
                                @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                                @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
@@ -21,6 +22,7 @@ public class CountQueryController {
         log.debug("filter - {}", filter);
 
         ReadContext readContext = ReadContext.builder()
+                .dbName(dbName)
                 .schemaName(schemaName)
                 .tableName(tableName)
                 .filter(filter)

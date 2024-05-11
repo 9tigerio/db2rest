@@ -22,26 +22,24 @@ import java.util.Map;
 @Slf4j
 public class JdbcOperationService implements DbOperationService {
 
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public int update(Map<String, Object> paramMap, String sql) {
+    public int update(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql) {
         return namedParameterJdbcTemplate.update(sql, paramMap);
     }
 
     @Override
-    public List<Map<String, Object>> read(Map<String, Object> paramMap, String sql) {
-
+    public List<Map<String, Object>> read(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql) {
         return namedParameterJdbcTemplate.queryForList(sql, new MapSqlParameterSource(paramMap));
     }
 
     @Override
-    public Map<String, Object> findOne(String sql, Map<String, Object> paramMap) {
+    public Map<String, Object> findOne(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String sql, Map<String, Object> paramMap) {
         return namedParameterJdbcTemplate.queryForMap(sql, paramMap);
     }
 
     @Override
-    public ExistsResponse exists(Map<String, Object> paramMap, String sql) {
+    public ExistsResponse exists(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql) {
         List<String> queryResult = namedParameterJdbcTemplate.query(sql,
                 paramMap,
                 (rs, rowNum) -> rs.getString(1)
@@ -52,26 +50,30 @@ public class JdbcOperationService implements DbOperationService {
     }
 
     @Override
-    public CountResponse count(Map<String, Object> paramMap, String sql) {
+    public CountResponse count(NamedParameterJdbcTemplate namedParameterJdbcTemplate,Map<String, Object> paramMap, String sql) {
         Long itemCount = namedParameterJdbcTemplate.queryForObject(sql, paramMap, Long.class);
         return new CountResponse(itemCount);
     }
 
     @Override
-    public Object queryCustom(boolean single, String sql, Map<String, Object> params) {
+    public Object queryCustom(NamedParameterJdbcTemplate namedParameterJdbcTemplate, boolean single, String sql, Map<String, Object> params) {
         return single ?
                 namedParameterJdbcTemplate.queryForMap(sql, params) :
                 namedParameterJdbcTemplate.queryForList(sql, params);
     }
 
     @Override
-    public int delete(Map<String, Object> params, String sql) {
+    public int delete(
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+            Map<String, Object> params, String sql) {
         return namedParameterJdbcTemplate.update(sql,
                 params);
     }
 
     @Override
-    public CreateResponse create(Map<String, Object> data, String sql, DbTable dbTable) {
+    public CreateResponse create(
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+            Map<String, Object> data, String sql, DbTable dbTable) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         int row = namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(data),
@@ -83,7 +85,9 @@ public class JdbcOperationService implements DbOperationService {
     }
 
     @Override
-    public CreateBulkResponse batchUpdate(List<Map<String, Object>> dataList, String sql, DbTable dbTable) {
+    public CreateBulkResponse batchUpdate(
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+            List<Map<String, Object>> dataList, String sql, DbTable dbTable) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
 
         int[] updateCounts;
@@ -95,7 +99,9 @@ public class JdbcOperationService implements DbOperationService {
     }
 
 
-    public CreateBulkResponse batchUpdate(List<Map<String, Object>> dataList, String sql) {
+    public CreateBulkResponse batchUpdate(
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+            List<Map<String, Object>> dataList, String sql) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dataList.toArray());
 
         int[] updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch);

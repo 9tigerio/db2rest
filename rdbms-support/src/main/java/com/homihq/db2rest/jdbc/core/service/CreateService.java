@@ -6,6 +6,6 @@ import java.util.Map;
 
 public interface CreateService {
 
-    CreateResponse save(String schemaName, String tableName, List<String> includedColumns,
+    CreateResponse save(String dbName, String schemaName, String tableName, List<String> includedColumns,
                         Map<String, Object> data, boolean tsIdEnabled, List<String> sequences);
 }

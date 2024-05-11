@@ -21,7 +21,7 @@ class MariaDBDeleteAllTest extends MariaDBBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {
-        mockMvc.perform(delete("/country")
+        mockMvc.perform(delete("/mariadb/country")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

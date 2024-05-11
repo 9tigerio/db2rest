@@ -39,7 +39,7 @@ class MariaDBBasicJoinControllerTest extends MariaDBBaseIntegrationTest {
     void testLeftJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/mariadb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
@@ -66,7 +66,7 @@ class MariaDBBasicJoinControllerTest extends MariaDBBaseIntegrationTest {
     void testRightJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/mariadb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
                 )

@@ -21,7 +21,7 @@ class OracleDeleteAllTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {
-        mockMvc.perform(delete("/COUNTRY")
+        mockMvc.perform(delete("/oradb/COUNTRY")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

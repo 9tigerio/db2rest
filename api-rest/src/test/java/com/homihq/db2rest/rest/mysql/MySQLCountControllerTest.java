@@ -16,7 +16,7 @@ class MySQLCountControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Get count")
     void findFilmCount() throws Exception {
-        mockMvc.perform(get("/film/count")
+        mockMvc.perform(get("/mysqldb/film/count")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andDo(print())

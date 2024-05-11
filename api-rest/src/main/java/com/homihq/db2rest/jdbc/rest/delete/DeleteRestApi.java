@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 public interface DeleteRestApi {
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{tableName}")
+    @DeleteMapping("/{dbName}/{tableName}")
     DeleteResponse delete(
+                         @PathVariable String dbName,
                         @RequestHeader(name="Content-Profile", required = false) String schemaName,
                         @PathVariable String tableName,
                         @RequestParam(name = "filter", required = false, defaultValue = "") String filter);

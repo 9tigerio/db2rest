@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.core.service;
 
-import com.homihq.db2rest.jdbc.JdbcSchemaCache;
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.jdbc.dto.InsertableColumn;
@@ -28,13 +28,15 @@ public class JdbcBulkCreateService implements BulkCreateService {
 
     private final TSIDProcessor tsidProcessor;
     private final SqlCreatorTemplate sqlCreatorTemplate;
-    private final JdbcSchemaCache jdbcSchemaCache;
+    private final JdbcManager jdbcManager;
     private final DbOperationService dbOperationService;
 
 
     @Override
     @Transactional
-    public CreateBulkResponse saveBulk(String schemaName, String tableName,
+    public CreateBulkResponse saveBulk(
+            String dbName,
+            String schemaName, String tableName,
                                        List<String> includedColumns,
                                        List<Map<String, Object>> dataList,
                                        boolean tsIdEnabled, List<String> sequences) {
@@ -45,7 +47,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
         try {
 
             //1. get actual table
-            DbTable dbTable = jdbcSchemaCache.getTable(schemaName, tableName);
+            DbTable dbTable = jdbcManager.getTable(dbName, schemaName, tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(dataList.get(0).keySet().stream().toList()) :
@@ -89,7 +91,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
             }
 
             for(Map<String,Object> data : dataList)
-                this.jdbcSchemaCache.getDialect().processTypes(dbTable, insertableColumns, data);
+                this.jdbcManager.getDialect(dbName).processTypes(dbTable, insertableColumns, data);
 
             log.debug("Finally insertable columns - {}", insertableColumns);
 
@@ -100,8 +102,10 @@ public class JdbcBulkCreateService implements BulkCreateService {
             log.debug("Data - {}", dataList);
 
             CreateBulkResponse createBulkResponse =
-                    this.jdbcSchemaCache.getDialect().supportBatchReturnKeys() ?
-                    dbOperationService.batchUpdate(dataList, sql, dbTable) : dbOperationService.batchUpdate(dataList, sql);
+                    this.jdbcManager.getDialect(dbName).supportBatchReturnKeys() ?
+                    dbOperationService.batchUpdate(
+                            jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                            dataList, sql, dbTable) : dbOperationService.batchUpdate(jdbcManager.getNamedParameterJdbcTemplate(dbName), dataList, sql);
 
             if(tsIdEnabled && Objects.isNull(createBulkResponse.keys())){
                 return new CreateBulkResponse(createBulkResponse.rows(), tsIds);

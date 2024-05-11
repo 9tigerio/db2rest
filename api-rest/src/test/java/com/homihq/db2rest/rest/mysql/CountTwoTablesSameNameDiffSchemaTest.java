@@ -19,7 +19,7 @@ class CountTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Get count two tables same name diff schema")
     void empCount() throws Exception {
-        mockMvc.perform(get("/employee/count")
+        mockMvc.perform(get("/mysqldb/employee/count")
                         .header("Accept-Profile", "sakila")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -28,7 +28,7 @@ class CountTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                 .andDo(document("mysql-employee-count-sakila"));
 
 
-        mockMvc.perform(get("/employee/count")
+        mockMvc.perform(get("/mysqldb/employee/count")
                         .header("Accept-Profile", "wakila")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

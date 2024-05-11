@@ -1,5 +1,6 @@
 package com.homihq.db2rest.jdbc.core.service;
 
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
@@ -16,7 +17,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class JdbcExistsQueryService implements ExistsQueryService {
-
+    private final JdbcManager jdbcManager;
 	private final DbOperationService dbOperationService;
 	private final List<ReadProcessor> processorList;
 	private final SqlCreatorTemplate sqlCreatorTemplate;
@@ -32,7 +33,10 @@ public class JdbcExistsQueryService implements ExistsQueryService {
         log.debug("{}", readContext.getParamMap());
 
         try {
-			return dbOperationService.exists(readContext.getParamMap(), sql);
+			return dbOperationService.exists(
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
+                    readContext.getParamMap(),
+                    sql);
 
 		} catch (DataAccessException e) {
             log.error("Error in exists op : " , e);

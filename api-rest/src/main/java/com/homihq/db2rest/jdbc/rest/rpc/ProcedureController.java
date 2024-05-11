@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("procedure")
+@RequestMapping("/{dbName}/procedure")
 @Slf4j
 @RequiredArgsConstructor
 public class ProcedureController {
@@ -17,9 +17,11 @@ public class ProcedureController {
     private final ProcedureService procedureService;
 
     @PostMapping("/{procName}")
-    public ResponseEntity<Map<String, Object>> execute(@PathVariable String procName,
+    public ResponseEntity<Map<String, Object>> execute(
+            @PathVariable String dbName,
+            @PathVariable String procName,
                                                        @RequestBody Map<String,Object> inParams) {
         log.debug("Execute stored procedure {} with IN params {}", procName, inParams.entrySet());
-        return ResponseEntity.ok(procedureService.execute(procName, inParams));
+        return ResponseEntity.ok(procedureService.execute(dbName,procName, inParams));
     }
 }

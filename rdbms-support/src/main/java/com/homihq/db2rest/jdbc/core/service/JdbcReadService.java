@@ -1,5 +1,6 @@
 package com.homihq.db2rest.jdbc.core.service;
 
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
@@ -14,7 +15,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class JdbcReadService implements ReadService {
-
+    private final JdbcManager jdbcManager;
     private final DbOperationService dbOperationService;
     private final List<ReadProcessor> processorList;
     private final SqlCreatorTemplate sqlCreatorTemplate;
@@ -30,7 +31,9 @@ public class JdbcReadService implements ReadService {
         log.info("{}", readContext.getParamMap());
 
         try {
-            return dbOperationService.read(readContext.getParamMap(), sql);
+            return dbOperationService.read(
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
+                    readContext.getParamMap(), sql);
         } catch (DataAccessException e) {
             log.error("Error in read op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());

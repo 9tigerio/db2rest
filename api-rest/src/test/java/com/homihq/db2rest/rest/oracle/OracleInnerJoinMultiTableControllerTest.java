@@ -38,7 +38,7 @@ class OracleInnerJoinMultiTableControllerTest extends OracleBaseIntegrationTest 
     void testInnerMultiTable() throws Exception {
 
 
-        mockMvc.perform(post("/FILM/_expand")
+        mockMvc.perform(post("/oradb/FILM/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
                 )

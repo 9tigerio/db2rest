@@ -20,7 +20,7 @@ class OracleDeleteControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Delete a Director")
     void delete_single_record() throws Exception {
-        mockMvc.perform(delete("/DIRECTOR")
+        mockMvc.perform(delete("/oradb/DIRECTOR")
                         .accept(APPLICATION_JSON)
                         .param("filter", "first_name==\"Alex\""))
                 .andExpect(status().isOk())
@@ -32,7 +32,7 @@ class OracleDeleteControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=true")
     void delete_all_records_with_allow_safe_delete_true() throws Exception {
-        mockMvc.perform(delete("/DIRECTOR")
+        mockMvc.perform(delete("/oradb/DIRECTOR")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
@@ -44,7 +44,7 @@ class OracleDeleteControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Column Does Not Exist")
     void column_does_not_exist() throws Exception {
-        mockMvc.perform(delete("/DIRECTOR")
+        mockMvc.perform(delete("/oradb/DIRECTOR")
                         .accept(APPLICATION_JSON)
                         .param("filter", "_name==\"Alex\""))
                 .andExpect(status().isNotFound())
@@ -58,7 +58,7 @@ class OracleDeleteControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Foreign Key Constraint Violation")
     void foreign_key_constraint_violation() throws Exception {
-        mockMvc.perform(delete("/LANGUAGE")
+        mockMvc.perform(delete("/oradb/LANGUAGE")
                         .accept(APPLICATION_JSON)
                         .param("filter", "name==\"English\""))
                 .andDo(print())

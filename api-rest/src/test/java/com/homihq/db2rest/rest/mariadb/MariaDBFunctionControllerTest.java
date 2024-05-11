@@ -25,7 +25,7 @@ class MariaDBFunctionControllerTest extends MariaDBBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/function/GetMovieRentalRateFunc")
+        mockMvc.perform(post("/mariadb/function/GetMovieRentalRateFunc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

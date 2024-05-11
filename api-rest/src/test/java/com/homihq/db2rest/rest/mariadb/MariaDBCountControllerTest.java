@@ -16,7 +16,7 @@ class MariaDBCountControllerTest extends MariaDBBaseIntegrationTest {
     @Test
     @DisplayName("test film count")
     void testFilmCount() throws Exception {
-        mockMvc.perform(get("/film/count")
+        mockMvc.perform(get("/mariadb/film/count")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andDo(print())
