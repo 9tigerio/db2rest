@@ -1,12 +1,9 @@
 package com.homihq.db2rest.jdbc.multidb;
 
+import com.homihq.db2rest.multidb.DatabaseContextHolder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-
-import java.util.Map;
 
 @Slf4j
 @Getter

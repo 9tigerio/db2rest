@@ -5,13 +5,13 @@ import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.core.exception.InvalidTableException;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 
-import com.homihq.db2rest.jdbc.multidb.DatabaseProperties;
+
 import com.homihq.db2rest.jdbc.multidb.DbDetailHolder;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
 import jakarta.annotation.PostConstruct;
-import lombok.Getter;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class JdbcManager {
 
     private final DataSource dataSource;
-    private final DatabaseProperties databaseProperties;
     private final List<Dialect> availableDialects;
 
     private Map<String,DbTable> dbTableMap;

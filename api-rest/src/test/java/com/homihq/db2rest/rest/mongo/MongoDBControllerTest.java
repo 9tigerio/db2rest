@@ -5,7 +5,9 @@ import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.homihq.db2rest.MongodbContainerConfiguration;
+import com.homihq.db2rest.MongoBaseIntegrationTest;
+import com.homihq.db2rest.MongoContainerConfiguration;
+import com.homihq.db2test.mongo.multidb.RoutingMongoTemplate;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.ClassOrderer;
@@ -49,20 +51,15 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-@ActiveProfiles("it-mongo")
 @TestWithResources
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(410)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MongoDBControllerTest extends MongodbContainerConfiguration {
+class MongoDBControllerTest extends MongoBaseIntegrationTest {
+
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private RoutingMongoTemplate routingMongoTemplate;
 
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
@@ -77,22 +74,12 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @GivenJsonResource("/testdata/UPDATE_ACTOR_REQUEST.json")
     Map<String, Object> UPDATE_ACTOR_REQUEST;
 
-    @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext,
-               RestDocumentationContextProvider restDocumentation) {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation)
-                        .snippets().withTemplateFormat(TemplateFormats.markdown())
-                )
-                .build();
-    }
 
     @Test
     @Order(1)
     @DisplayName("Create an actor")
     void create() throws Exception {
-        mockMvc.perform(post("/Sakila_actors")
+        mockMvc.perform(post("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_ACTOR_REQUEST))
@@ -102,7 +89,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
                 .andExpect(jsonPath("$.keys.timestamp").exists())
                 .andDo(document("mongodb-create-an-actor"));
 
-        mongoTemplate.remove(query(Criteria
+        routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
                         .is("KEVIN")),
                 "Sakila_actors");
@@ -112,7 +99,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(2)
     @DisplayName("Create an actor with with include fields")
     void createWithIncludeFields() throws Exception {
-        mockMvc.perform(post("/Sakila_actors")
+        mockMvc.perform(post("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("fields", "FirstName, LastName")
@@ -123,7 +110,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
                 .andExpect(jsonPath("$.keys.timestamp").exists())
                 .andDo(document("mongodb-create-an-actor-with-include-fields"));
 
-        mongoTemplate.remove(query(Criteria
+        routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
                         .is("KEVIN")),
                 "Sakila_actors");
@@ -133,7 +120,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(3)
     @DisplayName("Create many actors")
     void createBulk() throws Exception {
-        mockMvc.perform(post("/Sakila_actors/bulk")
+        mockMvc.perform(post("/mongo/Sakila_actors/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(BULK_CREATE_ACTOR_REQUEST))
@@ -148,11 +135,11 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
                 .andExpect(jsonPath("$.keys", allOf(notNullValue())))
                 .andDo(document("mongodb-bulk-create-actors"));
 
-        mongoTemplate.remove(query(Criteria
+        routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
                         .is("VIVIEN")),
                 "Sakila_actors");
-        mongoTemplate.remove(query(Criteria
+        routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
                         .is("CUBA")),
                 "Sakila_actors");
@@ -162,7 +149,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(4)
     @DisplayName("Create many actors with include fields")
     void createBulkWithIncludeFields() throws Exception {
-        mockMvc.perform(post("/Sakila_actors/bulk")
+        mockMvc.perform(post("/mongo/Sakila_actors/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("fields", "FirstName, LastName")
@@ -178,11 +165,11 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
                 .andExpect(jsonPath("$.keys", allOf(notNullValue())))
                 .andDo(document("mongodb-bulk-create-actors-with-include-fields"));
 
-        mongoTemplate.remove(query(Criteria
+        routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
                         .is("VIVIEN")),
                 "Sakila_actors");
-        mongoTemplate.remove(query(Criteria
+        routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
                         .is("CUBA")),
                 "Sakila_actors");
@@ -192,7 +179,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(5)
     @DisplayName("Update an existing Actor")
     void updateExistingActor() throws Exception {
-        mockMvc.perform(patch("/Sakila_actors")
+        mockMvc.perform(patch("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==PENELOPE")
@@ -207,7 +194,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(6)
     @DisplayName("Update a non-existing Actor")
     void updateNonExistingActor() throws Exception {
-        mockMvc.perform(patch("/Sakila_actors")
+        mockMvc.perform(patch("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==Michael")
@@ -222,7 +209,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(7)
     @DisplayName("Update non-existing Collection")
     void updateNonExistingCollection() throws Exception {
-        mockMvc.perform(patch("/unknown_collection")
+        mockMvc.perform(patch("/mongo/unknown_collection")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==Michael")
@@ -237,7 +224,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(8)
     @DisplayName("Update multiple Actors")
     void updateExistingActors() throws Exception {
-        mockMvc.perform(patch("/Sakila_actors")
+        mockMvc.perform(patch("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "LastName==ZELLWEGER")
@@ -252,7 +239,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(9)
     @DisplayName("Test find all actors - all fields")
     void findAllActors() throws Exception {
-        mockMvc.perform(get("/Sakila_actors")
+        mockMvc.perform(get("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -265,7 +252,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(10)
     @DisplayName("Test find all actors - 2 fields")
     void findAllActorsWithTwoFields() throws Exception {
-        mockMvc.perform(get("/Sakila_actors")
+        mockMvc.perform(get("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("fields", "FirstName,LastName")
@@ -282,7 +269,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(11)
     @DisplayName("Test find all actors with filter")
     void findAllActorsWithFilter() throws Exception {
-        mockMvc.perform(get("/Sakila_actors")
+        mockMvc.perform(get("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("filter", "FirstName==PENELOPE")
@@ -299,7 +286,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(12)
     @DisplayName("Test find all actors with sorting")
     void findAllActorsWithSorting() throws Exception {
-        mockMvc.perform(get("/Sakila_actors")
+        mockMvc.perform(get("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("sort", "FirstName;desc,LastName")
@@ -317,7 +304,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(13)
     @DisplayName("Test find all actors with pagination")
     void findAllActorsWithPagination() throws Exception {
-        mockMvc.perform(get("/Sakila_actors")
+        mockMvc.perform(get("/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("fields", "FirstName,LastName")
@@ -337,7 +324,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(14)
     @DisplayName("Find one actor - 2 fields")
     void findOneActor() throws Exception {
-        mockMvc.perform(get("/Sakila_actors/one")
+        mockMvc.perform(get("/mongo/Sakila_actors/one")
                         .contentType(APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("fields", "FirstName,LastName")
@@ -353,7 +340,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(15)
     @DisplayName("Total number of Actors")
     void countAll() throws Exception {
-        mockMvc.perform(get("/Sakila_actors/count")
+        mockMvc.perform(get("/mongo/Sakila_actors/count")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -365,7 +352,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(16)
     @DisplayName("Number of Actors by LastName")
     void countActorsByLastName() throws Exception {
-        mockMvc.perform(get("/Sakila_actors/count")
+        mockMvc.perform(get("/mongo/Sakila_actors/count")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "LastName==ZELLWEGER"))
@@ -378,7 +365,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(17)
     @DisplayName("Actor exists By FirstName")
     void existsByLastName() throws Exception {
-        mockMvc.perform(get("/Sakila_actors/exists")
+        mockMvc.perform(get("/mongo/Sakila_actors/exists")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==JENNIFER"))
@@ -391,7 +378,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(18)
     @DisplayName("Actor exists By unknown name")
     void existsByUnknownName() throws Exception {
-        mockMvc.perform(get("/Sakila_actors/exists")
+        mockMvc.perform(get("/mongo/Sakila_actors/exists")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==Unknown"))
@@ -404,7 +391,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(19)
     @DisplayName("Actor exists throws exception when 'filter' is not present")
     void existsThrowsException() throws Exception {
-        mockMvc.perform(get("/Sakila_actors/exists")
+        mockMvc.perform(get("/mongo/Sakila_actors/exists")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -417,7 +404,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(20)
     @DisplayName("Delete all documents while allowSafeDelete=true")
     void delete_all_documents_with_allow_safe_delete_true() throws Exception {
-        mockMvc.perform(delete("/Sakila_actors")
+        mockMvc.perform(delete("/mongo/Sakila_actors")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
@@ -429,7 +416,7 @@ class MongoDBControllerTest extends MongodbContainerConfiguration {
     @Order(21)
     @DisplayName("Delete an actor")
     void delete_single_record() throws Exception {
-        mockMvc.perform(delete("/Sakila_actors")
+        mockMvc.perform(delete("/mongo/Sakila_actors")
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==BETTE"))
                 .andExpect(status().isOk())

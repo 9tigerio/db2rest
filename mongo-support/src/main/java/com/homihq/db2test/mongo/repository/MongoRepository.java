@@ -6,13 +6,13 @@ import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.core.dto.UpdateResponse;
+import com.homihq.db2test.mongo.multidb.RoutingMongoTemplate;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -31,7 +31,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 @RequiredArgsConstructor
 public class MongoRepository {
 
-    private final MongoTemplate mongoTemplate;
+    private final RoutingMongoTemplate routingMongoTemplate;
 
     public CreateResponse save(String collectionName, List<String> includedFields,
                                Map<String, Object> data) {
@@ -43,7 +43,7 @@ public class MongoRepository {
             insertableData = data;
         }
         var insertableDocument = convertToDocument(insertableData);
-        var savedDocument = mongoTemplate.save(insertableDocument, collectionName);
+        var savedDocument = routingMongoTemplate.get().save(insertableDocument, collectionName);
         return new CreateResponse(1, savedDocument.getObjectId("_id"));
 
     }
@@ -62,7 +62,7 @@ public class MongoRepository {
         List<Document> insertableDocumentList = insertableDataList.stream()
                 .map(this::convertToDocument)
                 .toList();
-        Collection<Document> savedDocuments = mongoTemplate.insert(insertableDocumentList, collectionName);
+        Collection<Document> savedDocuments = routingMongoTemplate.get().insert(insertableDocumentList, collectionName);
         List<Integer> rows = Collections.nCopies(savedDocuments.size(), 1);
         List<ObjectId> keys = savedDocuments.stream().map(doc -> doc.getObjectId("_id")).toList();
         return new CreateBulkResponse(rows.stream()
@@ -85,32 +85,32 @@ public class MongoRepository {
     public UpdateResponse patch(Query query, String collectionName, Map<String, Object> data) {
         var updateDefinition = new Update();
         data.forEach(updateDefinition::set);
-        UpdateResult updateResult = mongoTemplate.updateMulti(query, updateDefinition, collectionName);
+        UpdateResult updateResult = routingMongoTemplate.get().updateMulti(query, updateDefinition, collectionName);
         return new UpdateResponse((int) updateResult.getModifiedCount());
     }
 
     public DeleteResponse delete(Query query, String collectionName) {
-        DeleteResult deleteResult = mongoTemplate.remove(query, collectionName);
+        DeleteResult deleteResult = routingMongoTemplate.get().remove(query, collectionName);
         var rows = deleteResult.getDeletedCount();
         log.debug("Number of documents deleted - {}", rows);
         return DeleteResponse.builder().rows((int) rows).build();
     }
 
     public Object find(Query query, String collectionName) {
-        return mongoTemplate.find(query, Object.class, collectionName);
+        return routingMongoTemplate.get().find(query, Object.class, collectionName);
     }
 
     @SuppressWarnings("unchecked")
     public Map<String, Object> findOne(Query query, String collectionName) {
-        return mongoTemplate.findOne(query, LinkedHashMap.class, collectionName);
+        return routingMongoTemplate.get().findOne(query, LinkedHashMap.class, collectionName);
     }
 
     public CountResponse count(Query query, String collectionName) {
-        var count = mongoTemplate.count(query, collectionName);
+        var count = routingMongoTemplate.get().count(query, collectionName);
         return new CountResponse(count);
     }
 
     public ExistsResponse exists(Query query, String collectionName) {
-        return new ExistsResponse(mongoTemplate.exists(query, collectionName));
+        return new ExistsResponse(routingMongoTemplate.get().exists(query, collectionName));
     }
 }

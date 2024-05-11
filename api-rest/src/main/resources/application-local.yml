@@ -1,4 +1,3 @@
-#DB1
 app:
   databases:
     - name: DB1
