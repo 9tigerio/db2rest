@@ -40,7 +40,7 @@ class PgBasicJoinControllerTest extends PostgreSQLBaseIntegrationTest {
     void testLeftJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/pgsqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
@@ -66,7 +66,7 @@ class PgBasicJoinControllerTest extends PostgreSQLBaseIntegrationTest {
     void testRightJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/pgsqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
                 )

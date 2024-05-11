@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.pg;
 
-import com.homihq.db2rest.MySQLBaseIntegrationTest;
+
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
@@ -21,7 +21,7 @@ class PgDeleteAllTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {
-        mockMvc.perform(delete("/country")
+        mockMvc.perform(delete("/pgsqldb/country")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -21,7 +21,7 @@ public class CustomQueryController {
     @PostMapping(value = "/{dbName}/query", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findByCustomQuery(
-            String dbName,
+            @PathVariable String dbName,
             @RequestBody @Valid QueryRequest queryRequest) {
         log.debug("Execute SQL statement {} with params {}", queryRequest.sql(), queryRequest.params());
         return ResponseEntity.ok(customQueryService.find(dbName, queryRequest));

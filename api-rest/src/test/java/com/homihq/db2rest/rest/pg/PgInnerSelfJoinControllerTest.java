@@ -34,11 +34,10 @@ class PgInnerSelfJoinControllerTest extends PostgreSQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Test inner self Join")
-    @Disabled
     void testInnerSelfJoin() throws Exception {
 
 
-        mockMvc.perform(post("/film/_expand")
+        mockMvc.perform(post("/pgsqldb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_SELF_JOIN))
                 )

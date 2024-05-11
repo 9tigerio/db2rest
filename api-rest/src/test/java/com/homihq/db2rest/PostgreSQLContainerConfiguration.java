@@ -1,6 +1,7 @@
 package com.homihq.db2rest;
 
 
+import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.testcontainers.jdbc.JdbcDatabaseDelegate;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 @TestConfiguration(proxyBeanMethods = false)
 @Profile("it-pg")
@@ -38,7 +40,13 @@ public class PostgreSQLContainerConfiguration {
         dataSourceBuilder.url(testPostgres.getJdbcUrl() + "&escapeSyntaxCallMode=callIfNoReturn");
         dataSourceBuilder.username(testPostgres.getUsername());
         dataSourceBuilder.password(testPostgres.getPassword());
-        return dataSourceBuilder.build();
+        DataSource dataSource =  dataSourceBuilder.build();
+
+        final RoutingDataSource routingDataSource = new RoutingDataSource();
+        routingDataSource.setTargetDataSources(Map.of("pgsqldb", dataSource));
+        routingDataSource.setDefaultTargetDataSource(dataSource);
+
+        return routingDataSource;
     }
 
 }

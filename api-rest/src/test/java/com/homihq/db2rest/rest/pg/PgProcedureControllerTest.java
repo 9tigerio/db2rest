@@ -28,7 +28,7 @@ class PgProcedureControllerTest extends PostgreSQLBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/procedure/GetMovieRentalRateProc")
+        mockMvc.perform(post("/pgsqldb/procedure/GetMovieRentalRateProc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -38,7 +38,7 @@ class PgProcedureControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.*", hasSize(1)))
                 .andExpect(jsonPath("$.rentalrate", equalTo(0.99)))
                 //.andDo(print())
-                .andDo(document("mysql-execute-procedure"));
+                .andDo(document("pgsql-execute-procedure"));
     }
 
 }

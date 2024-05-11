@@ -46,7 +46,7 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Update an existing film")
     void updateExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/film")
+        mockMvc.perform(patch("/pgsqldb/film")
                         .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
@@ -63,7 +63,7 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Update a non-existing film")
     void updateNonExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/film")
+        mockMvc.perform(patch("/pgsqldb/film")
                         .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
@@ -80,7 +80,7 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Update non-existing table")
     void updateNonExistingTable() throws Exception {
 
-        mockMvc.perform(patch("/unknown_table")
+        mockMvc.perform(patch("/pgsqldb/unknown_table")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
@@ -96,7 +96,7 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     void updateMultipleColumns() throws Exception {
 
 
-        mockMvc.perform(patch("/film")
+        mockMvc.perform(patch("/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
                         .content(objectMapper.writeValueAsString(UPDATE_FILMS_REQUEST))
