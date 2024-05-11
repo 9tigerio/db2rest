@@ -19,7 +19,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Delete a Director")
     void delete_single_record() throws Exception {
-        mockMvc.perform(delete("/director")
+        mockMvc.perform(delete("/mysqldb/director")
                         .accept(APPLICATION_JSON)
                         .param("filter", "first_name==\"Alex\""))
                 .andExpect(status().isOk())
@@ -31,7 +31,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=true")
     void delete_all_records_with_allow_safe_delete_true() throws Exception {
-        mockMvc.perform(delete("/director")
+        mockMvc.perform(delete("/mysqldb/director")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
@@ -43,7 +43,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Column Does Not Exist")
     void column_does_not_exist() throws Exception {
-        mockMvc.perform(delete("/director")
+        mockMvc.perform(delete("/mysqldb/director")
                         .accept(APPLICATION_JSON)
                         .param("filter", "_name==\"Alex\""))
                 .andExpect(status().isNotFound())
@@ -56,7 +56,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Foreign Key Constraint Violation")
     void foreign_key_constraint_violation() throws Exception {
-        mockMvc.perform(delete("/language")
+        mockMvc.perform(delete("/mysqldb/language")
                         .accept(APPLICATION_JSON)
                         .param("filter", "name==\"ENGLISH\""))
                 .andExpect(status().isBadRequest())

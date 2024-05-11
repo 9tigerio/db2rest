@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,6 +60,7 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_REQUEST))
                 )
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows").isArray())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
@@ -67,7 +69,7 @@ class MySQLBulkCreateControllerTest extends MySQLBaseIntegrationTest {
                 //.andExpect(jsonPath("$.generated_keys").isArray()) //TODO - push TSID columns
                 //.andExpect(jsonPath("$.generated_keys", hasSize(2)))
                 //.andExpect(jsonPath("$.generated_keys", allOf(notNullValue())))
-                //.andDo(print())
+
                 .andDo(document("mysql-bulk-create-films"));
 
     }

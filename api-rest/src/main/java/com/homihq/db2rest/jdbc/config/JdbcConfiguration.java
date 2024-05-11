@@ -232,13 +232,13 @@ public class JdbcConfiguration {
 
     //RPC
     @Bean
-    public FunctionService functionService(JdbcTemplate jdbcTemplate) {
-        return new JdbcFunctionService(jdbcTemplate);
+    public FunctionService functionService(JdbcManager jdbcManager) {
+        return new JdbcFunctionService(jdbcManager);
     }
 
     @Bean
-    public ProcedureService procedureService(JdbcTemplate jdbcTemplate) {
-        return new JdbcProcedureService(jdbcTemplate);
+    public ProcedureService procedureService(JdbcManager jdbcManager) {
+        return new JdbcProcedureService(jdbcManager);
     }
 
     //END ::: Services

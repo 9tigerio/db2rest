@@ -12,16 +12,18 @@ import java.util.Map;
 
 public interface SubRoutine {
 
-    default Map<String, Object> doExecute(JdbcTemplate jdbcTemplate, String subRoutineName, Map<String, Object> inParams) {
+    default Map<String, Object> doExecute(JdbcTemplate jdbcTemplate,
+                                          String dbName,
+                                          String subRoutineName, Map<String, Object> inParams) {
         jdbcTemplate.setResultsMapCaseInsensitive(true);
         SqlParameterSource in = new MapSqlParameterSource()
                 .addValues(inParams);
         try {
-            return getSimpleJdbcCall(subRoutineName).execute(in);
+            return getSimpleJdbcCall(dbName, subRoutineName).execute(in);
         } catch (InvalidDataAccessApiUsageException ex) {
             throw new RpcException(subRoutineName, inParams);
         }
     }
 
-    SimpleJdbcCall getSimpleJdbcCall(String subRoutineName);
+    SimpleJdbcCall getSimpleJdbcCall(String dbName,String subRoutineName);
 }

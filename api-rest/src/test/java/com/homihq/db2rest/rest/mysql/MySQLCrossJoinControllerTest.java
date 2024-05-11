@@ -40,7 +40,7 @@ class MySQLCrossJoinControllerTest extends MySQLBaseIntegrationTest {
     void testCrossJoin() throws Exception {
 
 
-        mockMvc.perform(post("/users/_expand")
+        mockMvc.perform(post("/mysqldb//users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN))
                 )
@@ -67,7 +67,7 @@ class MySQLCrossJoinControllerTest extends MySQLBaseIntegrationTest {
     void testCrossJoinTops() throws Exception {
 
 
-        mockMvc.perform(post("/tops/_expand")
+        mockMvc.perform(post("/mysqldb//tops/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
                 )

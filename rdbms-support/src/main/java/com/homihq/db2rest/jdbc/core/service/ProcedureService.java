@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import java.util.Map;
 
 public interface ProcedureService extends SubRoutine {
-    SimpleJdbcCall getSimpleJdbcCall(String subRoutineName);
+    SimpleJdbcCall getSimpleJdbcCall(String dbName, String subRoutineName);
 
-    Map<String, Object> execute(String subRoutineName, Map<String, Object> inParams);
+    Map<String, Object> execute(String dbName, String subRoutineName, Map<String, Object> inParams);
 }

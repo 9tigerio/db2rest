@@ -37,7 +37,7 @@ class MySQLInnerJoinMultiTableControllerTest extends MySQLBaseIntegrationTest {
     void testInnerMultiTable() throws Exception {
 
 
-        mockMvc.perform(post("/film/_expand")
+        mockMvc.perform(post("/mysqldb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
                 )

@@ -11,11 +11,11 @@
         <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>api-rest</artifactId>
+    <artifactId>db2rest</artifactId>
     <version>${project.parent.version}</version>
     <packaging>jar</packaging>
-    <name>api-rest</name>
-    <description>api-rest</description>
+    <name>db2rest</name>
+    <description>db2rest</description>
     <properties>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>

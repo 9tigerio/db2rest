@@ -38,7 +38,7 @@ class MySQLInnerJoinControllerTest extends MySQLBaseIntegrationTest {
     void testInnerJoin() throws Exception {
 
 
-        mockMvc.perform(post("/review/_expand")
+        mockMvc.perform(post("/mysqldb/review/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_JOIN))
                 )

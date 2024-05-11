@@ -46,6 +46,7 @@ public class MySQLContainerConfiguration {
 
         final RoutingDataSource routingDataSource = new RoutingDataSource();
         routingDataSource.setTargetDataSources(Map.of("mysqldb", dataSource));
+        routingDataSource.setDefaultTargetDataSource(dataSource);
 
         return routingDataSource;
     }
