@@ -49,7 +49,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create a film.")
     void create() throws Exception {
 
-        mockMvc.perform(post("/film")
+        mockMvc.perform(post("/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST))
                 )
@@ -66,7 +66,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Test Create a film with error.")
     void createError() throws Exception {
 
-        mockMvc.perform(post("/film")
+        mockMvc.perform(post("/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_ERROR)))
                 //.andDo(print())
@@ -79,7 +79,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Test create a film - non existent table.")
     void createNonExistentTable() throws Exception {
 
-        mockMvc.perform(post("/films")
+        mockMvc.perform(post("/mariadb/films")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
                 .andExpect(status().isNotFound())
@@ -92,7 +92,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Test Create a director - TSID enabled")
     void createDirectorWithTSIDEnabled() throws Exception {
         //TODO - MySQL return keys not working
-        mockMvc.perform(post("/director")
+        mockMvc.perform(post("/mariadb/director")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
                         .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
@@ -109,7 +109,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create a director - with TSID explicitly OFF")
     void createDirectorWithTSIDOff() throws Exception {
 
-        mockMvc.perform(post("/director")
+        mockMvc.perform(post("/mariadb/director")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "false")
                         .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
@@ -123,7 +123,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Test Create a Vanity Van - with varchar tsid type")
     void createVanityVanWithVarcharTsIdType() throws Exception {
         //TODO - MySQL return keys not working
-        mockMvc.perform(post("/vanity_van")
+        mockMvc.perform(post("/mariadb/vanity_van")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
                         .content(objectMapper.writeValueAsString(CREATE_VANITY_VAN_REQUEST)))
@@ -139,7 +139,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @Test
     @DisplayName("Create a film with subset of columns")
     void createFilmWithSubsetOfColumns() throws Exception {
-        var result = mockMvc.perform(post("/film")
+        var result = mockMvc.perform(post("/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
@@ -154,7 +154,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
 
         var pk = JsonPath.read(result.getResponse().getContentAsString(), "$.keys.insert_id");
 
-        mockMvc.perform(get("/film")
+        mockMvc.perform(get("/mariadb/film")
                         .accept(APPLICATION_JSON)
                         .queryParam("fields", "title,release_year")
                         .queryParam("filter", String.format("film_id==%s", pk)))
@@ -171,7 +171,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Ignore if columns parameter is blank")
     void shouldIgnoreWhenColumnsQueryParamIsEmpty() throws Exception {
 
-        var result = mockMvc.perform(post("/film")
+        var result = mockMvc.perform(post("/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
@@ -185,7 +185,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
 
         var pk = JsonPath.read(result.getResponse().getContentAsString(), "$.keys.insert_id");
 
-        mockMvc.perform(get("/film")
+        mockMvc.perform(get("/mariadb/film")
                         .accept(APPLICATION_JSON)
                         .queryParam("select", "title,release_year")
                         .queryParam("filter", String.format("film_id==%s", pk)))
@@ -203,7 +203,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Column is present in columns param but not in payload")
     void columnIsPresentInColumnsQueryParamButNotInPayload() throws Exception {
 
-        var result = mockMvc.perform(post("/film")
+        var result = mockMvc.perform(post("/mariadb/film")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
@@ -220,7 +220,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Column violates not-null constraint")
     void column_violates_not_null_constraint() throws Exception {
 
-        mockMvc.perform(post("/film")
+        mockMvc.perform(post("/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))

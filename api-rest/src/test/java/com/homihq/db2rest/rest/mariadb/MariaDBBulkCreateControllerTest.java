@@ -55,7 +55,7 @@ class MariaDBBulkCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create many films.")
     void create() throws Exception {
 
-        mockMvc.perform(post("/film/bulk")
+        mockMvc.perform(post("/mariadb/film/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_REQUEST))
                 )
@@ -77,7 +77,7 @@ class MariaDBBulkCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create many films with CSV type.")
     void createCSV() throws Exception {
 
-        mockMvc.perform(post("/film/bulk")
+        mockMvc.perform(post("/mariadb/film/bulk")
                         .contentType("text/csv").accept(APPLICATION_JSON)
                         .content(CREATE_FILM_REQUEST_CSV))
                 .andExpect(status().isCreated())
@@ -95,7 +95,7 @@ class MariaDBBulkCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create many films with CSV type resulting error.")
     void createCSVWithError() throws Exception {
 
-        mockMvc.perform(post("/film/bulk")
+        mockMvc.perform(post("/mariadb/film/bulk")
                         .contentType("text/csv")
                         .accept(APPLICATION_JSON)
                         .content(CREATE_FILM_BAD_REQUEST_CSV))
@@ -109,7 +109,7 @@ class MariaDBBulkCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create many films with failure.")
     void createError() throws Exception {
 
-        mockMvc.perform(post("/film/bulk")
+        mockMvc.perform(post("/mariadb/film/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_BAD_REQUEST))
@@ -125,7 +125,7 @@ class MariaDBBulkCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create many directors.")
     void createDirector() throws Exception {
 
-        mockMvc.perform(post("/director/bulk")
+        mockMvc.perform(post("/mariadb/director/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
                         .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_REQUEST))
@@ -141,7 +141,7 @@ class MariaDBBulkCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create many directors with wrong tsid type.")
     void createDirectorWithWrongTsidType() throws Exception {
 
-        mockMvc.perform(post("/director/bulk")
+        mockMvc.perform(post("/mariadb/director/bulk")
                         .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
@@ -161,7 +161,7 @@ class MariaDBBulkCreateControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Create reviews with default tsid type.")
     void createReviewWithDefaultTsidType() throws Exception {
 
-        mockMvc.perform(post("/review/bulk")
+        mockMvc.perform(post("/mariadb/review/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
                         .content(objectMapper.writeValueAsString(BULK_CREATE_REVIEW_REQUEST))

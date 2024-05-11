@@ -35,7 +35,7 @@ class MariaDBInnerSelfJoinControllerTest extends MariaDBBaseIntegrationTest {
     void testInnerSelfJoin() throws Exception {
 
 
-        mockMvc.perform(post("/film/_expand")
+        mockMvc.perform(post("/mariadb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_SELF_JOIN))
                 )

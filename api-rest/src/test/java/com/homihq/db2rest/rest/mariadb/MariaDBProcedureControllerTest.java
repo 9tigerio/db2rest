@@ -26,7 +26,7 @@ class MariaDBProcedureControllerTest extends MariaDBBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/procedure/GetMovieRentalRateProc")
+        mockMvc.perform(post("/mariadb/procedure/GetMovieRentalRateProc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
