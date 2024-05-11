@@ -36,7 +36,7 @@ class MongoDBDeleteAllTest extends MongoBaseIntegrationTest {
     @Test
     @DisplayName("Delete all documents while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {
-        mockMvc.perform(delete("/Sakila_actors")
+        mockMvc.perform(delete("/mongo/Sakila_actors")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", Matchers.equalTo(8)))

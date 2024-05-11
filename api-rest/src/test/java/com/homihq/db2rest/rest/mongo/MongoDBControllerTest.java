@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MongoBaseIntegrationTest;
 import com.homihq.db2rest.MongoContainerConfiguration;
+import com.homihq.db2rest.multidb.DatabaseContextHolder;
 import com.homihq.db2test.mongo.multidb.RoutingMongoTemplate;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -89,6 +90,8 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                 .andExpect(jsonPath("$.keys.timestamp").exists())
                 .andDo(document("mongodb-create-an-actor"));
 
+        DatabaseContextHolder.setCurrentDbId("mongo");
+
         routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
                         .is("KEVIN")),
@@ -109,6 +112,8 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys.timestamp").exists())
                 .andDo(document("mongodb-create-an-actor-with-include-fields"));
+
+        DatabaseContextHolder.setCurrentDbId("mongo");
 
         routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
@@ -134,6 +139,8 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                 .andExpect(jsonPath("$.keys", hasSize(2)))
                 .andExpect(jsonPath("$.keys", allOf(notNullValue())))
                 .andDo(document("mongodb-bulk-create-actors"));
+
+        DatabaseContextHolder.setCurrentDbId("mongo");
 
         routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
@@ -164,6 +171,8 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                 .andExpect(jsonPath("$.keys", hasSize(2)))
                 .andExpect(jsonPath("$.keys", allOf(notNullValue())))
                 .andDo(document("mongodb-bulk-create-actors-with-include-fields"));
+
+        DatabaseContextHolder.setCurrentDbId("mongo");
 
         routingMongoTemplate.get().remove(query(Criteria
                         .where("FirstName")
