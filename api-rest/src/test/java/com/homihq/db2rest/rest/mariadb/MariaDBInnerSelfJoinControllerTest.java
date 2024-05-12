@@ -16,7 +16,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @TestWithResources
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -35,7 +35,7 @@ class MariaDBInnerSelfJoinControllerTest extends MariaDBBaseIntegrationTest {
     void testInnerSelfJoin() throws Exception {
 
 
-        mockMvc.perform(post("/mariadb/film/_expand")
+        mockMvc.perform(post(VERSION + "/mariadb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_SELF_JOIN))
                 )
