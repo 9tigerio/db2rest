@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import java.util.*;
 
 @Configuration
-@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "mongo")
+//@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "mongo")
 @RequiredArgsConstructor
 public class MongoConfiguration {
 
