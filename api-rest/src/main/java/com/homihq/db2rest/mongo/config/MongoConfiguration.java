@@ -37,8 +37,6 @@ public class MongoConfiguration {
     @ConditionalOnMissingBean(RoutingMongoTemplate.class)
     public RoutingMongoTemplate routingMongoTemplate() {
 
-        System.out.println("databaseProperties - " +  databaseProperties.getDatabases());
-
         RoutingMongoTemplate routingMongoTemplate = new RoutingMongoTemplate();
 
         if(Objects.isNull(databaseProperties.getDatabases())) return routingMongoTemplate;
