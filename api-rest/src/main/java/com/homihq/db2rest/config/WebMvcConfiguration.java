@@ -1,6 +1,6 @@
-package com.homihq.db2rest.jdbc.config;
+package com.homihq.db2rest.config;
 
-import com.homihq.db2rest.jdbc.rest.interceptor.DatabaseContextRequestInterceptor;
+import com.homihq.db2rest.interceptor.DatabaseContextRequestInterceptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

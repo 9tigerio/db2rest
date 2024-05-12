@@ -11,7 +11,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(91)
 @TestPropertySource(properties = {"db2rest.allowSafeDelete=false"})
@@ -20,7 +20,7 @@ class MySQLDeleteAllTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {
-        mockMvc.perform(delete("/mysqldb/country")
+        mockMvc.perform(delete(VERSION + "/mysqldb/country")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -38,9 +38,7 @@ public class BulkCreateController implements BulkCreateRestApi {
         List<Map<String,Object>> data =
             dataProcessor.getData(request.getInputStream());
 
-        log.info("Bulk controller");
-        log.info("data - {}", data);
-        log.info("dbName - {}", dbName);
+
 
         return
                 bulkCreateService.saveBulk(dbName, schemaName, tableName, includeColumns, data, tsIdEnabled, sequences);

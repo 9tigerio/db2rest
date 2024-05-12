@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(6)
 class CountTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
@@ -19,7 +21,7 @@ class CountTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Get count two tables same name diff schema")
     void empCount() throws Exception {
-        mockMvc.perform(get("/mysqldb/employee/count")
+        mockMvc.perform(get(VERSION + "/mysqldb/employee/count")
                         .header("Accept-Profile", "sakila")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -28,7 +30,7 @@ class CountTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                 .andDo(document("mysql-employee-count-sakila"));
 
 
-        mockMvc.perform(get("/mysqldb/employee/count")
+        mockMvc.perform(get(VERSION + "/mysqldb/employee/count")
                         .header("Accept-Profile", "wakila")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

@@ -6,13 +6,14 @@ import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 public class CountQueryController {
     private final CountQueryService countQueryService;
-    @GetMapping("/{dbName}/{tableName}/count")
+    @GetMapping(VERSION + "/{dbName}/{tableName}/count")
     public CountResponse count(@PathVariable String dbName,
                                 @PathVariable String tableName,
                                @RequestHeader(name="Accept-Profile", required = false) String schemaName,

@@ -20,31 +20,33 @@ import java.util.List;
 import java.util.Map;
 
 public interface MongoRestApi {
+    String VERSION = "/v1/mongo";
+
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{dbName}/{collectionName}")
+    @PostMapping(VERSION + "/{dbName}/{collectionName}")
     CreateResponse save(@PathVariable String collectionName,
                         @RequestParam(name = "fields", required = false) List<String> includeFields,
                         @RequestBody Map<String, Object> data);
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{dbName}/{collectionName}/bulk")
+    @PostMapping(VERSION + "/{dbName}/{collectionName}/bulk")
     CreateBulkResponse saveAll(@PathVariable String collectionName,
                                @RequestParam(name = "fields", required = false) List<String> includeFields,
                                @RequestBody List<Map<String, Object>> dataList);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{dbName}/{collectionName}")
+    @PatchMapping(VERSION + "/{dbName}/{collectionName}")
     UpdateResponse patch(@PathVariable String collectionName,
                          @RequestBody Map<String, Object> data,
                          @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{dbName}/{collectionName}")
+    @DeleteMapping(VERSION + "/{dbName}/{collectionName}")
     DeleteResponse delete(@PathVariable String collectionName,
                           @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{dbName}/{collectionName}")
+    @GetMapping(VERSION + "/{dbName}/{collectionName}")
     Object findAll(@PathVariable String collectionName,
                    @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                    @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
@@ -53,18 +55,18 @@ public interface MongoRestApi {
                    @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{dbName}/{collectionName}/one")
+    @GetMapping(VERSION + "/{dbName}/{collectionName}/one")
     Map<String, Object> findOne(@PathVariable String collectionName,
                                 @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                                 @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{dbName}/{collectionName}/count")
+    @GetMapping(VERSION + "/{dbName}/{collectionName}/count")
     CountResponse count(@PathVariable String collectionName,
                         @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{dbName}/{collectionName}/exists")
+    @GetMapping(value = VERSION + "/{dbName}/{collectionName}/exists")
     ExistsResponse exists(@PathVariable String collectionName,
                           @RequestParam(name = "filter", defaultValue = "") String filter);
 }

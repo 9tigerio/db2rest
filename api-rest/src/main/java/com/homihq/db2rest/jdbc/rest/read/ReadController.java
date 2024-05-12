@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ public class ReadController {
 
     private final ReadService readService;
 
-    @GetMapping(value = "/{dbName}/{tableName}" , produces = "application/json")
+    @GetMapping(value =VERSION + "/{dbName}/{tableName}" , produces = "application/json")
     public Object findAll(
                 @PathVariable String dbName,
                         @PathVariable String tableName,
@@ -42,7 +42,7 @@ public class ReadController {
         return readService.findAll(readContext);
     }
 
-    @PostMapping(value = "/{dbName}/{tableName}/_expand" , produces = "application/json")
+    @PostMapping(value =VERSION +  "/{dbName}/{tableName}/_expand" , produces = "application/json")
     public Object find(
             @PathVariable String dbName,
             @PathVariable String tableName,

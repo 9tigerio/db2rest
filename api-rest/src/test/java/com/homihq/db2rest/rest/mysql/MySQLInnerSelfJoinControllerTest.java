@@ -17,7 +17,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @TestWithResources
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -36,7 +36,7 @@ class MySQLInnerSelfJoinControllerTest extends MySQLBaseIntegrationTest {
     void testInnerSelfJoin() throws Exception {
 
 
-        mockMvc.perform(post("/mysqldb/film/_expand")
+        mockMvc.perform(post(VERSION + "/mysqldb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_SELF_JOIN))
                 )

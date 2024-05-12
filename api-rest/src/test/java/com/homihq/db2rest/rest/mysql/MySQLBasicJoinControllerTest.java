@@ -20,6 +20,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(10)
@@ -41,7 +42,7 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     void testLeftJoin() throws Exception {
 
 
-        mockMvc.perform(post("/mysqldb/users/_expand")
+        mockMvc.perform(post(VERSION + "/mysqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
@@ -67,7 +68,7 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     void testRightJoin() throws Exception {
 
 
-        mockMvc.perform(post("/mysqldb/users/_expand")
+        mockMvc.perform(post(VERSION + "/mysqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
                 )

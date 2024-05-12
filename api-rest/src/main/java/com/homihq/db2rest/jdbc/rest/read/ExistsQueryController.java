@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @Slf4j
 @RestController
@@ -17,7 +18,7 @@ public class ExistsQueryController {
 
 	private final ExistsQueryService existsQueryService;
 
-	@GetMapping(value = "/{dbName}/{tableName}/exists", produces = "application/json")
+	@GetMapping(value = VERSION + "/{dbName}/{tableName}/exists", produces = "application/json")
 	public ExistsResponse exists(@PathVariable String dbName,
 								@PathVariable String tableName,
                                  @RequestHeader(name="Accept-Profile", required = false) String schemaName,
@@ -36,7 +37,7 @@ public class ExistsQueryController {
 		return existsQueryService.exists(readContext);
 	}
 
-	@PostMapping(value = "/{dbName}/{tableName}/exists/_expand", produces = "application/json")
+	@PostMapping(value = VERSION + "/{dbName}/{tableName}/exists/_expand", produces = "application/json")
 	public ExistsResponse exists(@PathVariable String dbName,
 								@PathVariable String tableName,
 								 @RequestHeader(name="Accept-Profile", required = false) String schemaName,

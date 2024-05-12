@@ -11,7 +11,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(90)
 class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
@@ -19,7 +19,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Delete a Director")
     void delete_single_record() throws Exception {
-        mockMvc.perform(delete("/mysqldb/director")
+        mockMvc.perform(delete(VERSION + "/mysqldb/director")
                         .accept(APPLICATION_JSON)
                         .param("filter", "first_name==\"Alex\""))
                 .andExpect(status().isOk())
@@ -31,7 +31,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=true")
     void delete_all_records_with_allow_safe_delete_true() throws Exception {
-        mockMvc.perform(delete("/mysqldb/director")
+        mockMvc.perform(delete(VERSION + "/mysqldb/director")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
@@ -43,7 +43,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Column Does Not Exist")
     void column_does_not_exist() throws Exception {
-        mockMvc.perform(delete("/mysqldb/director")
+        mockMvc.perform(delete(VERSION + "/mysqldb/director")
                         .accept(APPLICATION_JSON)
                         .param("filter", "_name==\"Alex\""))
                 .andExpect(status().isNotFound())
@@ -56,7 +56,7 @@ class MySQLDeleteControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Foreign Key Constraint Violation")
     void foreign_key_constraint_violation() throws Exception {
-        mockMvc.perform(delete("/mysqldb/language")
+        mockMvc.perform(delete(VERSION + "/mysqldb/language")
                         .accept(APPLICATION_JSON)
                         .param("filter", "name==\"ENGLISH\""))
                 .andExpect(status().isBadRequest())
