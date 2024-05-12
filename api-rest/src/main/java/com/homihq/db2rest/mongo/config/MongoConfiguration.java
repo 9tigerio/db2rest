@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import java.util.*;
 
 @Configuration
-@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "mongo")
+//@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "mongo")
 @RequiredArgsConstructor
 public class MongoConfiguration {
 
@@ -36,13 +36,17 @@ public class MongoConfiguration {
 
         System.out.println("databaseProperties - " +  databaseProperties.getDatabases());
 
+        RoutingMongoTemplate routingMongoTemplate = new RoutingMongoTemplate();
+
+        if(Objects.isNull(databaseProperties.getDatabases())) return routingMongoTemplate;
+
         List<Map<String, String>> mongoDbs =
         databaseProperties.getDatabases()
                 .stream()
                 .filter(m -> StringUtils.equalsIgnoreCase(m.get("type"), "mongo"))
                 .toList();
 
-        RoutingMongoTemplate routingMongoTemplate = new RoutingMongoTemplate();
+
         if(!mongoDbs.isEmpty()) {
 
             for(Map<String,String> mongo : mongoDbs){
