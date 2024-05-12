@@ -26,7 +26,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.mongo.rest.api.MongoRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(491)
 @TestPropertySource(properties = {"db2rest.allowSafeDelete=false"})
@@ -36,7 +36,7 @@ class MongoDBDeleteAllTest extends MongoBaseIntegrationTest {
     @Test
     @DisplayName("Delete all documents while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {
-        mockMvc.perform(delete("/mongo/Sakila_actors")
+        mockMvc.perform(delete(VERSION + "/mongo/Sakila_actors")
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andExpect(jsonPath("$.rows", Matchers.equalTo(8)))
