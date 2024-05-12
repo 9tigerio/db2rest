@@ -46,7 +46,6 @@ import java.util.Objects;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-//@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "jdbc")
 public class JdbcConfiguration {
 
 

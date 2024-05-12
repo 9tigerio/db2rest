@@ -26,7 +26,6 @@ import java.util.*;
 
 @Slf4j
 @Configuration
-//@ConditionalOnProperty(prefix = "db2rest.datasource", name = "type", havingValue = "mongo")
 @RequiredArgsConstructor
 public class MongoConfiguration {
 

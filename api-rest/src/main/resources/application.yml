@@ -14,37 +14,10 @@ spring:
     virtual:
       enabled: true
 
-  datasource:
-
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-
-    hikari:
-      maximum-pool-size: 10
-      pool-name: db2rest-platform-hikari-pool
-      data-source-properties:
-        reWriteBatchedInserts: true
-
-  data:
-    mongodb:
-      uri: ${MONGO_URI}
-      database: ${MONGO_DB_NAME}
-
   banner:
     location: classpath:banner.txt
 
 db2rest:
-  dateTime:
-    enableDataTimeFormatting: ${ENABLE_DATETIME_FORMATTING:false}
-    timeFormat: ${TIME_FORMAT:HH:mm:ss}
-    dateFormat: ${DATE_FORMAT:yyyy-MM-dd}
-    dateTimeFormat: ${DATE_TIME_FORMAT:yyyy-MM-dd HH:mm:ss}
-
-  defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
-  datasource:
-    type: ${DATASOURCE_TYPE:jdbc}
-  includeSchemas: ${INCLUDE_SCHEMAS:#{null}}
 
   auth:
     type: ${AUTH_TYPE:none}
@@ -62,13 +35,6 @@ db2rest:
   multiTenancy:
     enabled: ${MULTI_TENANCY_ENABLED:false}
     mode: ${MULTI_TENANCY_MODE:'NONE'}
-
-
-d1:
-  accountId: ${D1_ACCOUNT_ID}
-  dbId: ${D1_DB_ID}
-  apiKey: ${D1_API_KEY}
-
 
 logging:
   level:
