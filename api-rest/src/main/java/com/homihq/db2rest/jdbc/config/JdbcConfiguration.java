@@ -25,13 +25,13 @@ import com.homihq.db2rest.jdbc.rest.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
+import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -70,22 +70,24 @@ public class JdbcConfiguration {
     private Map<Object, Object> buildDataSources() {
         final Map<Object, Object> result = new HashMap<>();
 
+        log.info("Databases - {}", databaseProperties.getDatabases());
+
         if(Objects.isNull(databaseProperties.getDatabases())) return result;
 
-        for (Map<String,String> db : databaseProperties.getDatabases()) {
-            result.put(db.get("name"), this.buildDataSource(db));
+        for (DatabaseConnectionDetail connectionDetail : databaseProperties.getDatabases()) {
+            result.put(connectionDetail.name(), this.buildDataSource(connectionDetail));
         }
 
         return result;
     }
 
 
-    private DataSource buildDataSource(Map<String, String> db) {
+    private DataSource buildDataSource(DatabaseConnectionDetail connectionDetail) {
         final HikariConfig config = new HikariConfig();
 
-        config.setJdbcUrl(db.get("url"));
-        config.setUsername(db.get("username"));
-        config.setPassword(db.get("password"));
+        config.setJdbcUrl(connectionDetail.url());
+        config.setUsername(connectionDetail.username());
+        config.setPassword(connectionDetail.password());
 
         config.setAutoCommit(false);
         return new HikariDataSource(config);

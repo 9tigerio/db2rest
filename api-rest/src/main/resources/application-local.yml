@@ -1,16 +1,19 @@
 app:
   databases:
     - name: DB1
+      type: POSTGRESQL
       url: jdbc:postgresql://localhost:5432/homidb
       username: homi2022
       password: homi2022
 
     - name: DB2
+      type: POSTGRESQL
       url: jdbc:postgresql://localhost:5432/homidb
       username: homi2022
       password: homi2022
 
     - name: DB3
+      type: POSTGRESQL
       url: jdbc:postgresql://localhost:5432/homidb
       username: homi2022
       password: homi2022
