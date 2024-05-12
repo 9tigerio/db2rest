@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @RestController
-@RequestMapping("/{dbName}/procedure")
+@RequestMapping(VERSION + "/{dbName}/procedure")
 @Slf4j
 @RequiredArgsConstructor
 public class ProcedureController {

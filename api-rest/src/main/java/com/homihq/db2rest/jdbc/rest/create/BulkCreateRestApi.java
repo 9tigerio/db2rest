@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.create;
 
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface BulkCreateRestApi {
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/{dbName}/{tableName}/bulk",
+    @PostMapping(value = VERSION + "/{dbName}/{tableName}/bulk",
             consumes = {"application/json", "text/csv"}
     )
     CreateBulkResponse save(@PathVariable String dbName,

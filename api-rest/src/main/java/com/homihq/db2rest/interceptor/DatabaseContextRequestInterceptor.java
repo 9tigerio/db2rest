@@ -1,4 +1,4 @@
-package com.homihq.db2rest.jdbc.rest.interceptor;
+package com.homihq.db2rest.interceptor;
 
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.multidb.DatabaseContextHolder;

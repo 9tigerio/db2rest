@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-@RequestMapping("/$schemas")
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+@RequestMapping(VERSION + "/$schemas")
 @Tag(name = "Schema Objects", description = "Details about schemas and tables")
 public interface SchemaRestApi {
 

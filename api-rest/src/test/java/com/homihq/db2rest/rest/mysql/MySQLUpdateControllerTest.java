@@ -17,7 +17,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(70)
 @TestWithResources
@@ -43,7 +43,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Update an existing film")
     void updateExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/mysqldb/film")
+        mockMvc.perform(patch(VERSION + "/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"ACADEMY DINOSAUR\"")
                         .content(objectMapper.writeValueAsString(UPDATE_FILM_REQUEST))
@@ -58,7 +58,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Update a non-existing film")
     void updateNonExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/mysqldb/film")
+        mockMvc.perform(patch(VERSION + "/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"BAAHUBALI\"")
                         .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_FILM_REQUEST))
@@ -73,7 +73,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Update non-existing table")
     void updateNonExistingTable() throws Exception {
 
-        mockMvc.perform(patch("/mysqldb/unknown_table")
+        mockMvc.perform(patch(VERSION + "/mysqldb/unknown_table")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
                         .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_TABLE))
@@ -87,7 +87,7 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Updating multiple films")
     void updateMultipleColumns() throws Exception {
 
-        mockMvc.perform(patch("/mysqldb/film")
+        mockMvc.perform(patch(VERSION + "/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
                         .content(objectMapper.writeValueAsString(UPDATE_FILMS_REQUEST))

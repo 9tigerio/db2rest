@@ -14,7 +14,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(151)
 class PgFunctionControllerTest extends PostgreSQLBaseIntegrationTest {
@@ -28,7 +28,7 @@ class PgFunctionControllerTest extends PostgreSQLBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/pgsqldb/function/GetMovieRentalRateFunc")
+        mockMvc.perform(post(VERSION + "/pgsqldb/function/GetMovieRentalRateFunc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

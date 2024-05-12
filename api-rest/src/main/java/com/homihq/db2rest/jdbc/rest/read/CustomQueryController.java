@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @RestController
 @Slf4j
@@ -18,7 +18,7 @@ public class CustomQueryController {
 
     private final CustomQueryService customQueryService;
 
-    @PostMapping(value = "/{dbName}/query", consumes = MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(value =VERSION + "/{dbName}/query", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findByCustomQuery(
             @PathVariable String dbName,

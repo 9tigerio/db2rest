@@ -15,7 +15,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(51)
 class MySQLFunctionControllerTest extends MySQLBaseIntegrationTest {
@@ -28,7 +28,7 @@ class MySQLFunctionControllerTest extends MySQLBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/mysqldb/function/GetMovieRentalRateFunc")
+        mockMvc.perform(post(VERSION + "/mysqldb/function/GetMovieRentalRateFunc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

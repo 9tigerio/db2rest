@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.create;
 
 import com.homihq.db2rest.core.dto.CreateResponse;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 
 public interface CreateRestApi {
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{dbName}/{tableName}")
+    @PostMapping(VERSION + "/{dbName}/{tableName}")
     CreateResponse save(@PathVariable String dbName,
                         @RequestHeader(name="Content-Profile", required = false) String schemaName,
                         @PathVariable String tableName,

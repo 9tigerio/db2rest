@@ -18,7 +18,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(170)
 @TestWithResources
@@ -46,7 +46,7 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Update an existing film")
     void updateExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/pgsqldb/film")
+        mockMvc.perform(patch(VERSION + "/pgsqldb/film")
                         .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
@@ -63,7 +63,7 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Update a non-existing film")
     void updateNonExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/pgsqldb/film")
+        mockMvc.perform(patch(VERSION+ "/pgsqldb/film")
                         .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
@@ -80,7 +80,7 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Update non-existing table")
     void updateNonExistingTable() throws Exception {
 
-        mockMvc.perform(patch("/pgsqldb/unknown_table")
+        mockMvc.perform(patch(VERSION + "/pgsqldb/unknown_table")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
@@ -95,8 +95,7 @@ class PgUpdateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Updating multiple films")
     void updateMultipleColumns() throws Exception {
 
-
-        mockMvc.perform(patch("/pgsqldb/film")
+        mockMvc.perform(patch(VERSION + "/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
                         .content(objectMapper.writeValueAsString(UPDATE_FILMS_REQUEST))

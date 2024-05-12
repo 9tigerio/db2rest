@@ -12,7 +12,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(301)
 class MariaDBReadControllerTest extends MariaDBBaseIntegrationTest {
@@ -20,7 +20,7 @@ class MariaDBReadControllerTest extends MariaDBBaseIntegrationTest {
     @DisplayName("Test find all films - all columns.")
     void findAllFilms() throws Exception {
 
-        mockMvc.perform(get("/mariadb/film")
+        mockMvc.perform(get(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 //.andDo(print())
                 .andExpect(status().isOk())
@@ -34,7 +34,7 @@ class MariaDBReadControllerTest extends MariaDBBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - 3 columns")
     void findAllFilmsWithThreeCols() throws Exception {
-        mockMvc.perform(get("/mariadb/film")
+        mockMvc.perform(get(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .param("fields", "title,description,release_year")
                         )
@@ -49,7 +49,7 @@ class MariaDBReadControllerTest extends MariaDBBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - with column alias")
     void findAllFilmsWithColumnAlias() throws Exception {
-        mockMvc.perform(get("/mariadb/film")
+        mockMvc.perform(get(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .param("fields", "title,description,release_year:releaseYear")
                 )
@@ -67,7 +67,7 @@ class MariaDBReadControllerTest extends MariaDBBaseIntegrationTest {
     @Test
     @DisplayName("Get one")
     void findOneFilm() throws Exception {
-        mockMvc.perform(get("/mariadb/film/one")
+        mockMvc.perform(get(VERSION + "/mariadb/film/one")
                         .accept(MediaType.APPLICATION_JSON)
                 .param("fields", "title")
                 .param("filter", "film_id==1"))

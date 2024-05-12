@@ -7,14 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 public class UpdateController {
 
     private final UpdateService updateService;
-    @PatchMapping("/{dbName}/{tableName}")
+    @PatchMapping(VERSION + "/{dbName}/{tableName}")
     public UpdateResponse save(@PathVariable String dbName,
                                @PathVariable String tableName,
                                @RequestHeader(name="Content-Profile", required = false) String schemaName,

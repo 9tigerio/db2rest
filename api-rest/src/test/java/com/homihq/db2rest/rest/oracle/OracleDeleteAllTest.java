@@ -12,7 +12,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(291)
 @TestPropertySource(properties = {"db2rest.allowSafeDelete=false"})
@@ -21,7 +21,7 @@ class OracleDeleteAllTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Delete all records while allowSafeDelete=false")
     void deleteAllWithAllowSafeDeleteFalse() throws Exception {
-        mockMvc.perform(delete("/oradb/COUNTRY")
+        mockMvc.perform(delete(VERSION + "/oradb/COUNTRY")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

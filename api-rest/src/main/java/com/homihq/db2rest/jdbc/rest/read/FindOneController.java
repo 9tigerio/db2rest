@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @RestController
 @Slf4j
@@ -16,7 +16,7 @@ public class FindOneController {
 
     private final FindOneService findOneService;
 
-    @GetMapping("/{dbName}/{tableName}/one")
+    @GetMapping(VERSION + "/{dbName}/{tableName}/one")
     public Map<String,Object> findOne(@PathVariable String dbName,
                                         @PathVariable String tableName,
                                       @RequestHeader(name="Accept-Profile", required = false) String schemaName,

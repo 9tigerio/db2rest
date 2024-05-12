@@ -12,7 +12,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(3)
 class ReadTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
@@ -20,7 +20,7 @@ class ReadTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @DisplayName("Test find all films - all columns - different schemas.")
     void findUsersInTwoSchemas() throws Exception {
 
-        mockMvc.perform(get("/mysqldb/users")
+        mockMvc.perform(get(VERSION + "/mysqldb/users")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .header("Accept-Profile", "sakila")
                 )
@@ -32,7 +32,7 @@ class ReadTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                 .andDo(document("mysql-get-all-users-diff-schemas-sakila"));
 
 
-        mockMvc.perform(get("/mysqldb/users")
+        mockMvc.perform(get(VERSION + "/mysqldb/users")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .header("Accept-Profile", "wakila")
 

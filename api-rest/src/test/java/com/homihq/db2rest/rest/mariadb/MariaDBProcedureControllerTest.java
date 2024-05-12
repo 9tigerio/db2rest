@@ -12,7 +12,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(350)
 class MariaDBProcedureControllerTest extends MariaDBBaseIntegrationTest {
@@ -26,7 +26,7 @@ class MariaDBProcedureControllerTest extends MariaDBBaseIntegrationTest {
                        }
                 """;
 
-        mockMvc.perform(post("/mariadb/procedure/GetMovieRentalRateProc")
+        mockMvc.perform(post(VERSION + "/mariadb/procedure/GetMovieRentalRateProc")
                         .characterEncoding(UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

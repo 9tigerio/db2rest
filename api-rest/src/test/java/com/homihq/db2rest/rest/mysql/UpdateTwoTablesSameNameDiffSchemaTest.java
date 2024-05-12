@@ -16,7 +16,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(71)
 @TestWithResources
@@ -34,7 +34,7 @@ class UpdateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @DisplayName("Update employee diff schema")
     void updateEmployee() throws Exception {
 
-        mockMvc.perform(patch("/mysqldb/employee")
+        mockMvc.perform(patch(VERSION + "/mysqldb/employee")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "sakila")
@@ -47,7 +47,7 @@ class UpdateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
                 .andDo(document("mysql-update-emp-sakila"));
 
 
-        mockMvc.perform(patch("/mysqldb/employee")
+        mockMvc.perform(patch( VERSION + "/mysqldb/employee")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "wakila")
