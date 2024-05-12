@@ -41,6 +41,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Configuration
@@ -68,6 +69,8 @@ public class JdbcConfiguration {
 
     private Map<Object, Object> buildDataSources() {
         final Map<Object, Object> result = new HashMap<>();
+
+        if(Objects.isNull(databaseProperties.getDatabases())) return result;
 
         for (Map<String,String> db : databaseProperties.getDatabases()) {
             result.put(db.get("name"), this.buildDataSource(db));
