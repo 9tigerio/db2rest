@@ -21,7 +21,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(101)
 @TestWithResources
@@ -44,7 +44,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Test find all films - all columns.")
     void findAllFilms() throws Exception {
 
-        mockMvc.perform(get("/pgsqldb/film")
+        mockMvc.perform(get(VERSION + "/pgsqldb/film")
                         .accept(APPLICATION_JSON).accept(APPLICATION_JSON))
                // .andDo(print())
                 .andExpect(status().isOk())
@@ -58,7 +58,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - 3 columns")
     void findAllFilmsWithThreeCols() throws Exception {
-        mockMvc.perform(get("/pgsqldb/film")
+        mockMvc.perform(get(VERSION + "/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .param("fields", "title,description,release_year")
                 )
@@ -73,7 +73,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - with column alias")
     void findAllFilmsWithColumnAlias() throws Exception {
-        mockMvc.perform(get("/pgsqldb/film")
+        mockMvc.perform(get(VERSION + "/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                         .param("fields", "title,description,release_year:releaseYear")
                 )
@@ -91,7 +91,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Test Custom Query with Single Result")
     void findCustomQuerySingleResult() throws Exception {
 
-        mockMvc.perform(post("/pgsqldb/query")
+        mockMvc.perform(post(VERSION + "/pgsqldb/query")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(SINGLE_RESULT_ACTOR_QUERY)))
                 //.andDo(print())
@@ -104,7 +104,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Test Custom Query returns list of results")
     void findCustomQueryMultipleResult() throws Exception {
 
-        mockMvc.perform(post("/pgsqldb/query")
+        mockMvc.perform(post(VERSION + "/pgsqldb/query")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(BULK_RESULT_ACTOR_QUERY)))
@@ -120,7 +120,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Test Custom Query returns 400 - Bad Request")
     void findCustomQueryWithError400() throws Exception {
 
-        mockMvc.perform(post("/pgsqldb/query")
+        mockMvc.perform(post(VERSION + "/pgsqldb/query")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(EMPTY_ACTOR_QUERY)))
                 // .andDo(print())
@@ -133,7 +133,7 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @DisplayName("Test find one record")
     void findOneFilm() throws Exception {
-        mockMvc.perform(get("/pgsqldb/film/one")
+        mockMvc.perform(get(VERSION + "/pgsqldb/film/one")
                         .accept(APPLICATION_JSON)
                         .param("fields", "title")
                         .param("filter", "film_id==1")

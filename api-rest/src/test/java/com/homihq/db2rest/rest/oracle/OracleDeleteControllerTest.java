@@ -12,7 +12,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(290)
 class OracleDeleteControllerTest extends OracleBaseIntegrationTest {
@@ -20,7 +20,7 @@ class OracleDeleteControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Delete a Director")
     void delete_single_record() throws Exception {
-        mockMvc.perform(delete("/oradb/DIRECTOR")
+        mockMvc.perform(delete(VERSION + "/oradb/DIRECTOR")
                         .accept(APPLICATION_JSON)
                         .param("filter", "first_name==\"Alex\""))
                 .andExpect(status().isOk())

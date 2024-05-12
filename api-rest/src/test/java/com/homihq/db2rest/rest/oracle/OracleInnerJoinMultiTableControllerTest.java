@@ -20,7 +20,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(213)
 @TestWithResources
@@ -38,7 +38,7 @@ class OracleInnerJoinMultiTableControllerTest extends OracleBaseIntegrationTest 
     void testInnerMultiTable() throws Exception {
 
 
-        mockMvc.perform(post("/oradb/FILM/_expand")
+        mockMvc.perform(post(VERSION + "/oradb/FILM/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
                 )

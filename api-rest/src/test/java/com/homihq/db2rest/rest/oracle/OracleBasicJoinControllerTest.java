@@ -18,7 +18,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(210)
 @TestWithResources
@@ -39,7 +39,7 @@ class OracleBasicJoinControllerTest extends OracleBaseIntegrationTest {
     void testLeftJoin() throws Exception {
 
 
-        mockMvc.perform(post("/oradb/USERS/_expand")
+        mockMvc.perform(post(VERSION + "/oradb/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
@@ -66,7 +66,7 @@ class OracleBasicJoinControllerTest extends OracleBaseIntegrationTest {
     void testRightJoin() throws Exception {
 
 
-        mockMvc.perform(post("/oradb/USERS/_expand")
+        mockMvc.perform(post(VERSION + "/oradb/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
                 )

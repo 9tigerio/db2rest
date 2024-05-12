@@ -1,5 +1,6 @@
 package com.homihq.db2rest.rest.oracle;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
@@ -43,7 +44,7 @@ class OracleUpdateControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Update an existing film")
     void updateExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/oradb/FILM")
+        mockMvc.perform(patch(VERSION + "/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"ACADEMY DINOSAUR\"")
                         .content(objectMapper.writeValueAsString(UPDATE_FILM_REQUEST))
@@ -58,7 +59,7 @@ class OracleUpdateControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Update a non-existing film")
     void updateNonExistingFilm() throws Exception {
 
-        mockMvc.perform(patch("/oradb/FILM")
+        mockMvc.perform(patch(VERSION + "/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"BAAHUBALI\"")
                         .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_FILM_REQUEST))
@@ -73,7 +74,7 @@ class OracleUpdateControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Update non-existing table")
     void updateNonExistingTable() throws Exception {
 
-        mockMvc.perform(patch("/oradb/unknown_table")
+        mockMvc.perform(patch(VERSION + "/oradb/unknown_table")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
                         .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_TABLE))
@@ -87,7 +88,7 @@ class OracleUpdateControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Updating multiple films")
     void updateMultipleColumns() throws Exception {
 
-        mockMvc.perform(patch("/oradb/FILM")
+        mockMvc.perform(patch(VERSION + "/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
                         .content(objectMapper.writeValueAsString(UPDATE_FILMS_REQUEST))
