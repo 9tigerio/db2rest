@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.config.dialect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -56,6 +58,13 @@ public class PostGreSQLDialect implements Dialect {
             }
             else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "year")) {
                 data.put(columnName, Integer.valueOf(value.toString().trim()));
+            }
+            else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "_varchar")) {
+
+                log.info("Array type found");
+
+                data.put(columnName, new ArrayTypeValueHolder("java.sql.Array", "varchar",
+                        ((ArrayList) value).toArray() ));
             }
 
         }

@@ -47,4 +47,4 @@ logging:
       jdbc.service: INFO
     org.springframework.web : INFO
     org.springframework.beans : INFO
-    org.springframework.jdbc: INFO
+    org.springframework.jdbc: trace

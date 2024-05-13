@@ -16,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Slf4j
 @RequiredArgsConstructor
 public class JdbcDeleteService implements DeleteService {
@@ -52,15 +54,19 @@ public class JdbcDeleteService implements DeleteService {
         log.info("{}", sql);
         log.info("{}", context.getParamMap());
 
-        try {
-            return dbOperationService.delete(
-                    jdbcManager.getNamedParameterJdbcTemplate(dbName),
-                    context.getParamMap(),
-                    sql);
-        } catch (DataAccessException e) {
-            log.error("Error in delete op : " , e);
-            throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
-        }
+        Integer i = this.jdbcManager.getTxnTemplate(dbName).execute(status -> {
+            try {
+                return dbOperationService.delete(
+                        jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                        context.getParamMap(),
+                        sql);
+            } catch (DataAccessException e) {
+                log.error("Error in delete op : " , e);
+                throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
+            }
+        });
+
+        return Objects.isNull(i) ? 0 : i;
     }
 
 

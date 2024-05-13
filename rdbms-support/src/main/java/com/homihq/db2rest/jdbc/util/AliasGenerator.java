@@ -1,11 +1,12 @@
-package com.homihq.db2rest.jdbc.core.schema;
+package com.homihq.db2rest.jdbc.util;
 
 
 
 import java.util.Random;
 
 
-public class AliasGenerator {
+public class
+AliasGenerator {
     private static final Random random = new Random();
 
     public static String getAlias(String sqlIdentifier) {

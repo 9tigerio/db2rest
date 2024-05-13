@@ -17,8 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.jdbc.support.MetaDataAccessException;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -35,6 +37,9 @@ public final class JdbcManager {
 
     private Map<String, DbDetailHolder> dbDetailHolderMap = new ConcurrentHashMap<>();
     private Map<String, NamedParameterJdbcTemplate> namedParameterJdbcTemplateMap = new ConcurrentHashMap<>();
+    private Map<String, JdbcTransactionManager> jdbcTransactionManagerMap = new ConcurrentHashMap<>();
+
+    private Map<String, TransactionTemplate> transactionTemplateMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     private void reload() {
@@ -62,6 +67,13 @@ public final class JdbcManager {
                 DataSource ds = dataSourceMap.get(dbName);
                 loadMetaData((String) dbName, ds);
                 this.namedParameterJdbcTemplateMap.put((String) dbName, new NamedParameterJdbcTemplate(ds));
+
+                JdbcTransactionManager jdbcTransactionManager = new JdbcTransactionManager(ds);
+
+                this.jdbcTransactionManagerMap.put((String) dbName, jdbcTransactionManager);
+
+                this.transactionTemplateMap.put((String) dbName, new TransactionTemplate(jdbcTransactionManager));
+
             }
         }
         else{
@@ -135,6 +147,10 @@ public final class JdbcManager {
 
     public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate(String dbName) {
         return this.namedParameterJdbcTemplateMap.get(dbName);
+    }
+
+    public TransactionTemplate getTxnTemplate(String dbName) {
+        return this.transactionTemplateMap.get(dbName);
     }
 
     public Dialect getDialect(String dbName) {
