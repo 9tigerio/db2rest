@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.homihq.db2rest.jdbc.core.schema.AliasGenerator.getAlias;
+import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
 import static com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap.getRSQLOperator;
 import static com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap.getSQLOperator;
 

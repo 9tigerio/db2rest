@@ -1,5 +1,7 @@
 package com.homihq.db2rest.jdbc;
 
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
@@ -15,6 +17,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import java.sql.Array;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +35,8 @@ public class JdbcOperationService implements DbOperationService {
 
     @Override
     public List<Map<String, Object>> read(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql) {
-        return namedParameterJdbcTemplate.queryForList(sql, new MapSqlParameterSource(paramMap));
+        return namedParameterJdbcTemplate
+                .queryForList(sql, new MapSqlParameterSource(paramMap));
     }
 
     @Override
@@ -74,14 +80,43 @@ public class JdbcOperationService implements DbOperationService {
     public CreateResponse create(
             NamedParameterJdbcTemplate namedParameterJdbcTemplate,
             Map<String, Object> data, String sql, DbTable dbTable) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        int row = namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(data),
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+
+        for(String key : data.keySet()) {
+
+            Object value = data.get(key);
+
+            if(value instanceof ArrayTypeValueHolder) {
+                ArrayTypeValueHolder val = (ArrayTypeValueHolder) value;
+                value = processArrayValue(namedParameterJdbcTemplate, val);
+            }
+
+            parameterSource.addValue(key, value);
+        }
+
+        int row = namedParameterJdbcTemplate.update(sql, parameterSource,
                 keyHolder, dbTable.getKeyColumnNames()
         );
 
-
+        log.info("*** update fired returning ***");
         return new CreateResponse(row, keyHolder.getKeys());
+    }
+
+    private Array processArrayValue(NamedParameterJdbcTemplate namedParameterJdbcTemplate, ArrayTypeValueHolder val) {
+
+        try {
+            Connection connection =
+                namedParameterJdbcTemplate.getJdbcTemplate().getDataSource().getConnection();
+
+            log.info("connection - {}", connection);
+
+            return connection.createArrayOf(val.sqlType(), val.values());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new GenericDataAccessException("Unable to convert Array field");
+        }
     }
 
     @Override

@@ -41,10 +41,11 @@ public record DbColumn(String tableName, String name, String alias, String table
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "TIMESTAMP");
     }
 
+    //TODO move to dialect
     @Deprecated
     public boolean isIntFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
-                "SMALLINT", "int8", "BIGINT UNSIGNED","INTEGER", "NUMBER");
+                "SMALLINT", "int8", "int4" , "BIGINT UNSIGNED","INTEGER", "NUMBER");
     }
     @Deprecated
     public boolean isStringFamily() {

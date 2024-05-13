@@ -61,7 +61,6 @@ public class JdbcConfiguration {
 
         final RoutingDataSource routingDataSource = new RoutingDataSource();
         routingDataSource.setTargetDataSources(dataSources);
-        //routingDataSource.setDefaultTargetDataSource(dataSources.get(DataSourceType.PRIMARY));
 
         return routingDataSource;
     }

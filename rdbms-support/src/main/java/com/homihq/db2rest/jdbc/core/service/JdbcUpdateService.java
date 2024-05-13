@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @Slf4j
@@ -31,7 +32,6 @@ public class JdbcUpdateService implements UpdateService {
     private final DbOperationService dbOperationService;
 
     @Override
-    @Transactional
     public int patch(String dbName, String schemaName, String tableName, Map<String, Object> data, String filter) {
 
         DbTable dbTable = jdbcManager.getTable(dbName, schemaName, tableName);
@@ -63,14 +63,21 @@ public class JdbcUpdateService implements UpdateService {
         log.debug("{}", sql);
         log.debug("{}", context.getParamMap());
 
-        try {
-            return dbOperationService.update(
-                    jdbcManager.getNamedParameterJdbcTemplate(dbName),
-                    context.getParamMap(), sql);
-        } catch (DataAccessException e) {
-            log.error("Error in delete op : " , e);
-            throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
-        }
+
+        Integer i = this.jdbcManager.getTxnTemplate(dbName).execute(status -> {
+            try {
+                return dbOperationService.update(
+                        jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                        context.getParamMap(), sql);
+            } catch (DataAccessException e) {
+                log.error("Error in delete op : " , e);
+                status.setRollbackOnly();
+                throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
+            }
+
+        });
+
+        return Objects.isNull(i) ? 0 : i;
     }
 
 

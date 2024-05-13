@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.homihq.db2rest.jdbc.core.schema.AliasGenerator.getAlias;
+import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
 
 public interface MetaDataExtraction {
     boolean canHandle(String database);

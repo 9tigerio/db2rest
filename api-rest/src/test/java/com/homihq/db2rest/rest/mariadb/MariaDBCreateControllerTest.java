@@ -84,7 +84,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
                 .andExpect(status().isNotFound())
-                //.andDo(print())
+                .andDo(print())
                 .andDo(document("mariadb-create-a-film-no-table"));
 
     }

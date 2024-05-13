@@ -33,7 +33,6 @@ public class JdbcBulkCreateService implements BulkCreateService {
 
 
     @Override
-    @Transactional
     public CreateBulkResponse saveBulk(
             String dbName,
             String schemaName, String tableName,
@@ -102,10 +101,25 @@ public class JdbcBulkCreateService implements BulkCreateService {
             log.debug("Data - {}", dataList);
 
             CreateBulkResponse createBulkResponse =
-                    this.jdbcManager.getDialect(dbName).supportBatchReturnKeys() ?
-                    dbOperationService.batchUpdate(
-                            jdbcManager.getNamedParameterJdbcTemplate(dbName),
-                            dataList, sql, dbTable) : dbOperationService.batchUpdate(jdbcManager.getNamedParameterJdbcTemplate(dbName), dataList, sql);
+                this.jdbcManager.getTxnTemplate(dbName).execute(status -> {
+                    try {
+
+                        return
+                                this.jdbcManager.getDialect(dbName).supportBatchReturnKeys() ?
+                                        dbOperationService.batchUpdate(
+                                                jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                                                dataList, sql, dbTable) :
+                                        dbOperationService.batchUpdate(jdbcManager.getNamedParameterJdbcTemplate(dbName), dataList, sql);
+                    }
+                    catch(Exception e) {
+                        status.setRollbackOnly();
+                        throw new GenericDataAccessException("Error Bulk insert - " + e.getMessage());
+                    }
+
+                });
+
+
+
 
             if(tsIdEnabled && Objects.isNull(createBulkResponse.keys())){
                 return new CreateBulkResponse(createBulkResponse.rows(), tsIds);

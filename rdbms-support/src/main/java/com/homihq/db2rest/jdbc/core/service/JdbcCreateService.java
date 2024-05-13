@@ -32,9 +32,7 @@ public class JdbcCreateService implements CreateService {
     private final JdbcManager jdbcManager;
     private final DbOperationService dbOperationService;
 
-
     @Override
-    @Transactional
     public CreateResponse save(
             String dbName,
             String schemaName, String tableName, List<String> includedColumns,
@@ -53,7 +51,7 @@ public class JdbcCreateService implements CreateService {
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
 
                 for(DbColumn pkColumn : pkColumns) {
-                    log.debug("Adding primary key columns - {}", pkColumn.name());
+                    log.info("Adding primary key columns - {}", pkColumn.name());
                     insertableColumns.add(pkColumn.name());
                 }
 
@@ -87,17 +85,31 @@ public class JdbcCreateService implements CreateService {
             log.info("Data - {}", data);
 
 
-            CreateResponse createResponse = dbOperationService.create(
-                    jdbcManager.getNamedParameterJdbcTemplate(dbName),
-                    data, sql, dbTable);
+            CreateResponse createResponse =
+                    this.jdbcManager.getTxnTemplate(dbName).execute(status ->
+                        {
+                            try {
+                            return dbOperationService.create(
+                                    jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                                    data, sql, dbTable);
+                            }
+                            catch(Exception e) {
+                                status.setRollbackOnly();
+                                throw new GenericDataAccessException("Error insert - " + e.getMessage());
+                            }
+                        }
+                    );
 
-            if(tsIdEnabled && Objects.isNull(createResponse.keys())) {
-                return new CreateResponse(createResponse.row(), tsIdMap);
+
+            if(tsIdEnabled) {
+                assert createResponse != null;
+                if (Objects.isNull(createResponse.keys())) {
+                    return new CreateResponse(createResponse.row(), tsIdMap);
+                }
             }
 
             return createResponse;
         } catch (DataAccessException e) {
-
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
