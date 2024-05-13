@@ -1,6 +1,6 @@
 app:
-  version: @project.version@
-  name: @project.name@
+  version: 1.0.0-SNAPSHOT
+  name: db2rest
 
 
 server:
@@ -16,6 +16,10 @@ spring:
 
   banner:
     location: classpath:banner.txt
+
+  thymeleaf:
+    check-template-location: false
+    cache: true
 
 db2rest:
 
@@ -41,6 +45,6 @@ logging:
     com.homihq.db2rest:
       rest: INFO
       jdbc.service: INFO
-    org.springframework.web : DEBUG
+    org.springframework.web : INFO
     org.springframework.beans : INFO
     org.springframework.jdbc: INFO

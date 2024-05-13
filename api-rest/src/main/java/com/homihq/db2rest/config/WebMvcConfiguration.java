@@ -17,7 +17,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        log.info("==== Registering DatabaseContextRequestInterceptor ====");
         registry.addInterceptor(databaseContextRequestInterceptor);
     }
 }

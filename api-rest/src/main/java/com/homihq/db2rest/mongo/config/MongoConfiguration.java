@@ -40,8 +40,6 @@ public class MongoConfiguration {
 
         if(Objects.isNull(databaseProperties.getDatabases())) return routingMongoTemplate;
 
-        log.info("Databases - {}", databaseProperties.getDatabases());
-
         List<DatabaseConnectionDetail> mongoDbs =
         databaseProperties.getDatabases()
                 .stream()
@@ -54,6 +52,9 @@ public class MongoConfiguration {
                 routingMongoTemplate.add(mongo.name(),
                         mongoTemplate(mongo.url(), mongo.database()));
             }
+        }
+        else{
+            log.info("*** No MongoDB configured.");
         }
 
         return routingMongoTemplate;

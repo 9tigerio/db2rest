@@ -51,10 +51,12 @@ public final class JdbcManager {
     }
 
     private void loadAllMetaData() {
-        log.info("Loading meta data for all datasource.");
+        log.info("Attempting to load meta-data for all relational data-sources.");
 
         if(dataSource instanceof RoutingDataSource) {
             Map<Object,DataSource> dataSourceMap = ((RoutingDataSource) dataSource).getResolvedDataSources();
+
+            if(dataSourceMap.isEmpty()) log.info("**** No datasource to load.");
 
             for(Object dbName : dataSourceMap.keySet()) {
                 DataSource ds = dataSourceMap.get(dbName);
@@ -64,7 +66,6 @@ public final class JdbcManager {
         }
         else{
             log.info("Not routing data source. Unable to load database metadata.");
-            // loadMetaData();
         }
     }
 

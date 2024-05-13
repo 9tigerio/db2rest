@@ -69,9 +69,11 @@ public class JdbcConfiguration {
     private Map<Object, Object> buildDataSources() {
         final Map<Object, Object> result = new HashMap<>();
 
-        log.info("Databases - {}", databaseProperties.getDatabases());
+        if(Objects.isNull(databaseProperties.getDatabases())) {
+            log.info("*** No database configured.");
+            return result;
+        }
 
-        if(Objects.isNull(databaseProperties.getDatabases())) return result;
 
         for (DatabaseConnectionDetail connectionDetail : databaseProperties.getDatabases()) {
             result.put(connectionDetail.name(), this.buildDataSource(connectionDetail));
