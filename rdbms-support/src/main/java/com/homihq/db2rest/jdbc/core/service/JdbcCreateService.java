@@ -113,10 +113,7 @@ public class JdbcCreateService implements CreateService {
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
-        catch (Exception e) {
-            log.error("Error", e);
-            throw new GenericDataAccessException(e.getMessage());
-        }
+
 
     }
 
