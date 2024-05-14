@@ -2,6 +2,7 @@ package com.homihq.db2rest.jdbc.core;
 
 import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.ExistsResponse;
+import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
@@ -13,7 +14,9 @@ import java.util.Map;
 public interface DbOperationService {
     int update(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql);
 
-    List<Map<String, Object>> read(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql);
+    List<Map<String, Object>> read(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+                                   Map<String, Object> paramMap, String sql,
+                                   Dialect dialect);
 
     Map<String, Object> findOne(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String sql, Map<String, Object> paramMap);
 

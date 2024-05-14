@@ -42,7 +42,6 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>io.hypersistence</groupId>
             <artifactId>tsid</artifactId>

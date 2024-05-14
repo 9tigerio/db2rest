@@ -1,21 +1,21 @@
 package com.homihq.db2rest.jdbc.config.dialect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.postgresql.jdbc.PgArray;
 import org.postgresql.util.PGobject;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 @RequiredArgsConstructor
@@ -91,7 +91,7 @@ public class PostGreSQLDialect implements Dialect {
 
             return pGobject;
         } catch (Exception e) {
-            throw new RuntimeException(e.getLocalizedMessage());
+            throw new GenericDataAccessException("Error converting to JSON type - " + e.getLocalizedMessage());
         }
     }
 
@@ -110,9 +110,26 @@ public class PostGreSQLDialect implements Dialect {
         return getQuotedName(table.schema()) + "." + getQuotedName(table.name());
     }
 
-
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
         return StringUtils.equalsIgnoreCase(productName, "PostGreSQL");
+    }
+
+    @Override
+    public List<String> convertToStringArray(Object object) {
+
+        if(Objects.nonNull(object)) {
+
+            PgArray pgArray = (PgArray)object;
+            try {
+                Object o = pgArray.getArray();
+                return Arrays.asList((String[])o);
+            } catch (Exception e) {
+                throw new GenericDataAccessException("Error converting to Array type - " + e.getLocalizedMessage());
+            }
+
+        }
+
+        return Dialect.super.convertToStringArray(object);
     }
 }
