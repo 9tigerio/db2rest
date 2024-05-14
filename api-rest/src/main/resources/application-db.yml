@@ -1,0 +1,16 @@
+app:
+  databases:
+    - name: ${DB_NAME:pgdb}
+      type: POSTGRESQL
+      url: jdbc:postgresql://localhost:5432/homidb
+      username: homi2022
+      password: homi2022
+      schemas:
+      connectionProperties:
+        ssl: false
+      envProperties:
+          enableDatetimeFormatting: ${ENABLE_DATETIME_FORMATTING:false}
+          timeFormat: ${TIME_FORMAT:HH:mm:ss}
+          dateFormat: ${DATE_FORMAT:yyyy-MM-dd}
+          dateTimeFormat: ${DATE_TIME_FORMAT:yyyy-MM-dd HH:mm:ss}
+          defaultFetchLimit : ${DEFAULT_FETCH_LIMIT:100}
