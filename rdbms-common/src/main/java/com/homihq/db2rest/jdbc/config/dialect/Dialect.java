@@ -90,4 +90,6 @@ public interface Dialect {
         }
 
     }
+
+    default List<String> convertToStringArray(Object object) {return List.of();}
 }

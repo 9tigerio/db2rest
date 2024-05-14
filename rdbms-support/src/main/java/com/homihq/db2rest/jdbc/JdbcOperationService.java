@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc;
 
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
@@ -8,6 +9,7 @@ import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.ExistsResponse;
+import com.homihq.db2rest.jdbc.core.SimpleRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -34,9 +36,10 @@ public class JdbcOperationService implements DbOperationService {
     }
 
     @Override
-    public List<Map<String, Object>> read(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql) {
+    public List<Map<String, Object>> read(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql,
+                                          Dialect dialect) {
         return namedParameterJdbcTemplate
-                .queryForList(sql, new MapSqlParameterSource(paramMap));
+                .query(sql, new MapSqlParameterSource(paramMap), new SimpleRowMapper(dialect));
     }
 
     @Override
