@@ -23,6 +23,14 @@ spring:
 
 db2rest:
 
+  dateTime:
+    enableDataTimeFormatting: ${ENABLE_DATETIME_FORMATTING:false}
+    timeFormat: ${TIME_FORMAT:HH:mm:ss}
+    dateFormat: ${DATE_FORMAT:yyyy-MM-dd}
+    dateTimeFormat: ${DATE_TIME_FORMAT:yyyy-MM-dd HH:mm:ss}
+
+    defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
+
   auth:
     type: ${AUTH_TYPE:none}
 

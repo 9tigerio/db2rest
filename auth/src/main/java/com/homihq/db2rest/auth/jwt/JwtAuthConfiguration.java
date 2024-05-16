@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 @ConditionalOnProperty(prefix = "db2rest.auth", name="type" , havingValue = "jwt")
 public class JwtAuthConfiguration {
 
