@@ -6,6 +6,7 @@ import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
+import com.homihq.db2rest.jdbc.dto.BindVariable;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public interface DbOperationService {
 
     CountResponse count(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql);
 
-    Object queryCustom(NamedParameterJdbcTemplate namedParameterJdbcTemplate,boolean single, String sql, Map<String, Object> params);
+    Object queryCustom(NamedParameterJdbcTemplate namedParameterJdbcTemplate,boolean single, String sql, Map<String, BindVariable> params);
 
     int delete(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> params, String sql);
 

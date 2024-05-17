@@ -53,6 +53,6 @@ logging:
     com.homihq.db2rest:
       rest: INFO
       jdbc.service: INFO
-    org.springframework.web : INFO
+    org.springframework.web : DEBUG
     org.springframework.beans : INFO
-    org.springframework.jdbc: trace
+    org.springframework.jdbc: INFO
