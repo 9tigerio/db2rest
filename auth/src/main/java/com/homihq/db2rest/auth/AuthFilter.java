@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
     private final List<AuthProvider> authProviders;
     private final ObjectMapper objectMapper;
+    String AUTH_HEADER = "Authorization";
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
@@ -30,13 +32,17 @@ public class AuthFilter extends OncePerRequestFilter {
 
         log.info("Handling Auth");
 
-        String AUTH_HEADER = "Authorization";
+
         String authHeaderValue = request.getHeader(AUTH_HEADER);
 
-        Optional<AuthProvider> authProvider =
-        authProviders.stream()
-                        .filter(ap -> ap.canHandle(authHeaderValue))
-                                .findFirst();
+        if(StringUtils.isBlank(authHeaderValue)) {
+            addMissingAuthTokenError(request, response);
+            return;
+        }
+
+        Optional<AuthProvider> authProvider = authProviders.stream()
+                                            .filter(ap -> ap.canHandle(authHeaderValue))
+                                            .findFirst();
 
         if(authProvider.isEmpty()) {
             addAuthenticationError(request, response);
@@ -51,6 +57,23 @@ public class AuthFilter extends OncePerRequestFilter {
         logger.info("Completed Auth Filter");
     }
 
+    private void addMissingAuthTokenError(HttpServletRequest request , HttpServletResponse response) throws IOException{
+        var body = new LinkedHashMap<>();
+        body.put("type", "https://db2rest/jwt-token-not-found");
+        body.put("title", "Auth token not provided in header");
+        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+
+        body.put("detail", "Auth token not provided in header. Please add header " + AUTH_HEADER + " with valid Auth token.");
+        body.put("instance", request.getRequestURI());
+        body.put("errorCategory", "Invalid-Auth-Token");
+        body.put("timestamp", Instant.now());
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+        objectMapper.writeValue(response.getWriter(), body);
+    }
+
 
     private void addAuthenticationError(HttpServletRequest request , HttpServletResponse response) throws IOException{
         var body = new LinkedHashMap<>();
@@ -60,7 +83,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
         body.put("detail", "No Auth Handler found");
         body.put("instance", request.getRequestURI());
-        body.put("errorCategory", "Unauthorized");
+        body.put("errorCategory", "Auth-error");
         body.put("timestamp", Instant.now());
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
