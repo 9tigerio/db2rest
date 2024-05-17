@@ -30,6 +30,14 @@
     </distributionManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>auth</artifactId>
+            <version>1.0.0-RC1</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rest-common</artifactId>

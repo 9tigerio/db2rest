@@ -23,6 +23,14 @@ spring:
 
 db2rest:
 
+  dateTime:
+    enableDataTimeFormatting: ${ENABLE_DATETIME_FORMATTING:false}
+    timeFormat: ${TIME_FORMAT:HH:mm:ss}
+    dateFormat: ${DATE_FORMAT:yyyy-MM-dd}
+    dateTimeFormat: ${DATE_TIME_FORMAT:yyyy-MM-dd HH:mm:ss}
+
+    defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
+
   auth:
     type: ${AUTH_TYPE:none}
 
@@ -45,6 +53,6 @@ logging:
     com.homihq.db2rest:
       rest: INFO
       jdbc.service: INFO
-    org.springframework.web : INFO
+    org.springframework.web : DEBUG
     org.springframework.beans : INFO
-    org.springframework.jdbc: trace
+    org.springframework.jdbc: INFO

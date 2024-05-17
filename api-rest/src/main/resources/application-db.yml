@@ -8,7 +8,7 @@ app:
       schemas:
       connectionProperties:
         ssl: false
-      envProperties:
+      envProperties: # Not used yet
           enableDatetimeFormatting: ${ENABLE_DATETIME_FORMATTING:false}
           timeFormat: ${TIME_FORMAT:HH:mm:ss}
           dateFormat: ${DATE_FORMAT:yyyy-MM-dd}

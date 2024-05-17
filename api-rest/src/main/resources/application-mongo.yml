@@ -7,7 +7,7 @@ app:
       password: homi2022
       connectionProperties:
         ssl: false
-      envProperties:
+      envProperties: # Not used yet
           enableDatetimeFormatting: true
           timeFormat: 'HH:mm:ss'
           dateFormat: 'dd-MM-yyyy'

@@ -1,7 +1,7 @@
-package com.homihq.db2rest.auth.jwt;
+package com.homihq.db2rest.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.auth.jwt.service.JwtAuthService;
+import com.homihq.db2rest.auth.common.AuthProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,37 +11,67 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
-public class JwtAuthFilter extends OncePerRequestFilter {
+public class AuthFilter extends OncePerRequestFilter {
 
-    private final JwtAuthService jwtAuthService;
+    private final List<AuthProvider> authProviders;
     private final ObjectMapper objectMapper;
-    final String JWT_KEY_HEADER = "Authorization";
+    String AUTH_HEADER = "Authorization";
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
 
-        String jwtHeader = request.getHeader(JWT_KEY_HEADER);
-        if (StringUtils.isBlank(jwtHeader) || !jwtHeader.startsWith("Bearer ")) {
-            addMissingJwtTokenError(request, response);
+
+        log.info("Handling Auth");
+
+
+        String authHeaderValue = request.getHeader(AUTH_HEADER);
+
+        if(StringUtils.isBlank(authHeaderValue)) {
+            addMissingAuthTokenError(request, response);
             return;
         }
 
-        String token = StringUtils.replace(jwtHeader, "Bearer ", "", 1);
-        if (!jwtAuthService.isValidToken(token)) {
+        Optional<AuthProvider> authProvider = authProviders.stream()
+                                            .filter(ap -> ap.canHandle(authHeaderValue))
+                                            .findFirst();
+
+        if(authProvider.isEmpty()) {
             addAuthenticationError(request, response);
             return;
         }
+        else{
+            authProvider.get().handle(authHeaderValue);
+        }
 
         filterChain.doFilter(request, response);
-        logger.info("Completed Jwt Auth Filter");
+
+        logger.info("Completed Auth Filter");
+    }
+
+    private void addMissingAuthTokenError(HttpServletRequest request , HttpServletResponse response) throws IOException{
+        var body = new LinkedHashMap<>();
+        body.put("type", "https://db2rest/jwt-token-not-found");
+        body.put("title", "Auth token not provided in header");
+        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+
+        body.put("detail", "Auth token not provided in header. Please add header " + AUTH_HEADER + " with valid Auth token.");
+        body.put("instance", request.getRequestURI());
+        body.put("errorCategory", "Invalid-Auth-Token");
+        body.put("timestamp", Instant.now());
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+        objectMapper.writeValue(response.getWriter(), body);
     }
 
 
@@ -51,26 +81,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         body.put("title", "Unauthorized");
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
 
-        body.put("detail", "Invalid JWT Token");
+        body.put("detail", "No Auth Handler found");
         body.put("instance", request.getRequestURI());
-        body.put("errorCategory", "Unauthorized");
-        body.put("timestamp", Instant.now());
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-        objectMapper.writeValue(response.getWriter(), body);
-    }
-
-    private void addMissingJwtTokenError(HttpServletRequest request , HttpServletResponse response) throws IOException{
-        var body = new LinkedHashMap<>();
-        body.put("type", "https://db2rest/jwt-token-not-found");
-        body.put("title", "JWT token not provided in header");
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-
-        body.put("detail", "JWT token not provided in header. Please add header " + JWT_KEY_HEADER + " with valid JWT token.");
-        body.put("instance", request.getRequestURI());
-        body.put("errorCategory", "Invalid-JWT-Token");
+        body.put("errorCategory", "Auth-error");
         body.put("timestamp", Instant.now());
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
