@@ -28,12 +28,12 @@ public class DatabaseContextRequestInterceptor implements AsyncHandlerIntercepto
 
            if(Objects.isNull(pathVariables)) throw new GenericDataAccessException("Database ID not found.");
 
-           String dbName = pathVariables.get("dbName");
+           String dbId = pathVariables.get("dbId");
 
-           log.info("Db identifier : {}", dbName);
+           log.info("Db identifier : {}", dbId);
 
-           if(StringUtils.isNotBlank(dbName)) {
-               this.setTenantContext(dbName);
+           if(StringUtils.isNotBlank(dbId)) {
+               this.setTenantContext(dbId);
            }
            else{
                log.debug("DB could not be determined.");

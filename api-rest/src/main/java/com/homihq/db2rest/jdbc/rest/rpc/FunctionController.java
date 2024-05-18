@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @RestController
-@RequestMapping(VERSION + "/{dbName}/function")
+@RequestMapping(VERSION + "/{dbId}/function")
 @Slf4j
 @RequiredArgsConstructor
 public class FunctionController {
@@ -18,12 +18,12 @@ public class FunctionController {
 
     @PostMapping("/{funcName}")
     public ResponseEntity<Map<String, Object>> execute(
-                @PathVariable String dbName,
+                @PathVariable String dbId,
                 @PathVariable String funcName,
                 @RequestBody Map<String,Object> inParams) {
 
         log.debug("Execute function {} with IN params {}", funcName, inParams.entrySet());
 
-        return ResponseEntity.ok(functionService.execute(dbName, funcName, inParams));
+        return ResponseEntity.ok(functionService.execute(dbId, funcName, inParams));
     }
 }

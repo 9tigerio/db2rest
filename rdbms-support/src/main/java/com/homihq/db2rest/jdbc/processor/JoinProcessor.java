@@ -45,10 +45,10 @@ public class JoinProcessor implements ReadProcessor {
 
         for(JoinDetail joinDetail : joins) {
 
-            rootTable = reviewRootTable(readContext.getDbName(), allJoinTables, joinDetail, rootTable);
+            rootTable = reviewRootTable(readContext.getDbId(), allJoinTables, joinDetail, rootTable);
 
             String tableName = joinDetail.table();
-            DbTable table = jdbcManager.getTable(readContext.getDbName(), readContext.getSchemaName(), tableName);
+            DbTable table = jdbcManager.getTable(readContext.getDbId(), readContext.getSchemaName(), tableName);
 
 
             table = table.copyWithAlias(getAlias(tableName));
@@ -64,7 +64,7 @@ public class JoinProcessor implements ReadProcessor {
         }
     }
 
-    private DbTable reviewRootTable(String dbName, List<DbTable> allJoinTables, JoinDetail joinDetail, DbTable rootTable) {
+    private DbTable reviewRootTable(String dbId, List<DbTable> allJoinTables, JoinDetail joinDetail, DbTable rootTable) {
         if(allJoinTables.size() == 1) return rootTable;
 
         if(joinDetail.hasWith()) {
@@ -75,7 +75,7 @@ public class JoinProcessor implements ReadProcessor {
                     .findFirst();
 
             //look in cache
-            return newRoot.orElseGet(() -> jdbcManager.getTable(dbName, joinDetail.schemaName(), withTable));
+            return newRoot.orElseGet(() -> jdbcManager.getTable(dbId, joinDetail.schemaName(), withTable));
         }
 
         return rootTable;
@@ -109,7 +109,7 @@ public class JoinProcessor implements ReadProcessor {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcManager.getDialect(readContext.getDbName())));
+                            dbWhere, jdbcManager.getDialect(readContext.getDbId())));
 
             join.addAdditionalWhere(where);
 

@@ -16,9 +16,9 @@ public class ReadController {
 
     private final ReadService readService;
 
-    @GetMapping(value =VERSION + "/{dbName}/{tableName}" , produces = "application/json")
+    @GetMapping(value =VERSION + "/{dbId}/{tableName}" , produces = "application/json")
     public Object findAll(
-                @PathVariable String dbName,
+                @PathVariable String dbId,
                         @PathVariable String tableName,
                           @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                           @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
@@ -30,7 +30,7 @@ public class ReadController {
         log.info("filter - {}", filter);
 
         ReadContext readContext = ReadContext.builder()
-                .dbName(dbName)
+                .dbId(dbId)
                 .schemaName(schemaName)
                 .tableName(tableName)
                 .fields(fields)
@@ -44,9 +44,9 @@ public class ReadController {
         return readService.findAll(readContext);
     }
 
-    @PostMapping(value =VERSION +  "/{dbName}/{tableName}/_expand" , produces = "application/json")
+    @PostMapping(value =VERSION +  "/{dbId}/{tableName}/_expand" , produces = "application/json")
     public Object find(
-            @PathVariable String dbName,
+            @PathVariable String dbId,
             @PathVariable String tableName,
             @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                        @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
@@ -58,7 +58,7 @@ public class ReadController {
     ) {
 
         ReadContext readContext = ReadContext.builder()
-                .dbName(dbName)
+                .dbId(dbId)
                 .schemaName(schemaName)
                 .tableName(tableName)
                 .fields(fields)

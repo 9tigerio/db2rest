@@ -12,15 +12,15 @@ public class RoutingMongoTemplate {
 
     private final Map<String, MongoTemplate> mongoTemplateMap = new ConcurrentHashMap<>();
 
-    public void add(String dbName, MongoTemplate mongoTemplate) {
-        this.mongoTemplateMap.put(dbName, mongoTemplate);
+    public void add(String dbId, MongoTemplate mongoTemplate) {
+        this.mongoTemplateMap.put(dbId, mongoTemplate);
     }
 
     public MongoTemplate get() {
-        final String dbName = DatabaseContextHolder.getCurrentDbId();
+        final String dbId = DatabaseContextHolder.getCurrentDbId();
 
-        log.info("Resolved mongodb - {}", dbName);
+        log.info("Resolved mongodb - {}", dbId);
 
-        return this.mongoTemplateMap.get(dbName);
+        return this.mongoTemplateMap.get(dbId);
     }
 }

@@ -18,7 +18,7 @@ import java.util.Objects;
 @Data
 @Slf4j
 public class DeleteContext{
-    String dbName;
+    String dbId;
     String tableName;
     DbTable table;
     String where;

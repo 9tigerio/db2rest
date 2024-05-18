@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @RestController
-@RequestMapping(VERSION + "/{dbName}/procedure")
+@RequestMapping(VERSION + "/{dbId}/procedure")
 @Slf4j
 @RequiredArgsConstructor
 public class ProcedureController {
@@ -18,10 +18,10 @@ public class ProcedureController {
 
     @PostMapping("/{procName}")
     public ResponseEntity<Map<String, Object>> execute(
-            @PathVariable String dbName,
+            @PathVariable String dbId,
             @PathVariable String procName,
                                                        @RequestBody Map<String,Object> inParams) {
         log.debug("Execute stored procedure {} with IN params {}", procName, inParams.entrySet());
-        return ResponseEntity.ok(procedureService.execute(dbName,procName, inParams));
+        return ResponseEntity.ok(procedureService.execute(dbId,procName, inParams));
     }
 }

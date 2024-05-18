@@ -18,8 +18,8 @@ public class ExistsQueryController {
 
 	private final ExistsQueryService existsQueryService;
 
-	@GetMapping(value = VERSION + "/{dbName}/{tableName}/exists", produces = "application/json")
-	public ExistsResponse exists(@PathVariable String dbName,
+	@GetMapping(value = VERSION + "/{dbId}/{tableName}/exists", produces = "application/json")
+	public ExistsResponse exists(@PathVariable String dbId,
 								@PathVariable String tableName,
                                  @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                                  @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
@@ -28,7 +28,7 @@ public class ExistsQueryController {
 		log.debug("filter - {}", filter);
 
 		ReadContext readContext = ReadContext.builder()
-				.dbName(dbName)
+				.dbId(dbId)
 				.schemaName(schemaName)
 				.tableName(tableName)
 				.filter(filter)
@@ -37,8 +37,8 @@ public class ExistsQueryController {
 		return existsQueryService.exists(readContext);
 	}
 
-	@PostMapping(value = VERSION + "/{dbName}/{tableName}/exists/_expand", produces = "application/json")
-	public ExistsResponse exists(@PathVariable String dbName,
+	@PostMapping(value = VERSION + "/{dbId}/{tableName}/exists/_expand", produces = "application/json")
+	public ExistsResponse exists(@PathVariable String dbId,
 								@PathVariable String tableName,
 								 @RequestHeader(name="Accept-Profile", required = false) String schemaName,
 	                             @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
@@ -46,7 +46,7 @@ public class ExistsQueryController {
 	) {
 
 		ReadContext readContext = ReadContext.builder()
-				.dbName(dbName)
+				.dbId(dbId)
 				.schemaName(schemaName)
 				.tableName(tableName)
 				.fields("*")

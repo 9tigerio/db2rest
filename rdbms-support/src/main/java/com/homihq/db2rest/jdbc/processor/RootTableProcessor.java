@@ -19,7 +19,7 @@ public class RootTableProcessor implements ReadProcessor {
         log.debug("Processing root table");
         DbTable table =
                 jdbcManager.getTable(
-                        readContext.getDbName(),
+                        readContext.getDbId(),
                         readContext.getSchemaName(),
                         readContext.getTableName());
 

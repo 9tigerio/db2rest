@@ -14,15 +14,15 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 public class UpdateController {
 
     private final UpdateService updateService;
-    @PatchMapping(VERSION + "/{dbName}/{tableName}")
-    public UpdateResponse save(@PathVariable String dbName,
+    @PatchMapping(VERSION + "/{dbId}/{tableName}")
+    public UpdateResponse save(@PathVariable String dbId,
                                @PathVariable String tableName,
                                @RequestHeader(name="Content-Profile", required = false) String schemaName,
                                @RequestBody Map<String,Object> data
         , @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
 
-        int rows = updateService.patch(dbName,schemaName, tableName, data, filter);
+        int rows = updateService.patch(dbId,schemaName, tableName, data, filter);
         return new UpdateResponse(rows);
     }
 }

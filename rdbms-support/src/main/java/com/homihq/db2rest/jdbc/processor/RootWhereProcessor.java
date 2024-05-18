@@ -32,7 +32,7 @@ public class RootWhereProcessor implements ReadProcessor {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcManager.getDialect(readContext.getDbName())));
+                            dbWhere, jdbcManager.getDialect(readContext.getDbId())));
 
             log.debug("Where - {}", where);
             log.debug("param map - {}", readContext.getParamMap());

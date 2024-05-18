@@ -22,7 +22,7 @@ import java.util.*;
 public class ReadContext {
 
     /* Input Attributes */
-    String dbName;
+    String dbId;
     String schemaName;
     String tableName;
     String fields;

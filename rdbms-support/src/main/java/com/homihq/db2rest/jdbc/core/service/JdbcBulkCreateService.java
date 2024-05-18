@@ -34,7 +34,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
 
     @Override
     public CreateBulkResponse saveBulk(
-            String dbName,
+            String dbId,
             String schemaName, String tableName,
                                        List<String> includedColumns,
                                        List<Map<String, Object>> dataList,
@@ -46,7 +46,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
         try {
 
             //1. get actual table
-            DbTable dbTable = jdbcManager.getTable(dbName, schemaName, tableName);
+            DbTable dbTable = jdbcManager.getTable(dbId, schemaName, tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(dataList.get(0).keySet().stream().toList()) :
@@ -90,7 +90,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
             }
 
             for(Map<String,Object> data : dataList)
-                this.jdbcManager.getDialect(dbName).processTypes(dbTable, insertableColumns, data);
+                this.jdbcManager.getDialect(dbId).processTypes(dbTable, insertableColumns, data);
 
             log.debug("Finally insertable columns - {}", insertableColumns);
 
@@ -101,15 +101,15 @@ public class JdbcBulkCreateService implements BulkCreateService {
             log.debug("Data - {}", dataList);
 
             CreateBulkResponse createBulkResponse =
-                this.jdbcManager.getTxnTemplate(dbName).execute(status -> {
+                this.jdbcManager.getTxnTemplate(dbId).execute(status -> {
                     try {
 
                         return
-                                this.jdbcManager.getDialect(dbName).supportBatchReturnKeys() ?
+                                this.jdbcManager.getDialect(dbId).supportBatchReturnKeys() ?
                                         dbOperationService.batchUpdate(
-                                                jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                                                jdbcManager.getNamedParameterJdbcTemplate(dbId),
                                                 dataList, sql, dbTable) :
-                                        dbOperationService.batchUpdate(jdbcManager.getNamedParameterJdbcTemplate(dbName), dataList, sql);
+                                        dbOperationService.batchUpdate(jdbcManager.getNamedParameterJdbcTemplate(dbId), dataList, sql);
                     }
                     catch(Exception e) {
                         status.setRollbackOnly();
@@ -117,9 +117,6 @@ public class JdbcBulkCreateService implements BulkCreateService {
                     }
 
                 });
-
-
-
 
             if(tsIdEnabled && Objects.isNull(createBulkResponse.keys())){
                 return new CreateBulkResponse(createBulkResponse.rows(), tsIds);

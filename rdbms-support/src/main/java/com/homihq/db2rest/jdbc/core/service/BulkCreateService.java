@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface BulkCreateService {
     CreateBulkResponse saveBulk(
-            String dbName,
+            String dbId,
             String schemaName, String tableName,
                                 List<String> includedColumns,
                                 List<Map<String, Object>> dataList,

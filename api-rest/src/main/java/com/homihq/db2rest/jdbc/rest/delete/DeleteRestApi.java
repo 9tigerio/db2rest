@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 public interface DeleteRestApi {
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping(VERSION + "/{dbName}/{tableName}")
+    @DeleteMapping(VERSION + "/{dbId}/{tableName}")
     DeleteResponse delete(
-                         @PathVariable String dbName,
+                         @PathVariable String dbId,
                         @RequestHeader(name="Content-Profile", required = false) String schemaName,
                         @PathVariable String tableName,
                         @RequestParam(name = "filter", required = false, defaultValue = "") String filter);

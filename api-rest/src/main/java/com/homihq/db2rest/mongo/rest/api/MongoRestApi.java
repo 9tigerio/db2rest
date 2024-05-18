@@ -23,31 +23,33 @@ public interface MongoRestApi {
     String VERSION = "/v1/mongo";
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(VERSION + "/{dbName}/{collectionName}")
-    CreateResponse save(@PathVariable String collectionName,
+    @PostMapping(VERSION + "/{dbId}/{collectionName}")
+    CreateResponse save(
+                        @PathVariable String dbId,
+                        @PathVariable String collectionName,
                         @RequestParam(name = "fields", required = false) List<String> includeFields,
                         @RequestBody Map<String, Object> data);
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(VERSION + "/{dbName}/{collectionName}/bulk")
-    CreateBulkResponse saveAll(@PathVariable String collectionName,
+    @PostMapping(VERSION + "/{dbId}/{collectionName}/bulk")
+    CreateBulkResponse saveAll(@PathVariable String dbId, @PathVariable String collectionName,
                                @RequestParam(name = "fields", required = false) List<String> includeFields,
                                @RequestBody List<Map<String, Object>> dataList);
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping(VERSION + "/{dbName}/{collectionName}")
-    UpdateResponse patch(@PathVariable String collectionName,
+    @PatchMapping(VERSION + "/{dbId}/{collectionName}")
+    UpdateResponse patch(@PathVariable String dbId, @PathVariable String collectionName,
                          @RequestBody Map<String, Object> data,
                          @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping(VERSION + "/{dbName}/{collectionName}")
-    DeleteResponse delete(@PathVariable String collectionName,
+    @DeleteMapping(VERSION + "/{dbId}/{collectionName}")
+    DeleteResponse delete(@PathVariable String dbId, @PathVariable String collectionName,
                           @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(VERSION + "/{dbName}/{collectionName}")
-    Object findAll(@PathVariable String collectionName,
+    @GetMapping(VERSION + "/{dbId}/{collectionName}")
+    Object findAll(@PathVariable String dbId, @PathVariable String collectionName,
                    @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                    @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
                    @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
@@ -55,18 +57,18 @@ public interface MongoRestApi {
                    @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(VERSION + "/{dbName}/{collectionName}/one")
-    Map<String, Object> findOne(@PathVariable String collectionName,
+    @GetMapping(VERSION + "/{dbId}/{collectionName}/one")
+    Map<String, Object> findOne(@PathVariable String dbId, @PathVariable String collectionName,
                                 @RequestParam(name = "fields", required = false, defaultValue = "*") String fields,
                                 @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(VERSION + "/{dbName}/{collectionName}/count")
-    CountResponse count(@PathVariable String collectionName,
+    @GetMapping(VERSION + "/{dbId}/{collectionName}/count")
+    CountResponse count(@PathVariable String dbId, @PathVariable String collectionName,
                         @RequestParam(name = "filter", required = false, defaultValue = "") String filter);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = VERSION + "/{dbName}/{collectionName}/exists")
-    ExistsResponse exists(@PathVariable String collectionName,
+    @GetMapping(value = VERSION + "/{dbId}/{collectionName}/exists")
+    ExistsResponse exists(@PathVariable String dbId, @PathVariable String collectionName,
                           @RequestParam(name = "filter", defaultValue = "") String filter);
 }

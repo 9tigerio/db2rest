@@ -32,16 +32,16 @@ public class JdbcUpdateService implements UpdateService {
     private final DbOperationService dbOperationService;
 
     @Override
-    public int patch(String dbName, String schemaName, String tableName, Map<String, Object> data, String filter) {
+    public int patch(String dbId, String schemaName, String tableName, Map<String, Object> data, String filter) {
 
-        DbTable dbTable = jdbcManager.getTable(dbName, schemaName, tableName);
+        DbTable dbTable = jdbcManager.getTable(dbId, schemaName, tableName);
 
         List<String> updatableColumns = data.keySet().stream().toList();
 
-        jdbcManager.getDialect(dbName).processTypes(dbTable, updatableColumns, data);
+        jdbcManager.getDialect(dbId).processTypes(dbTable, updatableColumns, data);
 
         UpdateContext context = UpdateContext.builder()
-                .dbName(dbName)
+                .dbId(dbId)
                 .tableName(tableName)
                 .table(dbTable)
                 .updatableColumns(updatableColumns)
@@ -49,12 +49,12 @@ public class JdbcUpdateService implements UpdateService {
 
         context.createParamMap(data);
 
-        return executeUpdate(dbName, filter, dbTable, context);
+        return executeUpdate(dbId, filter, dbTable, context);
 
 
     }
 
-    private int executeUpdate(String dbName,String filter, DbTable table, UpdateContext context) {
+    private int executeUpdate(String dbId,String filter, DbTable table, UpdateContext context) {
 
         addWhere(filter, table, context);
         String sql =
@@ -64,10 +64,10 @@ public class JdbcUpdateService implements UpdateService {
         log.debug("{}", context.getParamMap());
 
 
-        Integer i = this.jdbcManager.getTxnTemplate(dbName).execute(status -> {
+        Integer i = this.jdbcManager.getTxnTemplate(dbId).execute(status -> {
             try {
                 return dbOperationService.update(
-                        jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                        jdbcManager.getNamedParameterJdbcTemplate(dbId),
                         context.getParamMap(), sql);
             } catch (DataAccessException e) {
                 log.error("Error in delete op : " , e);
@@ -94,7 +94,7 @@ public class JdbcUpdateService implements UpdateService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcManager.getDialect(context.getDbName())));
+                            dbWhere, jdbcManager.getDialect(context.getDbId())));
             context.setWhere(where);
 
         }
