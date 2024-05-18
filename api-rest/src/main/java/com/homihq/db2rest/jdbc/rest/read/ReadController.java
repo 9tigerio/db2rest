@@ -27,6 +27,8 @@ public class ReadController {
                           @RequestParam(name = "limit", required = false, defaultValue = "-1") int limit,
                           @RequestParam(name = "offset", required = false, defaultValue = "-1") long offset) {
 
+        log.info("filter - {}", filter);
+
         ReadContext readContext = ReadContext.builder()
                 .dbName(dbName)
                 .schemaName(schemaName)

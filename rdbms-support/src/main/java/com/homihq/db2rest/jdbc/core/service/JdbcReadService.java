@@ -6,6 +6,7 @@ import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import cz.jirutka.rsql.parser.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -22,21 +23,25 @@ public class JdbcReadService implements ReadService {
 
     @Override
     public Object findAll(ReadContext readContext) {
-        for (ReadProcessor processor : processorList) {
-            processor.process(readContext);
-        }
-
-        String sql = sqlCreatorTemplate.query(readContext);
-        log.info("{}", sql);
-        log.info("{}", readContext.getParamMap());
 
         try {
+            for (ReadProcessor processor : processorList) {
+                processor.process(readContext);
+            }
+
+            String sql = sqlCreatorTemplate.query(readContext);
+            log.info("{}", sql);
+            log.info("{}", readContext.getParamMap());
             return dbOperationService.read(
                     jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
                     readContext.getParamMap(), sql, jdbcManager.getDialect(readContext.getDbName()));
         } catch (DataAccessException e) {
             log.error("Error in read op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
+        }
+        catch (Exception e) {
+            log.error("Error in read op : " , e);
+            throw new GenericDataAccessException("Failed to parse RQL - " + e.getMessage());
         }
     }
 
