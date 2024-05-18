@@ -16,7 +16,7 @@ public class ProcedureController {
 
     private final ProcedureService procedureService;
 
-    @PostMapping("/{procId}")
+    @PostMapping("/{procName}")
     public ResponseEntity<Map<String, Object>> execute(
             @PathVariable String dbId,
             @PathVariable String procName,
