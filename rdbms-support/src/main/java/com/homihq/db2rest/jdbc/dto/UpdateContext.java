@@ -21,7 +21,7 @@ import java.util.Objects;
 @Slf4j
 public class UpdateContext {
 
-    String dbName;
+    String dbId;
     String tableName;
     DbTable table;
     String where;

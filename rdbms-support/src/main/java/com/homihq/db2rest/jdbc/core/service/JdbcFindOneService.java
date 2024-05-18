@@ -37,7 +37,7 @@ public class JdbcFindOneService implements FindOneService {
 
         try {
             return dbOperationService.findOne(
-                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbId()),
                     sql, bindValues);
         }
         catch (DataAccessException e) {

@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface BulkCreateRestApi {
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = VERSION + "/{dbName}/{tableName}/bulk",
+    @PostMapping(value = VERSION + "/{dbId}/{tableName}/bulk",
             consumes = {"application/json", "text/csv"}
     )
-    CreateBulkResponse save(@PathVariable String dbName,
+    CreateBulkResponse save(@PathVariable String dbId,
                             @PathVariable String tableName,
                             @RequestHeader(name="Content-Profile", required = false) String schemaName,
                             @RequestParam(name = "columns", required = false) List<String> includeColumns,

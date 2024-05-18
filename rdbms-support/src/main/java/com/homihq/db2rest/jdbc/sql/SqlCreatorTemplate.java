@@ -34,7 +34,7 @@ public class SqlCreatorTemplate {
 
         Map<String,Object> data = new HashMap<>();
 
-        if(jdbcManager.getDialect(updateContext.getDbName()).supportAlias()) {
+        if(jdbcManager.getDialect(updateContext.getDbId()).supportAlias()) {
             data.put("rootTable", updateContext.getTable().render());
         }
         else{
@@ -53,7 +53,7 @@ public class SqlCreatorTemplate {
     public String deleteQuery(DeleteContext deleteContext) {
 
         String rendererTableName =
-                jdbcManager.getDialect(deleteContext.getDbName())
+                jdbcManager.getDialect(deleteContext.getDbId())
                         .renderTableName(deleteContext.getTable(),
                                 StringUtils.isNotBlank(deleteContext.getWhere()),
                                 true
@@ -151,9 +151,9 @@ public class SqlCreatorTemplate {
 
 
         //TODO DB specific processing must move away
-        if(StringUtils.equalsIgnoreCase(this.jdbcManager.getDialect(readContext.getDbName()).getProductFamily(), "Oracle")) {
+        if(StringUtils.equalsIgnoreCase(this.jdbcManager.getDialect(readContext.getDbId()).getProductFamily(), "Oracle")) {
 
-            if(this.jdbcManager.getDialect(readContext.getDbName()).getMajorVersion() >= 12) {
+            if(this.jdbcManager.getDialect(readContext.getDbId()).getMajorVersion() >= 12) {
                 template = "read-ora-12";
             }
             else {

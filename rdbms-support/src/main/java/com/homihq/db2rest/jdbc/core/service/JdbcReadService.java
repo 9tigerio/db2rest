@@ -33,8 +33,8 @@ public class JdbcReadService implements ReadService {
             log.info("{}", sql);
             log.info("{}", readContext.getParamMap());
             return dbOperationService.read(
-                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
-                    readContext.getParamMap(), sql, jdbcManager.getDialect(readContext.getDbName()));
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbId()),
+                    readContext.getParamMap(), sql, jdbcManager.getDialect(readContext.getDbId()));
         } catch (DataAccessException e) {
             log.error("Error in read op : " , e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());

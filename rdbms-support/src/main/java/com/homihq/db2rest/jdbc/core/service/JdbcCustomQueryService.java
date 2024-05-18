@@ -14,10 +14,10 @@ public class JdbcCustomQueryService implements CustomQueryService {
     private final DbOperationService dbOperationService;
 
     @Override
-    public Object find(String dbName, QueryRequest queryRequest) {
-        log.info("dbName - {}", dbName);
+    public Object find(String dbId, QueryRequest queryRequest) {
+        log.info("dbId - {}", dbId);
         return dbOperationService.queryCustom(
-                jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                jdbcManager.getNamedParameterJdbcTemplate(dbId),
                 queryRequest.single(),
                 queryRequest.sql(),
                 queryRequest.params());

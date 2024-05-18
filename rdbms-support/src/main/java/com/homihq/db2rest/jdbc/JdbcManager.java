@@ -35,11 +35,11 @@ public final class JdbcManager {
 
     private Map<String,DbTable> dbTableMap;
 
-    private Map<String, DbDetailHolder> dbDetailHolderMap = new ConcurrentHashMap<>();
-    private Map<String, NamedParameterJdbcTemplate> namedParameterJdbcTemplateMap = new ConcurrentHashMap<>();
-    private Map<String, JdbcTransactionManager> jdbcTransactionManagerMap = new ConcurrentHashMap<>();
+    private final Map<String, DbDetailHolder> dbDetailHolderMap = new ConcurrentHashMap<>();
+    private final Map<String, NamedParameterJdbcTemplate> namedParameterJdbcTemplateMap = new ConcurrentHashMap<>();
+    private final Map<String, JdbcTransactionManager> jdbcTransactionManagerMap = new ConcurrentHashMap<>();
 
-    private Map<String, TransactionTemplate> transactionTemplateMap = new ConcurrentHashMap<>();
+    private final Map<String, TransactionTemplate> transactionTemplateMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     private void reload() {
@@ -63,16 +63,16 @@ public final class JdbcManager {
 
             if(dataSourceMap.isEmpty()) log.info("**** No datasource to load.");
 
-            for(Object dbName : dataSourceMap.keySet()) {
-                DataSource ds = dataSourceMap.get(dbName);
-                loadMetaData((String) dbName, ds);
-                this.namedParameterJdbcTemplateMap.put((String) dbName, new NamedParameterJdbcTemplate(ds));
+            for(Object dbId : dataSourceMap.keySet()) {
+                DataSource ds = dataSourceMap.get(dbId);
+                loadMetaData((String) dbId, ds);
+                this.namedParameterJdbcTemplateMap.put((String) dbId, new NamedParameterJdbcTemplate(ds));
 
                 JdbcTransactionManager jdbcTransactionManager = new JdbcTransactionManager(ds);
 
-                this.jdbcTransactionManagerMap.put((String) dbName, jdbcTransactionManager);
+                this.jdbcTransactionManagerMap.put((String) dbId, jdbcTransactionManager);
 
-                this.transactionTemplateMap.put((String) dbName, new TransactionTemplate(jdbcTransactionManager));
+                this.transactionTemplateMap.put((String) dbId, new TransactionTemplate(jdbcTransactionManager));
 
             }
         }
@@ -81,7 +81,7 @@ public final class JdbcManager {
         }
     }
 
-    private void loadMetaData(String dbName, DataSource ds) {
+    private void loadMetaData(String dbId, DataSource ds) {
         log.info("Loading meta data - {}", ds);
         try {
             Map<String,DbTable> dbTableMap = new ConcurrentHashMap<>();
@@ -101,18 +101,18 @@ public final class JdbcManager {
                             ).findFirst()
                             .orElseThrow(() -> new GenericDataAccessException("Dialect not found."));
 
-            dbDetailHolderMap.put(dbName, new DbDetailHolder(dbName, dbMeta, dbTableMap, dialect));
+            dbDetailHolderMap.put(dbId, new DbDetailHolder(dbId, dbMeta, dbTableMap, dialect));
 
         } catch (MetaDataAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public DbTable getTable(String dbName, String schemaName, String tableName) {
+    public DbTable getTable(String dbId, String schemaName, String tableName) {
 
-        if(StringUtils.isNotBlank(schemaName)) return getBySchemaAndTableName(dbName, schemaName, tableName);
+        if(StringUtils.isNotBlank(schemaName)) return getBySchemaAndTableName(dbId, schemaName, tableName);
 
-        DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbName);
+        DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbId);
 
         if(Objects.isNull(dbDetailHolder)) throw new GenericDataAccessException("DB not found.");
 
@@ -125,9 +125,9 @@ public final class JdbcManager {
         return table;
     }
 
-    private DbTable getBySchemaAndTableName(String dbName, String schemaName, String tableName) {
+    private DbTable getBySchemaAndTableName(String dbId, String schemaName, String tableName) {
 
-        DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbName);
+        DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbId);
 
         if(Objects.isNull(dbDetailHolder)) throw new GenericDataAccessException("DB not found.");
 
@@ -145,16 +145,16 @@ public final class JdbcManager {
                         new GenericDataAccessException("Missing table - schema : " + schemaName + " , table : " + tableName));
     }
 
-    public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate(String dbName) {
-        return this.namedParameterJdbcTemplateMap.get(dbName);
+    public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate(String dbId) {
+        return this.namedParameterJdbcTemplateMap.get(dbId);
     }
 
-    public TransactionTemplate getTxnTemplate(String dbName) {
-        return this.transactionTemplateMap.get(dbName);
+    public TransactionTemplate getTxnTemplate(String dbId) {
+        return this.transactionTemplateMap.get(dbId);
     }
 
-    public Dialect getDialect(String dbName) {
-        DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbName);
+    public Dialect getDialect(String dbId) {
+        DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbId);
 
         if(Objects.isNull(dbDetailHolder)) throw new GenericDataAccessException("DB not found.");
 

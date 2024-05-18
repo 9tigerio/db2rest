@@ -29,35 +29,33 @@ public class JdbcDeleteService implements DeleteService {
 
     @Override
     @Transactional
-    public int delete(String dbName,String schemaName, String tableName, String filter) {
+    public int delete(String dbId,String schemaName, String tableName, String filter) {
 
 
-        DbTable dbTable = jdbcManager.getTable(dbName, schemaName,tableName);
+        DbTable dbTable = jdbcManager.getTable(dbId, schemaName,tableName);
 
         DeleteContext context = DeleteContext.builder()
-                .dbName(dbName)
+                .dbId(dbId)
                 .tableName(tableName)
                 .table(dbTable).build();
 
-
-
-        return executeDelete(dbName, filter, dbTable, context);
+        return executeDelete(dbId, filter, dbTable, context);
 
     }
 
-    private int executeDelete(String dbName, String filter, DbTable table, DeleteContext context) {
+    private int executeDelete(String dbId, String filter, DbTable table, DeleteContext context) {
 
-        addWhere(dbName, filter, table, context);
+        addWhere(dbId, filter, table, context);
         String sql =
                 sqlCreatorTemplate.deleteQuery(context);
 
         log.info("{}", sql);
         log.info("{}", context.getParamMap());
 
-        Integer i = this.jdbcManager.getTxnTemplate(dbName).execute(status -> {
+        Integer i = this.jdbcManager.getTxnTemplate(dbId).execute(status -> {
             try {
                 return dbOperationService.delete(
-                        jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                        jdbcManager.getNamedParameterJdbcTemplate(dbId),
                         context.getParamMap(),
                         sql);
             } catch (DataAccessException e) {
@@ -71,7 +69,7 @@ public class JdbcDeleteService implements DeleteService {
 
 
 
-    private void addWhere(String dbName, String filter, DbTable table, DeleteContext context) {
+    private void addWhere(String dbId, String filter, DbTable table, DeleteContext context) {
 
         if(StringUtils.isNotBlank(filter)) {
             context.createParamMap();
@@ -84,7 +82,7 @@ public class JdbcDeleteService implements DeleteService {
 
             String where = rootNode
                     .accept(new BaseRSQLVisitor(
-                            dbWhere, jdbcManager.getDialect(dbName)));
+                            dbWhere, jdbcManager.getDialect(dbId)));
             context.setWhere(where);
 
         }

@@ -35,7 +35,7 @@ public class JdbcCountQueryService implements CountQueryService {
 
         try {
             return dbOperationService.count(
-                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbId()),
                     readContext.getParamMap(),
                     sql);
         } catch (DataAccessException e) {

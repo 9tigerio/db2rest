@@ -13,8 +13,8 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @RequiredArgsConstructor
 public class CountQueryController {
     private final CountQueryService countQueryService;
-    @GetMapping(VERSION + "/{dbName}/{tableName}/count")
-    public CountResponse count(@PathVariable String dbName,
+    @GetMapping(VERSION + "/{dbId}/{tableName}/count")
+    public CountResponse count(@PathVariable String dbId,
                                 @PathVariable String tableName,
                                @RequestHeader(name="Accept-Profile", required = false) String schemaName,
                                @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
@@ -23,7 +23,7 @@ public class CountQueryController {
         log.debug("filter - {}", filter);
 
         ReadContext readContext = ReadContext.builder()
-                .dbName(dbName)
+                .dbId(dbId)
                 .schemaName(schemaName)
                 .tableName(tableName)
                 .filter(filter)

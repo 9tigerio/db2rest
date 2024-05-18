@@ -34,12 +34,12 @@ public class JdbcCreateService implements CreateService {
 
     @Override
     public CreateResponse save(
-            String dbName,
+            String dbId,
             String schemaName, String tableName, List<String> includedColumns,
                                Map<String, Object> data, boolean tsIdEnabled, List<String> sequences) {
         try {
             //1. get actual table
-            DbTable dbTable = jdbcManager.getTable(dbName, schemaName, tableName);
+            DbTable dbTable = jdbcManager.getTable(dbId, schemaName, tableName);
 
             //2. determine the columns to be included in insert statement
             List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(data.keySet().stream().toList()) :
@@ -76,7 +76,7 @@ public class JdbcCreateService implements CreateService {
                 }
             }
 
-            this.jdbcManager.getDialect(dbName).processTypes(dbTable, insertableColumns, data);
+            this.jdbcManager.getDialect(dbId).processTypes(dbTable, insertableColumns, data);
 
             CreateContext context = new CreateContext(dbTable, insertableColumns, insertableColumnList);
             String sql = sqlCreatorTemplate.create(context);
@@ -86,11 +86,11 @@ public class JdbcCreateService implements CreateService {
 
 
             CreateResponse createResponse =
-                    this.jdbcManager.getTxnTemplate(dbName).execute(status ->
+                    this.jdbcManager.getTxnTemplate(dbId).execute(status ->
                         {
                             try {
                             return dbOperationService.create(
-                                    jdbcManager.getNamedParameterJdbcTemplate(dbName),
+                                    jdbcManager.getNamedParameterJdbcTemplate(dbId),
                                     data, sql, dbTable);
                             }
                             catch(Exception e) {

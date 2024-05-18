@@ -10,8 +10,8 @@ import java.util.Map;
 
 public interface CreateRestApi {
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(VERSION + "/{dbName}/{tableName}")
-    CreateResponse save(@PathVariable String dbName,
+    @PostMapping(VERSION + "/{dbId}/{tableName}")
+    CreateResponse save(@PathVariable String dbId,
                         @RequestHeader(name="Content-Profile", required = false) String schemaName,
                         @PathVariable String tableName,
                         @RequestParam(name = "columns", required = false) List<String> includeColumns,

@@ -6,6 +6,6 @@ import com.homihq.db2rest.jdbc.sql.DbMeta;
 
 import java.util.Map;
 
-public record DbDetailHolder (String dbName, DbMeta dbMeta, Map<String, DbTable> dbTableMap, Dialect dialect){
+public record DbDetailHolder (String dbId, DbMeta dbMeta, Map<String, DbTable> dbTableMap, Dialect dialect){
 
 }

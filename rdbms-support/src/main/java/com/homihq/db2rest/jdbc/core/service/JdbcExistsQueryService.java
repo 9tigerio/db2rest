@@ -34,7 +34,7 @@ public class JdbcExistsQueryService implements ExistsQueryService {
 
         try {
 			return dbOperationService.exists(
-                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbName()),
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbId()),
                     readContext.getParamMap(),
                     sql);
 
