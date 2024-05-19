@@ -15,8 +15,8 @@ public class GreaterThanOperatorHandler implements OperatorHandler {
     @Override
     public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
 
-        log.info("value - {}", value);
-        log.info("type - {}", type);
+        log.debug("value - {}", value);
+        log.debug("type - {}", type);
 
         Object vo = dialect.processValue(value, type,null);
 

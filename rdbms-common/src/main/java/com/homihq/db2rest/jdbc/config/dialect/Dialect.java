@@ -61,7 +61,7 @@ public interface Dialect {
     //TODO use Spring converter
     @Deprecated
     default Object processValue(String value, Class<?> type, String format) {
-        System.out.println("type " + type);
+        //System.out.println("type " + type);
         if (String.class == type) {
             //return "'" + value + "'";
             return value;

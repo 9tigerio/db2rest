@@ -1,7 +1,8 @@
 package com.homihq.db2rest.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.auth.common.AuthProvider;
+import com.homihq.db2rest.auth.common.AbstractAuthProvider;
+import com.homihq.db2rest.auth.common.UserDetail;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.UrlPathHelper;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -21,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
 
-    private final List<AuthProvider> authProviders;
+    private final List<AbstractAuthProvider> authProviders;
     private final ObjectMapper objectMapper;
     String AUTH_HEADER = "Authorization";
 
@@ -31,7 +34,11 @@ public class AuthFilter extends OncePerRequestFilter {
 
 
         log.info("Handling Auth");
+        UrlPathHelper urlPathHelper = new UrlPathHelper();
+        String requestUri = urlPathHelper.getRequestUri(request);
+        String method = request.getMethod();
 
+        log.info("Request URI - {}", requestUri);
 
         String authHeaderValue = request.getHeader(AUTH_HEADER);
 
@@ -40,7 +47,7 @@ public class AuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        Optional<AuthProvider> authProvider = authProviders.stream()
+        Optional<AbstractAuthProvider> authProvider = authProviders.stream()
                                             .filter(ap -> ap.canHandle(authHeaderValue))
                                             .findFirst();
 
@@ -49,7 +56,12 @@ public class AuthFilter extends OncePerRequestFilter {
             return;
         }
         else{
-            authProvider.get().handle(authHeaderValue);
+
+            UserDetail userDetail =
+            authProvider.get().authenticate(authHeaderValue);
+
+            //
+            authProvider.get().authorize(userDetail, requestUri, method);
         }
 
         filterChain.doFilter(request, response);

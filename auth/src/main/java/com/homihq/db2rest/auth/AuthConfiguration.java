@@ -3,6 +3,7 @@ package com.homihq.db2rest.auth;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.homihq.db2rest.auth.common.AbstractAuthProvider;
 import com.homihq.db2rest.auth.common.AuthDataProvider;
 import com.homihq.db2rest.auth.data.AuthDataProperties;
 import com.homihq.db2rest.auth.data.FileAuthDataProvider;
@@ -14,6 +15,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 @ConditionalOnProperty(prefix = "db2rest.auth", name="enabled" , havingValue = "true")
@@ -22,14 +25,21 @@ public class AuthConfiguration {
     private final JwtProperties jwtProperties;
 
     @Bean
-    public JwtAuthProvider jwtAuthProvider() {
+    public AuthFilter authFilter(AuthDataProperties authDataProperties, ObjectMapper objectMapper) {
+        List<AbstractAuthProvider> authProviders = List.of(jwtAuthProvider(authDataProperties));
+
+        return new AuthFilter(authProviders, objectMapper);
+    }
+
+    @Bean
+    public JwtAuthProvider jwtAuthProvider(AuthDataProperties authDataProperties) {
 
         JWTVerifier jwtVerifier =
         JWT.require(jwtProperties.getAlgo())
                 .withIssuer(jwtProperties.getIssuers())
                 .build();
 
-        return new JwtAuthProvider(jwtVerifier);
+        return new JwtAuthProvider(jwtVerifier, authDataProvider(authDataProperties));
     }
 
     @Bean

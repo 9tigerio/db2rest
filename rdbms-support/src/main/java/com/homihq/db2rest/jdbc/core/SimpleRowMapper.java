@@ -20,7 +20,7 @@ public class SimpleRowMapper extends ColumnMapRowMapper {
         //HOT FIX - to be moved to dialect
         String columnType = rs.getMetaData().getColumnTypeName(index);
 
-        log.info("columnType - {}", columnType);
+        log.debug("columnType - {}", columnType);
 
         if(StringUtils.equalsIgnoreCase(columnType, "_varchar")) { //handle pg varchar array
 

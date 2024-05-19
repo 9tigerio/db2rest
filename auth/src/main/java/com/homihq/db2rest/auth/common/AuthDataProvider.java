@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AuthDataProvider {
 
-    List<ApiResource> getApiResources();
+    List<ResourceRole> getApiResourceRoles();
     List<User> getUsers();
 
     default User validate(String username, String password) {
