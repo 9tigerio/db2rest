@@ -1,0 +1,50 @@
+name: db2rest-security
+resourceRoles:
+  - resource: "/api/v2/host"
+    method: post
+    roles:
+      - role2
+      - role3
+      - role4
+  - resource: "/api/v2/host"
+    method: get
+    roles:
+      - role2
+      - role3
+      - role4
+  - resource: "/api/v2/host"
+    method: delete
+    roles:
+      - role2
+      - role3
+      - role4
+  - resource: "/api/v2/source3/*"
+    method: get
+    roles:
+      - role1
+      - role2
+  - resource: "/api/mi/**"
+    method: '*'
+    roles:
+      - role2
+
+
+excludedResources:
+  - resource: "/api/v1/source3"
+    method: get
+  - resource: "/api/v3/host"
+    method: post
+  - resource: "/api/v3/book"
+    method: '*'
+
+account:
+  - appId: admin
+    credential: 0192023A7BBD73250516F069DF18B500
+    salt: 123
+    role: [role1,role2]
+  - appId: root
+    credential: 23456
+    role: [role1]
+  - appId: tom
+    credential: 32113
+    role: [role3]
