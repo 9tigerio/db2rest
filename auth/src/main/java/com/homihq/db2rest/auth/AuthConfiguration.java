@@ -12,6 +12,7 @@ import com.homihq.db2rest.auth.data.NoAuthdataProvider;
 import com.homihq.db2rest.auth.jwt.JwtAuthProvider;
 import com.homihq.db2rest.auth.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +21,14 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 @ConditionalOnProperty(prefix = "db2rest.auth", name="enabled" , havingValue = "true")
 public class AuthConfiguration {
 
     private final JwtProperties jwtProperties;
+
 
     @Bean("authAntPathMatcher")
     public AntPathMatcher authAntPathMatcher() {
@@ -34,6 +37,7 @@ public class AuthConfiguration {
 
     @Bean
     public AuthFilter authFilter(AuthDataProperties authDataProperties, ObjectMapper objectMapper) {
+        log.info("** Auth enabled. Initializing auth components.");
         List<AbstractAuthProvider> authProviders = List.of(jwtAuthProvider(authDataProperties));
 
         return new AuthFilter(authProviders, objectMapper);
@@ -55,11 +59,14 @@ public class AuthConfiguration {
     public AuthDataProvider authDataProvider(AuthDataProperties authDataProperties) {
 
         if(authDataProperties.isFileProvider()) {
+            log.info("Initializing file auth data provider");
             return new FileAuthDataProvider(authDataProperties.getFile());
         }
-        else if(authDataProperties.isFileProvider()){
+        else if(authDataProperties.isApiDataProvider()){
+            log.info("Initializing API auth data provider");
             return new ApiAuthDataProvider(authDataProperties.getApiEndpoint(), authDataProperties.getApiKey());
         }
+        log.info("No auth data provider");
         return new NoAuthdataProvider();
     }
 
