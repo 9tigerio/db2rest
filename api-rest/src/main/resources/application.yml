@@ -32,7 +32,16 @@ db2rest:
     defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
 
   auth:
-    type: ${AUTH_TYPE:none}
+    enabled: ${AUTH_ENABLED:false}
+    jwt:
+      algorithm: HMAC256
+      secret: abc
+      issuers:
+        - a
+        - b
+    data:
+      file: ${user.home}/git/db2rest/auth/auth-sample.yml
+      api-endpoint:
 
   unKeyDev:
     enabled: ${UNKEY_DEV_ENABLED:false}
@@ -53,6 +62,6 @@ logging:
     com.homihq.db2rest:
       rest: INFO
       jdbc.service: INFO
-    org.springframework.web : DEBUG
+    org.springframework.web : INFO
     org.springframework.beans : INFO
     org.springframework.jdbc: INFO

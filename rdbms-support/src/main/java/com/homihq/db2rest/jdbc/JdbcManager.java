@@ -118,7 +118,7 @@ public final class JdbcManager {
 
         DbTable table = dbDetailHolder.dbTableMap().get(tableName);
 
-        log.info("Table retrieved - {}", table);
+        log.debug("Table retrieved - {}", table);
 
         if(Objects.isNull(table)) throw new InvalidTableException(tableName);
 
