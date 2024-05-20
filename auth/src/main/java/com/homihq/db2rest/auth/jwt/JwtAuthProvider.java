@@ -20,6 +20,7 @@ public class JwtAuthProvider extends AbstractAuthProvider {
 
     private final JWTVerifier jwtVerifier;
     private final AuthDataProvider authDataProvider;
+    private final AntPathMatcher antPathMatcher;
 
     @Override
     public boolean canHandle(String authHeader) {
@@ -35,34 +36,14 @@ public class JwtAuthProvider extends AbstractAuthProvider {
             return new UserDetail(decodedJWT.getSubject(), List.of());
         }
         catch (JWTVerificationException e) {
-            throw new AuthException("Error in JWT validation - " +  e.getMessage());
+            log.error("Error in JWT validation - " ,  e);
         }
+
+        return null;
     }
 
     @Override
     public boolean authorize(UserDetail userDetail, String requestUri, String method) {
-        AntPathMatcher antPathMatcher = new AntPathMatcher();
-
-        //resource mapping
-        Optional<ResourceRole> resourceRole =
-        authDataProvider.getApiResourceRoles()
-                .stream()
-                .filter(r -> antPathMatcher.match(r.resource(), requestUri))
-                .findFirst();
-
-        //resource to role mapping
-        //TODO - method check required
-        if(resourceRole.isPresent()) {
-            ResourceRole rr = resourceRole.get();
-            boolean roleMatch =
-            rr.roles()
-                    .stream()
-                    .anyMatch(role -> StringUtils.equalsAnyIgnoreCase(role, userDetail.getRoles()));
-
-            log.info("Role match - {}", roleMatch);
-
-        }
-
-        return false;
+        return super.authorizeCommon(userDetail, requestUri, method, authDataProvider.getApiResourceRoles(), antPathMatcher);
     }
 }

@@ -41,6 +41,7 @@ db2rest:
         - b
     data:
       file: ${user.home}/git/db2rest/auth/auth-sample.yml
+      api-endpoint:
 
   unKeyDev:
     enabled: ${UNKEY_DEV_ENABLED:false}

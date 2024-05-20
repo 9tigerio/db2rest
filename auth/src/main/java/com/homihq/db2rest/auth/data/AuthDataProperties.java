@@ -27,5 +27,5 @@ public class AuthDataProperties {
         return StringUtils.isNotBlank(file);
     }
 
-
+    public boolean isApiDataProvider() {return StringUtils.isNotBlank(apiEndpoint);}
 }
