@@ -12,9 +12,13 @@ public class CustomRSQLOperators extends RSQLOperators {
     public static final ComparisonOperator START_WITH = new ComparisonOperator("=startWith=", false);
     public static final ComparisonOperator END_WITH = new ComparisonOperator("=endWith=", false);
 
+    public static final ComparisonOperator IS_NULL = new ComparisonOperator(
+            new String[]{"=isnull=", "=null=", "=na="}
+            , false);
+
     public static Set<ComparisonOperator> customOperators() {
         Set<ComparisonOperator> comparisonOperators = RSQLOperators.defaultOperators();
-        comparisonOperators.addAll(Arrays.asList(LIKE, START_WITH, END_WITH));
+        comparisonOperators.addAll(Arrays.asList(LIKE, START_WITH, END_WITH, IS_NULL));
         return comparisonOperators;
     }
 

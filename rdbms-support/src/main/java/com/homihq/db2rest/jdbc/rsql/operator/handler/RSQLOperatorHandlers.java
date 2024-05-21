@@ -24,6 +24,8 @@ public class RSQLOperatorHandlers {
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.START_WITH.getSymbol(), new StartWithOperatorHandler());
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.END_WITH.getSymbol(), new EndWithOperatorHandler());
 
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.IS_NULL.getSymbol(), new IsNullOperatorHandler());
+
     }
 
     public static OperatorHandler getOperatorHandler(String symbol) {
