@@ -1,6 +1,6 @@
 app:
-  version: 1.0.0-SNAPSHOT
-  name: db2rest
+  version: @project.version@
+  name: @project.name@
 
 
 server:
