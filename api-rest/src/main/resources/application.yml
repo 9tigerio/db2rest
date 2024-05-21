@@ -1,6 +1,6 @@
 app:
-  version: 1.0.0-SNAPSHOT
-  name: db2rest
+  version: @project.version@
+  name: @project.name@
 
 
 server:
@@ -40,8 +40,9 @@ db2rest:
         - a
         - b
     data:
-      file: ${user.home}/git/db2rest/auth/auth-sample.yml
-      api-endpoint:
+      # file: ${user.home}/git/db2rest/auth/auth-sample.yml
+      api-endpoint: 'https://api.npoint.io/25e777e70e3a62289dc7'
+      api-key: 123
 
   unKeyDev:
     enabled: ${UNKEY_DEV_ENABLED:false}

@@ -23,10 +23,12 @@ public class ApiAuthDataProvider implements AuthDataProvider {
                  .build();
 
         authDataSource =
-        restClient.post()
+        restClient.get()
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(AuthDataSource.class);
+
+        log.info("Auth data - {}", authDataSource);
     }
 
     @Override

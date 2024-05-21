@@ -5,7 +5,6 @@ app:
       url: jdbc:postgresql://localhost:5432/homidb
       username: homi2022
       password: homi2022
-      schemas:
       connectionProperties:
         ssl: false
       envProperties: # Not used yet
