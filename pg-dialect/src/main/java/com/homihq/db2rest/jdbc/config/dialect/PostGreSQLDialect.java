@@ -1,5 +1,6 @@
 package com.homihq.db2rest.jdbc.config.dialect;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
@@ -37,7 +38,7 @@ public class PostGreSQLDialect implements Dialect {
             log.info("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
             if (Objects.isNull(value)) continue;
 
-            if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
+            if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json", "jsonb")) {
                 Object v = convertToJson(value, columnDataTypeName);
                 data.put(columnName, v);
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timestamp")) {
@@ -95,6 +96,26 @@ public class PostGreSQLDialect implements Dialect {
         }
     }
 
+    @Override
+    public Map convertJsonToMap(Object object) {
+
+        if(Objects.nonNull(object)) {
+
+            PGobject pGobject = (PGobject) object;
+
+            String val = pGobject.getValue();
+
+            try {
+                return objectMapper.readValue(val, Map.class);
+            } catch (JsonProcessingException e) {
+                throw new GenericDataAccessException("Error converting to JSON type - " + e.getLocalizedMessage());
+            }
+        }
+        else{
+            return null;
+        }
+
+    }
 
     private String getQuotedName(String name) {
         return coverChar + name + coverChar;

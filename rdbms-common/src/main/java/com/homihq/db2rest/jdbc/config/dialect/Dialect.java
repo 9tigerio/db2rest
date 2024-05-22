@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,4 +93,6 @@ public interface Dialect {
     }
 
     default List<String> convertToStringArray(Object object) {return List.of();}
+
+    default  Map convertJsonToMap(Object object) {return new HashMap();}
 }
