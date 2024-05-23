@@ -24,11 +24,11 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 # Stable Releases
 
-| Release              | Download                                                                    |
-|----------------------|-----------------------------------------------------------------------------|
-| 1.0.4                | [DB2Rest](https://download.db2rest.com/db2rest-1.0.4.jar)                   |
-| Oracle9i - 1.0.4     | [DB2Rest-Oracle9i](https://download.db2rest.com/db2rest-oracle9i-1.0.4.jar) |
-| 1.0.4 (Docker Image) | ` docker pull kdhrubo/db2rest:v72 `                                         |
+| Release              | Download                                                                          |
+|----------------------|-----------------------------------------------------------------------------------|
+| 1.0.5                | [DB2Rest-1.0.5](https://download.db2rest.com/db2rest-1.0.5.jar)                   |
+| Oracle9i - 1.0.5     | [DB2Rest-Oracle9i-1.0.5](https://download.db2rest.com/db2rest-oracle9i-1.0.5.jar) |
+| 1.0.5 (Docker Image) | ` docker pull kdhrubo/db2rest:v74 `                                               |
 
 # Quick start guides
 
