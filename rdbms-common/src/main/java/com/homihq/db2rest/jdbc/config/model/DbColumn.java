@@ -1,14 +1,21 @@
 package com.homihq.db2rest.jdbc.config.model;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+@Slf4j
 public record DbColumn(String tableName, String name, String alias, String tableAlias,
                        boolean pk, String columnDataTypeName, boolean generated, boolean autoIncremented
-                        ,Class<?> typeMappedClass , String coverChar) {
+                        ,Class<?> typeMappedClass , String coverChar, String jsonParts) {
 
     @Deprecated
     private String getQuotedName() {
-        return coverChar + name + coverChar;
+        if(StringUtils.isBlank(jsonParts)) {
+            return coverChar + name + coverChar;
+        }
+        else {
+            return coverChar + name + coverChar + jsonParts;
+        }
     }
 
     @Deprecated
@@ -23,10 +30,15 @@ public record DbColumn(String tableName, String name, String alias, String table
 
     @Deprecated
     public String renderWithAlias() {
-        if(StringUtils.isNotBlank(alias))
-            return tableAlias + "."+ getQuotedName() + " as " + getQuotedAlias();
 
-        return tableAlias + "."+ getQuotedName() + " " + alias;
+        String firstPart = tableAlias + "."+ getQuotedName();
+
+        if(StringUtils.isNotBlank(alias)) {
+
+            return firstPart + " as " + getQuotedAlias();
+        }
+
+        return firstPart;
     }
 
 
@@ -53,13 +65,17 @@ public record DbColumn(String tableName, String name, String alias, String table
                 "VARCHAR","TEXT", "VARCHAR2");
     }
 
-    public DbColumn copyWithAlias(String columnAlias) {
-        return new DbColumn(tableName, name, columnAlias, tableAlias,
-                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass, coverChar);
+    public DbColumn copyWithAlias(DbAlias columnAlias) {
+
+        log.debug("columnDataTypeName - {}", columnDataTypeName);
+        log.debug("full Column name - {}", columnAlias.jsonParts());
+
+        return new DbColumn(tableName, name, columnAlias.alias(), tableAlias,
+                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass, coverChar, columnAlias.jsonParts());
     }
 
     public DbColumn copyWithTableAlias(String tableAlias) {
         return new DbColumn(tableName, name, alias, tableAlias,
-                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass, coverChar);
+                pk, columnDataTypeName, generated, autoIncremented, typeMappedClass, coverChar, "");
     }
 }
