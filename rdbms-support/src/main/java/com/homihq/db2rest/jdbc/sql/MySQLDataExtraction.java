@@ -85,7 +85,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
                                 typeName,
                                 StringUtils.equalsAnyIgnoreCase(isGenerated,"YES"),
                                 StringUtils.equalsAnyIgnoreCase(isAutoIncrement,"YES"),
-                                javaType, "`"
+                                javaType, "`", ""
                         );
 
                 dbColumns.add(dbColumn);

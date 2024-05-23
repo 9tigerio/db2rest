@@ -97,7 +97,7 @@ public class PostGreSQLDialect implements Dialect {
     }
 
     @Override
-    public Map convertJsonToMap(Object object) {
+    public Object convertJsonToVO(Object object) {
 
         if(Objects.nonNull(object)) {
 
@@ -106,7 +106,7 @@ public class PostGreSQLDialect implements Dialect {
             String val = pGobject.getValue();
 
             try {
-                return objectMapper.readValue(val, Map.class);
+                return objectMapper.readValue(val, Object.class);
             } catch (JsonProcessingException e) {
                 throw new GenericDataAccessException("Error converting to JSON type - " + e.getLocalizedMessage());
             }

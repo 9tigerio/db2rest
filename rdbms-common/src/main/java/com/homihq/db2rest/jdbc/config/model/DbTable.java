@@ -1,10 +1,11 @@
 package com.homihq.db2rest.jdbc.config.model;
 
 import com.homihq.db2rest.core.exception.InvalidColumnException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
-
+@Slf4j
 public record DbTable(String schema, String name, String fullName, String alias,
                       List<DbColumn> dbColumns, String type, String coverChar) {
 
@@ -23,8 +24,9 @@ public record DbTable(String schema, String name, String fullName, String alias,
 
     public DbColumn buildColumn(String columnName) {
 
-
         DbAlias dbAlias = getAlias(columnName);
+
+        log.info("Db alias - {}", dbAlias);
 
         return getDbColumn(dbAlias);
     }
@@ -33,18 +35,33 @@ public record DbTable(String schema, String name, String fullName, String alias,
         return
         this.dbColumns.stream()
                 .filter(dbColumn -> StringUtils.equalsAnyIgnoreCase(dbAlias.name(), dbColumn.name()))
-                .map(dbColumn -> dbColumn.copyWithAlias(dbAlias.alias()))
+                .map(dbColumn -> dbColumn.copyWithAlias(dbAlias))
                 .findFirst().orElseThrow(() -> new InvalidColumnException(name,dbAlias.name()));
     }
 
-    public DbAlias getAlias(String name) {
+    private DbAlias getAlias(String name) {
         String [] aliasParts = name.split(":");
 
+        String columnName = aliasParts[0];
+        String colName = columnName;
+        String jsonParts = "";
+
+        if(StringUtils.contains(columnName, "->")) {
+            colName = columnName.substring(0, columnName.indexOf("->"));
+            jsonParts = columnName.substring(columnName.indexOf("->"));
+        }
+        else if(StringUtils.contains(columnName, "->>")) {
+            colName = columnName.substring(0, columnName.indexOf("->>"));
+            jsonParts = columnName.substring(columnName.indexOf("->>"));
+        }
+
+        log.info("Col name - {}", colName);
+
         if(aliasParts.length == 2) {
-            return new DbAlias(aliasParts[0], aliasParts[1]);
+            return new DbAlias(colName, aliasParts[1], jsonParts);
         }
         else {
-            return new DbAlias(aliasParts[0], "");
+            return new DbAlias(colName, "", jsonParts);
         }
     }
 

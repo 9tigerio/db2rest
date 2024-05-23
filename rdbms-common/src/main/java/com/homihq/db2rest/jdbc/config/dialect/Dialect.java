@@ -94,5 +94,5 @@ public interface Dialect {
 
     default List<String> convertToStringArray(Object object) {return List.of();}
 
-    default  Map convertJsonToMap(Object object) {return new HashMap();}
+    default  Object convertJsonToVO(Object object) {return null;}
 }

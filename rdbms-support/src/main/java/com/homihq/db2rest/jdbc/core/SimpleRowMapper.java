@@ -26,7 +26,7 @@ public class SimpleRowMapper extends ColumnMapRowMapper {
             return dialect.convertToStringArray(rs.getArray(index));
         }
         if(StringUtils.equalsAnyIgnoreCase(columnType, "json","jsonb")) { //handle pg jsonb, json
-            return dialect.convertJsonToMap(rs.getObject(index));
+            return dialect.convertJsonToVO(rs.getObject(index));
         }
 
         return super.getColumnValue(rs, index);
