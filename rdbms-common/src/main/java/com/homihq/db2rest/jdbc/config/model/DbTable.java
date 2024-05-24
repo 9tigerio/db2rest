@@ -23,7 +23,7 @@ public record DbTable(String schema, String name, String fullName, String alias,
     }
 
     public DbColumn buildColumn(String columnName) {
-
+        log.info("columnName - {}", columnName);
         DbAlias dbAlias = getAlias(columnName);
 
         log.info("Db alias - {}", dbAlias);
@@ -40,6 +40,7 @@ public record DbTable(String schema, String name, String fullName, String alias,
     }
 
     private DbAlias getAlias(String name) {
+        log.info("Name - {}", name);
         String [] aliasParts = name.split(":");
 
         String columnName = aliasParts[0];
@@ -54,14 +55,32 @@ public record DbTable(String schema, String name, String fullName, String alias,
             colName = columnName.substring(0, columnName.indexOf("->>"));
             jsonParts = columnName.substring(columnName.indexOf("->>"));
         }
+        else if(StringUtils.contains(columnName, "#>")) {
 
-        log.info("Col name - {}", colName);
+            colName = columnName.substring(0, columnName.indexOf("#>"));
+            jsonParts = columnName.substring(columnName.indexOf("#>"));
+            jsonParts = jsonParts.replace(".", ","); //specific attribute
+        }
+        else if(StringUtils.contains(columnName, "#>>")) {
+
+            colName = columnName.substring(0, columnName.indexOf("#>>"));
+            jsonParts = columnName.substring(columnName.indexOf("#>>"));
+            jsonParts = jsonParts.replace(".", ","); //specific attribute
+        }
+        else if(StringUtils.contains(columnName, "**")) {
+            colName = columnName.substring(0, columnName.indexOf("**"));
+            jsonParts = "->>" + "'" + columnName.substring(columnName.indexOf("**") + 2) + "'";
+        }
+        else if(StringUtils.contains(columnName, "*")) {
+            colName = columnName.substring(0, columnName.indexOf("*"));
+            jsonParts = "->" + "'" + columnName.substring(columnName.indexOf("*") + 1) + "'";
+        }
 
         if(aliasParts.length == 2) {
-            return new DbAlias(colName, aliasParts[1], jsonParts);
+            return new DbAlias(colName.trim(), aliasParts[1], jsonParts);
         }
         else {
-            return new DbAlias(colName, "", jsonParts);
+            return new DbAlias(colName.trim(), "", jsonParts);
         }
     }
 

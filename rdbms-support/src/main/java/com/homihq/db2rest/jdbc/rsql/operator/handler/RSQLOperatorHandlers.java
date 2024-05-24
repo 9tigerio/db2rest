@@ -26,6 +26,12 @@ public class RSQLOperatorHandlers {
 
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.IS_NULL.getSymbol(), new IsNullOperatorHandler());
 
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSONB_CONTAIN.getSymbol(), new JsonbContainOperatorHandler());
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSON_CONTAIN.getSymbol(), new JsonContainOperatorHandler());
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSONB_EQUAL.getSymbol(), new JsonbEqualToOperatorHandler());
+
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSONB_KEY_EXISTS.getSymbol(), new JsonbKeyExistsOperatorHandler());
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSON_CONTAINS_IN_ARRAY.getSymbol(), new JsonContainInArrayOperatorHandler());
     }
 
     public static OperatorHandler getOperatorHandler(String symbol) {
