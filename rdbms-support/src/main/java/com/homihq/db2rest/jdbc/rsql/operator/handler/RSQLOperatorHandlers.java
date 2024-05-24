@@ -32,6 +32,10 @@ public class RSQLOperatorHandlers {
 
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSONB_KEY_EXISTS.getSymbol(), new JsonbKeyExistsOperatorHandler());
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSON_CONTAINS_IN_ARRAY.getSymbol(), new JsonContainInArrayOperatorHandler());
+
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.NOT_LIKE.getSymbol(), new NotLikeOperatorHandler());
+
+
     }
 
     public static OperatorHandler getOperatorHandler(String symbol) {
