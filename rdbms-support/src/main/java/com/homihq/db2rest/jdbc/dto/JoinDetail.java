@@ -9,11 +9,11 @@ import java.util.Objects;
 public record JoinDetail (
         String schemaName,
         String table, String withTable, List<String> fields,
-                          List<String> on, String filter, String type){
+                          List<String> on, String filter, String joinType){
 
     public String getJoinType() {
-        return StringUtils.isBlank(type) ? "INNER" :
-                StringUtils.upperCase(type);
+        return StringUtils.isBlank(joinType) ? "INNER" :
+                StringUtils.upperCase(joinType);
 
     }
     public boolean hasWith() {
