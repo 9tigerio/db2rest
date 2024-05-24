@@ -16,9 +16,30 @@ public class CustomRSQLOperators extends RSQLOperators {
             new String[]{"=isnull=", "=null=", "=na="}
             , false);
 
+    public static final ComparisonOperator JSONB_CONTAIN = new ComparisonOperator(
+            new String[]{"=jsonbContain=", "=jbc="}
+            , false);
+
+    public static final ComparisonOperator JSON_CONTAIN = new ComparisonOperator(
+            new String[]{"=jsonContain=", "=jc="}
+            , false);
+
+    public static final ComparisonOperator JSONB_EQUAL = new ComparisonOperator(
+            new String[]{"=jbe="}
+            , false);
+
+    public static final ComparisonOperator JSONB_KEY_EXISTS = new ComparisonOperator(
+            new String[]{"=jbKeyExist="}
+            , false);
+
+    public static final ComparisonOperator JSON_CONTAINS_IN_ARRAY = new ComparisonOperator(
+            new String[]{"=jcInArray="}
+            , false);
+
     public static Set<ComparisonOperator> customOperators() {
         Set<ComparisonOperator> comparisonOperators = RSQLOperators.defaultOperators();
-        comparisonOperators.addAll(Arrays.asList(LIKE, START_WITH, END_WITH, IS_NULL));
+        comparisonOperators.addAll(Arrays.asList(LIKE, START_WITH, END_WITH, IS_NULL,
+                JSONB_CONTAIN,JSON_CONTAIN,JSONB_EQUAL,JSONB_KEY_EXISTS, JSON_CONTAINS_IN_ARRAY));
         return comparisonOperators;
     }
 

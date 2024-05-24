@@ -24,6 +24,8 @@ public class JdbcReadService implements ReadService {
     @Override
     public Object findAll(ReadContext readContext) {
 
+        log.info("readContext : {}", readContext);
+
         try {
             for (ReadProcessor processor : processorList) {
                 processor.process(readContext);
