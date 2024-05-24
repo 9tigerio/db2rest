@@ -3,7 +3,7 @@
     "table": "USERPROFILE",
 
     "fields" : ["apid","auid","firstname","lastname","email","phone"],
-    "type" : "RIGHT",
+    "joinType" : "RIGHT",
 
     "on" : ["auid==auid"]
   }
