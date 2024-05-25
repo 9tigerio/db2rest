@@ -40,9 +40,13 @@ public class CustomRSQLOperators extends RSQLOperators {
             new String[]{"=notlike=","=nk="}
             , false);
 
+    public static final ComparisonOperator IS_NOT_NULL = new ComparisonOperator(
+            new String[]{"=nn=","=notnull=","=isnotnull="}
+            , false);
+
     public static Set<ComparisonOperator> customOperators() {
         Set<ComparisonOperator> comparisonOperators = RSQLOperators.defaultOperators();
-        comparisonOperators.addAll(Arrays.asList(LIKE, START_WITH, END_WITH, IS_NULL,
+        comparisonOperators.addAll(Arrays.asList(LIKE, START_WITH, END_WITH, IS_NULL, IS_NOT_NULL,
                 JSONB_CONTAIN,JSON_CONTAIN,JSONB_EQUAL,JSONB_KEY_EXISTS, JSON_CONTAINS_IN_ARRAY,NOT_LIKE));
         return comparisonOperators;
     }

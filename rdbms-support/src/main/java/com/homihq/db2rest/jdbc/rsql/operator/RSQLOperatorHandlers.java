@@ -1,7 +1,9 @@
-package com.homihq.db2rest.jdbc.rsql.operator.handler;
+package com.homihq.db2rest.jdbc.rsql.operator;
 
 
 import com.homihq.db2rest.jdbc.rsql.operator.CustomRSQLOperators;
+import com.homihq.db2rest.jdbc.rsql.operator.OperatorHandler;
+import com.homihq.db2rest.jdbc.rsql.operator.handler.*;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
 
 import java.util.HashMap;
@@ -34,7 +36,7 @@ public class RSQLOperatorHandlers {
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSON_CONTAINS_IN_ARRAY.getSymbol(), new JsonContainInArrayOperatorHandler());
 
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.NOT_LIKE.getSymbol(), new NotLikeOperatorHandler());
-
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.IS_NOT_NULL.getSymbol(), new IsNotNullOperatorHandler());
 
     }
 

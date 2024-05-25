@@ -2,9 +2,9 @@ package com.homihq.db2rest.jdbc.rsql.visitor;
 
 import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
-import com.homihq.db2rest.jdbc.rsql.operator.handler.RSQLOperatorHandlers;
+import com.homihq.db2rest.jdbc.rsql.operator.RSQLOperatorHandlers;
 import com.homihq.db2rest.jdbc.config.model.DbWhere;
-import com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorHandler;
+import com.homihq.db2rest.jdbc.rsql.operator.OperatorHandler;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
