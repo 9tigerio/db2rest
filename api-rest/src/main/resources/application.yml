@@ -7,6 +7,12 @@ server:
   port: ${SERVER_PORT:8080}
   forward-headers-strategy: framework
 
+  compression:
+    enabled: ${GZIP_ENABLED:false}
+    mime-types: application/json
+    min-response-size: 1024
+    # excluded-user-agents: MSIE 6.0,UCBrowser
+
 
 spring:
 
