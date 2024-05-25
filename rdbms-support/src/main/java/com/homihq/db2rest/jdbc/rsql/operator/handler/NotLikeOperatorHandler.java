@@ -3,6 +3,7 @@ package com.homihq.db2rest.jdbc.rsql.operator.handler;
 import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbWhere;
+import com.homihq.db2rest.jdbc.rsql.operator.OperatorHandler;
 
 import java.util.Map;
 

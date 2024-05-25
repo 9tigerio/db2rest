@@ -21,8 +21,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
-import static com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap.getRSQLOperator;
-import static com.homihq.db2rest.jdbc.rsql.operator.handler.OperatorMap.getSQLOperator;
+import static com.homihq.db2rest.jdbc.rsql.operator.OperatorMap.getRSQLOperator;
+import static com.homihq.db2rest.jdbc.rsql.operator.OperatorMap.getSQLOperator;
 
 
 @Slf4j
