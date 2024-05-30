@@ -1,9 +1,9 @@
 package com.homihq.db2rest.auth.jwt;
 
-import com.auth0.jwt.algorithms.Algorithm;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
@@ -21,19 +21,18 @@ public class JwtProperties { //Currently support HMAC only
 
     String [] issuers;
 
-    public Algorithm getAlgo() {
-        switch (algorithm) {
-            case "HMAC256" -> {
-                return Algorithm.HMAC256(secret);
-            }
-            case "HMAC384" -> {
-                return Algorithm.HMAC384(secret);
-            }
-            case "HMAC512" -> {
-                return Algorithm.HMAC512(secret);
-            }
-            default -> throw new RuntimeException(algorithm + " is not supported.");
-        }
+    String envPrivateKey;
+    String envPublicKey;
+
+    String privateKeyFile;
+    String publicKeyFile;
+
+    public boolean isEnvironmentBasedProperty() {
+        return StringUtils.isBlank(envPrivateKey) && StringUtils.isBlank(envPublicKey);
+    }
+
+    public boolean isFileBasedProperty() {
+        return StringUtils.isBlank(privateKeyFile) && StringUtils.isBlank(publicKeyFile);
     }
 
 }
