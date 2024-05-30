@@ -9,6 +9,7 @@ import com.homihq.db2rest.auth.data.ApiAuthDataProvider;
 import com.homihq.db2rest.auth.data.AuthDataProperties;
 import com.homihq.db2rest.auth.data.FileAuthDataProvider;
 import com.homihq.db2rest.auth.data.NoAuthdataProvider;
+import com.homihq.db2rest.auth.jwt.AlgorithmFactory;
 import com.homihq.db2rest.auth.jwt.JwtAuthProvider;
 import com.homihq.db2rest.auth.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class AuthConfiguration {
     }
 
     @Bean
-    public AuthFilter authFilter(AuthDataProperties authDataProperties, ObjectMapper objectMapper) {
+    public AuthFilter authFilter(AuthDataProperties authDataProperties, ObjectMapper objectMapper) throws Exception {
         log.info("** Auth enabled. Initializing auth components.");
         List<AbstractAuthProvider> authProviders = List.of(jwtAuthProvider(authDataProperties));
 
@@ -44,15 +45,16 @@ public class AuthConfiguration {
     }
 
     @Bean
-    public JwtAuthProvider jwtAuthProvider(AuthDataProperties authDataProperties) {
+    public JwtAuthProvider jwtAuthProvider(AuthDataProperties authDataProperties) throws Exception{
 
         JWTVerifier jwtVerifier =
-        JWT.require(jwtProperties.getAlgo())
+        JWT.require(AlgorithmFactory.getAlgorithm(jwtProperties))
                 .withIssuer(jwtProperties.getIssuers())
                 .build();
 
         return new JwtAuthProvider(jwtVerifier,
-                authDataProvider(authDataProperties), authAntPathMatcher());
+                authDataProvider(authDataProperties), authAntPathMatcher()
+        );
     }
 
     @Bean
