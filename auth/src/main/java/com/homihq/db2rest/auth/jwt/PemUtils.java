@@ -1,5 +1,8 @@
 package com.homihq.db2rest.auth.jwt;
 
+import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.pkcs.RSAPrivateKey;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
@@ -11,11 +14,9 @@ import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.EncodedKeySpec;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.*;
 
+@Slf4j
 public class PemUtils {
 
     private static byte[] parsePEMFile(File pemFile) throws IOException {
@@ -36,7 +37,7 @@ public class PemUtils {
             EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
             publicKey = kf.generatePublic(keySpec);
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("Could not reconstruct the public key, the given algorithm could not be found.");
+            log.error("Could not reconstruct the public key, the given algorithm could not be found.", e);
         } catch (InvalidKeySpecException e) {
             System.out.println("Could not reconstruct the public key");
         }
@@ -59,12 +60,35 @@ public class PemUtils {
         return privateKey;
     }
 
+    private static PrivateKey getPKCS1PrivateKey(byte[] keyBytes, String algorithm) {
+        PrivateKey privateKey = null;
+        try {
+            RSAPrivateKey asn1PrivKey = RSAPrivateKey.getInstance(ASN1Sequence.fromByteArray(keyBytes));
+            RSAPrivateKeySpec rsaPrivateKeySpec = new RSAPrivateKeySpec(asn1PrivKey.getModulus(), asn1PrivKey.getPrivateExponent());
+            KeyFactory kf = KeyFactory.getInstance(algorithm);
+            privateKey = kf.generatePrivate(rsaPrivateKeySpec);
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("Could not reconstruct the private key, the given algorithm could not be found.");
+        } catch (InvalidKeySpecException e) {
+            System.out.println("Could not reconstruct the private key");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return privateKey;
+    }
+
     public static PublicKey readPublicKeyFromFile(String filepath, String algorithm) throws IOException {
         byte[] bytes = PemUtils.parsePEMFile(new File(filepath));
         return PemUtils.getPublicKey(bytes, algorithm);
     }
 
     public static PrivateKey readPrivateKeyFromFile(String filepath, String algorithm) throws IOException {
+        byte[] bytes = PemUtils.parsePEMFile(new File(filepath));
+        return PemUtils.getPrivateKey(bytes, algorithm);
+    }
+
+    public static PrivateKey readPKCS1PrivateKeyFromFile(String filepath, String algorithm) throws IOException {
         byte[] bytes = PemUtils.parsePEMFile(new File(filepath));
         return PemUtils.getPrivateKey(bytes, algorithm);
     }
