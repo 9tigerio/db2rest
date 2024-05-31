@@ -2,6 +2,11 @@ app:
   version: @project.version@
   name: @project.name@
 
+  databases:
+    - name: ${DB_ID:db}
+      url: ${DB_URL:}
+      username: ${DB_USER:}
+      password: ${DB_PASSWORD:}
 
 server:
   port: ${SERVER_PORT:8080}
@@ -72,3 +77,4 @@ logging:
     org.springframework.web : INFO
     org.springframework.beans : INFO
     org.springframework.jdbc: INFO
+
