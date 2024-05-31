@@ -11,4 +11,8 @@ public record DatabaseConnectionDetail(String name, String type, String url, Str
     public boolean isMongo() {
         return StringUtils.equalsIgnoreCase(type, "MONGO");
     }
+
+    public boolean isJdbcPresent() {
+        return StringUtils.isNoneBlank(url);
+    }
 }

@@ -75,7 +75,9 @@ public class JdbcConfiguration {
 
 
         for (DatabaseConnectionDetail connectionDetail : databaseProperties.getDatabases()) {
-            result.put(connectionDetail.name(), this.buildDataSource(connectionDetail));
+
+            if(connectionDetail.isJdbcPresent())
+                result.put(connectionDetail.name(), this.buildDataSource(connectionDetail));
         }
 
         return result;

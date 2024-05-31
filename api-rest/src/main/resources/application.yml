@@ -4,9 +4,9 @@ app:
 
   databases:
     - name: ${DB_ID:db}
-      url: ${DB_URL}
-      username: ${DB_USER}
-      password: ${DB_PASSWORD}
+      url: ${DB_URL:}
+      username: ${DB_USER:}
+      password: ${DB_PASSWORD:}
 
 server:
   port: ${SERVER_PORT:8080}
