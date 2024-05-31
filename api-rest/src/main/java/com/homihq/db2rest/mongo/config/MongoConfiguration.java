@@ -49,7 +49,7 @@ public class MongoConfiguration {
         if(!mongoDbs.isEmpty()) {
 
             for(DatabaseConnectionDetail mongo : mongoDbs){
-                routingMongoTemplate.add(mongo.name(),
+                routingMongoTemplate.add(mongo.id(),
                         mongoTemplate(mongo.url(), mongo.database()));
             }
         }

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Map;
 
-public record DatabaseConnectionDetail(String name, String type, String url, String username, String password, String database
+public record DatabaseConnectionDetail(String id, String type, String url, String username, String password, String database
                                         ,List<String> catalog, List<String>  schema, List<String>  tables,
     Map<String,String> connectionProperties, EnvironmentProperties envProperties) {
     public boolean isMongo() {
