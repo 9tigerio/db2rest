@@ -1,6 +1,6 @@
 app:
   databases:
-    - name: DB1
+    - id: DB1
       type: POSTGRESQL
       url: jdbc:postgresql://localhost:5432/homidb
       username: homi2022
@@ -14,13 +14,13 @@ app:
           dateTimeFormat: 'dd-MM-yyyy HH:mm:ss'
           defaultFetchLimit : 100
 
-    - name: DB2
+    - id: DB2
       type: POSTGRESQL
       url: jdbc:postgresql://localhost:5432/homidb
       username: homi2022
       password: homi2022
 
-    - name: DB3
+    - id: DB3
       type: POSTGRESQL
       url: jdbc:postgresql://localhost:5432/homidb
       username: homi2022
