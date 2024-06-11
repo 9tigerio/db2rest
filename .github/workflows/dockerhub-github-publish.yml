@@ -28,7 +28,7 @@ jobs:
           server-password: MAVEN_PASSWORD
 
       - name: Build with Maven
-        run: ./mvnw -B package --file pom.xml -DskipTests
+        run: mvn -B package --file pom.xml -DskipTests
       
       - name: Publish to the Maven Central Repository
         run: mvn --batch-mode deploy
@@ -43,12 +43,7 @@ jobs:
           distribution: 'liberica'
 
       - name: Publish to GitHub Packages 
-        run: mvn --batch-mode deploy -DskipTests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to GitHub Packages Apache Maven - Oracle9i
-        run: mvn --batch-mode deploy --file api-rest/pom-oracle9i.xml -DskipTests
+        run: mvn --batch-mode deploy --file pom.xml -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
