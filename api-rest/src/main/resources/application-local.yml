@@ -5,26 +5,14 @@ app:
       url: jdbc:postgresql://localhost:5432/homidb
       username: homi2022
       password: homi2022
-      connectionProperties:
-        ssl: false
-      envProperties: # Not used yet
-          enableDatetimeFormatting: true
-          timeFormat: 'HH:mm:ss'
-          dateFormat: 'dd-MM-yyyy'
-          dateTimeFormat: 'dd-MM-yyyy HH:mm:ss'
-          defaultFetchLimit : 100
 
     - id: DB2
-      type: POSTGRESQL
-      url: jdbc:postgresql://localhost:5432/homidb
-      username: homi2022
-      password: homi2022
+      type: MYSQL
+      url: jdbc:mysql://localhost:3306/sakila
+      username: root
+      password: @Kolkata84
 
-    - id: DB3
-      type: POSTGRESQL
-      url: jdbc:postgresql://localhost:5432/homidb
-      username: homi2022
-      password: homi2022
+
 
 
 
