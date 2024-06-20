@@ -30,11 +30,11 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml -DskipTests
       
-      - name: Publish to the Maven Central Repository
-        run: mvn --batch-mode deploy
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+      #- name: Publish to the Maven Central Repository
+      #  run: mvn --batch-mode deploy
+      #  env:
+      #    MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      #    MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
 
       - name: Set up JDK 21 for GitHub Packages publish
         uses: actions/setup-java@v4 # We have to setup JDK a second time to overwrite the settings.xml file for auth to GitHub Packages.
