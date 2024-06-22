@@ -5,7 +5,7 @@ name: Maven Package
 
 on:
   release:
-    types: [created-deprecated]
+    types: [created-DEPRECATED]
 
 jobs:
   build:
@@ -16,33 +16,19 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - name: Set up JDK 21
-        uses: actions/setup-java@v4 # Setup JDK to use with Maven and set settings.xml for auth to Maven Central
+        uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'liberica'
-          server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Build with Maven
-        run: mvn -B package --file api-rest/pom-oracle9i.xml -DskipTests
+        run: ./mvnw -B package --file api-rest/pom-oracle9i.xml -DskipTests
 
-      #- name: Publish to the Maven Central Repository
-      #  run: mvn --batch-mode deploy --file api-rest/pom-oracle9i.xml -DskipTests
-      #  env:
-      #    MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      #    MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-  
-      - name: Set up JDK 21 for GitHub Packages publish
-        uses: actions/setup-java@v4 # We have to setup JDK a second time to overwrite the settings.xml file for auth to GitHub Packages.
-        with:
-          java-version: '21'
-          distribution: 'liberica'
-
-      - name: Publish to GitHub Packages Apache Maven - Oracle9i
-        run: mvn --batch-mode deploy --file api-rest/pom-oracle9i.xml -DskipTests
+      - name: Publish to GitHub Packages Apache Maven
+        run: ./mvnw deploy -s $GITHUB_WORKSPACE/settings.xml --file api-rest/pom-oracle9i.xml -DskipTests
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+          GITHUB_TOKEN: ${{ github.token }}
