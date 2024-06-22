@@ -31,6 +31,8 @@
 
     <dependencies>
 
+
+
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>auth</artifactId>
@@ -207,6 +209,13 @@
             <version>0.3.3</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-datadog</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
 
 
 
