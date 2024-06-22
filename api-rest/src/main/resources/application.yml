@@ -32,6 +32,8 @@ spring:
     check-template-location: false
     cache: true
 
+
+
 db2rest:
 
   dateTime:
@@ -78,3 +80,15 @@ logging:
     org.springframework.beans : INFO
     org.springframework.jdbc: INFO
 
+
+
+
+management:
+  datadog:
+    metrics:
+      export:
+        enabled: ${DATADOG_EXPORT_ENABLED:false}
+        api-key: ${DATADOG_API_KEY}
+        application-key: ${DATADOG_APPLICATION_KEY}
+        uri: ${DATADOG_EXPORT_URI}
+        step: ${DATADOG_EXPORT_INTERVAL:30s}
