@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>1.0.8</version>
+        <version>1.0.9-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
@@ -30,6 +30,15 @@
     </distributionManagement>
 
     <dependencies>
+
+        <!--
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>auth-sureness</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        -->
+
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rest-common</artifactId>
@@ -107,6 +116,15 @@
             <artifactId>spring-restdocs-mockmvc</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-datadog</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+
+
 
 
     </dependencies>

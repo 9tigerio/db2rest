@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.github</groupId>
         <artifactId>db2rest-parent</artifactId>
@@ -10,29 +11,34 @@
 
         <!-- lookup parent from repository -->
     </parent>
-
-    <artifactId>oracle-dialect</artifactId>
+    <artifactId>auth-sureness</artifactId>
     <version>${project.parent.version}</version>
-    <name>oracle-dialect</name>
-    <description>oracle-dialect</description>
+    <name>auth-sureness</name>
+    <description>auth-sureness</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
     <properties>
         <java.version>21</java.version>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <scope>runtime</scope>
+            <groupId>com.usthe.sureness</groupId>
+            <artifactId>spring-boot3-starter-sureness</artifactId>
+            <version>1.1.0</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>com.github</groupId>
-            <artifactId>rdbms-common</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
-
 
 
 </project>

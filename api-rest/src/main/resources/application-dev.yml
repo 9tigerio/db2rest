@@ -42,28 +42,6 @@ db2rest:
     dateFormat: ${DATE_FORMAT:yyyy-MM-dd}
     dateTimeFormat: ${DATE_TIME_FORMAT:yyyy-MM-dd HH:mm:ss}
     defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
-
-  auth:
-    enabled: ${AUTH_ENABLED:false}
-    jwt:
-      algorithm: HMAC256
-      secret: abc
-      issuers:
-        - a
-        - b
-    data:
-      # file: ${user.home}/git/db2rest/auth/auth-sample.yml
-      api-endpoint: 'https://api.npoint.io/25e777e70e3a62289dc7'
-      api-key: 123
-
-  unKeyDev:
-    enabled: ${UNKEY_DEV_ENABLED:false}
-    url: ${UNKEY_DEV_URL}
-    rootKey: ${UNKEY_DEV_ROOT_KEY}
-
-  jwt:
-    secret: ${JWT_SECRET_KEY}
-
   allowSafeDelete : ${ALLOW_SAFE_DELETE:true}
 
   multiTenancy:
