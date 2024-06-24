@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.github</groupId>
     <artifactId>db2rest-parent</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>DB2Rest parent</name>
     <description>An Open Source instant REST Data API for databases. This is the DB2Rest parent Maven project.</description>
@@ -53,6 +53,7 @@
     <modules>
         <module>api-rest</module>
         <module>auth</module>
+        <module>auth-sureness</module>
         <module>mongo-support</module>
         <module>rest-common</module>
         <module>pg-dialect</module>
@@ -125,7 +126,7 @@
         <dependency>
             <groupId>io.github.nstdio</groupId>
             <artifactId>rsql-parser</artifactId>
-            <version>2.2.1</version>
+            <version>2.3.2</version>
         </dependency>
 
     </dependencies>
