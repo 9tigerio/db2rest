@@ -17,17 +17,16 @@ import org.springframework.web.util.UrlPathHelper;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
 
-    private final List<AbstractAuthProvider> authProviders;
+    private final AbstractAuthProvider authProvider;
     private final ObjectMapper objectMapper;
     String AUTH_HEADER = "Authorization";
+    UrlPathHelper urlPathHelper = new UrlPathHelper();
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
@@ -35,7 +34,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
 
         log.info("Handling Auth");
-        UrlPathHelper urlPathHelper = new UrlPathHelper();
+
         String requestUri = urlPathHelper.getRequestUri(request);
         String method = request.getMethod();
 
@@ -50,36 +49,26 @@ public class AuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        Optional<AbstractAuthProvider> authProvider = authProviders.stream()
-                                            .filter(ap -> ap.canHandle(authHeaderValue))
-                                            .findFirst();
+        //authenticate
+        UserDetail userDetail =
+                authProvider.authenticate(authHeaderValue);
 
-        if(authProvider.isEmpty()) {
-            String errorMessage = "No Auth Handler found";
+        if(Objects.isNull(userDetail)) {
+            String errorMessage = "Authentication failure.";
             addError(errorMessage, request, response);
             return;
         }
-        else{
-            //authenticate
-            UserDetail userDetail =
-            authProvider.get().authenticate(authHeaderValue);
 
-            if(Objects.isNull(userDetail)) {
-                String errorMessage = "Authentication failure.";
-                addError(errorMessage, request, response);
-                return;
-            }
+        //authorize
+        boolean authorized =
+                authProvider.authorize(userDetail, requestUri, method);
 
-            //authorize
-            boolean authorized =
-            authProvider.get().authorize(userDetail, requestUri, method);
-
-            if(!authorized) {
-                String errorMessage = "Authorization failure.";
-                addError(errorMessage, request, response);
-                return;
-            }
+        if(!authorized) {
+            String errorMessage = "Authorization failure.";
+            addError(errorMessage, request, response);
+            return;
         }
+
 
         filterChain.doFilter(request, response);
 

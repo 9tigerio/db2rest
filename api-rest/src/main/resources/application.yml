@@ -35,6 +35,13 @@ spring:
 
 db2rest:
 
+  auth:
+    enabled: ${ENABLE_AUTH:false}
+
+    data:
+      source: ${AUTH_DATA_SOURCE}
+
+
   dateTime:
     enableDataTimeFormatting: ${ENABLE_DATETIME_FORMATTING:false}
     timeFormat: ${TIME_FORMAT:HH:mm:ss}
@@ -56,7 +63,6 @@ logging:
     org.springframework.web : INFO
     org.springframework.beans : INFO
     org.springframework.jdbc: INFO
-
 
 
 

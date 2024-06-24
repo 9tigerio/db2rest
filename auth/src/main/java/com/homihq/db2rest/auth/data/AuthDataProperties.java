@@ -1,6 +1,5 @@
 package com.homihq.db2rest.auth.data;
 
-import com.auth0.jwt.algorithms.Algorithm;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,15 +16,15 @@ import org.springframework.validation.annotation.Validated;
 @Setter
 public class AuthDataProperties {
 
-    String file;
+    String source;
 
     String apiEndpoint;
     String apiKey;
 
 
     public boolean isFileProvider() {
-        return StringUtils.isNotBlank(file);
+        return StringUtils.startsWith(source, "file");
     }
 
-    public boolean isApiDataProvider() {return StringUtils.isNotBlank(apiEndpoint);}
+    public boolean isApiDataProvider() {return StringUtils.startsWithAny(source, "http", "https");}
 }

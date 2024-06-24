@@ -20,7 +20,7 @@ public class FileAuthDataProvider implements AuthDataProvider {
     private AuthDataSource authDataSource;
     public FileAuthDataProvider(String authFileFullPath) {
 
-        try(InputStream inputStream = new FileInputStream(authFileFullPath)) {
+        try(InputStream inputStream = new FileInputStream(authFileFullPath.replace("file:",""))) {
             ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
 
             authDataSource = objectMapper.readValue(inputStream, AuthDataSource.class);

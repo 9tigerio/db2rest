@@ -32,10 +32,9 @@
     <dependencies>
 
 
-
         <dependency>
             <groupId>com.github</groupId>
-            <artifactId>auth-sureness</artifactId>
+            <artifactId>auth</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
