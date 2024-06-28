@@ -40,34 +40,40 @@ public class AuthFilter extends OncePerRequestFilter {
 
         log.info("Request URI - {}", requestUri);
 
-        String authHeaderValue = request.getHeader(AUTH_HEADER);
+        if(!authProvider.isExcluded(requestUri, method)) {
+            String authHeaderValue = request.getHeader(AUTH_HEADER);
 
-        if(StringUtils.isBlank(authHeaderValue)) {
-            String errorMessage = "Auth token not provided in header. Please add header "
-                    + AUTH_HEADER + " with valid Auth token.";
-            addError(errorMessage, request, response);
-            return;
+            if(StringUtils.isBlank(authHeaderValue)) {
+                String errorMessage = "Auth token not provided in header. Please add header "
+                        + AUTH_HEADER + " with valid Auth token.";
+                addError(errorMessage, request, response);
+                return;
+            }
+
+            //authenticate
+            UserDetail userDetail =
+                    authProvider.authenticate(authHeaderValue);
+
+            if(Objects.isNull(userDetail)) {
+                String errorMessage = "Authentication failure.";
+                addError(errorMessage, request, response);
+                return;
+            }
+
+            //authorize
+            boolean authorized =
+                    authProvider.authorize(userDetail, requestUri, method);
+
+            if(!authorized) {
+                String errorMessage = "Authorization failure.";
+                addError(errorMessage, request, response);
+                return;
+            }
+        }
+        else {
+            log.info("URI in whitelist. Security checks not applied.");
         }
 
-        //authenticate
-        UserDetail userDetail =
-                authProvider.authenticate(authHeaderValue);
-
-        if(Objects.isNull(userDetail)) {
-            String errorMessage = "Authentication failure.";
-            addError(errorMessage, request, response);
-            return;
-        }
-
-        //authorize
-        boolean authorized =
-                authProvider.authorize(userDetail, requestUri, method);
-
-        if(!authorized) {
-            String errorMessage = "Authorization failure.";
-            addError(errorMessage, request, response);
-            return;
-        }
 
 
         filterChain.doFilter(request, response);

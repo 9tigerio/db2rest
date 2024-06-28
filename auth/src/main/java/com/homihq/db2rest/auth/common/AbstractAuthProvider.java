@@ -16,8 +16,20 @@ public abstract class AbstractAuthProvider{
 
     public abstract boolean authorize(UserDetail userDetail, String resourceUri, String method);
 
+    public abstract boolean isExcluded(String requestUri, String method);
 
-    protected boolean authorizeCommon(UserDetail userDetail, String requestUri, String method,
+    protected boolean isExcludedInternal(String requestUri, String method,  List<ApiExcludedResource> excludedResources,
+                                 AntPathMatcher antPathMatcher) {
+
+       return
+                excludedResources
+                        .stream()
+                        .anyMatch(r -> antPathMatcher.match(r.resource(), requestUri)
+                                && StringUtils.equalsIgnoreCase(r.method(), method));
+    }
+
+
+    protected boolean authorizeInternal(UserDetail userDetail, String requestUri, String method,
                                    List<ResourceRole> resourceRoleList, AntPathMatcher antPathMatcher) {
 
         //resource mapping

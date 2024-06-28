@@ -3,10 +3,7 @@ package com.homihq.db2rest.auth.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import com.homihq.db2rest.auth.common.AuthDataProvider;
-import com.homihq.db2rest.auth.common.AuthDataSource;
-import com.homihq.db2rest.auth.common.ResourceRole;
-import com.homihq.db2rest.auth.common.User;
+import com.homihq.db2rest.auth.common.*;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -39,8 +36,15 @@ public class FileAuthDataProvider implements AuthDataProvider {
         return authDataSource.resourceRoles();
     }
 
+
+
     @Override
     public List<User> getUsers() {
         return null;
+    }
+
+    @Override
+    public List<ApiExcludedResource> getExcludedResources() {
+        return authDataSource.excludedResources();
     }
 }

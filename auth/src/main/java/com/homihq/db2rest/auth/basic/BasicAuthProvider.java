@@ -4,6 +4,8 @@ import com.homihq.db2rest.auth.common.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.AntPathMatcher;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -13,6 +15,7 @@ import java.util.Base64;
 public class BasicAuthProvider extends AbstractAuthProvider {
 
     private final AuthDataProvider authDataProvider;
+    private final AntPathMatcher antPathMatcher;
     @Override
     public boolean canHandle(String authHeader) {
         return StringUtils.isNotBlank(authHeader) && authHeader.startsWith("Basic ");
@@ -36,5 +39,10 @@ public class BasicAuthProvider extends AbstractAuthProvider {
     @Override
     public boolean authorize(UserDetail userDetail, String requestUri, String method) {
         return false;
+    }
+
+    @Override
+    public boolean isExcluded(String requestUri, String method) {
+        return super.isExcludedInternal(requestUri, method, authDataProvider.getExcludedResources(), antPathMatcher);
     }
 }

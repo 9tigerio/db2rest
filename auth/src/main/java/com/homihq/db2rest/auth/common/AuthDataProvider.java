@@ -9,6 +9,8 @@ public interface AuthDataProvider {
 
     List<ResourceRole> getApiResourceRoles();
     List<User> getUsers();
+    List<ApiExcludedResource> getExcludedResources();
+
 
     default User validate(String username, String password) {
         return

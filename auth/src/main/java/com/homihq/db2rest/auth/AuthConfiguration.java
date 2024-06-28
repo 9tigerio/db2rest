@@ -46,7 +46,7 @@ public class AuthConfiguration {
 
     @Bean
     public AbstractAuthProvider authProvider(AuthDataProperties authDataProperties) throws Exception{
-        return new BasicAuthProvider(authDataProvider(authDataProperties));
+        return new BasicAuthProvider(authDataProvider(authDataProperties),authAntPathMatcher());
 
         /*
         JWTVerifier jwtVerifier =
