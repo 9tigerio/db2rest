@@ -67,6 +67,10 @@ logging:
 
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,httpexchanges,prometheus"
   datadog:
     metrics:
       export:
@@ -76,7 +80,10 @@ management:
         uri: ${DATADOG_EXPORT_URI}
         step: ${DATADOG_EXPORT_INTERVAL:30s}
 
-
+  prometheus:
+    metrics:
+      export:
+        enabled: ${PROMETHEUS_EXPORT_ENABLED:false}
 
 sureness:
   enable: ${ENABLE_AUTH:false}

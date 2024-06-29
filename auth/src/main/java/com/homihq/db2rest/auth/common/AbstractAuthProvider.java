@@ -4,11 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.AntPathMatcher;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 public abstract class AbstractAuthProvider{
+
+    private final String [] DEFAULT_WHITELIST = {"/actuator/**"} ;
 
     public abstract boolean canHandle(String authHeader);
 
@@ -21,11 +24,24 @@ public abstract class AbstractAuthProvider{
     protected boolean isExcludedInternal(String requestUri, String method,  List<ApiExcludedResource> excludedResources,
                                  AntPathMatcher antPathMatcher) {
 
-       return
-                excludedResources
-                        .stream()
-                        .anyMatch(r -> antPathMatcher.match(r.resource(), requestUri)
-                                && StringUtils.equalsIgnoreCase(r.method(), method));
+        //check in default whitelist first
+
+        boolean match =
+                Arrays.stream(DEFAULT_WHITELIST)
+                        .anyMatch(r -> antPathMatcher.match(r, requestUri));
+
+        if(!match) {
+
+            return
+                    excludedResources
+                            .stream()
+                            .anyMatch(r ->
+                                    (antPathMatcher.match(r.resource(), requestUri)
+                                            && StringUtils.equalsIgnoreCase(r.method(), method))
+                            );
+        }
+
+        return true;
     }
 
 
