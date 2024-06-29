@@ -3,16 +3,15 @@ package com.homihq.db2rest.auth.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import com.homihq.db2rest.auth.common.AuthDataProvider;
-import com.homihq.db2rest.auth.common.AuthDataSource;
-import com.homihq.db2rest.auth.common.ResourceRole;
-import com.homihq.db2rest.auth.common.User;
+import com.homihq.db2rest.auth.common.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class FileAuthDataProvider implements AuthDataProvider {
@@ -20,7 +19,7 @@ public class FileAuthDataProvider implements AuthDataProvider {
     private AuthDataSource authDataSource;
     public FileAuthDataProvider(String authFileFullPath) {
 
-        try(InputStream inputStream = new FileInputStream(authFileFullPath)) {
+        try(InputStream inputStream = new FileInputStream(authFileFullPath.replace("file:",""))) {
             ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
 
             authDataSource = objectMapper.readValue(inputStream, AuthDataSource.class);
@@ -39,8 +38,21 @@ public class FileAuthDataProvider implements AuthDataProvider {
         return authDataSource.resourceRoles();
     }
 
+
+
     @Override
     public List<User> getUsers() {
-        return null;
+        return authDataSource.users();
+    }
+
+    @Override
+    public List<ApiExcludedResource> getExcludedResources() {
+        return authDataSource.excludedResources();
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return getUsers().stream()
+                .filter(u -> StringUtils.equals(u.username(), username)).findFirst();
     }
 }

@@ -4,8 +4,11 @@ import com.homihq.db2rest.auth.common.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.AntPathMatcher;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -13,6 +16,7 @@ import java.util.Base64;
 public class BasicAuthProvider extends AbstractAuthProvider {
 
     private final AuthDataProvider authDataProvider;
+    private final AntPathMatcher antPathMatcher;
     @Override
     public boolean canHandle(String authHeader) {
         return StringUtils.isNotBlank(authHeader) && authHeader.startsWith("Basic ");
@@ -28,13 +32,25 @@ public class BasicAuthProvider extends AbstractAuthProvider {
         String username = parts[0];
         String password = parts[1];
 
-        User user = authDataProvider.validate(username, password);
 
-        return new UserDetail(username, user.roles());
+        Optional<User> user = authDataProvider.getUserByUsername(username);
+
+        if(user.isPresent() && StringUtils.equals(password, user.get().password())) {
+            return new UserDetail(username, user.get().roles());
+        }
+
+        return null;
+
     }
 
     @Override
     public boolean authorize(UserDetail userDetail, String requestUri, String method) {
-        return false;
+
+        return this.authorizeInternal(userDetail, requestUri, method, authDataProvider.getApiResourceRoles(), antPathMatcher);
+    }
+
+    @Override
+    public boolean isExcluded(String requestUri, String method) {
+        return super.isExcludedInternal(requestUri, method, authDataProvider.getExcludedResources(), antPathMatcher);
     }
 }

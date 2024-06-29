@@ -1,15 +1,13 @@
 package com.homihq.db2rest.auth.data;
 
 
-import com.homihq.db2rest.auth.common.AuthDataProvider;
-import com.homihq.db2rest.auth.common.AuthDataSource;
-import com.homihq.db2rest.auth.common.ResourceRole;
-import com.homihq.db2rest.auth.common.User;
+import com.homihq.db2rest.auth.common.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class ApiAuthDataProvider implements AuthDataProvider {
@@ -40,4 +38,16 @@ public class ApiAuthDataProvider implements AuthDataProvider {
     public List<User> getUsers() {
         return null;
     }
+
+    @Override
+    public List<ApiExcludedResource> getExcludedResources() {
+        return List.of();
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return Optional.empty();
+    }
+
+
 }

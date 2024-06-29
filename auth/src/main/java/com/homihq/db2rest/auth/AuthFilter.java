@@ -17,17 +17,16 @@ import org.springframework.web.util.UrlPathHelper;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
 
-    private final List<AbstractAuthProvider> authProviders;
+    private final AbstractAuthProvider authProvider;
     private final ObjectMapper objectMapper;
     String AUTH_HEADER = "Authorization";
+    UrlPathHelper urlPathHelper = new UrlPathHelper();
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
@@ -35,34 +34,27 @@ public class AuthFilter extends OncePerRequestFilter {
 
 
         log.info("Handling Auth");
-        UrlPathHelper urlPathHelper = new UrlPathHelper();
+
         String requestUri = urlPathHelper.getRequestUri(request);
         String method = request.getMethod();
 
         log.info("Request URI - {}", requestUri);
 
-        String authHeaderValue = request.getHeader(AUTH_HEADER);
+        if(!authProvider.isExcluded(requestUri, method)) {
+            String authHeaderValue = request.getHeader(AUTH_HEADER);
 
-        if(StringUtils.isBlank(authHeaderValue)) {
-            String errorMessage = "Auth token not provided in header. Please add header "
-                    + AUTH_HEADER + " with valid Auth token.";
-            addError(errorMessage, request, response);
-            return;
-        }
+            if(StringUtils.isBlank(authHeaderValue)) {
+                String errorMessage = "Auth token not provided in header. Please add header "
+                        + AUTH_HEADER + " with valid Auth token.";
+                addError(errorMessage, request, response);
+                return;
+            }
 
-        Optional<AbstractAuthProvider> authProvider = authProviders.stream()
-                                            .filter(ap -> ap.canHandle(authHeaderValue))
-                                            .findFirst();
-
-        if(authProvider.isEmpty()) {
-            String errorMessage = "No Auth Handler found";
-            addError(errorMessage, request, response);
-            return;
-        }
-        else{
             //authenticate
             UserDetail userDetail =
-            authProvider.get().authenticate(authHeaderValue);
+                    authProvider.authenticate(authHeaderValue);
+
+            log.info("user detail - {}", userDetail);
 
             if(Objects.isNull(userDetail)) {
                 String errorMessage = "Authentication failure.";
@@ -72,7 +64,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
             //authorize
             boolean authorized =
-            authProvider.get().authorize(userDetail, requestUri, method);
+                    authProvider.authorize(userDetail, requestUri, method);
 
             if(!authorized) {
                 String errorMessage = "Authorization failure.";
@@ -80,6 +72,11 @@ public class AuthFilter extends OncePerRequestFilter {
                 return;
             }
         }
+        else {
+            log.info("URI in whitelist. Security checks not applied.");
+        }
+
+
 
         filterChain.doFilter(request, response);
 

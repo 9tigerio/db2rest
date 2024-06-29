@@ -3,6 +3,7 @@ package com.homihq.db2rest.auth;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.homihq.db2rest.auth.basic.BasicAuthProvider;
 import com.homihq.db2rest.auth.common.AbstractAuthProvider;
 import com.homihq.db2rest.auth.common.AuthDataProvider;
 import com.homihq.db2rest.auth.data.ApiAuthDataProvider;
@@ -39,14 +40,15 @@ public class AuthConfiguration {
     @Bean
     public AuthFilter authFilter(AuthDataProperties authDataProperties, ObjectMapper objectMapper) throws Exception {
         log.info("** Auth enabled. Initializing auth components.");
-        List<AbstractAuthProvider> authProviders = List.of(jwtAuthProvider(authDataProperties));
 
-        return new AuthFilter(authProviders, objectMapper);
+        return new AuthFilter(authProvider(authDataProperties), objectMapper);
     }
 
     @Bean
-    public JwtAuthProvider jwtAuthProvider(AuthDataProperties authDataProperties) throws Exception{
+    public AbstractAuthProvider authProvider(AuthDataProperties authDataProperties) throws Exception{
+        return new BasicAuthProvider(authDataProvider(authDataProperties),authAntPathMatcher());
 
+        /*
         JWTVerifier jwtVerifier =
         JWT.require(AlgorithmFactory.getAlgorithm(jwtProperties))
                 .withIssuer(jwtProperties.getIssuers())
@@ -55,6 +57,8 @@ public class AuthConfiguration {
         return new JwtAuthProvider(jwtVerifier,
                 authDataProvider(authDataProperties), authAntPathMatcher()
         );
+
+         */
     }
 
     @Bean
@@ -62,7 +66,7 @@ public class AuthConfiguration {
 
         if(authDataProperties.isFileProvider()) {
             log.info("Initializing file auth data provider");
-            return new FileAuthDataProvider(authDataProperties.getFile());
+            return new FileAuthDataProvider(authDataProperties.getSource());
         }
         else if(authDataProperties.isApiDataProvider()){
             log.info("Initializing API auth data provider");

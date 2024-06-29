@@ -44,6 +44,11 @@ public class JwtAuthProvider extends AbstractAuthProvider {
 
     @Override
     public boolean authorize(UserDetail userDetail, String requestUri, String method) {
-        return super.authorizeCommon(userDetail, requestUri, method, authDataProvider.getApiResourceRoles(), antPathMatcher);
+        return super.authorizeInternal(userDetail, requestUri, method, authDataProvider.getApiResourceRoles(), antPathMatcher);
+    }
+
+    @Override
+    public boolean isExcluded(String requestUri, String method) {
+        return false;
     }
 }
