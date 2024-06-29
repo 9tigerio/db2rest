@@ -5,11 +5,13 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import com.homihq.db2rest.auth.common.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class FileAuthDataProvider implements AuthDataProvider {
@@ -40,11 +42,17 @@ public class FileAuthDataProvider implements AuthDataProvider {
 
     @Override
     public List<User> getUsers() {
-        return null;
+        return authDataSource.users();
     }
 
     @Override
     public List<ApiExcludedResource> getExcludedResources() {
         return authDataSource.excludedResources();
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return getUsers().stream()
+                .filter(u -> StringUtils.equals(u.username(), username)).findFirst();
     }
 }

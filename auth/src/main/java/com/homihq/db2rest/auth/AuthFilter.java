@@ -54,6 +54,8 @@ public class AuthFilter extends OncePerRequestFilter {
             UserDetail userDetail =
                     authProvider.authenticate(authHeaderValue);
 
+            log.info("user detail - {}", userDetail);
+
             if(Objects.isNull(userDetail)) {
                 String errorMessage = "Authentication failure.";
                 addError(errorMessage, request, response);

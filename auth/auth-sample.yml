@@ -1,7 +1,7 @@
 name: db2rest-security
 
 resourceRoles:
-  - resource: "/api/v2/host"
+  - resource: "/v1/rdbms/pgdb/actor/**"
     method: post
     roles:
       - role2
@@ -18,7 +18,7 @@ resourceRoles:
 excludedResources:
   - resource: "/v1/rdbms/**"
     method: get
-  - resource: "/v1/rdbms/**"
+  - resource: "/v1/rdbms/pgdb/factor"
     method: post
   - resource: "/v1/rdbms/**"
     method: put
@@ -28,7 +28,7 @@ excludedResources:
 users:
   - username: admin
     password: admin
-    roles: [role1,role2]
+    roles: [role1,role6]
   - username: root
     password: 23456
     roles: [role1]

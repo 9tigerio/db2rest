@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class ApiAuthDataProvider implements AuthDataProvider {
@@ -41,6 +42,11 @@ public class ApiAuthDataProvider implements AuthDataProvider {
     @Override
     public List<ApiExcludedResource> getExcludedResources() {
         return List.of();
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return Optional.empty();
     }
 
 
