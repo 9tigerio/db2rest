@@ -85,5 +85,4 @@ management:
       export:
         enabled: ${PROMETHEUS_EXPORT_ENABLED:false}
 
-sureness:
-  enable: ${ENABLE_AUTH:false}
+
