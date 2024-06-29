@@ -45,7 +45,8 @@ public class BasicAuthProvider extends AbstractAuthProvider {
 
     @Override
     public boolean authorize(UserDetail userDetail, String requestUri, String method) {
-        return false;
+
+        return this.authorizeInternal(userDetail, requestUri, method, authDataProvider.getApiResourceRoles(), antPathMatcher);
     }
 
     @Override

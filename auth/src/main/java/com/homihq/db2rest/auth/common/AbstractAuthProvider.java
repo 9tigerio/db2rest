@@ -47,12 +47,13 @@ public abstract class AbstractAuthProvider{
                             .stream()
                             .anyMatch(role -> StringUtils.equalsAnyIgnoreCase(role, userDetail.getRoles()));
 
-            log.info("Role match - {}", roleMatch);
+            log.info("Role match result - {}", roleMatch);
+
+            return roleMatch;
 
         }
-        else{
-            log.info("Failed to match resource role and/or HTTP method");
-        }
+
+        log.info("Failed to match resource role and/or HTTP method");
 
         return false;
     }
