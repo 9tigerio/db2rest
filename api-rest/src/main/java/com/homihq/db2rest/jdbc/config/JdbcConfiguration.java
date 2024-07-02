@@ -105,7 +105,7 @@ public class JdbcConfiguration {
                 ,new OracleDialect(objectMapper)
         );
 
-        return new JdbcManager(dataSource(), dialects);
+        return new JdbcManager(dataSource(), dialects, databaseProperties);
     }
 
     @Bean

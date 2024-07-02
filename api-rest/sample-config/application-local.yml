@@ -10,7 +10,7 @@ app:
       type: MYSQL
       url: jdbc:mysql://localhost:3306/sakila
       username: root
-      password: @Kolkata84
+      password: "@Kolkata84"
 
 
 
