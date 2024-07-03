@@ -1,19 +1,26 @@
 package com.homihq.db2rest.multidb;
 
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
-@Getter
+@Data
 @Component
 @ConfigurationProperties(prefix = "app")
 public class DatabaseProperties {
 
-    @Setter
-    //private List<Map<String,String>> databases;
 
     private List<DatabaseConnectionDetail> databases;
+
+    public Optional<DatabaseConnectionDetail> getDatabase(String dbId) {
+        return
+        databases.stream()
+                .filter(databaseConnectionDetail -> StringUtils.equalsIgnoreCase(dbId, databaseConnectionDetail.id()))
+                .findFirst();
+    }
 }

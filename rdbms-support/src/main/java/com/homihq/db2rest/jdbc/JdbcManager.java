@@ -10,6 +10,8 @@ import com.homihq.db2rest.jdbc.multidb.DbDetailHolder;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
+import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
+import com.homihq.db2rest.multidb.DatabaseProperties;
 import jakarta.annotation.PostConstruct;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public final class JdbcManager {
 
     private final DataSource dataSource;
     private final List<Dialect> availableDialects;
-
+    private final DatabaseProperties databaseProperties;
     private Map<String,DbTable> dbTableMap;
 
     private final Map<String, DbDetailHolder> dbDetailHolderMap = new ConcurrentHashMap<>();
@@ -59,19 +61,32 @@ public final class JdbcManager {
         log.info("Attempting to load meta-data for all relational data-sources.");
 
         if(dataSource instanceof RoutingDataSource) {
+
+
             Map<Object,DataSource> dataSourceMap = ((RoutingDataSource) dataSource).getResolvedDataSources();
 
             if(dataSourceMap.isEmpty()) log.info("**** No datasource to load.");
 
             for(Object dbId : dataSourceMap.keySet()) {
                 DataSource ds = dataSourceMap.get(dbId);
-                loadMetaData((String) dbId, ds);
+                DatabaseConnectionDetail databaseConnectionDetail = null;
+                Optional<DatabaseConnectionDetail> connectionDetail = this.databaseProperties
+                        .getDatabase((String) dbId);
+
+                if(connectionDetail.isPresent()) {
+                    databaseConnectionDetail = connectionDetail.get();
+                }
+
+
+                log.info("Database connection details - {}", databaseConnectionDetail);
+
+                loadMetaData((String) dbId, ds, databaseConnectionDetail);
+
                 this.namedParameterJdbcTemplateMap.put((String) dbId, new NamedParameterJdbcTemplate(ds));
 
                 JdbcTransactionManager jdbcTransactionManager = new JdbcTransactionManager(ds);
 
                 this.jdbcTransactionManagerMap.put((String) dbId, jdbcTransactionManager);
-
                 this.transactionTemplateMap.put((String) dbId, new TransactionTemplate(jdbcTransactionManager));
 
             }
@@ -81,14 +96,23 @@ public final class JdbcManager {
         }
     }
 
-    private void loadMetaData(String dbId, DataSource ds) {
+    private void loadMetaData(String dbId, DataSource ds, DatabaseConnectionDetail databaseConnectionDetail) {
         log.info("Loading meta data - {}", ds);
         try {
             Map<String,DbTable> dbTableMap = new ConcurrentHashMap<>();
 
+            // assume database connection detail as null
+            boolean includeAllSchemas = true;
+            List<String> schemas = null;
+
+            if(Objects.nonNull(databaseConnectionDetail)) {
+                includeAllSchemas = databaseConnectionDetail.includeAllSchemas();
+                schemas = databaseConnectionDetail.schemas();
+            }
+
             //TODO Get from db config
             DbMeta dbMeta = JdbcUtils.extractDatabaseMetaData(ds,
-                    new JdbcMetaDataProvider(true, List.of()));
+                    new JdbcMetaDataProvider(includeAllSchemas, schemas));
 
             for (final  DbTable dbTable : dbMeta.dbTables()) {
                 dbTableMap.put(dbTable.name(), dbTable);
