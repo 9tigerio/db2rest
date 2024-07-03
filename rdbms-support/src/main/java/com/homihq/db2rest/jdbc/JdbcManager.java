@@ -69,12 +69,19 @@ public final class JdbcManager {
 
             for(Object dbId : dataSourceMap.keySet()) {
                 DataSource ds = dataSourceMap.get(dbId);
+                DatabaseConnectionDetail databaseConnectionDetail = null;
+                Optional<DatabaseConnectionDetail> connectionDetail = this.databaseProperties
+                        .getDatabase((String) dbId);
 
-                DatabaseConnectionDetail databaseConnectionDetail = this.databaseProperties.getDatabase((String) dbId).get();
+                if(connectionDetail.isPresent()) {
+                    databaseConnectionDetail = connectionDetail.get();
+                }
+
 
                 log.info("Database connection details - {}", databaseConnectionDetail);
 
                 loadMetaData((String) dbId, ds, databaseConnectionDetail);
+
                 this.namedParameterJdbcTemplateMap.put((String) dbId, new NamedParameterJdbcTemplate(ds));
 
                 JdbcTransactionManager jdbcTransactionManager = new JdbcTransactionManager(ds);
@@ -94,10 +101,18 @@ public final class JdbcManager {
         try {
             Map<String,DbTable> dbTableMap = new ConcurrentHashMap<>();
 
+            // assume database connection detail as null
+            boolean includeAllSchemas = true;
+            List<String> schemas = null;
+
+            if(Objects.nonNull(databaseConnectionDetail)) {
+                includeAllSchemas = databaseConnectionDetail.includeAllSchemas();
+                schemas = databaseConnectionDetail.schemas();
+            }
+
             //TODO Get from db config
             DbMeta dbMeta = JdbcUtils.extractDatabaseMetaData(ds,
-                    new JdbcMetaDataProvider(databaseConnectionDetail.includeAllSchemas(),
-                            databaseConnectionDetail.schemas()));
+                    new JdbcMetaDataProvider(includeAllSchemas, schemas));
 
             for (final  DbTable dbTable : dbMeta.dbTables()) {
                 dbTableMap.put(dbTable.name(), dbTable);
