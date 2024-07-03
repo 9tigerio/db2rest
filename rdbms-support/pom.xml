@@ -13,8 +13,8 @@
 
     <artifactId>rdbms-support</artifactId>
     <version>${project.parent.version}</version>
-    <name>db2rest-rdbms</name>
-    <description>db2rest-rdbms</description>
+    <name>rdbms-support</name>
+    <description>rdbms-support</description>
     <properties>
         <java.version>21</java.version>
     </properties>
