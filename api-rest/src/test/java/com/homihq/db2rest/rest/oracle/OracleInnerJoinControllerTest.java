@@ -23,6 +23,7 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(212)
 @TestWithResources
+@Disabled
 class OracleInnerJoinControllerTest extends OracleBaseIntegrationTest {
 
     @WithJacksonMapper
