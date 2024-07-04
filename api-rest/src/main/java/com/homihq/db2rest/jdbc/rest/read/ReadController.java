@@ -1,5 +1,6 @@
 package com.homihq.db2rest.jdbc.rest.read;
 
+import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.core.service.ReadService;
 import com.homihq.db2rest.jdbc.dto.JoinDetail;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
@@ -15,6 +16,7 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 public class ReadController {
 
     private final ReadService readService;
+    private final Db2RestConfigProperties db2RestConfigProperties;
 
     @GetMapping(value =VERSION + "/{dbId}/{tableName}" , produces = "application/json")
     public Object findAll(
@@ -37,6 +39,7 @@ public class ReadController {
                 .filter(filter)
                 .sorts(sorts)
                 .limit(limit)
+                .defaultFetchLimit(db2RestConfigProperties.getDefaultFetchLimit())
                 .offset(offset)
                 .build();
 
@@ -65,6 +68,7 @@ public class ReadController {
                 .filter(filter)
                 .sorts(sorts)
                 .limit(limit)
+                .defaultFetchLimit(db2RestConfigProperties.getDefaultFetchLimit())
                 .offset(offset)
                 .joins(joins)
                 .build();

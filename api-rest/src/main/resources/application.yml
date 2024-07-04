@@ -48,7 +48,8 @@ db2rest:
     timeFormat: ${TIME_FORMAT:HH:mm:ss}
     dateFormat: ${DATE_FORMAT:yyyy-MM-dd}
     dateTimeFormat: ${DATE_TIME_FORMAT:yyyy-MM-dd HH:mm:ss}
-    defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
+
+  defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
 
   allowSafeDelete : ${ALLOW_SAFE_DELETE:true}
 
@@ -58,9 +59,9 @@ db2rest:
 
 logging:
   level:
-    com.homihq.db2rest:
-      rest: INFO
-      jdbc.service: INFO
+    com.homihq.db2rest.rest: INFO
+    com.homihq.db2rest.jdbc.core.service: INFO
+
     org.springframework.web : INFO
     org.springframework.beans : INFO
     org.springframework.jdbc: INFO

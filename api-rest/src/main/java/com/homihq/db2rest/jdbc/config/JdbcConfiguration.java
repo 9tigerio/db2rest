@@ -296,8 +296,8 @@ public class JdbcConfiguration {
 
     @Bean
     @ConditionalOnBean(ReadService.class)
-    public ReadController readController(ReadService readService) {
-        return new ReadController(readService);
+    public ReadController readController(ReadService readService,  Db2RestConfigProperties configProperties) {
+        return new ReadController(readService, configProperties);
     }
 
 
