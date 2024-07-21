@@ -21,7 +21,7 @@ import java.util.Objects;
 @Component
 public class DatabaseContextRequestInterceptor implements AsyncHandlerInterceptor {
 
-        private List<String> WHITE_LIST = List.of("/swagger-ui/**", "/v3/api-docs/**");
+        private List<String> WHITE_LIST = List.of("/swagger-ui/**", "/v3/api-docs/**", "/actuator/**");
 
         private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
