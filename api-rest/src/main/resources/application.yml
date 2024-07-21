@@ -72,7 +72,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,httpexchanges,prometheus"
+        include: "health,info,httpexchanges,prometheus,metrics"
   datadog:
     metrics:
       export:
