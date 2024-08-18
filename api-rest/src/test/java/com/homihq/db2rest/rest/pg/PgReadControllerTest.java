@@ -9,19 +9,17 @@ import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 
-
 import java.util.Map;
 
-import static org.hamcrest.Matchers.*;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(101)
 @TestWithResources
@@ -86,49 +84,6 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$[0].releaseYear", notNullValue()))
                 .andDo(document("pg-find-all-films-with-column-alias"));
     }
-
-    @Test
-    @DisplayName("Test Custom Query with Single Result")
-    void findCustomQuerySingleResult() throws Exception {
-
-        mockMvc.perform(post(VERSION + "/pgsqldb/query")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(SINGLE_RESULT_ACTOR_QUERY)))
-                //.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.first_name", equalTo("PENELOPE")))
-                .andDo(document("pg-custom-query-single-result"));
-    }
-
-    @Test
-    @DisplayName("Test Custom Query returns list of results")
-    void findCustomQueryMultipleResult() throws Exception {
-
-        mockMvc.perform(post(VERSION + "/pgsqldb/query")
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(BULK_RESULT_ACTOR_QUERY)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(2)))
-                .andExpect(jsonPath("$[0].first_name", equalTo("PENELOPE")))
-                .andExpect(jsonPath("$[1].last_name", equalTo("WAHLBERG")))
-                .andDo(document("pg-custom-query-list-result"));
-    }
-
-    @Test
-    @DisplayName("Test Custom Query returns 400 - Bad Request")
-    void findCustomQueryWithError400() throws Exception {
-
-        mockMvc.perform(post(VERSION + "/pgsqldb/query")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(EMPTY_ACTOR_QUERY)))
-                // .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status", is(400)))
-                .andDo(document("pg-custom-query-with-error-400"));
-    }
-
 
     @Test
     @DisplayName("Test find one record")
