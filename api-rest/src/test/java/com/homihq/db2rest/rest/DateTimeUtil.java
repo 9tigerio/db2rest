@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class DateTimeUtil {
 
     // Convert LocalDateTime to UTC string
-    public static String transformTimeStamp(MvcResult result) throws UnsupportedEncodingException {
+    public static String utcToLocalTimestampString(MvcResult result) throws UnsupportedEncodingException {
         String lastUpdateStr = result.getResponse().getContentAsString();
 
         String lastUpdateValue = JsonPath.read(lastUpdateStr, "$[0].last_update");
