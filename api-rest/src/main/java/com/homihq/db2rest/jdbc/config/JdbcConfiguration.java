@@ -1,31 +1,30 @@
 package com.homihq.db2rest.jdbc.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.jdbc.JdbcOperationService;
-import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.config.dialect.*;
-
-import com.homihq.db2rest.multidb.DatabaseProperties;
-import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
-import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
-import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.bulk.DataProcessor;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-
+import com.homihq.db2rest.jdbc.JdbcManager;
+import com.homihq.db2rest.jdbc.JdbcOperationService;
+import com.homihq.db2rest.jdbc.config.dialect.*;
+import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.core.service.*;
+import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
-
-import com.homihq.db2rest.jdbc.rest.read.*;
+import com.homihq.db2rest.jdbc.rest.read.CountQueryController;
+import com.homihq.db2rest.jdbc.rest.read.ExistsQueryController;
+import com.homihq.db2rest.jdbc.rest.read.FindOneController;
+import com.homihq.db2rest.jdbc.rest.read.ReadController;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
 import com.homihq.db2rest.jdbc.rest.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
-
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
+import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
+import com.homihq.db2rest.multidb.DatabaseProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
@@ -206,11 +205,6 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    public CustomQueryService customQueryService(JdbcManager jdbcManager,DbOperationService dbOperationService) {
-        return new JdbcCustomQueryService(jdbcManager, dbOperationService);
-    }
-
-    @Bean
     public ReadService readService(
             JdbcManager jdbcManager,
             SqlCreatorTemplate sqlCreatorTemplate,
@@ -280,12 +274,6 @@ public class JdbcConfiguration {
     @ConditionalOnBean(ExistsQueryService.class)
     public ExistsQueryController existsQueryController(ExistsQueryService existsQueryService) {
         return new ExistsQueryController(existsQueryService);
-    }
-
-    @Bean
-    @ConditionalOnBean(CustomQueryService.class)
-    public CustomQueryController customQueryController(CustomQueryService customQueryService) {
-        return new CustomQueryController(customQueryService);
     }
 
     @Bean
