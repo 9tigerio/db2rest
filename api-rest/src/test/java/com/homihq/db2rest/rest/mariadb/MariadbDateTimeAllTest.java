@@ -1,0 +1,129 @@
+package com.homihq.db2rest.rest.mariadb;
+
+import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.homihq.db2rest.MariaDBBaseIntegrationTest;
+import com.homihq.db2rest.rest.DateTimeUtil;
+import org.junit.jupiter.api.*;
+import org.springframework.test.context.TestPropertySource;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Order(392)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestPropertySource(properties = {"db2rest.allowSafeDelete=false"})
+public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
+
+    @WithJacksonMapper
+    ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
+
+    private final String dateTime = "2024-03-15T10:30:45.000";
+
+    @Test
+    @Order(1)
+    @DisplayName("Test Create a actor with datetime fields")
+    void createActorWithDateTimeFields() throws Exception {
+        // Prepare the request with datetime fields
+        Map<String, Object> actorRequestWithDateTime = new HashMap<>();
+        actorRequestWithDateTime.put("first_name", "Collective");
+        actorRequestWithDateTime.put("last_name", "Unconscious");
+        actorRequestWithDateTime.put("last_update", "2020-03-15T14:30:45.000");
+
+        mockMvc.perform(post(VERSION + "/mariadb/actor")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(actorRequestWithDateTime)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.row", equalTo(1)))
+                .andDo(document("mariadb-create-an-actor-with-datetime"));
+    }
+
+    @Test
+    @Order(1)
+    @DisplayName("Test Create an actor with error timestamp field")
+    void createActorWithErrorDateTimeField() throws Exception{
+        Map<String, Object> actorRequestWithErrorDateTime = new HashMap<>();
+        actorRequestWithErrorDateTime.put("first_name", "Hero");
+        actorRequestWithErrorDateTime.put("last_name", "shadow");
+        actorRequestWithErrorDateTime.put("last_update", "2023-15-35T14:75:90");
+
+        mockMvc.perform(post(VERSION + "/mariadb/actor")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
+                .andExpect(status().isBadRequest())
+                .andDo(document("mariadb-create-an-actor-with-error-timestamp"));
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("Test update an actor with datetime field")
+    void updateActorWithDateTimeField() throws Exception {
+        // Prepare the request with datetime fields
+        Map<String, Object> updateActorRequestWithDateTime = new HashMap<>();
+        updateActorRequestWithDateTime.put("last_update", dateTime);
+
+        mockMvc.perform(patch(VERSION + "/mariadb/actor")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .param("filter", "last_name == Unconscious")
+                        .content(objectMapper.writeValueAsString(updateActorRequestWithDateTime))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", equalTo(1)))
+                .andDo(document("mariadb-update-an-actor-with-datetime"));
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Test get an actor with datetime fields")
+    void getActorWithDateTimeFields() throws Exception {
+        mockMvc.perform(get(VERSION + "/mariadb/actor")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .param("filter", "first_name == Collective"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampString(result)))
+                .andDo(document("mariadb-get-an-actor-with-datetime"));
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Test get an actor filter by timestamp")
+    void getActorFilterByTimeStamp() throws Exception {
+        mockMvc.perform(get(VERSION + "/mariadb/actor")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .param("filter", "last_update > \"2023-03-15T10:30:45.00Z\""))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("[0].last_name", equalTo("Unconscious")))
+                .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampString(result)))
+                .andDo(document("mariadb-get-an-actor-filter-by-timestamp"));
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Test delete an actor by timestamp")
+    void deleteActorByTimeStamp() throws Exception {
+        mockMvc.perform(delete(VERSION + "/mariadb/actor")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .param("filter", "last_update > \"2023-03-15T05:30:45.00Z\""))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.rows", equalTo(1)))
+                .andDo(document("mariadb-delete-an-actor-by-timestamp"));
+    }
+}

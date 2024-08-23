@@ -70,7 +70,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_ERROR)))
-                //.andDo(print())
+//                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document("mariadb-create-a-film-error"));
 
