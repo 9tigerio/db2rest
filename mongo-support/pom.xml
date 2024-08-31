@@ -12,12 +12,8 @@
     </parent>
 
     <artifactId>mongo-support</artifactId>
-    <version>${project.parent.version}</version>
     <name>mongo-support</name>
     <description>mongo-support</description>
-    <properties>
-        <java.version>21</java.version>
-    </properties>
 
     <dependencies>
 

@@ -12,12 +12,8 @@
     </parent>
 
     <artifactId>mariadb-dialect</artifactId>
-    <version>${project.parent.version}</version>
     <name>mariadb-dialect</name>
     <description>mariadb-dialect</description>
-    <properties>
-        <java.version>21</java.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
@@ -28,7 +24,7 @@
         <dependency>
             <groupId>com.github</groupId>
             <artifactId>rdbms-common</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

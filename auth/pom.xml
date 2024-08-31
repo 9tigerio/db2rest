@@ -12,12 +12,8 @@
     </parent>
 
     <artifactId>auth</artifactId>
-    <version>${project.parent.version}</version>
     <name>auth</name>
     <description>auth</description>
-    <properties>
-        <java.version>21</java.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

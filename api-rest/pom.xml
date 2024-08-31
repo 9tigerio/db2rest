@@ -12,14 +12,9 @@
     </parent>
 
     <artifactId>db2rest</artifactId>
-    <version>${project.parent.version}</version>
     <packaging>jar</packaging>
     <name>db2rest</name>
     <description>db2rest</description>
-    <properties>
-        <java.version>21</java.version>
-        <spring-restdocs.version>3.0.1</spring-restdocs.version>
-    </properties>
 
     <distributionManagement>
         <repository>

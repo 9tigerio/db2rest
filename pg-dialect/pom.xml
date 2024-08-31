@@ -12,12 +12,8 @@
     </parent>
 
     <artifactId>pg-dialect</artifactId>
-    <version>${project.parent.version}</version>
     <name>pg-dialect</name>
     <description>pg-dialect</description>
-    <properties>
-        <java.version>21</java.version>
-    </properties>
     <dependencies>
 
         <dependency>

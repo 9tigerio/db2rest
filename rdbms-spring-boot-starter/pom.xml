@@ -12,13 +12,8 @@
     </parent>
 
     <artifactId>rdbms-spring-boot-starter</artifactId>
-    <version>${project.parent.version}</version>
     <name>rdbms-support-spring-starter</name>
     <description>rdbms-support-spring-starter</description>
-    <properties>
-        <java.version>21</java.version>
-
-    </properties>
     <dependencies>
 
         <dependency>
