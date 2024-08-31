@@ -12,7 +12,6 @@
     </parent>
 
     <artifactId>mssql-server-dialect</artifactId>
-    <version>${project.parent.version}</version>
     <name>mssql-server-dialect</name>
     <description>Microsoft SQL server dialect</description>
 

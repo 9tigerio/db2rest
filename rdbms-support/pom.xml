@@ -12,12 +12,8 @@
     </parent>
 
     <artifactId>rdbms-support</artifactId>
-    <version>${project.parent.version}</version>
     <name>rdbms-support</name>
     <description>rdbms-support</description>
-    <properties>
-        <java.version>21</java.version>
-    </properties>
     <dependencies>
 
         <dependency>

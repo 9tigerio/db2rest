@@ -12,13 +12,8 @@
     </parent>
 
     <artifactId>rest-common</artifactId>
-    <version>${project.parent.version}</version>
     <name>rest-common</name>
     <description>rest-common</description>
-
-    <properties>
-        <java.version>21</java.version>
-    </properties>
 
     <dependencies>
 
