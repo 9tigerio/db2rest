@@ -2,19 +2,20 @@
 -- Table structure for table `tops`
 --
 
+
 CREATE TABLE tops (
-          top_item varchar(30) NOT NULL,
-          color varchar(30) NOT NULL,
-          t_size varchar(2) NOT NULL
+                      top_item varchar(30) NOT NULL,
+                      color varchar(30) NOT NULL,
+                      t_size varchar(2) NOT NULL
 );
 --
 -- Table structure for table `bottoms`
 --
 
 CREATE TABLE bottoms (
-     bottom_item varchar(30) NOT NULL,
-     color varchar(30) NOT NULL,
-     b_size varchar(2) NOT NULL
+                         bottom_item varchar(30) NOT NULL,
+                         color varchar(30) NOT NULL,
+                         b_size varchar(2) NOT NULL
 );
 
 
@@ -26,23 +27,23 @@ CREATE TABLE bottoms (
 --DROP TABLE users;
 
 CREATE TABLE users (
-       auid INT NOT NULL ,
-       username VARCHAR(45) NOT NULL,
-       password VARCHAR(45) NOT NULL,
-       createdate DATE  DEFAULT sysdate,
-       is_active char(1) DEFAULT 'Y',
-       CONSTRAINT pk_users PRIMARY KEY  (auid)
+                       auid INT NOT NULL ,
+                       username VARCHAR(45) NOT NULL,
+                       password VARCHAR(45) NOT NULL,
+                       createdate DATE  DEFAULT sysdate,
+                       is_active char(1) DEFAULT 'Y',
+                       CONSTRAINT pk_users PRIMARY KEY  (auid)
 );
 
 
 CREATE TABLE userprofile (
-     apid INT NOT NULL,
-     auid INT NOT NULL,
-     firstname VARCHAR(50) NOT NULL,
-     lastname VARCHAR(50) NOT NULL,
-     email VARCHAR(100) NOT NULL,
-     phone VARCHAR(45) NOT NULL,
-     CONSTRAINT pk_userprofile PRIMARY KEY  (apid)
+                             apid INT NOT NULL,
+                             auid INT NOT NULL,
+                             firstname VARCHAR(50) NOT NULL,
+                             lastname VARCHAR(50) NOT NULL,
+                             email VARCHAR(100) NOT NULL,
+                             phone VARCHAR(45) NOT NULL,
+                             CONSTRAINT pk_userprofile PRIMARY KEY  (apid)
 );
 
 --
@@ -51,24 +52,25 @@ CREATE TABLE userprofile (
 --DROP TABLE actor;
 
 CREATE TABLE actor (
-       actor_id INT NOT NULL ,
-       first_name VARCHAR(45) NOT NULL,
-       last_name VARCHAR(45) NOT NULL,
-       last_update DATE NOT NULL,
-       CONSTRAINT pk_actor PRIMARY KEY  (actor_id)
+                       actor_id INT NOT NULL ,
+                       first_name VARCHAR(45) NOT NULL,
+                       last_name VARCHAR(45) NOT NULL,
+                       last_update TIMESTAMP NOT NULL,
+                       CONSTRAINT pk_actor PRIMARY KEY  (actor_id)
 );
 
 CREATE  INDEX idx_actor_last_name ON actor(last_name);
 
- 
-  --DROP SEQUENCE actor_sequence;
 
-CREATE SEQUENCE actor_sequence;
+--DROP SEQUENCE actor_sequence;
 
+CREATE SEQUENCE actor_sequence
+    INCREMENT BY 1
+    START WITH 200;
 
 /*
 
-CREATE OR REPLACE TRIGGER actor_before_trigger 
+CREATE OR REPLACE TRIGGER actor_before_trigger
 BEFORE INSERT ON actor FOR EACH ROW
 BEGIN
   IF (:NEW.actor_id IS NULL) THEN
@@ -116,9 +118,9 @@ END;
 */
 
 CREATE OR REPLACE TRIGGER country_before_update
-BEFORE UPDATE ON country FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON country FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -145,20 +147,20 @@ CREATE SEQUENCE city_sequence;
 
 
 CREATE OR REPLACE TRIGGER city_before_trigger
-BEFORE INSERT ON city FOR EACH ROW
+    BEFORE INSERT ON city FOR EACH ROW
 BEGIN
-  IF (:NEW.city_id IS NULL) THEN
-SELECT city_sequence.nextval INTO :NEW.city_id
-FROM DUAL;
-END IF;
- :NEW.last_update:=current_date;
+    IF (:NEW.city_id IS NULL) THEN
+        SELECT city_sequence.nextval INTO :NEW.city_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
 END;
 
 
 CREATE OR REPLACE TRIGGER city_before_update
-BEFORE UPDATE ON city FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON city FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -185,26 +187,26 @@ CREATE  INDEX idx_fk_city_id ON address(city_id);
 ALTER TABLE address ADD  CONSTRAINT fk_address_city FOREIGN KEY (city_id) REFERENCES city (city_id);
 
 
-  --DROP SEQUENCE city_sequence;
+--DROP SEQUENCE city_sequence;
 
 CREATE SEQUENCE address_sequence;
 
 
 CREATE OR REPLACE TRIGGER address_before_trigger
-BEFORE INSERT ON address FOR EACH ROW
+    BEFORE INSERT ON address FOR EACH ROW
 BEGIN
-  IF (:NEW.address_id IS NULL) THEN
-SELECT address_sequence.nextval INTO :NEW.address_id
-FROM DUAL;
-END IF;
- :NEW.last_update:=current_date;
+    IF (:NEW.address_id IS NULL) THEN
+        SELECT address_sequence.nextval INTO :NEW.address_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
 END;
 
 
 CREATE OR REPLACE TRIGGER address_before_update
-BEFORE UPDATE ON address FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON address FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -241,13 +243,13 @@ END;
 
 
 CREATE TABLE director (
-      director_id INT NOT NULL, --- this column will be filled with TSID long value
-      first_name VARCHAR(45) NOT NULL,
-      last_name VARCHAR(45) NOT NULL,
-      last_update DATE DEFAULT sysdate,
-      CONSTRAINT pk_director PRIMARY KEY (director_id)
+                          director_id INT NOT NULL, --- this column will be filled with TSID long value
+                          first_name VARCHAR(45) NOT NULL,
+    last_name VARCHAR(45) NOT NULL,
+    last_update DATE DEFAULT sysdate,
+    CONSTRAINT pk_director PRIMARY KEY (director_id)
 
-);
+    );
 
 
 --
@@ -255,16 +257,16 @@ CREATE TABLE director (
 --
 
 CREATE TABLE vanity_van (
-        van_id VARCHAR(45) NOT NULL, --- this column will be filled with TSID string value
-        name VARCHAR(45) NOT NULL,
-        last_update DATE DEFAULT sysdate,
-        CONSTRAINT pk_vanity_van PRIMARY KEY (van_id)
-);
+                            van_id VARCHAR(45) NOT NULL, --- this column will be filled with TSID string value
+                            name VARCHAR(45) NOT NULL,
+    last_update DATE DEFAULT sysdate,
+    CONSTRAINT pk_vanity_van PRIMARY KEY (van_id)
+    );
 
 CREATE OR REPLACE TRIGGER language_before_update
-BEFORE UPDATE ON language FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON language FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -285,20 +287,20 @@ CREATE SEQUENCE category_sequence;
 
 
 CREATE OR REPLACE TRIGGER category_before_trigger
-BEFORE INSERT ON category FOR EACH ROW
+    BEFORE INSERT ON category FOR EACH ROW
 BEGIN
-  IF (:NEW.category_id IS NULL) THEN
-SELECT category_sequence.nextval INTO :NEW.category_id
-FROM DUAL;
-END IF;
-  :NEW.last_update:=current_date;
+    IF (:NEW.category_id IS NULL) THEN
+        SELECT category_sequence.nextval INTO :NEW.category_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
 END;
 
 
 CREATE OR REPLACE TRIGGER category_before_update
-BEFORE UPDATE ON category FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON category FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -332,20 +334,20 @@ CREATE SEQUENCE customer_sequence;
 
 
 CREATE OR REPLACE TRIGGER customer_before_trigger
-BEFORE INSERT ON customer FOR EACH ROW
+    BEFORE INSERT ON customer FOR EACH ROW
 BEGIN
-  IF (:NEW.customer_id IS NULL) THEN
-SELECT customer_sequence.nextval INTO :NEW.customer_id
-FROM DUAL;
-END IF;
-  :NEW.last_update:=current_date;
-  :NEW.create_date:=current_date;
+    IF (:NEW.customer_id IS NULL) THEN
+        SELECT customer_sequence.nextval INTO :NEW.customer_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
+    :NEW.create_date:=current_date;
 END;
 
 CREATE OR REPLACE TRIGGER customer_before_update
-BEFORE UPDATE ON customer FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON customer FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 --
@@ -353,23 +355,23 @@ END;
 --
 
 CREATE TABLE film (
-      film_id INT NOT NULL,
-      title VARCHAR(255) NOT NULL,
-      description CLOB DEFAULT NULL,
-      release_year VARCHAR(4) DEFAULT NULL,
-      language_id INT NOT NULL,
-      original_language_id INT DEFAULT NULL,
-      rental_duration SMALLINT  DEFAULT 3 NOT NULL,
-      rental_rate DECIMAL(4,2) DEFAULT 4.99 NOT NULL,
-      length SMALLINT DEFAULT NULL,
-      replacement_cost DECIMAL(5,2) DEFAULT 19.99 NOT NULL,
-      rating VARCHAR(10) DEFAULT 'G',
-      special_features VARCHAR(100) DEFAULT NULL,
-      last_update DATE DEFAULT sysdate,
-      prequel_film_id INT DEFAULT NULL,
-      CONSTRAINT pk_film PRIMARY KEY  (film_id),
-      CONSTRAINT fk_film_language FOREIGN KEY (language_id) REFERENCES language (language_id) ,
-      CONSTRAINT fk_film_language_original FOREIGN KEY (original_language_id) REFERENCES language (language_id)
+                      film_id INT NOT NULL,
+                      title VARCHAR(255) NOT NULL,
+                      description CLOB DEFAULT NULL,
+                      release_year VARCHAR(4) DEFAULT NULL,
+                      language_id INT NOT NULL,
+                      original_language_id INT DEFAULT NULL,
+                      rental_duration SMALLINT  DEFAULT 3 NOT NULL,
+                      rental_rate DECIMAL(4,2) DEFAULT 4.99 NOT NULL,
+                      length SMALLINT DEFAULT NULL,
+                      replacement_cost DECIMAL(5,2) DEFAULT 19.99 NOT NULL,
+                      rating VARCHAR(10) DEFAULT 'G',
+                      special_features VARCHAR(100) DEFAULT NULL,
+                      last_update DATE DEFAULT sysdate,
+                      prequel_film_id INT DEFAULT NULL,
+                      CONSTRAINT pk_film PRIMARY KEY  (film_id),
+                      CONSTRAINT fk_film_language FOREIGN KEY (language_id) REFERENCES language (language_id) ,
+                      CONSTRAINT fk_film_language_original FOREIGN KEY (original_language_id) REFERENCES language (language_id)
 );
 
 ALTER TABLE film ADD CONSTRAINT CHECK_special_features CHECK(special_features is null or
@@ -395,13 +397,13 @@ CREATE SEQUENCE film_sequence INCREMENT BY 1 START WITH 6;
 --
 
 CREATE TABLE review (
-        review_id VARCHAR(20) NOT NULL, --- this column will be filled with TSID string value
-        message VARCHAR(100) NOT NULL,
-        rating INT NOT NULL,
-        film_id INT NOT NULL,
-        last_update DATE DEFAULT sysdate,
-        CONSTRAINT pk_review PRIMARY KEY  (review_id)
-);
+                        review_id VARCHAR(20) NOT NULL, --- this column will be filled with TSID string value
+                        message VARCHAR(100) NOT NULL,
+    rating INT NOT NULL,
+    film_id INT NOT NULL,
+    last_update DATE DEFAULT sysdate,
+    CONSTRAINT pk_review PRIMARY KEY  (review_id)
+    );
 
 /*
 CREATE OR REPLACE TRIGGER film_before_trigger
@@ -427,12 +429,12 @@ END;
 --
 
 CREATE TABLE film_actor (
-            actor_id INT NOT NULL,
-            film_id  INT NOT NULL,
-            last_update DATE DEFAULT sysdate,
-            CONSTRAINT pk_film_actor PRIMARY KEY  (actor_id,film_id),
-            CONSTRAINT fk_film_actor_actor FOREIGN KEY (actor_id) REFERENCES actor (actor_id),
-            CONSTRAINT fk_film_actor_film FOREIGN KEY (film_id) REFERENCES film (film_id)
+                            actor_id INT NOT NULL,
+                            film_id  INT NOT NULL,
+                            last_update DATE DEFAULT sysdate,
+                            CONSTRAINT pk_film_actor PRIMARY KEY  (actor_id,film_id),
+                            CONSTRAINT fk_film_actor_actor FOREIGN KEY (actor_id) REFERENCES actor (actor_id),
+                            CONSTRAINT fk_film_actor_film FOREIGN KEY (film_id) REFERENCES film (film_id)
 );
 
 CREATE  INDEX idx_fk_film_actor_film ON film_actor(film_id);
@@ -474,16 +476,16 @@ CREATE  INDEX idx_fk_film_category_category ON film_category(category_id);
 
 
 CREATE OR REPLACE TRIGGER film_category_before_trigger
-BEFORE INSERT ON film_category FOR EACH ROW
-BEGIN
+    BEFORE INSERT ON film_category FOR EACH ROW
+    BEGIN
     :NEW.last_update:=current_date;
 END;
 
 
 CREATE OR REPLACE TRIGGER film_category_before_update
-BEFORE UPDATE ON film_category FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON film_category FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 --
@@ -522,19 +524,19 @@ CREATE SEQUENCE inventory_sequence;
 
 
 CREATE OR REPLACE TRIGGER inventory_before_trigger
-BEFORE INSERT ON inventory FOR EACH ROW
+    BEFORE INSERT ON inventory FOR EACH ROW
 BEGIN
- IF (:NEW.inventory_id IS NULL) THEN
-SELECT inventory_sequence.nextval INTO :NEW.inventory_id
-FROM DUAL;
-END IF;
-  :NEW.last_update:=current_date;
+    IF (:NEW.inventory_id IS NULL) THEN
+        SELECT inventory_sequence.nextval INTO :NEW.inventory_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
 END;
 
 CREATE OR REPLACE TRIGGER inventory_before_update
-BEFORE UPDATE ON inventory FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON inventory FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -570,20 +572,20 @@ CREATE SEQUENCE staff_sequence;
 
 
 CREATE OR REPLACE TRIGGER staff_before_trigger
-BEFORE INSERT ON staff FOR EACH ROW
+    BEFORE INSERT ON staff FOR EACH ROW
 BEGIN
- IF (:NEW.staff_id IS NULL) THEN
-SELECT staff_sequence.nextval INTO :NEW.staff_id
-FROM DUAL;
-END IF;
-  :NEW.last_update:=current_date;
+    IF (:NEW.staff_id IS NULL) THEN
+        SELECT staff_sequence.nextval INTO :NEW.staff_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
 END;
 
 
 CREATE OR REPLACE TRIGGER staff_before_update
-BEFORE UPDATE ON staff FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON staff FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -615,20 +617,20 @@ CREATE SEQUENCE store_sequence;
 
 
 CREATE OR REPLACE TRIGGER store_before_trigger
-BEFORE INSERT ON store FOR EACH ROW
+    BEFORE INSERT ON store FOR EACH ROW
 BEGIN
- IF (:NEW.store_id IS NULL) THEN
-SELECT store_sequence.nextval INTO :NEW.store_id
-FROM DUAL;
-END IF;
- :NEW.last_update:=current_date;
+    IF (:NEW.store_id IS NULL) THEN
+        SELECT store_sequence.nextval INTO :NEW.store_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
 END;
 
 
 CREATE OR REPLACE TRIGGER store_before_update
-BEFORE UPDATE ON store FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON store FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -660,20 +662,20 @@ CREATE SEQUENCE payment_sequence;
 
 
 CREATE OR REPLACE TRIGGER payment_before_trigger
-BEFORE INSERT ON payment FOR EACH ROW
+    BEFORE INSERT ON payment FOR EACH ROW
 BEGIN
- IF (:NEW.payment_id IS NULL) THEN
-SELECT payment_sequence.nextval INTO :NEW.payment_id
-FROM DUAL;
-END IF;
- :NEW.last_update:=current_date;
+    IF (:NEW.payment_id IS NULL) THEN
+        SELECT payment_sequence.nextval INTO :NEW.payment_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
 END;
 
 
 CREATE OR REPLACE TRIGGER payment_before_update
-BEFORE UPDATE ON payment FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON payment FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -706,20 +708,20 @@ CREATE SEQUENCE rental_sequence;
 
 
 CREATE OR REPLACE TRIGGER rental_before_trigger
-BEFORE INSERT ON rental FOR EACH ROW
+    BEFORE INSERT ON rental FOR EACH ROW
 BEGIN
- IF (:NEW.rental_id IS NULL) THEN
-SELECT rental_sequence.nextval INTO :NEW.rental_id
-FROM DUAL;
-END IF;
- :NEW.last_update:=current_date;
+    IF (:NEW.rental_id IS NULL) THEN
+        SELECT rental_sequence.nextval INTO :NEW.rental_id
+        FROM DUAL;
+    END IF;
+    :NEW.last_update:=current_date;
 END;
 
 
 CREATE OR REPLACE TRIGGER rental_before_update
-BEFORE UPDATE ON rental FOR EACH ROW
-BEGIN
-  :NEW.last_update:=current_date;
+    BEFORE UPDATE ON rental FOR EACH ROW
+    BEGIN
+    :NEW.last_update:=current_date;
 END;
 
 
@@ -731,5 +733,3 @@ ALTER TABLE inventory ADD CONSTRAINT fk_inventory_store FOREIGN KEY (store_id) R
 ALTER TABLE staff ADD CONSTRAINT fk_staff_store FOREIGN KEY (store_id) REFERENCES store (store_id);
 
 ALTER TABLE payment ADD CONSTRAINT fk_payment_rental FOREIGN KEY (rental_id) REFERENCES rental (rental_id) ON DELETE SET NULL;
-
-

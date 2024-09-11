@@ -1,9 +1,10 @@
-package com.homihq.db2rest.rest.mariadb;
+package com.homihq.db2rest.rest.pg;
 
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MariaDBBaseIntegrationTest;
+import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import com.homihq.db2rest.rest.DateTimeUtil;
 import org.junit.jupiter.api.*;
 
@@ -20,9 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(392)
+@Order(192)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
+public class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
 
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
@@ -40,12 +41,12 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
         actorRequestWithDateTime.put("last_name", "Unconscious");
         actorRequestWithDateTime.put("last_update", "2020-03-15T14:30:45.000");
 
-        mockMvc.perform(post(VERSION + "/mariadb/actor")
+        mockMvc.perform(post(VERSION + "/pgsqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithDateTime)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
-                .andDo(document("mariadb-create-an-actor-with-datetime"));
+                .andDo(document("pg-create-an-actor-with-datetime"));
     }
 
     @Test
@@ -57,11 +58,11 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
         actorRequestWithErrorDateTime.put("last_name", "shadow");
         actorRequestWithErrorDateTime.put("last_update", "2023-15-35T14:75:90");
 
-        mockMvc.perform(post(VERSION + "/mariadb/actor")
+        mockMvc.perform(post(VERSION + "/pgsqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
                 .andExpect(status().isBadRequest())
-                .andDo(document("mariadb-create-an-actor-with-error-timestamp"));
+                .andDo(document("pg-create-an-actor-with-error-timestamp"));
     }
 
     @Test
@@ -72,33 +73,33 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
         Map<String, Object> updateActorRequestWithDateTime = new HashMap<>();
         updateActorRequestWithDateTime.put("last_update", dateTime);
 
-        mockMvc.perform(patch(VERSION + "/mariadb/actor")
+        mockMvc.perform(patch(VERSION + "/pgsqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "last_name == Unconscious")
                         .content(objectMapper.writeValueAsString(updateActorRequestWithDateTime)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
-                .andDo(document("mariadb-update-an-actor-with-datetime"));
+                .andDo(document("pg-update-an-actor-with-datetime"));
     }
 
     @Test
     @Order(3)
     @DisplayName("Test get an actor with datetime fields")
     void getActorWithDateTimeFields() throws Exception {
-        mockMvc.perform(get(VERSION + "/mariadb/actor")
+        mockMvc.perform(get(VERSION + "/pgsqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "first_name == Collective"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampString(result)))
-                .andDo(document("mariadb-get-an-actor-with-datetime"));
+                .andDo(document("pg-get-an-actor-with-datetime"));
     }
 
     @Test
     @Order(3)
     @DisplayName("Test get an actor filter by timestamp")
     void getActorFilterByTimeStamp() throws Exception {
-        mockMvc.perform(get(VERSION + "/mariadb/actor")
+        mockMvc.perform(get(VERSION + "/pgsqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "last_update > \"2023-03-15T10:30:45.00Z\""))
 //                .andDo(print())
@@ -106,20 +107,20 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("[0].last_name", equalTo("Unconscious")))
                 .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampString(result)))
-                .andDo(document("mariadb-get-an-actor-filter-by-timestamp"));
+                .andDo(document("pg-get-an-actor-filter-by-timestamp"));
     }
 
     @Test
     @Order(4)
     @DisplayName("Test delete an actor by timestamp")
     void deleteActorByTimeStamp() throws Exception {
-        mockMvc.perform(delete(VERSION + "/mariadb/actor")
+        mockMvc.perform(delete(VERSION + "/pgsqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "last_update > \"2023-03-15T05:30:45.00Z\""))
 //                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
-                .andDo(document("mariadb-delete-an-actor-by-timestamp"));
+                .andDo(document("pg-delete-an-actor-by-timestamp"));
     }
 }

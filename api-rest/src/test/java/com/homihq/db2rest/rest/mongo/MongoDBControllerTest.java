@@ -36,6 +36,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.homihq.db2rest.mongo.rest.api.MongoRestApi.VERSION;
@@ -326,6 +327,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .param("fields", "FirstName,LastName")
                         .param("filter", "FirstName==PENELOPE"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(3)))
                 .andExpect(jsonPath("$.FirstName", equalTo("PENELOPE")))
