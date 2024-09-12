@@ -4,6 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -11,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
 
-    // Convert LocalDateTime to UTC string
+    // Convert UTC time to LocalDateTime string
     public static String utcToLocalTimestampString(MvcResult result) throws UnsupportedEncodingException {
         String lastUpdateStr = result.getResponse().getContentAsString();
 
@@ -26,4 +27,13 @@ public class DateTimeUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
         return formatter.format(localDateTime);
     }
+
+    // Convert UTC time to Oracle TIMESTAMP Format
+    public static String toOracleTimestampFormat(String dateTimeString) throws UnsupportedEncodingException {
+        // Format the current date and time to a string that Oracle TIMESTAMP understands
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+        return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
 }
