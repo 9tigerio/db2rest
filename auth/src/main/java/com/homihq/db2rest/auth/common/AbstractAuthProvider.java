@@ -53,10 +53,11 @@ public abstract class AbstractAuthProvider{
                 resourceRoleList
                         .stream()
                         .filter(r -> antPathMatcher.match(r.resource(), requestUri))
+                        .filter(r -> StringUtils.equalsIgnoreCase(r.method(), method))
                         .findFirst();
 
         //resource to role mapping
-        if(resourceRole.isPresent() && StringUtils.equalsIgnoreCase(method, resourceRole.get().method())) {
+        if(resourceRole.isPresent()) {
             ResourceRole rr = resourceRole.get();
             boolean roleMatch =
                     rr.roles()
