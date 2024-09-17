@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
+import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.postgresql.jdbc.PgArray;
 import org.postgresql.util.PGobject;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
@@ -133,7 +133,7 @@ public class PostGreSQLDialect implements Dialect {
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
-        return StringUtils.equalsIgnoreCase(productName, "PostGreSQL");
+        return StringUtils.equalsIgnoreCase(productName, Database.POSTGRESQL.getProductName());
     }
 
     @Override

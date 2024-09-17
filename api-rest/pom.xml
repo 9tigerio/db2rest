@@ -82,11 +82,11 @@
             <artifactId>oracle-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
-
-
-        <!-- Can be removed -->
-
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>mssql-dialect</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -120,13 +120,6 @@
             <groupId>com.ibm.db2</groupId>
             <artifactId>jcc</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        -->
-
-        <!--
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
         </dependency>
         -->
 
@@ -177,6 +170,11 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mariadb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mssqlserver</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -1,0 +1,6 @@
+UPDATE [(${rootTableAlias})]
+SET [(${columnSets})]
+FROM [(${rootTable})]
+[# th:if="${rootWhere}"]
+    WHERE [(${rootWhere})]
+[/]

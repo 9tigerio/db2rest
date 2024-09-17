@@ -45,7 +45,7 @@ public interface MetaDataExtraction {
         try(ResultSet resultSet = databaseMetaData.getSchemas()){
 
             while(resultSet.next()) {
-                String schema = resultSet.getString("TABLE_SCHEM");
+                String schema = resultSet.getString(ColumnLabel.TABLE_SCHEM.name());
 
                 if(include(schema, excludedSchemas)) {
                     includedSchemas.add(schema);
@@ -69,10 +69,10 @@ public interface MetaDataExtraction {
                 null,
                 new String[]{"TABLE", "VIEW"})){
             while(resultSet.next()) {
-                String tableName = resultSet.getString("TABLE_NAME");
-                String catalog = resultSet.getString("TABLE_CAT");
-                String schema = resultSet.getString("TABLE_SCHEM");
-                String tableType = resultSet.getString("TABLE_TYPE");
+                String tableName = resultSet.getString(ColumnLabel.TABLE_NAME.name());
+                String catalog = resultSet.getString(ColumnLabel.TABLE_CAT.name());
+                String schema = resultSet.getString(ColumnLabel.TABLE_SCHEM.name());
+                String tableType = resultSet.getString(ColumnLabel.TABLE_TYPE.name());
                 String tableAlias = getAlias(tableName);
                 MetaDataTable metaDataTable = new MetaDataTable(tableName, catalog, schema, tableType, tableAlias);
 
@@ -88,7 +88,7 @@ public interface MetaDataExtraction {
 
         try(ResultSet primaryKeys = databaseMetaData.getPrimaryKeys(catalog, schema, tableName)){
             while(primaryKeys.next()){
-                String primaryKeyColumnName = primaryKeys.getString("COLUMN_NAME");
+                String primaryKeyColumnName = primaryKeys.getString(ColumnLabel.COLUMN_NAME.name());
 
                 pkColumns.add(primaryKeyColumnName);
             }

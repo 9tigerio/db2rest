@@ -2,6 +2,7 @@ package com.homihq.db2rest.jdbc.config.dialect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +22,14 @@ public class OracleDialect implements Dialect {
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
-        return StringUtils.equalsIgnoreCase(productName, "Oracle") && majorVersion == 9;
+        return StringUtils.equalsIgnoreCase(productName, Database.ORACLE.getProductName())
+                && majorVersion == 9;
     }
 
     @Override
-    public String getProductFamily() {
-        return "Oracle";
+    public String getReadSqlTemplate() {
+        return "read-ora-9";
     }
-
 
     @Override
     public boolean supportBatchReturnKeys() {

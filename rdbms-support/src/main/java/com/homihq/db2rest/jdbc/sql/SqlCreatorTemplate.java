@@ -1,17 +1,17 @@
 package com.homihq.db2rest.jdbc.sql;
 
 import com.homihq.db2rest.jdbc.JdbcManager;
+import com.homihq.db2rest.jdbc.config.dialect.Dialect;
+import com.homihq.db2rest.jdbc.config.model.DbColumn;
+import com.homihq.db2rest.jdbc.config.model.DbSort;
+import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.jdbc.dto.CreateContext;
 import com.homihq.db2rest.jdbc.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.dto.UpdateContext;
-import com.homihq.db2rest.jdbc.config.model.DbColumn;
-import com.homihq.db2rest.jdbc.config.model.DbSort;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -33,43 +33,46 @@ public class SqlCreatorTemplate {
     public String updateQuery(UpdateContext updateContext) {
 
         Map<String,Object> data = new HashMap<>();
+        DbTable table = updateContext.getTable();
+        Dialect dialect = jdbcManager.getDialect(updateContext.getDbId());
 
-        if(jdbcManager.getDialect(updateContext.getDbId()).supportAlias()) {
-            data.put("rootTable", updateContext.getTable().render());
+        if(dialect.supportAlias()) {
+            data.put("rootTable", table.render());
         }
         else{
-            data.put("rootTable", updateContext.getTable().name());
+            data.put("rootTable", table.name());
         }
 
         data.put("rootWhere", updateContext.getWhere());
         data.put("columnSets", updateContext.renderSetColumns());
+        data.put("rootTableAlias", table.alias());
 
         Context context = new Context();
         context.setVariables(data);
-        return templateEngine.process("update", context);
 
+        return templateEngine.process(dialect.getUpdateSqlTemplate(), context);
     }
 
     public String deleteQuery(DeleteContext deleteContext) {
+        Dialect dialect = jdbcManager.getDialect(deleteContext.getDbId());
 
-        String rendererTableName =
-                jdbcManager.getDialect(deleteContext.getDbId())
-                        .renderTableName(deleteContext.getTable(),
-                                StringUtils.isNotBlank(deleteContext.getWhere()),
-                                true
-
-                        );
+        String rendererTableName = dialect.renderTableName(
+            deleteContext.getTable(),
+            StringUtils.isNotBlank(deleteContext.getWhere()),
+            true
+        );
 
         log.info("rendererTableName - {}", rendererTableName);
 
         Map<String,Object> data = new HashMap<>();
         data.put("rootTable", rendererTableName);
         data.put("rootWhere", deleteContext.getWhere());
+        data.put("rootTableAlias", deleteContext.getTable().alias());
 
         Context context = new Context();
         context.setVariables(data);
-        return templateEngine.process("delete", context);
 
+        return templateEngine.process(dialect.getDeleteSqlTemplate(), context);
     }
 
     public String create(CreateContext createContext) {
@@ -80,11 +83,11 @@ public class SqlCreatorTemplate {
         data.put("columns", createContext.renderColumns());
         data.put("parameters", createContext.renderParams());
 
-
         Context context = new Context();
         context.setVariables(data);
-        return templateEngine.process("insert", context);
+        Dialect dialect = jdbcManager.getDialect(createContext.dbId());
 
+        return templateEngine.process(dialect.getInsertSqlTemplate(), context);
     }
 
     public String findOne(ReadContext readContext) {
@@ -95,7 +98,9 @@ public class SqlCreatorTemplate {
 
         Context context = new Context();
         context.setVariables(data);
-        return templateEngine.process("find-one", context);
+        Dialect dialect = jdbcManager.getDialect(readContext.getDbId());
+
+        return templateEngine.process(dialect.getFindOneSqlTemplate(), context);
     }
 
     public String count(ReadContext readContext) {
@@ -106,7 +111,9 @@ public class SqlCreatorTemplate {
 
         Context context = new Context();
         context.setVariables(data);
-        return templateEngine.process("count", context);
+        Dialect dialect = jdbcManager.getDialect(readContext.getDbId());
+
+        return templateEngine.process(dialect.getCountSqlTemplate(), context);
     }
 
     public String exists(ReadContext readContext) {
@@ -118,10 +125,10 @@ public class SqlCreatorTemplate {
 
         Context context = new Context();
         context.setVariables(data);
+        Dialect dialect = jdbcManager.getDialect(readContext.getDbId());
 
-        return templateEngine.process("exists", context);
+        return templateEngine.process(dialect.getExistSqlTemplate(), context);
     }
-
 
     public String query(ReadContext readContext) {
 
@@ -147,25 +154,12 @@ public class SqlCreatorTemplate {
 
         if(readContext.getOffset() > -1) data.put("offset", readContext.getOffset());
 
-        String template = "read";
-
-
-        //TODO DB specific processing must move away
-        if(StringUtils.equalsIgnoreCase(this.jdbcManager.getDialect(readContext.getDbId()).getProductFamily(), "Oracle")) {
-
-            if(this.jdbcManager.getDialect(readContext.getDbId()).getMajorVersion() >= 12) {
-                template = "read-ora-12";
-            }
-            else {
-                template = "read-ora-9";
-            }
-        }
-        log.debug("template - {}", template);
         log.debug("data - {}", data);
         Context context = new Context();
         context.setVariables(data);
-        return templateEngine.process(template, context);
+        Dialect dialect = jdbcManager.getDialect(readContext.getDbId());
 
+        return templateEngine.process(dialect.getReadSqlTemplate(), context);
     }
 
     public String projections(List<DbColumn> columns) {

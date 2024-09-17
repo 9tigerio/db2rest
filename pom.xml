@@ -56,7 +56,7 @@
         <module>mongo-support</module>
         <module>rest-common</module>
         <module>pg-dialect</module>
-        <module>mssql-server-dialect</module>
+        <module>mssql-dialect</module>
         <module>mysql-dialect</module>
         <module>mariadb-dialect</module>
         <module>oracle-dialect</module>

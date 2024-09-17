@@ -11,8 +11,8 @@
         <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>mssql-server-dialect</artifactId>
-    <name>mssql-server-dialect</name>
+    <artifactId>mssql-dialect</artifactId>
+    <name>mssql-dialect</name>
     <description>Microsoft SQL server dialect</description>
 
     <properties>
