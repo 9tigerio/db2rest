@@ -20,11 +20,13 @@ import com.homihq.db2rest.jdbc.rest.read.ReadController;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
 import com.homihq.db2rest.jdbc.rest.schema.SchemaController;
+import com.homihq.db2rest.jdbc.rest.sql.SQLTemplateController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
 import com.homihq.db2rest.multidb.DatabaseProperties;
+import com.hubspot.jinjava.Jinjava;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.util.AntPathMatcher;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
@@ -120,6 +123,16 @@ public class JdbcConfiguration {
         return new SqlCreatorTemplate(templateEngine, jdbcManager);
     }
 
+
+    @Bean
+    public Jinjava jinjava() {
+        return new Jinjava();
+    }
+
+    @Bean
+    public AntPathMatcher antPathMatcher() {
+        return new AntPathMatcher();
+    }
 
     //START ::: Processors
     @Bean
@@ -243,6 +256,21 @@ public class JdbcConfiguration {
         return new JdbcProcedureService(jdbcManager);
     }
 
+    @Bean
+    public SQLTemplateService templateService(
+            Jinjava jinjava,
+            Db2RestConfigProperties db2RestConfigProperties,
+            DbOperationService dbOperationService,
+            JdbcManager jdbcManager
+    ) {
+        return new JinJavaTemplateService(
+                jinjava,
+                db2RestConfigProperties,
+                dbOperationService,
+                jdbcManager
+        );
+    }
+
     //END ::: Services
 
     //START ::: API
@@ -322,6 +350,14 @@ public class JdbcConfiguration {
         return new SchemaController(jdbcManager);
     }
 
+    @Bean
+    @ConditionalOnBean(SQLTemplateService.class)
+    public SQLTemplateController sqlTemplateController(
+            SQLTemplateService sqlTemplateService,
+            AntPathMatcher antPathMatcher
+    ) {
+        return new SQLTemplateController(sqlTemplateService, antPathMatcher);
+    }
     //END ::: API
 
 }

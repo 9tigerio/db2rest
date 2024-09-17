@@ -1,14 +1,14 @@
 package com.homihq.db2rest.jdbc;
 
+import com.homihq.db2rest.core.dto.CountResponse;
+import com.homihq.db2rest.core.dto.CreateBulkResponse;
+import com.homihq.db2rest.core.dto.CreateResponse;
+import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
-import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import com.homihq.db2rest.core.dto.CreateBulkResponse;
-import com.homihq.db2rest.core.dto.CreateResponse;
-import com.homihq.db2rest.core.dto.CountResponse;
-import com.homihq.db2rest.core.dto.ExistsResponse;
+import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.core.SimpleRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -145,5 +145,10 @@ public class JdbcOperationService implements DbOperationService {
         int[] updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch);
 
         return new CreateBulkResponse(updateCounts, null);
+    }
+
+    public Object query(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String sql, Dialect dialect) {
+        return namedParameterJdbcTemplate
+                .query(sql, new SimpleRowMapper(dialect));
     }
 }

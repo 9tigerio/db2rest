@@ -57,6 +57,8 @@ db2rest:
     enabled: ${MULTI_TENANCY_ENABLED:false}
     mode: ${MULTI_TENANCY_MODE:'NONE'}
 
+  templates: ${SQL_TEMPLATE_PATH}
+
 logging:
   level:
     com.homihq.db2rest.rest: INFO

@@ -1,12 +1,11 @@
 package com.homihq.db2rest.jdbc.core;
 
 import com.homihq.db2rest.core.dto.CountResponse;
+import com.homihq.db2rest.core.dto.CreateBulkResponse;
+import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import com.homihq.db2rest.core.dto.CreateBulkResponse;
-import com.homihq.db2rest.core.dto.CreateResponse;
-import com.homihq.db2rest.jdbc.dto.BindVariable;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
@@ -35,4 +34,5 @@ public interface DbOperationService {
 
     CreateBulkResponse batchUpdate(NamedParameterJdbcTemplate namedParameterJdbcTemplate, List<Map<String, Object>> dataList, String sql);
 
+    Object query(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String sql, Dialect dialect);
 }
