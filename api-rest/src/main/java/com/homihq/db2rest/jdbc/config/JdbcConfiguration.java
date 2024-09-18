@@ -36,7 +36,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.util.AntPathMatcher;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
@@ -127,11 +126,6 @@ public class JdbcConfiguration {
     @Bean
     public Jinjava jinjava() {
         return new Jinjava();
-    }
-
-    @Bean
-    public AntPathMatcher antPathMatcher() {
-        return new AntPathMatcher();
     }
 
     //START ::: Processors
