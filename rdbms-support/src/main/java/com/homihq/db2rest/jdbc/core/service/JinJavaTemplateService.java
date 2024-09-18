@@ -25,13 +25,13 @@ public class JinJavaTemplateService implements SQLTemplateService {
 	@Override
 	public String renderTemplate(String templateName, Map<String, Object> context) throws IOException {
 		log.debug("Rendering query from template {}", templateName);
-		String userTemplateLocation = db2RestConfigProperties.getTemplates();
-		Path templatePath = Paths.get(userTemplateLocation, templateName + ".sql");
+		final String userTemplateLocation = db2RestConfigProperties.getTemplates();
+		final Path templatePath = Paths.get(userTemplateLocation, templateName + ".sql");
 		if (!Files.exists(templatePath)) {
 			throw new IllegalArgumentException("Template not found: " + templateName);
 		}
 		try {
-			String templateContent = Files.readString(templatePath);
+			final String templateContent = Files.readString(templatePath);
 			return jinjava.render(templateContent, context);
 		} catch (IOException ioe) {
 			throw new IOException("Could not read SQL template at: " + templatePath);
