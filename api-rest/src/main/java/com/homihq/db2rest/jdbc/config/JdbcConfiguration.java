@@ -353,10 +353,9 @@ public class JdbcConfiguration {
     @Bean
     @ConditionalOnBean(SQLTemplateService.class)
     public SQLTemplateController sqlTemplateController(
-            SQLTemplateService sqlTemplateService,
-            AntPathMatcher antPathMatcher
+            SQLTemplateService sqlTemplateService
     ) {
-        return new SQLTemplateController(sqlTemplateService, antPathMatcher);
+        return new SQLTemplateController(sqlTemplateService);
     }
     //END ::: API
 
