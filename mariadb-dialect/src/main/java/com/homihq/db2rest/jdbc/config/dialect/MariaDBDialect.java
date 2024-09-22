@@ -3,6 +3,7 @@ package com.homihq.db2rest.jdbc.config.dialect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,8 @@ public class MariaDBDialect implements Dialect {
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
-        return StringUtils.equalsIgnoreCase(productName, "MariaDB");
+        return StringUtils.equalsIgnoreCase(productName, Database.MARIADB.getProductName());
     }
-
 
     @Override
     public void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data) {

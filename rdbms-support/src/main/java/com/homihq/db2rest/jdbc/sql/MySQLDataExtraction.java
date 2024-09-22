@@ -1,9 +1,11 @@
 package com.homihq.db2rest.jdbc.sql;
 
+import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +20,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
 
     @Override
     public boolean canHandle(String database) {
-        return StringUtils.equalsIgnoreCase(database, "MySQL");
+        return StringUtils.equalsIgnoreCase(database, Database.MYSQL.getProductName());
     }
 
 
@@ -69,11 +71,10 @@ public class MySQLDataExtraction implements MetaDataExtraction {
         try(ResultSet columns = databaseMetaData
                 .getColumns(catalog,schema, tableName, null)){
             while(columns.next()) {
-                String columnName = columns.getString("COLUMN_NAME");
-                int datatype = columns.getInt("DATA_TYPE");
-                String isAutoIncrement = columns.getString("IS_AUTOINCREMENT");
-                String isGenerated = "N";
-                String typeName = columns.getString("TYPE_NAME");
+                String columnName = columns.getString(ColumnLabel.COLUMN_NAME.name());
+                int datatype = columns.getInt(ColumnLabel.DATA_TYPE.name());
+                String isAutoIncrement = columns.getString(ColumnLabel.IS_AUTOINCREMENT.name());
+                String typeName = columns.getString(ColumnLabel.TYPE_NAME.name());
 
                 Class<?> javaType = JdbcTypeJavaClassMappings.INSTANCE.determineJavaClassForJdbcTypeCode(datatype);
 
@@ -83,7 +84,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
                                 tableAlias,
                                 pkColumns.contains(columnName),
                                 typeName,
-                                StringUtils.equalsAnyIgnoreCase(isGenerated,"YES"),
+                                false,
                                 StringUtils.equalsAnyIgnoreCase(isAutoIncrement,"YES"),
                                 javaType, "`", ""
                         );

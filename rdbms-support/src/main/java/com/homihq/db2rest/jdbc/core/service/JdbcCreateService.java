@@ -13,7 +13,6 @@ import com.homihq.db2rest.core.dto.CreateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +77,7 @@ public class JdbcCreateService implements CreateService {
 
             this.jdbcManager.getDialect(dbId).processTypes(dbTable, insertableColumns, data);
 
-            CreateContext context = new CreateContext(dbTable, insertableColumns, insertableColumnList);
+            CreateContext context = new CreateContext(dbId, dbTable, insertableColumns, insertableColumnList);
             String sql = sqlCreatorTemplate.create(context);
 
             log.info("SQL - {}", sql);

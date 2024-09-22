@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
-import io.swagger.v3.oas.annotations.servers.Server;
 
 @OpenAPIDefinition(
   info = @Info(
@@ -18,7 +17,6 @@ import io.swagger.v3.oas.annotations.servers.Server;
   license = @License(
     name = "Apache-2.0 Licence",
     url = "https://github.com/kdhrubo/db2rest?tab=Apache-2.0-1-ov-file"))
-    //,servers = @Server(url = "https://api.api24hq.com")
 )
 class OpenAPIConfiguration {
 }

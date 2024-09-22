@@ -98,10 +98,11 @@ public class JdbcConfiguration {
     public JdbcManager jdbcManager() {
 
         List<Dialect> dialects = List.of(
-                new PostGreSQLDialect(objectMapper)
-                ,new MySQLDialect(objectMapper)
-                ,new MariaDBDialect(objectMapper)
-                ,new OracleDialect(objectMapper)
+                new PostGreSQLDialect(objectMapper),
+                new MySQLDialect(objectMapper),
+                new MariaDBDialect(objectMapper),
+                new OracleDialect(objectMapper),
+                new MsSQLServerDialect(objectMapper)
         );
 
         return new JdbcManager(dataSource(), dialects, databaseProperties);

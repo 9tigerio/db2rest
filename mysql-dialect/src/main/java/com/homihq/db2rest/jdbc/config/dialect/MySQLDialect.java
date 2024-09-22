@@ -3,6 +3,7 @@ package com.homihq.db2rest.jdbc.config.dialect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class MySQLDialect implements Dialect {
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
-        return StringUtils.equalsIgnoreCase(productName, "MySQL");
+        return StringUtils.equalsIgnoreCase(productName, Database.MYSQL.getProductName());
     }
 
     @Override

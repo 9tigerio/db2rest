@@ -13,7 +13,6 @@ import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +48,9 @@ public class JdbcBulkCreateService implements BulkCreateService {
             DbTable dbTable = jdbcManager.getTable(dbId, schemaName, tableName);
 
             //2. determine the columns to be included in insert statement
-            List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(dataList.get(0).keySet().stream().toList()) :
-                    new ArrayList<>(includedColumns);
+            List<String> insertableColumns = isEmpty(includedColumns)
+                    ? new ArrayList<>(dataList.getFirst().keySet().stream().toList())
+                    : new ArrayList<>(includedColumns);
 
             //3. check if tsId is enabled and add those values for PK.
             List<Map<String,Object>> tsIds = new ArrayList<>();
@@ -94,7 +94,7 @@ public class JdbcBulkCreateService implements BulkCreateService {
 
             log.debug("Finally insertable columns - {}", insertableColumns);
 
-            CreateContext context = new CreateContext(dbTable, insertableColumns, insertableColumnList);
+            CreateContext context = new CreateContext(dbId, dbTable, insertableColumns, insertableColumnList);
             String sql = sqlCreatorTemplate.create(context);
 
             log.debug("SQL - {}", sql);

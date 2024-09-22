@@ -4,7 +4,9 @@ import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.support.DatabaseMetaDataCallback;
-import java.sql.*;
+
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +16,13 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
     private final boolean includeAllSchemas;
     private final List<String> includedSchemas;
-    List<MetaDataExtraction> exclusions = List.of(new OracleMetaDataExtraction(),
-        new PostgreSQLDataExclusion(), new MySQLDataExtraction(), new MariaDBDataExtraction());
+    List<MetaDataExtraction> exclusions = List.of(
+            new OracleMetaDataExtraction(),
+            new PostgreSQLDataExclusion(),
+            new MySQLDataExtraction(),
+            new MariaDBDataExtraction(),
+            new MsSQLServerMetaDataExtraction()
+    );
 
     //TODO include schemas , tables , view,  filters filters
     @Override
