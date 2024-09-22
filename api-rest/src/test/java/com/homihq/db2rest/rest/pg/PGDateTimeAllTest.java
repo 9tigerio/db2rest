@@ -49,7 +49,7 @@ public class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
                 .andDo(document("pg-create-an-actor-with-datetime"));
     }
 
-    //@Test
+    @Test
     @Order(1)
     @DisplayName("Test Create an actor with error timestamp field")
     void createActorWithErrorDateTimeField() throws Exception{

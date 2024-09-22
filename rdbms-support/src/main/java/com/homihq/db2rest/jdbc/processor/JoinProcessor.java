@@ -57,7 +57,6 @@ public class JoinProcessor implements ReadProcessor {
             readContext.addColumns(columnList);
             addJoin(table, rootTable, joinDetail, readContext);
 
-
             allJoinTables.add(rootTable);
 
             rootTable = table;
@@ -92,7 +91,6 @@ public class JoinProcessor implements ReadProcessor {
         processFilter(table, joinDetail, join, readContext);
 
         readContext.addJoin(join);
-
     }
 
     private void processFilter(DbTable table, JoinDetail joinDetail, DbJoin join,
@@ -112,8 +110,6 @@ public class JoinProcessor implements ReadProcessor {
                             dbWhere, jdbcManager.getDialect(readContext.getDbId())));
 
             join.addAdditionalWhere(where);
-
-
         }
 
     }

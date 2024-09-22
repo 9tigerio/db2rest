@@ -1,3 +1,4 @@
+ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS.FF';
 
 Insert into language (language_id,name,last_update) Values (1,'English',SYSDATE);
 Insert into language (language_id,name,last_update) Values (2,'Italian',SYSDATE);

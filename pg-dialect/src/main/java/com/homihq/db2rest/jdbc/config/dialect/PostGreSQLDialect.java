@@ -73,15 +73,27 @@ public class PostGreSQLDialect implements Dialect {
     }
 
     private OffsetTime convertToOffsetTime(String value) {
-        return OffsetTime.parse(value, DateTimeFormatter.ISO_OFFSET_TIME);
+        try {
+            return OffsetTime.parse(value, DateTimeFormatter.ISO_OFFSET_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to OffsetTime type - " + e.getLocalizedMessage());
+        }
     }
 
     private LocalDateTime convertToLocalDateTime(String value) {
-        return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        try {
+            return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to LocalDateTime type - " + e.getLocalizedMessage());
+        }
     }
 
     private OffsetDateTime convertToOffsetDateTime(String value) {
-        return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        try {
+            return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to OffsetDateTime type - " + e.getLocalizedMessage());
+        }
     }
 
     private Object convertToJson(Object value, String columnDataTypeName) {

@@ -1,9 +1,10 @@
-package com.homihq.db2rest.rest.mariadb;
+package com.homihq.db2rest.rest.oracle;
 
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MariaDBBaseIntegrationTest;
+import com.homihq.db2rest.OracleBaseIntegrationTest;
 import com.homihq.db2rest.rest.DateTimeUtil;
 import org.junit.jupiter.api.*;
 
@@ -16,13 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(392)
+@Order(292)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
+public class OracleDateTimeAllTest extends OracleBaseIntegrationTest {
 
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
@@ -38,14 +40,16 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
         Map<String, Object> actorRequestWithDateTime = new HashMap<>();
         actorRequestWithDateTime.put("first_name", "Collective");
         actorRequestWithDateTime.put("last_name", "Unconscious");
-        actorRequestWithDateTime.put("last_update", "2020-03-15T14:30:45.000");
+        actorRequestWithDateTime.put("last_update", "15-OCT-23 07.45.30.123456 AM");
 
-        mockMvc.perform(post(VERSION + "/mariadb/actor")
+        mockMvc.perform(post(VERSION + "/oradb/ACTOR")
+                        .queryParam("sequences", "actor_id:actor_sequence")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithDateTime)))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
-                .andDo(document("mariadb-create-an-actor-with-datetime"));
+                .andDo(document("oracle-create-an-actor-with-datetime"));
     }
 
     @Test
@@ -57,11 +61,13 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
         actorRequestWithErrorDateTime.put("last_name", "shadow");
         actorRequestWithErrorDateTime.put("last_update", "2023-15-35T14:75:90");
 
-        mockMvc.perform(post(VERSION + "/mariadb/actor")
+        mockMvc.perform(post(VERSION + "/oradb/ACTOR")
+                        .queryParam("sequences", "actor_id:actor_sequence")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
+                .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andDo(document("mariadb-create-an-actor-with-error-timestamp"));
+                .andDo(document("oracle-create-an-actor-with-error-timestamp"));
     }
 
     @Test
@@ -70,57 +76,59 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
     void updateActorWithDateTimeField() throws Exception {
         // Prepare the request with datetime fields
         Map<String, Object> updateActorRequestWithDateTime = new HashMap<>();
-        updateActorRequestWithDateTime.put("last_update", dateTime);
+        updateActorRequestWithDateTime.put("last_update", "15-MAR-24 10.30.45.000000 AM");
 
-        mockMvc.perform(patch(VERSION + "/mariadb/actor")
+        mockMvc.perform(patch(VERSION + "/oradb/ACTOR")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "last_name == Unconscious")
                         .content(objectMapper.writeValueAsString(updateActorRequestWithDateTime)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
-                .andDo(document("mariadb-update-an-actor-with-datetime"));
+                .andDo(document("oracle-update-an-actor-with-datetime"));
     }
 
     @Test
     @Order(3)
     @DisplayName("Test get an actor with datetime fields")
     void getActorWithDateTimeFields() throws Exception {
-        mockMvc.perform(get(VERSION + "/mariadb/actor")
+        mockMvc.perform(get(VERSION + "/oradb/ACTOR")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "first_name == Collective"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
-                .andExpect(jsonPath("[0].last_name", equalTo("Unconscious")))
-                .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampString(result)))
-                .andDo(document("mariadb-get-an-actor-with-datetime"));
+                .andExpect(jsonPath("[0].LAST_NAME", equalTo("Unconscious")))
+                .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampStringOracle(result)))
+                .andDo(document("oracle-get-an-actor-with-datetime"));
     }
 
     @Test
     @Order(3)
     @DisplayName("Test get an actor filter by timestamp")
     void getActorFilterByTimeStamp() throws Exception {
-        mockMvc.perform(get(VERSION + "/mariadb/actor")
+        mockMvc.perform(get(VERSION + "/oradb/ACTOR")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update > \"2023-03-15T10:30:45.00Z\""))
-//                .andDo(print())
+                        .param("filter", "last_update < \"2024-03-15T10:30:45.00Z\""))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
-                .andExpect(jsonPath("[0].last_name", equalTo("Unconscious")))
-                .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampString(result)))
-                .andDo(document("mariadb-get-an-actor-filter-by-timestamp"));
+                .andExpect(jsonPath("[0].LAST_NAME", equalTo("Unconscious")))
+                .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampStringOracle(result)))
+                .andDo(document("oracle-get-an-actor-filter-by-timestamp"));
     }
 
     @Test
     @Order(4)
     @DisplayName("Test delete an actor by timestamp")
     void deleteActorByTimeStamp() throws Exception {
-        mockMvc.perform(delete(VERSION + "/mariadb/actor")
+        mockMvc.perform(delete(VERSION + "/oradb/ACTOR")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update > \"2023-03-15T05:30:45.00Z\""))
-//                .andDo(print())
+                        .param("filter", "last_update < \"2024-03-15T10:30:45.00Z\""))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
-                .andDo(document("mariadb-delete-an-actor-by-timestamp"));
+                .andDo(document("oracle-delete-an-actor-by-timestamp"));
     }
 }
