@@ -54,7 +54,6 @@ public class ReadContext {
 
     public void addJoin(DbJoin join) {
         if(Objects.isNull(dbJoins)) dbJoins = new ArrayList<>();
-
         dbJoins.add(join);
     }
 }
