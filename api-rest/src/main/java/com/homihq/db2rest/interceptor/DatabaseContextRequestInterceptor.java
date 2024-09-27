@@ -33,6 +33,8 @@ public class DatabaseContextRequestInterceptor implements AsyncHandlerIntercepto
                final Map<String, String> pathVariables = (Map<String, String>) request
                        .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
+               log.debug("pathVariables - {}", pathVariables);
+
                if(Objects.isNull(pathVariables)) throw new GenericDataAccessException("Database ID not found.");
 
                String dbId = pathVariables.get("dbId");

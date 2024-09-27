@@ -41,6 +41,39 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @ExceptionHandler({SqlTemplateNotFoundException.class})
+    ProblemDetail handleTemplateException(SqlTemplateNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("SQL Template Processing Error");
+        problemDetail.setType(URI.create("https://db2rest.com/error/sql-template-error"));
+        problemDetail.setProperty("errorCategory", "SQL-Template-Processing-error");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+
+    }
+
+    @ExceptionHandler({SqlTemplateReadException.class})
+    ProblemDetail handleTemplateException(SqlTemplateReadException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("SQL Template Processing Error");
+        problemDetail.setType(URI.create("https://db2rest.com/error/sql-template-error"));
+        problemDetail.setProperty("errorCategory", "SQL-Template-Processing-error");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+
+    }
+
+    @ExceptionHandler({PathVariableNamesMissingException.class})
+    ProblemDetail handleTemplateException(PathVariableNamesMissingException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("SQL Template Processing Error");
+        problemDetail.setType(URI.create("https://db2rest.com/error/sql-template-error"));
+        problemDetail.setProperty("errorCategory", "SQL-Template-Processing-error");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+
+    }
+
 
     @ExceptionHandler(RpcException.class)
     ProblemDetail handleRpcException(RpcException e) {
@@ -97,6 +130,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
 
     }
+
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

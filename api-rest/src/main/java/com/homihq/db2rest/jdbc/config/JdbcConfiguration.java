@@ -251,13 +251,13 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    public SQLTemplateService templateService(
+    public SQLTemplateExecutorService templateService(
             Jinjava jinjava,
             Db2RestConfigProperties db2RestConfigProperties,
             DbOperationService dbOperationService,
             JdbcManager jdbcManager
     ) {
-        return new JinJavaTemplateService(
+        return new JinJavaTemplateExecutorService(
                 jinjava,
                 db2RestConfigProperties,
                 dbOperationService,
@@ -345,11 +345,11 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    @ConditionalOnBean(SQLTemplateService.class)
+    @ConditionalOnBean(SQLTemplateExecutorService.class)
     public SQLTemplateController sqlTemplateController(
-            SQLTemplateService sqlTemplateService
+            SQLTemplateExecutorService sqlTemplateExecutorService
     ) {
-        return new SQLTemplateController(sqlTemplateService);
+        return new SQLTemplateController(sqlTemplateExecutorService);
     }
     //END ::: API
 
