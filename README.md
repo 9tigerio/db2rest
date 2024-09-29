@@ -64,8 +64,9 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 
 # Supported Databases
 
-- **PostgreSQL** 
+- **PostgreSQL** (Including 9, 10g)
 - **MySQL**
+- **MS SQL Server**
 - **Tembo** 
 - **Oracle**  (Including 9i, 10g)
 - **DigitalOcean PostgreSQL** 
@@ -80,7 +81,7 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 # Planned Database Support
 
 - [PostgreML](https://postgresml.org/) 
-- **MS SQL Server**
+
 - TursoDB
 - **Yugabyte**
 - **PlanetScale**
