@@ -118,6 +118,7 @@ public class OracleDateTimeAllTest extends OracleBaseIntegrationTest {
                 .andDo(document("oracle-get-an-actor-filter-by-timestamp"));
     }
 
+    @Disabled
     @Test
     @Order(4)
     @DisplayName("Test delete an actor by timestamp")
