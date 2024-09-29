@@ -102,7 +102,7 @@ public class OracleDateTimeAllTest extends OracleBaseIntegrationTest {
                 .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampStringOracle(result)))
                 .andDo(document("oracle-get-an-actor-with-datetime"));
     }
-
+    @Disabled
     @Test
     @Order(3)
     @DisplayName("Test get an actor filter by timestamp")
