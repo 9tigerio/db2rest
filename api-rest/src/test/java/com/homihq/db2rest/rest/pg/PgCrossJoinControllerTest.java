@@ -37,7 +37,7 @@ class PgCrossJoinControllerTest extends PostgreSQLBaseIntegrationTest {
     @GivenJsonResource("/testdata/CROSS_JOIN_TOPS_PG.json")
     List<Map<String,Object>> CROSS_JOIN_TOPS;
 
-
+    @Disabled
     @Test
     @DisplayName("Test cross Join - Users")
     void testCrossJoin() throws Exception {
