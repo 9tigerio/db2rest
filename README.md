@@ -56,12 +56,6 @@ DB2Rest works as a secure database gateway. This helps enterprises to open up da
 
 Complex, error-prone maintenance-heavy file-based data exchange can be replaced with DB2Rest. Integrations can be loosely coupled by reducing direct database based integration.
 
-
-## Easy Database DevOps and Documentation
-
-Evolve database structures at speed with DB2Rest DML support. DB2Rest provides database visualization, diagramming, linting and diff.
-
-
 # Supported Databases
 
 - **PostgreSQL** 
