@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Order(2)
+@Order(502)
 @TestWithResources
 class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
 
