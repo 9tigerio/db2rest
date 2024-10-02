@@ -96,7 +96,6 @@ Complex, error-prone maintenance-heavy file-based data exchange can be replaced 
 
 [![](https://dcbadge.vercel.app/api/server/deQgNkgt8b?theme=discord)](https://discord.gg/gytFPNW656)
 
-
 # Contact
 
 <help@db2rest.com>
