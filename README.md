@@ -74,8 +74,7 @@ Complex, error-prone maintenance-heavy file-based data exchange can be replaced 
 
 # Planned Database Support
 
-- [PostgreML](https://postgresml.org/) 
-
+- [PostgreML](https://postgresml.org/)
 - TursoDB
 - **Yugabyte**
 - **PlanetScale**
