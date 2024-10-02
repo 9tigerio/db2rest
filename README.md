@@ -26,8 +26,8 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 | Release              | Download/Docker Pull                                                              |
 |----------------------|-----------------------------------------------------------------------------------|
-| 1.2.1                | [DB2Rest-1.2.0](https://download.db2rest.com/db2rest-1.2.1.jar)                   |
-| Oracle9i - 1.2.1     | [DB2Rest-Oracle9i-1.2.0](https://download.db2rest.com/db2rest-oracle9i-1.2.1.jar) |
+| 1.2.1                | [DB2Rest-1.2.1](https://download.db2rest.com/db2rest-1.2.1.jar)                   |
+| Oracle9i - 1.2.1     | [DB2Rest-Oracle9i-1.2.1](https://download.db2rest.com/db2rest-oracle9i-1.2.1.jar) |
 | 1.2.1 (Docker Image) | ` docker pull kdhrubo/db2rest:v104 ` or ` docker pull kdhrubo/db2rest:latest `    |
 
 # Quick start guides
@@ -67,13 +67,13 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 - **PostgreSQL** 
 - **MySQL**
 - **MS SQL Server**
-- **Tembo** 
+- **Tembo PostgreSQL** 
 - **Oracle**  (Including 9i, 10g)
 - **DigitalOcean PostgreSQL** 
 - **DigitalOcean MySQL** 
-- **AWS RDS Postgres** - (Work in progress)
-- **AWS RDS MySQL** - (Work in progress)
-- MongoDB - (Work in progress)
+- **AWS RDS Postgres** 
+- **AWS RDS MySQL**
+- **MongoDB**
 - **MariaDB**  
 - **CockroachDB**
 - **Neon**
