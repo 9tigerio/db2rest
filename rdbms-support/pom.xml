@@ -14,7 +14,18 @@
     <artifactId>rdbms-support</artifactId>
     <name>rdbms-support</name>
     <description>rdbms-support</description>
+
+    <properties>
+        <jte.version>3.1.12</jte.version>
+    </properties>
+
     <dependencies>
+
+        <dependency>
+            <groupId>gg.jte</groupId>
+            <artifactId>jte</artifactId>
+            <version>${jte.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.github</groupId>
@@ -31,11 +42,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
         <dependency>

@@ -28,14 +28,15 @@ import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
 import com.homihq.db2rest.multidb.DatabaseProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import gg.jte.ContentType;
+import gg.jte.TemplateEngine;
+import gg.jte.resolve.ResourceCodeResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -116,12 +117,16 @@ public class JdbcConfiguration {
 
 
     @Bean
-    @DependsOn("textTemplateResolver")
-    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, JdbcManager jdbcManager
-                                                 ) {
+    public SqlCreatorTemplate sqlCreatorTemplate(TemplateEngine templateEngine, JdbcManager jdbcManager) {
         return new SqlCreatorTemplate(templateEngine, jdbcManager);
     }
 
+    @Bean
+    public TemplateEngine jteTemplateEngine() {
+        ResourceCodeResolver codeResolver =
+                new ResourceCodeResolver("sql-templates", this.getClass().getClassLoader());
+        return TemplateEngine.create(codeResolver, ContentType.Plain);
+    }
 
     //START ::: Processors
     @Bean
