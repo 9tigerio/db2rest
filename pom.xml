@@ -11,7 +11,7 @@
 
     <groupId>com.github</groupId>
     <artifactId>db2rest-parent</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3-RC1</version>
     <packaging>pom</packaging>
     <name>DB2Rest parent</name>
     <description>An Open Source instant REST Data API for databases. This is the DB2Rest parent Maven project.</description>
@@ -32,14 +32,14 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git://github.com//kdhrubo/db2rest.git</connection>
-        <developerConnection>scm:git:https://github.com/kdhrubo/db2rest</developerConnection>
-        <url>https://github.com/kdhrubo/db2rest</url>
+        <connection>scm:git:git://github.com//9tigerio/db2rest.git</connection>
+        <developerConnection>scm:git:https://github.com/9tigerio/db2rest</developerConnection>
+        <url>https://github.com/9tigerio/db2rest</url>
         <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/kdhrubo/db2rest/issues</url>
+        <url>https://github.com/9tigerio/db2rest/issues</url>
     </issueManagement>
 
     <!-- BEGIN MODULE LAYOUT -->
@@ -71,7 +71,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/kdhrubo/db2rest</url>
+            <url>https://maven.pkg.github.com/9tigerio/db2rest</url>
         </repository>
     </distributionManagement>
 
