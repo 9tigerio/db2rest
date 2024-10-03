@@ -28,6 +28,7 @@ import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
 import com.homihq.db2rest.multidb.DatabaseProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import gg.jte.CodeResolver;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
@@ -122,8 +123,8 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    public TemplateEngine jteTemplateEngine() {
-        ResourceCodeResolver codeResolver =
+    public TemplateEngine templateEngine() {
+        CodeResolver codeResolver =
                 new ResourceCodeResolver("sql-templates", this.getClass().getClassLoader());
         return TemplateEngine.create(codeResolver, ContentType.Plain);
     }
