@@ -5,7 +5,7 @@ name: Maven Default Publish
 
 on:
   release:
-    types: [created]
+    types: [created_pause]
 
 jobs:
   build:
