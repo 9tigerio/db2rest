@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Order(5)
+@Order(505)
 class MsSQLDeleteControllerTest extends MsSQLBaseIntegrationTest {
 
     @Test

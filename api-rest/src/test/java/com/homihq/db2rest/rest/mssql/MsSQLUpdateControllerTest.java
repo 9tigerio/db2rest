@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Order(3)
+@Order(503)
 @TestWithResources
 class MsSQLUpdateControllerTest extends MsSQLBaseIntegrationTest {
 

@@ -15,7 +15,7 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(6)
-class CountTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
+class MySQLCountTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
 
 
     @Test

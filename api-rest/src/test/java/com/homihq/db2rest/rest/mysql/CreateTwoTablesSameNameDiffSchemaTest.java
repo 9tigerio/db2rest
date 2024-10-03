@@ -26,7 +26,7 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(82)
 @TestWithResources
-class CreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
+class MySQLCreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());

@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(3)
-class ReadTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
+class MySQLReadTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Test find all films - all columns - different schemas.")
     void findUsersInTwoSchemas() throws Exception {
