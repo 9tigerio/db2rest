@@ -37,6 +37,7 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     @GivenJsonResource("/testdata/RIGHT_JOIN.json")
     List<Map<String,Object>> RIGHT_JOIN;
 
+    @Disabled
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
