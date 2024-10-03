@@ -20,7 +20,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/kdhrubo/db2rest</url>
+            <url>https://maven.pkg.github.com/9tigerio/db2rest</url>
         </repository>
     </distributionManagement>
 
