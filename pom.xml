@@ -11,7 +11,7 @@
 
     <groupId>com.github</groupId>
     <artifactId>db2rest-parent</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>DB2Rest parent</name>
     <description>An Open Source instant REST Data API for databases. This is the DB2Rest parent Maven project.</description>
