@@ -29,10 +29,6 @@ spring:
   banner:
     location: classpath:banner.txt
 
-  thymeleaf:
-    check-template-location: false
-    cache: true
-
 
 db2rest:
 
