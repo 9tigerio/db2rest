@@ -4,12 +4,9 @@ app:
 
   databases:
     - id: ${DB_ID:db}
-      url: jdbc:mariadb://localhost:3306/db2rest
-      #      url: ${DB_URL:}
-      username: root
-      #      username: ${DB_USER:}
-      password: 3321
-      #      password: ${DB_PASSWORD:}
+      url: ${DB_URL:}
+      username: ${DB_USER:}
+      password: ${DB_PASSWORD:}
       schemas: ${INCLUDED_SCHEMAS:}
 
 server:

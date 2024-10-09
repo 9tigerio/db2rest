@@ -92,7 +92,7 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
     /**
      * Asynchronously saves a multipart file by streaming its content and performing a bulk insert.
      *
-     * @param fileUploadContext the context containing details about the file upload
+     * @param fileUploadContext the context containing details about the file upload request
      * @param file the multipart file to be saved
      * @return a CompletableFuture containing the response of the create operation
      */
