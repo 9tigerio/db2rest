@@ -212,6 +212,18 @@ CREATE TABLE country (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `person`
+--
+
+CREATE TABLE person (
+  person_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  age TINYINT UNSIGNED,
+  PRIMARY KEY  (person_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
 -- Stored procedure
 --
 
