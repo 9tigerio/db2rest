@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UrlPathHelper;
@@ -25,13 +24,14 @@ public class AuthFilter extends OncePerRequestFilter {
 
     private final AbstractAuthProvider authProvider;
     private final ObjectMapper objectMapper;
-    String AUTH_HEADER = "Authorization";
-    UrlPathHelper urlPathHelper = new UrlPathHelper();
+    private final UrlPathHelper urlPathHelper = new UrlPathHelper();
 
     @Override
-    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
-                                    final FilterChain filterChain) throws ServletException, IOException {
-
+    protected void doFilterInternal(
+            final HttpServletRequest request,
+            final HttpServletResponse response,
+            final FilterChain filterChain
+    ) throws ServletException, IOException {
 
         log.info("Handling Auth");
 
@@ -41,18 +41,9 @@ public class AuthFilter extends OncePerRequestFilter {
         log.info("Request URI - {}", requestUri);
 
         if(!authProvider.isExcluded(requestUri, method)) {
-            String authHeaderValue = request.getHeader(AUTH_HEADER);
-
-            if(StringUtils.isBlank(authHeaderValue)) {
-                String errorMessage = "Auth token not provided in header. Please add header "
-                        + AUTH_HEADER + " with valid Auth token.";
-                addError(errorMessage, request, response);
-                return;
-            }
 
             //authenticate
-            UserDetail userDetail =
-                    authProvider.authenticate(authHeaderValue);
+            UserDetail userDetail = authProvider.authenticate(request);
 
             log.info("user detail - {}", userDetail);
 
@@ -75,8 +66,6 @@ public class AuthFilter extends OncePerRequestFilter {
         else {
             log.info("URI in whitelist. Security checks not applied.");
         }
-
-
 
         filterChain.doFilter(request, response);
 

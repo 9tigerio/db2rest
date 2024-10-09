@@ -12,7 +12,7 @@ import java.util.Optional;
 @Slf4j
 public class ApiAuthDataProvider implements AuthDataProvider {
 
-    private AuthDataSource authDataSource;
+    private final AuthDataSource authDataSource;
 
     public ApiAuthDataProvider(String apiEndPoint, String apiKey) {
         RestClient restClient = RestClient.builder()
@@ -32,6 +32,11 @@ public class ApiAuthDataProvider implements AuthDataProvider {
     @Override
     public List<ResourceRole> getApiResourceRoles() {
         return authDataSource.resourceRoles();
+    }
+
+    @Override
+    public List<ApiKey> getApiKeys() {
+        return List.of();
     }
 
     @Override

@@ -1,8 +1,7 @@
 package com.homihq.db2rest.auth;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.homihq.db2rest.auth.apikey.ApiKeyAuthProvider;
 import com.homihq.db2rest.auth.basic.BasicAuthProvider;
 import com.homihq.db2rest.auth.common.AbstractAuthProvider;
 import com.homihq.db2rest.auth.common.AuthDataProvider;
@@ -10,8 +9,6 @@ import com.homihq.db2rest.auth.data.ApiAuthDataProvider;
 import com.homihq.db2rest.auth.data.AuthDataProperties;
 import com.homihq.db2rest.auth.data.FileAuthDataProvider;
 import com.homihq.db2rest.auth.data.NoAuthdataProvider;
-import com.homihq.db2rest.auth.jwt.AlgorithmFactory;
-import com.homihq.db2rest.auth.jwt.JwtAuthProvider;
 import com.homihq.db2rest.auth.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +16,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.client.RestClient;
-
-import java.util.List;
 
 @Slf4j
 @Configuration
@@ -38,16 +32,19 @@ public class AuthConfiguration {
     }
 
     @Bean
-    public AuthFilter authFilter(AuthDataProperties authDataProperties, ObjectMapper objectMapper) throws Exception {
+    public AuthFilter authFilter(
+            AbstractAuthProvider authProvider,
+            ObjectMapper objectMapper
+    ) {
         log.info("** Auth enabled. Initializing auth components.");
 
-        return new AuthFilter(authProvider(authDataProperties), objectMapper);
+        return new AuthFilter(authProvider, objectMapper);
     }
 
     @Bean
-    public AbstractAuthProvider authProvider(AuthDataProperties authDataProperties) throws Exception{
-        return new BasicAuthProvider(authDataProvider(authDataProperties),authAntPathMatcher());
-
+    @ConditionalOnProperty(prefix = "db2rest.auth", name = "provider", havingValue = "apiKey")
+    public AbstractAuthProvider apiKeyAuthProvider(AuthDataProperties authDataProperties) {
+        return new ApiKeyAuthProvider(authDataProvider(authDataProperties), authAntPathMatcher());
         /*
         JWTVerifier jwtVerifier =
         JWT.require(AlgorithmFactory.getAlgorithm(jwtProperties))
@@ -59,6 +56,12 @@ public class AuthConfiguration {
         );
 
          */
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "db2rest.auth", name = "provider", havingValue = "basic")
+    public AbstractAuthProvider basicAuthProvider(AuthDataProperties authDataProperties) {
+        return new BasicAuthProvider(authDataProvider(authDataProperties), authAntPathMatcher());
     }
 
     @Bean

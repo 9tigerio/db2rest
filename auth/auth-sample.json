@@ -58,29 +58,50 @@
       "method": "*"
     }
   ],
-  "account": [
+  "users": [
     {
-      "appId": "admin",
-      "credential": "0192023A7BBD73250516F069DF18B500",
-      "salt": 123,
-      "role": [
+      "username": "admin",
+      "password": "0192023A7BBD73250516F069DF18B500",
+      "roles": [
         "role1",
         "role2"
       ]
     },
     {
-      "appId": "root",
-      "credential": 23456,
-      "role": [
+      "username": "root",
+      "password": 23456,
+      "roles": [
         "role1"
       ]
     },
     {
-      "appId": "tom",
-      "credential": 32113,
-      "role": [
+      "username": "tom",
+      "password": 32113,
+      "roles": [
         "role3"
       ]
+    }
+  ],
+  "apiKeys": [
+    {
+      "key": "apikey1",
+      "roles": [
+        "admin"
+      ],
+      "active": true
+    },
+    {
+      "key": "apikey2",
+      "roles": [
+        "admin"
+      ]
+    },
+    {
+      "key": "apiKey3",
+      "roles": [
+        "user"
+      ],
+      "active": true
     }
   ]
 }

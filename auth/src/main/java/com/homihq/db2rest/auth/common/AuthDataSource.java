@@ -6,7 +6,8 @@ public record AuthDataSource(
         String name,
         List<ResourceRole> resourceRoles,
         List<ApiExcludedResource> excludedResources,
-        List<User> users
+        List<User> users,
+        List<ApiKey> apiKeys
 ) {
     @Override
     public List<ApiExcludedResource> excludedResources() {
