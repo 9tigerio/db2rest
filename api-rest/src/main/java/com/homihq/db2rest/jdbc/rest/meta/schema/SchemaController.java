@@ -12,12 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * provides methods to filter and retrieve schema objects from a database
+ */
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 public class SchemaController implements SchemaRestApi{
 
     private final JdbcManager jdbcManager;
+    
+    /** 
+     * @param dbId database id from which to retrieve the schema objects
+     * @param filter filter conditions to match against a schema, name, or type
+     * @return List<TableObject>
+     */
     @Override
     public List<TableObject> getObjects(String dbId, String filter) {
 
