@@ -6,12 +6,10 @@ import com.homihq.db2rest.auth.common.AuthDataProvider;
 import com.homihq.db2rest.auth.common.UserDetail;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.AntPathMatcher;
 
 @RequiredArgsConstructor
-@Slf4j
 public class ApiKeyAuthProvider extends AbstractAuthProvider {
 
     private static final String API_KEY_HEADER = "X-API-KEY";
