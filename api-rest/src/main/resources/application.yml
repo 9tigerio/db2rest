@@ -4,7 +4,7 @@ app:
 
   databases:
     - id: ${DB_ID:db}
-      url: ${DB_URL:}
+      url: ${DB_URL:jdbc:mariadb://localhost:3306/db2rest}
       username: ${DB_USER:}
       password: ${DB_PASSWORD:}
       schemas: ${INCLUDED_SCHEMAS:}
@@ -28,6 +28,12 @@ spring:
 
   banner:
     location: classpath:banner.txt
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 
 db2rest:

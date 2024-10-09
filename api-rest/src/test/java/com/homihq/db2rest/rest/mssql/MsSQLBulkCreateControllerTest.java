@@ -57,7 +57,7 @@ class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.rows").isArray())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
-                .andDo(document(DB_NAME + "-bulk-create-films-with-json-type"));
+                .andDo(document(DB_NAME + "-bulk-create-films-with-actor.json-type"));
     }
 
     @Test
@@ -96,7 +96,7 @@ class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
                 )
                 .andExpect(status().isBadRequest())
                 .andDo(print())
-                .andDo(document(DB_NAME + "-bulk-create-films-with-json-type-error"));
+                .andDo(document(DB_NAME + "-bulk-create-films-with-actor.json-type-error"));
     }
 
     @Test

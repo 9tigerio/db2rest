@@ -1,4 +1,5 @@
 SET IDENTITY_INSERT category ON;
+
 INSERT INTO employee
     (first_name, last_name)
 VALUES ('Ivan', 'Levchenko'),

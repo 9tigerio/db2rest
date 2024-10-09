@@ -2,6 +2,7 @@ package com.homihq.db2rest.jdbc.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.bulk.DataProcessor;
+import com.homihq.db2rest.bulk.FileSubject;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
@@ -14,13 +15,13 @@ import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
 import com.homihq.db2rest.jdbc.rest.meta.db.DbInfoController;
+import com.homihq.db2rest.jdbc.rest.meta.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.read.CountQueryController;
 import com.homihq.db2rest.jdbc.rest.read.ExistsQueryController;
 import com.homihq.db2rest.jdbc.rest.read.FindOneController;
 import com.homihq.db2rest.jdbc.rest.read.ReadController;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
-import com.homihq.db2rest.jdbc.rest.meta.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
@@ -170,8 +171,10 @@ public class JdbcConfiguration {
     public BulkCreateService bulkCreateService(TSIDProcessor tsidProcessor,
                                                SqlCreatorTemplate sqlCreatorTemplate,
                                                JdbcManager jdbcManager,
-                                               DbOperationService dbOperationService) {
-        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService);
+                                               DbOperationService dbOperationService,
+                                               List<DataProcessor> dataProcessors,
+                                               FileSubject fileSubject) {
+        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService, fileSubject);
     }
 
     @Bean

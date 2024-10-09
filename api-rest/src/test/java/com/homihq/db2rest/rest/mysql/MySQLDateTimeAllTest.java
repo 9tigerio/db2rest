@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,6 +61,7 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mysqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
+                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document("mysql-create-an-actor-with-error-timestamp"));
     }
@@ -76,6 +78,7 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "last_name == Unconscious")
                         .content(objectMapper.writeValueAsString(updateActorRequestWithDateTime)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
                 .andDo(document("mysql-update-an-actor-with-datetime"));
@@ -88,6 +91,7 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
         mockMvc.perform(get(VERSION + "/mysqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "first_name == Collective"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampString(result)))
@@ -100,8 +104,8 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
     void getActorFilterByTimeStamp() throws Exception {
         mockMvc.perform(get(VERSION + "/mysqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update > \"2023-03-15T10:30:45.00Z\""))
-//                .andDo(print())
+                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("[0].last_name", equalTo("Unconscious")))
@@ -115,8 +119,8 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
     void deleteActorByTimeStamp() throws Exception {
         mockMvc.perform(delete(VERSION + "/mysqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update > \"2023-03-15T05:30:45.00Z\""))
-//                .andDo(print())
+                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
