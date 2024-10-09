@@ -91,6 +91,20 @@ VALUES (1, 'Afghanistan', '2006-02-15 04:44:00.000'),
        (4, 'Angola', '2006-02-15 04:44:00.000');
 SET IDENTITY_INSERT country OFF;
 
+INSERT INTO person
+    (name, age)
+VALUES ('Stephan', 20),
+       ('Thomas', 21),
+       ('Alex', 22),
+       ('Peter', 23),
+       ('Marko', 24),
+       ('Kevin', 25),
+       ('Anna', 26),
+       ('Sofi', 27),
+       ('Tamas', 28),
+       ('Max', 29);
+
+
 
 INSERT INTO review (review_id, message, rating, film_id)
 VALUES ('ABC123', 'Awesome movie', 4, 1);

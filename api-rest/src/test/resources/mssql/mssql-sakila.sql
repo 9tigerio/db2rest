@@ -143,6 +143,14 @@ CREATE TABLE country
     last_update DATETIME    NOT NULL DEFAULT GETDATE()
 );
 
+CREATE TABLE person
+(
+  person_id BIGINT      NOT NULL IDENTITY PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  age TINYINT,
+);
+
+
 CREATE FUNCTION GetMovieRentalRateFunc(@movieTitle VARCHAR(100))
     RETURNS DECIMAL(4, 2)
 AS

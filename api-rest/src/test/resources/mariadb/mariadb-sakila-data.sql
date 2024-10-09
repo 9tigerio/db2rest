@@ -225,6 +225,59 @@ Values
 ('4','Angola','2006-02-15 04:44:00.000');
 
 
+-- person
+
+Insert into person
+(`name`, `age`)
+Values
+('Thomas',  20);
+
+Insert into person
+(`name`, `age`)
+Values
+('Stephan',  21);
+
+Insert into person
+(`name`, `age`)
+Values
+('Anna',  22);
+
+Insert into person
+(`name`, `age`)
+Values
+('Alex',  23);
+
+Insert into person
+(`name`, `age`)
+Values
+('Jan',  24);
+
+Insert into person
+( `name`, `age`)
+Values
+('Mat',  25);
+
+Insert into person
+(`name`, `age`)
+Values
+('Peter',  26);
+
+Insert into person
+(`name`, `age`)
+Values
+('Marko',  27);
+
+Insert into person
+(`name`, `age`)
+Values
+('Sofi',  28);
+
+Insert into person
+(`name`, `age`)
+Values
+('Tamas',  29);
+
+
 --review
 INSERT INTO review (review_id , message, rating ,film_id) VALUES ('ABC123','Awesome movie', 4, 1);
 
