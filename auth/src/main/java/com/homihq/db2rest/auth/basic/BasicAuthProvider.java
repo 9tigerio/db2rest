@@ -1,6 +1,10 @@
 package com.homihq.db2rest.auth.basic;
 
-import com.homihq.db2rest.auth.common.*;
+import com.homihq.db2rest.auth.common.AbstractAuthProvider;
+import com.homihq.db2rest.auth.common.AuthDataProvider;
+import com.homihq.db2rest.auth.common.User;
+import com.homihq.db2rest.auth.common.UserDetail;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,16 +19,21 @@ import java.util.Optional;
 @Slf4j
 public class BasicAuthProvider extends AbstractAuthProvider {
 
+    private static final String BASIC_AUTH = "Basic";
+
     private final AuthDataProvider authDataProvider;
     private final AntPathMatcher antPathMatcher;
+
     @Override
-    public boolean canHandle(String authHeader) {
-        return StringUtils.isNotBlank(authHeader) && authHeader.startsWith("Basic ");
+    public boolean canHandle(HttpServletRequest request) {
+        String authHeader = this.getAuthHeader(request);
+        return StringUtils.isNotBlank(authHeader) && authHeader.startsWith(BASIC_AUTH);
     }
 
     @Override
-    public UserDetail authenticate(String authHeader) {
-        String base64Credentials = authHeader.substring("Basic ".length());
+    public UserDetail authenticate(HttpServletRequest request) {
+        String authHeader = this.getAuthHeader(request);
+        String base64Credentials = authHeader.substring(String.format("%s ", BASIC_AUTH).length());
         byte[] decodedCredentials = Base64.getDecoder().decode(base64Credentials);
         String credentials = new String(decodedCredentials, StandardCharsets.UTF_8);
 

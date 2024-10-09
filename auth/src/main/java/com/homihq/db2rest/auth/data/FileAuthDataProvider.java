@@ -7,7 +7,6 @@ import com.homihq.db2rest.auth.common.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -38,7 +37,10 @@ public class FileAuthDataProvider implements AuthDataProvider {
         return authDataSource.resourceRoles();
     }
 
-
+    @Override
+    public List<ApiKey> getApiKeys() {
+        return this.authDataSource.apiKeys();
+    }
 
     @Override
     public List<User> getUsers() {

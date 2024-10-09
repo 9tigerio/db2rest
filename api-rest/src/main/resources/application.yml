@@ -34,7 +34,7 @@ db2rest:
 
   auth:
     enabled: ${ENABLE_AUTH:false}
-
+    provider: ${AUTH_PROVIDER:basic}
     data:
       source: ${AUTH_DATA_SOURCE}
 
