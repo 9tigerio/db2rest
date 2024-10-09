@@ -4,9 +4,12 @@ app:
 
   databases:
     - id: ${DB_ID:db}
-      url: ${DB_URL:}
-      username: ${DB_USER:}
-      password: ${DB_PASSWORD:}
+      url: jdbc:mariadb://localhost:3306/db2rest
+      #      url: ${DB_URL:}
+      username: root
+      #      username: ${DB_USER:}
+      password: 3321
+      #      password: ${DB_PASSWORD:}
       schemas: ${INCLUDED_SCHEMAS:}
 
 server:
@@ -16,7 +19,7 @@ server:
   compression:
     enabled: ${GZIP_ENABLED:false}
     mime-types: application/json
-    min-response-size: {GZIP_MIN_RESPONSE_SIZE:1024}
+    min-response-size: { GZIP_MIN_RESPONSE_SIZE:1024 }
     # excluded-user-agents: MSIE 6.0,UCBrowser
 
 
@@ -32,6 +35,12 @@ spring:
   thymeleaf:
     check-template-location: false
     cache: true
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 
 db2rest:
@@ -51,7 +60,7 @@ db2rest:
 
   defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
 
-  allowSafeDelete : ${ALLOW_SAFE_DELETE:true}
+  allowSafeDelete: ${ALLOW_SAFE_DELETE:true}
 
   multiTenancy:
     enabled: ${MULTI_TENANCY_ENABLED:false}
@@ -62,8 +71,8 @@ logging:
     com.homihq.db2rest.rest: INFO
     com.homihq.db2rest.jdbc.core.service: INFO
 
-    org.springframework.web : INFO
-    org.springframework.beans : INFO
+    org.springframework.web: INFO
+    org.springframework.beans: INFO
     org.springframework.jdbc: INFO
 
 

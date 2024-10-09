@@ -2,6 +2,8 @@ package com.homihq.db2rest.jdbc.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.bulk.DataProcessor;
+import com.homihq.db2rest.bulk.FileSubject;
+import com.homihq.db2rest.bulk.JsonFileDataProcessor;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
@@ -164,8 +166,10 @@ public class JdbcConfiguration {
     public BulkCreateService bulkCreateService(TSIDProcessor tsidProcessor,
                                                SqlCreatorTemplate sqlCreatorTemplate,
                                                JdbcManager jdbcManager,
-                                               DbOperationService dbOperationService) {
-        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService);
+                                               DbOperationService dbOperationService,
+                                               List<DataProcessor> dataProcessors,
+                                               FileSubject fileSubject) {
+        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService, fileSubject);
     }
 
     @Bean

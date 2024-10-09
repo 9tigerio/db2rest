@@ -169,7 +169,6 @@ class MariaDBBulkCreateControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(status().isCreated())
                 //.andDo(print())
                 .andDo(document("mariadb-bulk-create-reviews-with-default-tsid-type"));
-
     }
 
 }
