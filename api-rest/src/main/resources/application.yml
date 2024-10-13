@@ -4,10 +4,10 @@ app:
 
   databases:
     - id: ${DB_ID:db}
-      url: ${DB_URL:jdbc:mariadb://localhost:3306/db2rest}
-      username: ${DB_USER:}
-      password: ${DB_PASSWORD:}
-      schemas: ${INCLUDED_SCHEMAS:}
+      url: ${DB_URL}
+      username: ${DB_USER}
+      password: ${DB_PASSWORD}
+      schemas: ${INCLUDED_SCHEMAS}
 
 server:
   port: ${SERVER_PORT:8080}
