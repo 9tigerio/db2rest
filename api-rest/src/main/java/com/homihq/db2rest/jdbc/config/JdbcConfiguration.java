@@ -24,6 +24,7 @@ import com.homihq.db2rest.jdbc.rest.sql.SQLTemplateController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
+import com.homihq.db2rest.jdbc.validator.CustomPlaceholderValidators;
 import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
 import com.homihq.db2rest.multidb.DatabaseProperties;
 import com.hubspot.jinjava.Jinjava;
@@ -161,6 +162,13 @@ public class JdbcConfiguration {
 
     //END ::: Processors
 
+    //START ::: Validator
+    @Bean
+    public CustomPlaceholderValidators customPlaceholderValidators() {
+        return new CustomPlaceholderValidators();
+    }
+
+    //END ::: Validator
 
     //START ::: Service
     //CREATE SERVICE
@@ -255,13 +263,15 @@ public class JdbcConfiguration {
             Jinjava jinjava,
             Db2RestConfigProperties db2RestConfigProperties,
             DbOperationService dbOperationService,
-            JdbcManager jdbcManager
+            JdbcManager jdbcManager,
+            CustomPlaceholderValidators customPlaceholderValidators
     ) {
         return new JinJavaTemplateExecutorService(
                 jinjava,
                 db2RestConfigProperties,
                 dbOperationService,
-                jdbcManager
+                jdbcManager,
+                customPlaceholderValidators
         );
     }
 

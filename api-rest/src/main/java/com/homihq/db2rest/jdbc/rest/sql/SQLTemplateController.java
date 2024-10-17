@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
@@ -30,7 +32,7 @@ public class SQLTemplateController {
 	                          @RequestParam Map<String, String> requestParams,
 	                          @RequestHeader Map<String, String> requestHeaders,
 	                          @MatrixVariable Map<String, String> matrixVariables
-	)  {
+	) {
 		final Map<String, Object> context = createContext(userPathVariable, requestParams, requestHeaders, matrixVariables);
 
 		log.info("context - {}", context);
@@ -53,13 +55,13 @@ public class SQLTemplateController {
 
 		String headerPaths = requestHeaders.get("paths");
 
-		if(!userPathVariables.isEmpty() &&
+		if (!userPathVariables.isEmpty() &&
 				StringUtils.isBlank(headerPaths)) throw new PathVariableNamesMissingException();
 
-		Map<String,String> pathVariables = new HashMap<>();
+		Map<String, String> pathVariables = new HashMap<>();
 
 
-		if(StringUtils.isNotBlank(headerPaths)) {
+		if (StringUtils.isNotBlank(headerPaths)) {
 
 			String[] pathKeys = headerPaths.split(",");
 
@@ -70,7 +72,7 @@ public class SQLTemplateController {
 			}
 		}
 
-        context.put("paths", pathVariables);
+		context.put("paths", pathVariables);
 
 		context.put("params", requestParams);
 		context.put("headers", requestHeaders);

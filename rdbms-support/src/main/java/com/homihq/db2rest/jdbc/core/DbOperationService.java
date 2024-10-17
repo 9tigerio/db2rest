@@ -33,6 +33,4 @@ public interface DbOperationService {
     CreateBulkResponse batchUpdate(NamedParameterJdbcTemplate namedParameterJdbcTemplate,List<Map<String, Object>> dataList, String sql, DbTable dbTable);
 
     CreateBulkResponse batchUpdate(NamedParameterJdbcTemplate namedParameterJdbcTemplate, List<Map<String, Object>> dataList, String sql);
-
-    Object query(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String sql, Dialect dialect);
 }

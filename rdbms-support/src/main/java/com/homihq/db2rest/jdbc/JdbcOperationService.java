@@ -146,9 +146,4 @@ public class JdbcOperationService implements DbOperationService {
 
         return new CreateBulkResponse(updateCounts, null);
     }
-
-    public Object query(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String sql, Dialect dialect) {
-        return namedParameterJdbcTemplate
-                .query(sql, new SimpleRowMapper(dialect));
-    }
 }
