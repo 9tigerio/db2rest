@@ -48,7 +48,7 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 		return executeQuery(dbId, paramMap, namedParamsSQL);
 	}
 
-	public Object executeQuery(String dbId, Map<String, Object> paramMap, String sql) {
+	private Object executeQuery(String dbId, Map<String, Object> paramMap, String sql) {
 		log.debug("Execute: {}", sql);
 		return dbOperationService.read(
 				jdbcManager.getNamedParameterJdbcTemplate(dbId),
@@ -71,24 +71,25 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 	private String renderJinJavaTemplate(String templateFile, Map<String, Object> context) {
 		log.debug("Rendering query from template {}", templateFile);
 
-		if (templateCache.containsKey(templateFile)) {
-			final String templateContent = templateCache.get(templateFile);
-			return jinjava.render(templateContent, context);
-		} else {
-			final String userTemplateLocation = db2RestConfigProperties.getTemplates();
-			final Path templatePath = Paths.get(userTemplateLocation, templateFile + ".sql");
-
-			if (!Files.exists(templatePath)) {
-				throw new SqlTemplateNotFoundException(templateFile);
-			}
-			try {
-				final String templateContent = Files.readString(templatePath);
-
-				templateCache.put(templateFile, templateContent);
-
+		synchronized (templateCache) {
+			if (templateCache.containsKey(templateFile)) {
+				final String templateContent = templateCache.get(templateFile);
 				return jinjava.render(templateContent, context);
-			} catch (IOException ioe) {
-				throw new SqlTemplateReadException(templateFile);
+			} else {
+				final String userTemplateLocation = db2RestConfigProperties.getTemplates();
+				final Path templatePath = Paths.get(userTemplateLocation, templateFile + ".sql");
+
+				if (!Files.exists(templatePath)) {
+					throw new SqlTemplateNotFoundException(templateFile);
+				}
+				try {
+					final String templateContent = Files.readString(templatePath);
+					templateCache.put(templateFile, templateContent);
+					return jinjava.render(templateContent, context);
+				} catch (IOException ioe) {
+					log.error("Error reading template file {}: {}", templatePath, ioe.getMessage());
+					throw new SqlTemplateReadException(templateFile);
+				}
 			}
 		}
 	}
@@ -123,6 +124,9 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 		placeholders.forEach((placeholderKey, placeholder) -> {
 			List<String> constraints = placeholder.filters();
 			Object value = paramMap.get(placeholder.namedParam());
+			if (value == null) {
+				log.warn("Placeholder {} is missing a value in paramMap", placeholder.namedParam());
+			}
 			constraints.forEach(constraint -> {
 				ConstraintValidator validator = validators.getValidator(constraint);
 				if (validator != null) {
