@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github</groupId>
+        <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
         <version>1.2.4-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -22,7 +22,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>rdbms-common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

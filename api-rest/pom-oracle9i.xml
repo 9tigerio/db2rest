@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github</groupId>
+        <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
         <version>1.2.4-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -33,51 +33,51 @@
 
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>auth</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>rest-common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>mongo-support</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>rdbms-support</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <!--TODO - Remove -->
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>pg-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>mysql-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>mariadb-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>oracle9i-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
