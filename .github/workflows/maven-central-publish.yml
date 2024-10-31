@@ -1,23 +1,23 @@
 # This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
 
-name: Publish package to the Maven Central Repository
+name: Maven Default Publish
 
 on:
   release:
-    types: [created_pause]
+    types: [created]
 
 jobs:
-  publish:
+  build:
 
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: read
-    #   packages: write
+    permissions:
+      contents: read
+      packages: write
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Maven Central Repository
+    - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
@@ -25,12 +25,19 @@ jobs:
         server-id: central # Value of the distributionManagement/repository/id field of the pom.xml
         server-username: MAVEN_USERNAME
         server-password: MAVEN_PASSWORD
-
-    # - name: Build with Maven
-    #   run: mvn -B package --file pom.xml -DskipTests
+        gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
     - name: Publish package
-      run: mvn --batch-mode deploy
+      run: ./mvnw -P release --batch-mode deploy -DskipTests
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
+
+    - name: Publish package Oracle9i
+      run: ./mvnw -P release --batch-mode deploy --file api-rest/pom-oracle9i.xml -DskipTests
+      env:
+        MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
