@@ -24,8 +24,7 @@ public class SQLTemplateController {
 
 	@GetMapping({
 			VERSION + "/{dbId}/sql/{fileName}/{*userPathVariable}"
-	}
-	)
+	})
 	public Object sqlTemplate(@PathVariable String dbId,
 	                          @PathVariable String fileName,
 	                          @PathVariable(name = "userPathVariable") String userPathVariable,

@@ -38,7 +38,7 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 	private final JdbcManager jdbcManager;
 	private final CustomPlaceholderValidators validators;
 	private final Map<String, String> templateCache = new ConcurrentHashMap<>();
-	private static final String PLACEHOLDER_REGEX = "\\{\\$\\s*([^|]+?)\\s*(?:\\|\\s*([^}]+?))*\\s*\\$}";
+	private static final String PLACEHOLDER_REGEX = "\\{\\{\\s*([^|}]+?)\\s*(?:\\|\\s*([^}]+?))*\\s*}}";
 
 	@Override
 	public Object execute(String dbId, String templateFile, Map<String, Object> context) {

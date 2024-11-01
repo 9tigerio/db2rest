@@ -6,6 +6,7 @@ import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.config.dialect.*;
+import com.homihq.db2rest.jdbc.config.jinjava.DisabledExpressionTokenScannerSymbols;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.core.service.*;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
@@ -28,6 +29,7 @@ import com.homihq.db2rest.jdbc.validator.CustomPlaceholderValidators;
 import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
 import com.homihq.db2rest.multidb.DatabaseProperties;
 import com.hubspot.jinjava.Jinjava;
+import com.hubspot.jinjava.JinjavaConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
@@ -126,7 +128,12 @@ public class JdbcConfiguration {
 
     @Bean
     public Jinjava jinjava() {
-        return new Jinjava();
+        JinjavaConfig config = JinjavaConfig
+                .newBuilder()
+                .withTokenScannerSymbols(new DisabledExpressionTokenScannerSymbols())
+                .build();
+
+        return new Jinjava(config);
     }
 
     //START ::: Processors
