@@ -38,6 +38,7 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 	private final JdbcManager jdbcManager;
 	private final CustomPlaceholderValidators validators;
 	private final Map<String, String> templateCache = new ConcurrentHashMap<>();
+	private static final String SQL_TEMPLATE_EXTENSION = ".sql";
 	private static final String PLACEHOLDER_REGEX = "\\{\\{\\s*([^|}]+?)\\s*(?:\\|\\s*([^}]+?))*\\s*}}";
 
 	@Override
@@ -77,7 +78,7 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 				return jinjava.render(templateContent, context);
 			} else {
 				final String userTemplateLocation = db2RestConfigProperties.getTemplates();
-				final Path templatePath = Paths.get(userTemplateLocation, templateFile + ".sql");
+				final Path templatePath = Paths.get(userTemplateLocation, templateFile + SQL_TEMPLATE_EXTENSION);
 
 				if (!Files.exists(templatePath)) {
 					throw new SqlTemplateNotFoundException(templateFile);
