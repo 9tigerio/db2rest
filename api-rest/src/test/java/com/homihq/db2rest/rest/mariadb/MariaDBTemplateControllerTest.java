@@ -1,6 +1,6 @@
-package com.homihq.db2rest.rest.mysql;
+package com.homihq.db2rest.rest.mariadb;
 
-import com.homihq.db2rest.MySQLBaseIntegrationTest;
+import com.homihq.db2rest.MariaDBBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
@@ -14,9 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(9)
+@Order(309)
 @DisplayName("Parameterized SQL template")
-class MySQLTemplateControllerTest extends MySQLBaseIntegrationTest {
+class MariaDBTemplateControllerTest extends MariaDBBaseIntegrationTest {
 
 	public final static int ID = 1;
 
@@ -25,87 +25,87 @@ class MySQLTemplateControllerTest extends MySQLBaseIntegrationTest {
 	void findAllFilms() throws Exception {
 		var tableName = "film";
 
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/select_all")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/select_all")
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(4), hasSize(9), hasSize(8))))
 				.andExpect(jsonPath("$[0].*", hasSize(14)))
-				.andDo(document("mysql-template-get-all-films-all-columns"));
+				.andDo(document("mariadb-template-get-all-films-all-columns"));
 	}
 
 	@Test
 	@DisplayName("Find film by id with request param")
 	void findFilmByID() throws Exception {
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/select_by_id")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/select_by_id")
 						.param("film_id", String.valueOf(ID))
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andDo(print())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-				.andDo(document("mysql-template-get-film-by-id-with-params"));
+				.andDo(document("mariadb-template-get-film-by-id-with-params"));
 	}
 
 	@Test
 	@DisplayName("Find film by id with headers")
 	void findFilmByIDWithHeader() throws Exception {
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/select_by_id")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/select_by_id")
 						.header("film_id", String.valueOf(ID))
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andDo(print())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-				.andDo(document("mysql-template-get-film-by-id-with-headers"));
+				.andDo(document("mariadb-template-get-film-by-id-with-headers"));
 	}
 
 	@Test
 	@DisplayName("Find film by id with custom path")
 	void findFilmByIDWithPath() throws Exception {
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/select_by_id/"+ ID)
+		mockMvc.perform(get(VERSION + "/mariadb/sql/select_by_id/"+ ID)
 						.header("paths", "film_id")
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andDo(print())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-				.andDo(document("mysql-template-get-film-by-id-with-user-path"));
+				.andDo(document("mariadb-template-get-film-by-id-with-user-path"));
 	}
 
 	@Test
 	@DisplayName("Failed to find film by id without provided param")
 	void findFilmByIDWithRequiredConstraint() throws Exception {
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/select_by_id_is_required")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/select_by_id_is_required")
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().is4xxClientError())
-				.andDo(document("mysql-template-get-film-by-id-with-required-constraint"));
+				.andDo(document("mariadb-template-get-film-by-id-with-required-constraint"));
 	}
 
 	@Test
 	@DisplayName("Conditional render: select all when no request params")
 	void selectWithConditionalRenderNoRequestParams() throws Exception {
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/conditional_render_and_op")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/conditional_render_and_op")
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(4), hasSize(9), hasSize(8))))
 				.andExpect(jsonPath("$[0].*", hasSize(14)))
-				.andDo(document("mysql-template-conditional-render-no-request-params"));
+				.andDo(document("mariadb-template-conditional-render-no-request-params"));
 	}
 
 	@Test
 	@DisplayName("Conditional render: select render one condition")
 	void selectWithConditionalRenderWithID() throws Exception {
 		var id = 4;
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/conditional_render_and_op")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/conditional_render_and_op")
 						.param("film_id", String.valueOf(id))
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
 				.andExpect(jsonPath("$[0].film_id").value(id))
-				.andDo(document("mysql-template-conditional-render-with-id-condition"));
+				.andDo(document("mariadb-template-conditional-render-with-id-condition"));
 	}
 
 	@Test
@@ -113,7 +113,7 @@ class MySQLTemplateControllerTest extends MySQLBaseIntegrationTest {
 	void selectWithConditionalRenderWithField() throws Exception {
 		var id = 4;
 		var rating = "G";
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/conditional_render_and_op")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/conditional_render_and_op")
 						.param("film_id", String.valueOf(id))
 						.param("rating", rating)
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
@@ -122,7 +122,7 @@ class MySQLTemplateControllerTest extends MySQLBaseIntegrationTest {
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
 				.andExpect(jsonPath("$[0].film_id").value(id))
 				.andExpect(jsonPath("$[0].rating").value(rating))
-			.andDo(document("mysql-template-conditional-render-render-both-and-operations"));
+			.andDo(document("mariadb-template-conditional-render-render-both-and-operations"));
 	}
 
 
@@ -130,14 +130,14 @@ class MySQLTemplateControllerTest extends MySQLBaseIntegrationTest {
 	@DisplayName("Conditional render join: skip render join, select film by id")
 	void selectWithConditionalRenderJoinWithoutInput() throws Exception {
 		var film_id = 1;
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/conditional_render_join")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/conditional_render_join")
 						.param("film_id", String.valueOf(film_id))
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
 				.andExpect(jsonPath("$[0].film_id").value(film_id))
-				.andDo(document("mysql-template-conditional-render-join-skip-render"));
+				.andDo(document("mariadb-template-conditional-render-join-skip-render"));
 	}
 
 	@Test
@@ -145,7 +145,7 @@ class MySQLTemplateControllerTest extends MySQLBaseIntegrationTest {
 	void selectWithConditionalRenderJoin() throws Exception {
 		var film_id = 1;
 		var language_id = 1;
-		mockMvc.perform(get(VERSION + "/mysqldb/sql/conditional_render_join")
+		mockMvc.perform(get(VERSION + "/mariadb/sql/conditional_render_join")
 						.param("film_id", String.valueOf(film_id))
 						.param("language_id", String.valueOf(language_id))
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
@@ -154,6 +154,6 @@ class MySQLTemplateControllerTest extends MySQLBaseIntegrationTest {
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
 				.andExpect(jsonPath("$[0].film_id").value(film_id))
 				.andExpect(jsonPath("$[0].language_name").value("English"))
-				.andDo(document("mysql-template-conditional-render-join"));
+				.andDo(document("mariadb-template-conditional-render-join"));
 	}
 }
