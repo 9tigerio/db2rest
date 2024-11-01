@@ -61,14 +61,19 @@ db2rest:
 
 logging:
   level:
-    '[com.homihq.db2rest.rest]': INFO
-    '[com.homihq.db2rest.jdbc.core.service]': INFO
+    com: 
+      homihq: 
+       db2rest: 
+         rest: INFO
+         jdbc:
+           core:
+             service: INFO
 
-    '[org.springframework.web]' : INFO
-    '[org.springframework.beans]' : INFO
-    '[org.springframework.jdbc]': INFO
-
-
+    org:
+      springframework:
+        web: INFO
+        beans: INFO
+        jdbc: INFO
 
 management:
   endpoints:
