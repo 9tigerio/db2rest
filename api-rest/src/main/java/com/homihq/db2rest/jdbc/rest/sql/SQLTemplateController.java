@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.sql;
 
 import com.homihq.db2rest.core.exception.PathVariableNamesMissingException;
+import com.homihq.db2rest.core.exception.PathVariableValuesMissingException;
 import com.homihq.db2rest.jdbc.core.service.SQLTemplateExecutorService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -52,27 +53,32 @@ public class SQLTemplateController {
 				.filter(StringUtils::isNotEmpty)
 				.toList();
 
-		String headerPaths = requestHeaders.get("paths");
+		final String headerPaths = requestHeaders.get("paths");
 
-		if (!userPathVariables.isEmpty() &&
-				StringUtils.isBlank(headerPaths)) throw new PathVariableNamesMissingException();
+		if (!userPathVariables.isEmpty() && StringUtils.isBlank(headerPaths)) {
+			throw new PathVariableNamesMissingException();
+		}
 
 		Map<String, String> pathVariables = new HashMap<>();
 
-
 		if (StringUtils.isNotBlank(headerPaths)) {
-
 			String[] pathKeys = headerPaths.split(",");
 
+			if (pathKeys.length != userPathVariables.size()) {
+				throw new PathVariableValuesMissingException();
+			}
+
 			for (int i = 0; i < pathKeys.length; i++) {
-				String key = pathKeys[i];
-				String value = userPathVariables.get(i);
-				pathVariables.put(key, value);
+				final String key = pathKeys[i];
+				final String pathValue = userPathVariables.get(i);
+				if (StringUtils.isBlank(pathValue)) {
+					throw new PathVariableValuesMissingException(key);
+				}
+				pathVariables.put(key, pathValue);
 			}
 		}
 
 		context.put("paths", pathVariables);
-
 		context.put("params", requestParams);
 		context.put("headers", requestHeaders);
 		context.put("matrix", matrixVariables);

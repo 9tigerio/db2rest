@@ -74,6 +74,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @ExceptionHandler({PathVariableValuesMissingException.class})
+    ProblemDetail handleTemplateException(PathVariableValuesMissingException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("SQL Template Processing Error");
+        problemDetail.setType(URI.create("https://db2rest.com/error/sql-template-error"));
+        problemDetail.setProperty("errorCategory", "SQL-Template-Processing-error");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+
+    }
+
     @ExceptionHandler({PlaceholderConstraintException.class})
     ProblemDetail handleCustomPlaceholderException(PlaceholderConstraintException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
