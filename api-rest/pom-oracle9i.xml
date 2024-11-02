@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>1.2.4-SNAPSHOT</version>
+        <version>1.2.4</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
@@ -23,21 +23,18 @@
 
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/9tigerio/db2rest</url>
+            <id>central</id>
+            <url>https://central.sonatype.com</url>
         </repository>
     </distributionManagement>
 
     <dependencies>
-
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>auth</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>io.9tiger</groupId>
@@ -195,7 +192,6 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
             <scope>runtime</scope>
         </dependency>
-
 
     </dependencies>
 
