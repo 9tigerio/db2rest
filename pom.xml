@@ -12,7 +12,7 @@
 
     <groupId>io.9tiger</groupId>
     <artifactId>db2rest-parent</artifactId>
-    <version>1.2.4-SNAPSHOT</version>
+    <version>1.2.4</version>
     <packaging>pom</packaging>
     <name>DB2Rest parent</name>
     <description>An Open Source instant REST Data API for databases. This is the DB2Rest parent Maven project.</description>
@@ -200,6 +200,7 @@
                         </executions>
                         <configuration>
                             <bestPractices>true</bestPractices>
+                            <signer>bc</signer>
                         </configuration>
                     </plugin>
                     <plugin>

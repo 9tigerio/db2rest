@@ -23,11 +23,6 @@ jobs:
         java-version: '21'
         distribution: 'liberica'
         cache: 'maven'
-        server-id: central # Value of the distributionManagement/repository/id field of the pom.xml
-        server-username: MAVEN_USERNAME
-        server-password: MAVEN_PASSWORD
-        gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
     - name: Publish package
       run: mvn -B deploy -P release -DskipTests
@@ -35,6 +30,7 @@ jobs:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
 
     - name: Publish package Oracle9i
       run: mvn -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
@@ -42,3 +38,4 @@ jobs:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
