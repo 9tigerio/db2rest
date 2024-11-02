@@ -23,6 +23,8 @@ jobs:
         java-version: '21'
         distribution: 'liberica'
         cache: 'maven'
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_CENTRAL_PASSWORD
 
     - name: Publish package
       run: mvn -X -B deploy -P release -DskipTests
