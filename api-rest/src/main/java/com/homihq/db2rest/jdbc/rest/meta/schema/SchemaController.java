@@ -25,7 +25,7 @@ public class SchemaController implements SchemaRestApi{
     /** 
      * @param dbId database id from which to retrieve the schema objects
      * @param filter filter conditions to match against a schema, name, or type
-     * @return List<TableObject>
+     * @return list of schema objects (schema, name, type) that match the filter conditions
      */
     @Override
     public List<TableObject> getObjects(String dbId, String filter) {
