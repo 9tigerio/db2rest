@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>${project.parent.version}</version>
+    <version>1.2.4</version>
     <packaging>jar</packaging>
     <name>db2rest-oracle9i</name>
     <description>db2rest-oracle9i</description>
