@@ -25,7 +25,7 @@ jobs:
         cache: 'maven'
 
     - name: Publish package
-      run: mvn -B deploy -P release -DskipTests
+      run: mvn -e -B deploy -P release -DskipTests
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
@@ -33,7 +33,7 @@ jobs:
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
 
     - name: Publish package Oracle9i
-      run: mvn -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
+      run: mvn -e -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
