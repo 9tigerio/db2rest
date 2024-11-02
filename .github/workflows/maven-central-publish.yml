@@ -28,7 +28,7 @@ jobs:
         server-id: central
 
     - name: Publish package
-      run: mvn -X -B deploy -P release -DskipTests
+      run: mvn -B deploy -P release -DskipTests
       # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
       # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
       env:
@@ -38,7 +38,7 @@ jobs:
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
     - name: Publish package Oracle9i
-      run: mvn -X -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
+      run: mvn -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
