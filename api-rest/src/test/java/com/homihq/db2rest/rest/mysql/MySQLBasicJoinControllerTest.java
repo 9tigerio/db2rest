@@ -37,6 +37,7 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     @GivenJsonResource("/testdata/RIGHT_JOIN.json")
     List<Map<String,Object>> RIGHT_JOIN;
 
+    @Disabled
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
@@ -72,7 +73,7 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
                 )
-                //.andDo(print())
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(4)))

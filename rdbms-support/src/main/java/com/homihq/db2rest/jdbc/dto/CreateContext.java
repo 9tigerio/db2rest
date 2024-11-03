@@ -4,7 +4,12 @@ import com.homihq.db2rest.jdbc.config.model.DbTable;
 import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
-public record CreateContext(DbTable table, List<String> insertableColumns, List<InsertableColumn> insertableColumnList) {
+public record CreateContext(
+        String dbId,
+        DbTable table,
+        List<String> insertableColumns,
+        List<InsertableColumn> insertableColumnList
+) {
 
     private List<String> getColumnNames() {
         return insertableColumnList.stream().map(c -> c.columnName)

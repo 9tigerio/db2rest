@@ -35,7 +35,6 @@ public final class JdbcManager {
     private final DataSource dataSource;
     private final List<Dialect> availableDialects;
     private final DatabaseProperties databaseProperties;
-    private Map<String,DbTable> dbTableMap;
 
     private final Map<String, DbDetailHolder> dbDetailHolderMap = new ConcurrentHashMap<>();
     private final Map<String, NamedParameterJdbcTemplate> namedParameterJdbcTemplateMap = new ConcurrentHashMap<>();
@@ -46,15 +45,29 @@ public final class JdbcManager {
     @PostConstruct
     private void reload() {
 
-        this.dbTableMap = new ConcurrentHashMap<>();
         loadAllMetaData();
+
+    }
+
+    public DbMeta getDbMetaByDbId(String dbId) {
+        Map<String, DbMeta> dbMetaMap =
+                getDbMetaMap();
+
+        return dbMetaMap.get(dbId);
+
+    }
+
+    public Map<String, DbMeta> getDbMetaMap() {
+        Map<String, DbMeta> dbMetaMap = new HashMap<>();
+
+        dbDetailHolderMap.forEach((k, v) -> dbMetaMap.put(k, v.dbMeta()));
+
+        return dbMetaMap;
     }
 
     public List<DbTable> getTables() {
-        return
-        this.dbTableMap.values()
-                .stream()
-                .toList();
+        return List.of();
+
     }
 
     private void loadAllMetaData() {
@@ -76,7 +89,6 @@ public final class JdbcManager {
                 if(connectionDetail.isPresent()) {
                     databaseConnectionDetail = connectionDetail.get();
                 }
-
 
                 log.info("Database connection details - {}", databaseConnectionDetail);
 

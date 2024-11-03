@@ -3,14 +3,10 @@ package com.homihq.db2rest.jdbc.config.dialect;
 
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +20,6 @@ public interface Dialect {
     }
     default boolean supportAlias() {
         return true;
-    }
-
-
-    default String getProductFamily() {
-        return "";
     }
 
     default int getMajorVersion() {
@@ -95,4 +86,33 @@ public interface Dialect {
     default List<String> convertToStringArray(Object object) {return List.of();}
 
     default  Object convertJsonToVO(Object object) {return null;}
+
+    default String getCountSqlTemplate() {
+        return "count";
+    }
+
+    default String getDeleteSqlTemplate() {
+        return "delete";
+    }
+
+    default String getExistSqlTemplate() {
+        return "exists";
+    }
+
+    default String getFindOneSqlTemplate() {
+        return "find-one";
+    }
+
+    default String getInsertSqlTemplate() {
+        return "insert";
+    }
+
+    default String getReadSqlTemplate() {
+        return "read";
+    }
+
+    default String getUpdateSqlTemplate() {
+        return "update";
+    }
+
 }

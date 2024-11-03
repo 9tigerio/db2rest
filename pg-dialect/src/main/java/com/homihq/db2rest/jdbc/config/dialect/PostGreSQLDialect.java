@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
+import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.postgresql.jdbc.PgArray;
 import org.postgresql.util.PGobject;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
@@ -73,15 +73,27 @@ public class PostGreSQLDialect implements Dialect {
     }
 
     private OffsetTime convertToOffsetTime(String value) {
-        return OffsetTime.parse(value, DateTimeFormatter.ISO_OFFSET_TIME);
+        try {
+            return OffsetTime.parse(value, DateTimeFormatter.ISO_OFFSET_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to OffsetTime type - " + e.getLocalizedMessage());
+        }
     }
 
     private LocalDateTime convertToLocalDateTime(String value) {
-        return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        try {
+            return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to LocalDateTime type - " + e.getLocalizedMessage());
+        }
     }
 
     private OffsetDateTime convertToOffsetDateTime(String value) {
-        return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        try {
+            return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to OffsetDateTime type - " + e.getLocalizedMessage());
+        }
     }
 
     private Object convertToJson(Object value, String columnDataTypeName) {
@@ -133,7 +145,7 @@ public class PostGreSQLDialect implements Dialect {
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
-        return StringUtils.equalsIgnoreCase(productName, "PostGreSQL");
+        return StringUtils.equalsIgnoreCase(productName, Database.POSTGRESQL.getProductName());
     }
 
     @Override

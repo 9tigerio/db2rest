@@ -41,7 +41,6 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
     @DisplayName("Test cross Join - Users")
     void testCrossJoin() throws Exception {
 
-
         mockMvc.perform(post(VERSION + "/oradb/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN))

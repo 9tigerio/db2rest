@@ -321,6 +321,18 @@ CREATE TABLE country (
 );
 
 
+--
+-- Table structure for table `person`
+--
+
+CREATE TABLE person (
+                          person_id SERIAL PRIMARY KEY,
+                          name varchar(50) NOT NULL,
+                          age SMALLINT
+
+);
+
+
 ALTER TABLE public.country OWNER TO postgres;
 
 --

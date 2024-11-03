@@ -1,3 +1,4 @@
+ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS.FF';
 
 Insert into language (language_id,name,last_update) Values (1,'English',SYSDATE);
 Insert into language (language_id,name,last_update) Values (2,'Italian',SYSDATE);
@@ -13,6 +14,21 @@ Insert into country (country_id,country,last_update) Values (3,'American Samoa',
 Insert into country (country_id,country,last_update) Values (4,'Angola',SYSDATE);
 Insert into country (country_id,country,last_update) Values (5,'Anguilla',SYSDATE);
 Insert into country (country_id,country,last_update) Values (6,'Argentina',SYSDATE);
+
+
+-- person
+
+Insert into person (name, age) Values ('Thomas', 20);
+Insert into person (name, age) Values ('Stephan', 21);
+Insert into person (name, age) Values ('Anna', 22);
+Insert into person (name, age) Values ('Alex', 23);
+Insert into person (name, age) Values ('Jan', 24);
+Insert into person (name, age) Values ('Mat', 25);
+Insert into person (name, age) Values ('Peter', 26);
+Insert into person (name, age) Values ('Marko', 27);
+Insert into person (name, age) Values ('Sofi', 28);
+Insert into person (name, age) Values ('Tamas', 29);
+
 
 
 Insert into actor (actor_id,first_name,last_name,last_update) Values (1,'PENELOPE','GUINESS',SYSDATE);

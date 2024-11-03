@@ -1,5 +1,6 @@
 package com.homihq.db2rest.jdbc.sql;
 
+import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class MariaDBDataExtraction implements MetaDataExtraction {
 
     @Override
     public boolean canHandle(String database) {
-        return StringUtils.equalsIgnoreCase(database, "MariaDB");
+        return StringUtils.equalsIgnoreCase(database, Database.MARIADB.getProductName());
     }
 
 
@@ -41,7 +42,7 @@ public class MariaDBDataExtraction implements MetaDataExtraction {
                         getMetaTables(databaseMetaData, catalog, null);
 
                 List<DbTable> tables =
-                        metaDataTables.parallelStream()
+                        metaDataTables.stream()
                                 .map(metaDataTable -> getDbTable(
                                         databaseMetaData,
                                         metaDataTable
@@ -70,11 +71,10 @@ public class MariaDBDataExtraction implements MetaDataExtraction {
         try(ResultSet columns = databaseMetaData
                 .getColumns(catalog,schema, tableName, null)){
             while(columns.next()) {
-                String columnName = columns.getString("COLUMN_NAME");
-                int datatype = columns.getInt("DATA_TYPE");
-                String isAutoIncrement = columns.getString("IS_AUTOINCREMENT");
-                String isGenerated = "N";
-                String typeName = columns.getString("TYPE_NAME");
+                String columnName = columns.getString(ColumnLabel.COLUMN_NAME.name());
+                int datatype = columns.getInt(ColumnLabel.DATA_TYPE.name());
+                String isAutoIncrement = columns.getString(ColumnLabel.IS_AUTOINCREMENT.name());
+                String typeName = columns.getString(ColumnLabel.TYPE_NAME.name());
 
                 Class<?> javaType = JdbcTypeJavaClassMappings.INSTANCE.determineJavaClassForJdbcTypeCode(datatype);
 
@@ -84,7 +84,7 @@ public class MariaDBDataExtraction implements MetaDataExtraction {
                                 tableAlias,
                                 pkColumns.contains(columnName),
                                 typeName,
-                                StringUtils.equalsAnyIgnoreCase(isGenerated,"YES"),
+                                false,
                                 StringUtils.equalsAnyIgnoreCase(isAutoIncrement,"YES"),
                                 javaType, "`", ""
                         );

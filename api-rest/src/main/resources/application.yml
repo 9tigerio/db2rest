@@ -4,10 +4,10 @@ app:
 
   databases:
     - id: ${DB_ID:db}
-      url: ${DB_URL:}
-      username: ${DB_USER:}
-      password: ${DB_PASSWORD:}
-      schemas: ${INCLUDED_SCHEMAS:}
+      url: ${DB_URL}
+      username: ${DB_USER}
+      password: ${DB_PASSWORD}
+      schemas: ${INCLUDED_SCHEMAS}
 
 server:
   port: ${SERVER_PORT:8080}
@@ -16,7 +16,7 @@ server:
   compression:
     enabled: ${GZIP_ENABLED:false}
     mime-types: application/json
-    min-response-size: {GZIP_MIN_RESPONSE_SIZE:1024}
+    min-response-size: ${GZIP_MIN_RESPONSE_SIZE:1024}
     # excluded-user-agents: MSIE 6.0,UCBrowser
 
 
@@ -29,16 +29,18 @@ spring:
   banner:
     location: classpath:banner.txt
 
-  thymeleaf:
-    check-template-location: false
-    cache: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 
 db2rest:
 
   auth:
     enabled: ${ENABLE_AUTH:false}
-
+    provider: ${AUTH_PROVIDER:basic}
     data:
       source: ${AUTH_DATA_SOURCE}
 
@@ -61,14 +63,19 @@ db2rest:
 
 logging:
   level:
-    com.homihq.db2rest.rest: INFO
-    com.homihq.db2rest.jdbc.core.service: INFO
+    com: 
+      homihq: 
+       db2rest: 
+         rest: INFO
+         jdbc:
+           core:
+             service: INFO
 
-    org.springframework.web : INFO
-    org.springframework.beans : INFO
-    org.springframework.jdbc: INFO
-
-
+    org:
+      springframework:
+        web: INFO
+        beans: INFO
+        jdbc: INFO
 
 management:
   endpoints:

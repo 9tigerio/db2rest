@@ -16,4 +16,5 @@ public class OracleBaseIntegrationTest extends BaseIntegrationTest{
         var query = "DELETE FROM " + table + " WHERE " + column + " = ?";
         return jdbcTemplate.update(query, id) == 1;
     }
+
 }

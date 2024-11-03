@@ -37,10 +37,9 @@ class PgCrossJoinControllerTest extends PostgreSQLBaseIntegrationTest {
     @GivenJsonResource("/testdata/CROSS_JOIN_TOPS_PG.json")
     List<Map<String,Object>> CROSS_JOIN_TOPS;
 
-
     @Test
     @DisplayName("Test cross Join - Users")
-    void testCrossJoin() throws Exception {
+    void testCrossJoinUsers() throws Exception {
 
 
         mockMvc.perform(post(VERSION + "/pgsqldb/users/_expand")

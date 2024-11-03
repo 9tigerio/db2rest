@@ -26,9 +26,9 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 | Release              | Download/Docker Pull                                                              |
 |----------------------|-----------------------------------------------------------------------------------|
-| 1.1.4                | [DB2Rest-1.1.3](https://download.db2rest.com/db2rest-1.1.4.jar)                   |
-| Oracle9i - 1.1.4     | [DB2Rest-Oracle9i-1.1.3](https://download.db2rest.com/db2rest-oracle9i-1.1.4.jar) |
-| 1.1.4 (Docker Image) | ` docker pull kdhrubo/db2rest:v99 ` or ` docker pull kdhrubo/db2rest:latest `     |
+| 1.2.3                | [DB2Rest-1.2.3](https://download.db2rest.com/db2rest-1.2.3.jar)                   |
+| Oracle9i - 1.2.3     | [DB2Rest-Oracle9i-1.2.3](https://download.db2rest.com/db2rest-oracle9i-1.2.3.jar) |
+| 1.2.3 (Docker Image) | ` docker pull kdhrubo/db2rest:v116 ` or ` docker pull kdhrubo/db2rest:latest `    |
 
 # Quick start guides
 
@@ -56,31 +56,25 @@ DB2Rest works as a secure database gateway. This helps enterprises to open up da
 
 Complex, error-prone maintenance-heavy file-based data exchange can be replaced with DB2Rest. Integrations can be loosely coupled by reducing direct database based integration.
 
-
-## Easy Database DevOps and Documentation
-
-Evolve database structures at speed with DB2Rest DML support. DB2Rest provides database visualization, diagramming, linting and diff.
-
-
 # Supported Databases
 
 - **PostgreSQL** 
 - **MySQL**
-- **Tembo** 
+- **MS SQL Server**
+- **Tembo PostgreSQL** 
 - **Oracle**  (Including 9i, 10g)
 - **DigitalOcean PostgreSQL** 
 - **DigitalOcean MySQL** 
-- **AWS RDS Postgres** - (Work in progress)
-- **AWS RDS MySQL** - (Work in progress)
-- MongoDB - (Work in progress)
+- **AWS RDS Postgres** 
+- **AWS RDS MySQL**
+- **MongoDB**
 - **MariaDB**  
 - **CockroachDB**
 - **Neon**
 
 # Planned Database Support
 
-- [PostgreML](https://postgresml.org/) 
-- **MS SQL Server**
+- [PostgresML](https://postgresml.org/)
 - TursoDB
 - **Yugabyte**
 - **PlanetScale**
@@ -100,7 +94,6 @@ Evolve database structures at speed with DB2Rest DML support. DB2Rest provides d
 *Connect on Discord*
 
 [![](https://dcbadge.vercel.app/api/server/deQgNkgt8b?theme=discord)](https://discord.gg/gytFPNW656)
-
 
 # Contact
 

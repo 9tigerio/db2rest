@@ -1,0 +1,6 @@
+[
+  {
+    "table": "userprofile",
+    "joinType": "CROSS"
+  }
+]

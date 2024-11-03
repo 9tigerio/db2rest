@@ -3,16 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github</groupId>
+        <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>1.1.4</version>
+        <version>1.2.4</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
     </parent>
 
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>${project.parent.version}</version>
+    <version>1.2.4</version>
     <packaging>jar</packaging>
     <name>db2rest-oracle9i</name>
     <description>db2rest-oracle9i</description>
@@ -23,61 +23,58 @@
 
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/kdhrubo/db2rest</url>
+            <id>central</id>
+            <url>https://central.sonatype.com</url>
         </repository>
     </distributionManagement>
 
     <dependencies>
 
-
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>auth</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
-
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>rest-common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>mongo-support</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>rdbms-support</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <!--TODO - Remove -->
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>pg-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>mysql-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>mariadb-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>oracle9i-dialect</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -112,8 +109,75 @@
 
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>oracle-xe</artifactId>
+            <version>1.19.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mariadb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mssqlserver</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.restdocs</groupId>
             <artifactId>spring-restdocs-mockmvc</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test-autoconfigure</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.hosuaby</groupId>
+            <artifactId>inject-resources-junit-jupiter</artifactId>
+            <version>0.3.3</version>
             <scope>test</scope>
         </dependency>
 
@@ -128,8 +192,6 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
             <scope>runtime</scope>
         </dependency>
-
-
 
     </dependencies>
 

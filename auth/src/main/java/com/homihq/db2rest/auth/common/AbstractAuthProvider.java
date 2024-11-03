@@ -1,5 +1,6 @@
 package com.homihq.db2rest.auth.common;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.AntPathMatcher;
@@ -11,11 +12,13 @@ import java.util.Optional;
 @Slf4j
 public abstract class AbstractAuthProvider{
 
+    private static final String AUTH_HEADER = "Authorization";
+
     private final String [] DEFAULT_WHITELIST = {"/actuator/**"} ;
 
-    public abstract boolean canHandle(String authHeader);
+    public abstract boolean canHandle(HttpServletRequest request);
 
-    public abstract UserDetail authenticate(String authHeader);
+    public abstract UserDetail authenticate(HttpServletRequest request);
 
     public abstract boolean authorize(UserDetail userDetail, String resourceUri, String method);
 
@@ -44,6 +47,9 @@ public abstract class AbstractAuthProvider{
         return true;
     }
 
+    protected String getAuthHeader(HttpServletRequest request) {
+        return request.getHeader(AUTH_HEADER);
+    }
 
     protected boolean authorizeInternal(UserDetail userDetail, String requestUri, String method,
                                    List<ResourceRole> resourceRoleList, AntPathMatcher antPathMatcher) {

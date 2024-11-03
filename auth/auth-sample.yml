@@ -35,3 +35,13 @@ users:
   - username: tom
     password: 32113
     roles: [role3]
+
+apiKeys:
+  - key: apikey1
+    roles: [admin]
+    active: true
+  - key: apikey2
+    roles: [admin]
+  - key: apiKey3
+    roles: [user]
+    active: true

@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github</groupId>
+        <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>1.1.4</version>
+        <version>1.2.4</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
@@ -14,16 +14,27 @@
     <artifactId>rdbms-support</artifactId>
     <name>rdbms-support</name>
     <description>rdbms-support</description>
+
+    <properties>
+        <jte.version>3.1.12</jte.version>
+    </properties>
+
     <dependencies>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>gg.jte</groupId>
+            <artifactId>jte</artifactId>
+            <version>${jte.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.9tiger</groupId>
             <artifactId>db2rest-common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>rdbms-common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -34,17 +45,12 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.hypersistence</groupId>
             <artifactId>tsid</artifactId>
             <version>1.1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>io.9tiger</groupId>
             <artifactId>rest-common</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>

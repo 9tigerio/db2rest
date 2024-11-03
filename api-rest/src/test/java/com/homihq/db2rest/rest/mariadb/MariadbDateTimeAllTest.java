@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,6 +44,7 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mariadb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithDateTime)))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andDo(document("mariadb-create-an-actor-with-datetime"));
@@ -60,6 +62,7 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mariadb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
+                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document("mariadb-create-an-actor-with-error-timestamp"));
     }
@@ -76,6 +79,7 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "last_name == Unconscious")
                         .content(objectMapper.writeValueAsString(updateActorRequestWithDateTime)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
                 .andDo(document("mariadb-update-an-actor-with-datetime"));
@@ -88,8 +92,10 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(get(VERSION + "/mariadb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "first_name == Collective"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("[0].last_name", equalTo("Unconscious")))
                 .andDo(result -> assertEquals(dateTime, DateTimeUtil.utcToLocalTimestampString(result)))
                 .andDo(document("mariadb-get-an-actor-with-datetime"));
     }
@@ -100,8 +106,8 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
     void getActorFilterByTimeStamp() throws Exception {
         mockMvc.perform(get(VERSION + "/mariadb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update > \"2023-03-15T10:30:45.00Z\""))
-//                .andDo(print())
+                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("[0].last_name", equalTo("Unconscious")))
@@ -115,8 +121,8 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
     void deleteActorByTimeStamp() throws Exception {
         mockMvc.perform(delete(VERSION + "/mariadb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update > \"2023-03-15T05:30:45.00Z\""))
-//                .andDo(print())
+                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.rows", equalTo(1)))

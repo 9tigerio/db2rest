@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(92)
-class DeleteTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
+class MySQLDeleteTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Delete Employee Same table different database")

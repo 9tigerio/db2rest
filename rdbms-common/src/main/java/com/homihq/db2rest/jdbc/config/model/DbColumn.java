@@ -57,7 +57,7 @@ public record DbColumn(String tableName, String name, String alias, String table
     @Deprecated
     public boolean isIntFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
-                "SMALLINT", "int8", "int4" , "BIGINT UNSIGNED","INTEGER", "NUMBER");
+                "SMALLINT", "BIGINT", "int8", "int4", "BIGINT UNSIGNED", "INTEGER", "NUMBER");
     }
     @Deprecated
     public boolean isStringFamily() {

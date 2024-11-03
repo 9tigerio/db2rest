@@ -16,12 +16,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 
 @Slf4j
 @Component
 public class DatabaseContextRequestInterceptor implements AsyncHandlerInterceptor {
 
-        private List<String> WHITE_LIST = List.of("/swagger-ui/**", "/v3/api-docs/**", "/actuator/**");
+        private final List<String> WHITE_LIST = List.of(
+                "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**",
+                VERSION + "/$dbs");
 
         private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 

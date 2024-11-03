@@ -2,6 +2,7 @@ package com.homihq.db2rest.jdbc.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.bulk.DataProcessor;
+import com.homihq.db2rest.bulk.FileSubject;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
@@ -14,6 +15,8 @@ import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
+import com.homihq.db2rest.jdbc.rest.meta.db.DbInfoController;
+import com.homihq.db2rest.jdbc.rest.meta.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.read.CountQueryController;
 import com.homihq.db2rest.jdbc.rest.read.ExistsQueryController;
 import com.homihq.db2rest.jdbc.rest.read.FindOneController;
@@ -32,14 +35,16 @@ import com.hubspot.jinjava.Jinjava;
 import com.hubspot.jinjava.JinjavaConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import gg.jte.CodeResolver;
+import gg.jte.ContentType;
+import gg.jte.TemplateEngine;
+import gg.jte.resolve.ResourceCodeResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -103,10 +108,11 @@ public class JdbcConfiguration {
     public JdbcManager jdbcManager() {
 
         List<Dialect> dialects = List.of(
-                new PostGreSQLDialect(objectMapper)
-                ,new MySQLDialect(objectMapper)
-                ,new MariaDBDialect(objectMapper)
-                ,new OracleDialect(objectMapper)
+                new PostGreSQLDialect(objectMapper),
+                new MySQLDialect(objectMapper),
+                new MariaDBDialect(objectMapper),
+                new OracleDialect(objectMapper),
+                new MsSQLServerDialect(objectMapper)
         );
 
         return new JdbcManager(dataSource(), dialects, databaseProperties);
@@ -119,12 +125,16 @@ public class JdbcConfiguration {
 
 
     @Bean
-    @DependsOn("textTemplateResolver")
-    public SqlCreatorTemplate sqlCreatorTemplate(SpringTemplateEngine templateEngine, JdbcManager jdbcManager
-                                                 ) {
+    public SqlCreatorTemplate sqlCreatorTemplate(TemplateEngine templateEngine, JdbcManager jdbcManager) {
         return new SqlCreatorTemplate(templateEngine, jdbcManager);
     }
 
+    @Bean
+    public TemplateEngine templateEngine() {
+        CodeResolver codeResolver =
+                new ResourceCodeResolver("sql-templates", this.getClass().getClassLoader());
+        return TemplateEngine.create(codeResolver, ContentType.Plain);
+    }
 
     @Bean
     public Jinjava jinjava() {
@@ -184,8 +194,10 @@ public class JdbcConfiguration {
     public BulkCreateService bulkCreateService(TSIDProcessor tsidProcessor,
                                                SqlCreatorTemplate sqlCreatorTemplate,
                                                JdbcManager jdbcManager,
-                                               DbOperationService dbOperationService) {
-        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService);
+                                               DbOperationService dbOperationService,
+                                               List<DataProcessor> dataProcessors,
+                                               FileSubject fileSubject) {
+        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService, fileSubject);
     }
 
     @Bean
@@ -367,6 +379,11 @@ public class JdbcConfiguration {
             SQLTemplateExecutorService sqlTemplateExecutorService
     ) {
         return new SQLTemplateController(sqlTemplateExecutorService);
+    }
+  
+    @ConditionalOnBean(JdbcManager.class)
+    public DbInfoController dbInfoController(JdbcManager jdbcManager) {
+        return new DbInfoController(jdbcManager);
     }
     //END ::: API
 
