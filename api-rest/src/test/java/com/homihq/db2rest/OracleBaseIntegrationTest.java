@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
-@Import(MySQLContainerConfiguration.class)
+@Import(OracleContainerConfiguration.class)
 @ActiveProfiles("it-oracle")
 public class OracleBaseIntegrationTest extends BaseIntegrationTest{
 
