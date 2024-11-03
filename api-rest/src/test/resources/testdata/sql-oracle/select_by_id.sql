@@ -1,5 +1,5 @@
 SELECT *
-FROM sakila.film f
+FROM film f
 WHERE 1 = 1
   AND f.film_id =
     {% if params.film_id %}

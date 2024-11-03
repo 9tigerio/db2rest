@@ -1,1 +1,2 @@
-SELECT * FROM sakila.film;
+SELECT *
+FROM film;

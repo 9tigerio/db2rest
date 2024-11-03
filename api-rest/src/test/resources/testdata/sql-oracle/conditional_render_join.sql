@@ -4,11 +4,11 @@ SELECT
     {% else %}
         *
     {% endif %}
-FROM sakila.film f
+FROM film f
 
 {% if params.film_id and params.language_id %}
 JOIN
-    sakila.language l
+    language l
 ON f.language_id = l.language_id
 {% endif %}
 

@@ -23,7 +23,6 @@ import com.homihq.db2rest.jdbc.rest.read.FindOneController;
 import com.homihq.db2rest.jdbc.rest.read.ReadController;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
-import com.homihq.db2rest.jdbc.rest.schema.SchemaController;
 import com.homihq.db2rest.jdbc.rest.sql.SQLTemplateController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
