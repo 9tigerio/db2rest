@@ -23,8 +23,6 @@ class MySQLTemplateControllerTest extends MySQLBaseIntegrationTest {
 	@Test
 	@DisplayName("Test find all films with sql template")
 	void findAllFilms() throws Exception {
-		var tableName = "film";
-
 		mockMvc.perform(get(VERSION + "/mysqldb/sql/select_all")
 						.contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
 				.andExpect(status().isOk())
