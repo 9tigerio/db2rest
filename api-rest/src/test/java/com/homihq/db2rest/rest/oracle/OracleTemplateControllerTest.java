@@ -102,7 +102,7 @@ class OracleTemplateControllerTest extends OracleBaseIntegrationTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-				.andExpect(jsonPath("$[0].film_id").value(id))
+				.andExpect(jsonPath("$[0].FILM_ID").value(id))
 				.andDo(document("ora-template-conditional-render-with-id-condition"));
 	}
 
@@ -118,8 +118,8 @@ class OracleTemplateControllerTest extends OracleBaseIntegrationTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-				.andExpect(jsonPath("$[0].film_id").value(id))
-				.andExpect(jsonPath("$[0].rating").value(rating))
+				.andExpect(jsonPath("$[0].FILM_ID").value(id))
+				.andExpect(jsonPath("$[0].RATING").value(rating))
 			.andDo(document("ora-template-conditional-render-render-both-and-operations"));
 	}
 
@@ -134,7 +134,7 @@ class OracleTemplateControllerTest extends OracleBaseIntegrationTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-				.andExpect(jsonPath("$[0].film_id").value(film_id))
+				.andExpect(jsonPath("$[0].FILM_ID").value(film_id))
 				.andDo(document("ora-template-conditional-render-join-skip-render"));
 	}
 
@@ -150,7 +150,7 @@ class OracleTemplateControllerTest extends OracleBaseIntegrationTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.*").isArray())
 				.andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-				.andExpect(jsonPath("$[0].film_id").value(film_id))
+				.andExpect(jsonPath("$[0].FILM_ID").value(film_id))
 				.andExpect(jsonPath("$[0].language_name").value("English"))
 				.andDo(document("ora-template-conditional-render-join"));
 	}
