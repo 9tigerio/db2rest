@@ -5,11 +5,14 @@ import com.homihq.db2rest.core.exception.SqlTemplateNotFoundException;
 import com.homihq.db2rest.core.exception.SqlTemplateReadException;
 import com.homihq.db2rest.core.exception.UnsupportedConstraintException;
 import com.homihq.db2rest.jdbc.JdbcManager;
+import com.homihq.db2rest.jdbc.config.dialect.Dialect;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.Placeholder;
 import com.homihq.db2rest.jdbc.validator.ConstraintValidator;
 import com.homihq.db2rest.jdbc.validator.CustomPlaceholderValidators;
 import com.hubspot.jinjava.Jinjava;
+import com.hubspot.jinjava.interpret.TemplateError;
+import com.hubspot.jinjava.tree.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,10 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +51,9 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 
 	private Object executeQuery(String dbId, Map<String, Object> paramMap, String sql) {
 		log.debug("Execute: {}", sql);
+
+		Dialect dialect = jdbcManager.getDialect(dbId);
+
 		return dbOperationService.read(
 				jdbcManager.getNamedParameterJdbcTemplate(dbId),
 				paramMap,
@@ -69,6 +72,33 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 		return Pair.of(namedParamsSQL, paramMap);
 	}
 
+	private void analyzeTemplate(String templateContent) {
+		var interpreter = jinjava.newInterpreter();
+		Node parsedTemplate = interpreter.parse(templateContent);
+
+		// 1. Get Template Errors (if any)
+		List<TemplateError> errors = interpreter.getErrors();
+		System.out.println("Errors:");
+		errors.forEach(System.out::println);
+
+		// 2. Get Template Variables
+		Set<String> variables = interpreter.getContext().getSessionBindings().keySet();
+		System.out.println("Variables Used: " + variables);
+
+		// 3. Get all nodes for further metadata if needed (e.g., macros, includes, custom blocks)
+		List<String> nodeNames = parsedTemplate.getChildren().stream()
+				.map(Node::getName)
+				.toList();
+		System.out.println("Nodes in Template: " + nodeNames);
+
+		parsedTemplate.getChildren().forEach(c -> {
+			var child = c;
+
+			System.out.println("Child: " + child.getName());
+		});
+
+	}
+
 	private String renderJinJavaTemplate(String templateFile, Map<String, Object> context) {
 		log.debug("Rendering query from template {}", templateFile);
 
@@ -79,13 +109,15 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 			} else {
 				final String userTemplateLocation = db2RestConfigProperties.getTemplates();
 				final Path templatePath = Paths.get(userTemplateLocation, templateFile + SQL_TEMPLATE_EXTENSION);
-
 				if (!Files.exists(templatePath)) {
 					throw new SqlTemplateNotFoundException(templateFile);
 				}
 				try {
 					final String templateContent = Files.readString(templatePath);
 					templateCache.put(templateFile, templateContent);
+
+					analyzeTemplate(templateContent);
+
 					return jinjava.render(templateContent, context);
 				} catch (IOException ioe) {
 					log.error("Error reading template file {}: {}", templatePath, ioe.getMessage());
