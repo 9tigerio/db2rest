@@ -2,16 +2,19 @@ package com.homihq.db2rest.multidb;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Data
 @Component
 @ConfigurationProperties(prefix = "app")
+@Slf4j
 public class DatabaseProperties {
 
 
@@ -22,5 +25,17 @@ public class DatabaseProperties {
         databases.stream()
                 .filter(databaseConnectionDetail -> StringUtils.equalsIgnoreCase(dbId, databaseConnectionDetail.id()))
                 .findFirst();
+    }
+
+    public boolean isRdbmsConfigured() {
+        if(Objects.isNull(databases)) {
+            log.info("*** No RDBMS configured.");
+            return false;
+        }
+
+        return databases.stream()
+                .anyMatch(DatabaseConnectionDetail::isJdbcPresent);
+
+
     }
 }
