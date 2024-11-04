@@ -18,7 +18,6 @@
     <description>An Open Source instant REST Data API for databases. This is the DB2Rest parent Maven project.</description>
 
     <!-- PROJECT ORGANIZATION METADATA -->
-
     <organization>
         <name>9Tiger</name>
         <url>https://9tiger.io</url>
