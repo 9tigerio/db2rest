@@ -7,6 +7,7 @@ import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.jdbc.config.dialect.*;
+import com.homihq.db2rest.jdbc.config.jinjava.DisabledExpressionTokenScannerSymbols;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.core.service.*;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
@@ -22,11 +23,15 @@ import com.homihq.db2rest.jdbc.rest.read.FindOneController;
 import com.homihq.db2rest.jdbc.rest.read.ReadController;
 import com.homihq.db2rest.jdbc.rest.rpc.FunctionController;
 import com.homihq.db2rest.jdbc.rest.rpc.ProcedureController;
+import com.homihq.db2rest.jdbc.rest.sql.SQLTemplateController;
 import com.homihq.db2rest.jdbc.rest.update.UpdateController;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
+import com.homihq.db2rest.jdbc.validator.CustomPlaceholderValidators;
 import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
 import com.homihq.db2rest.multidb.DatabaseProperties;
+import com.hubspot.jinjava.Jinjava;
+import com.hubspot.jinjava.JinjavaConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.CodeResolver;
@@ -130,6 +135,16 @@ public class JdbcConfiguration {
         return TemplateEngine.create(codeResolver, ContentType.Plain);
     }
 
+    @Bean
+    public Jinjava jinjava() {
+        JinjavaConfig config = JinjavaConfig
+                .newBuilder()
+                .withTokenScannerSymbols(new DisabledExpressionTokenScannerSymbols())
+                .build();
+
+        return new Jinjava(config);
+    }
+
     //START ::: Processors
     @Bean
     public TSIDProcessor tsidProcessor() {
@@ -163,6 +178,13 @@ public class JdbcConfiguration {
 
     //END ::: Processors
 
+    //START ::: Validator
+    @Bean
+    public CustomPlaceholderValidators customPlaceholderValidators() {
+        return new CustomPlaceholderValidators();
+    }
+
+    //END ::: Validator
 
     //START ::: Service
     //CREATE SERVICE
@@ -254,6 +276,23 @@ public class JdbcConfiguration {
         return new JdbcProcedureService(jdbcManager);
     }
 
+    @Bean
+    public SQLTemplateExecutorService templateService(
+            Jinjava jinjava,
+            Db2RestConfigProperties db2RestConfigProperties,
+            DbOperationService dbOperationService,
+            JdbcManager jdbcManager,
+            CustomPlaceholderValidators customPlaceholderValidators
+    ) {
+        return new JinJavaTemplateExecutorService(
+                jinjava,
+                db2RestConfigProperties,
+                dbOperationService,
+                jdbcManager,
+                customPlaceholderValidators
+        );
+    }
+
     //END ::: Services
 
     //START ::: API
@@ -334,13 +373,17 @@ public class JdbcConfiguration {
     }
 
     @Bean
+    @ConditionalOnBean(SQLTemplateExecutorService.class)
+    public SQLTemplateController sqlTemplateController(
+            SQLTemplateExecutorService sqlTemplateExecutorService
+    ) {
+        return new SQLTemplateController(sqlTemplateExecutorService);
+    }
+  
     @ConditionalOnBean(JdbcManager.class)
     public DbInfoController dbInfoController(JdbcManager jdbcManager) {
         return new DbInfoController(jdbcManager);
     }
-
-
-
     //END ::: API
 
 }
