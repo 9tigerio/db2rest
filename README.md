@@ -106,6 +106,4 @@ Refer to [open roadmap](https://db2rest.com/roadmap/) items.
 
 # IDE Sponsor
 
-## IntelliJ IDEA Ultimate
-
 ![IntelliJ IDEA logo](https://resources.jetbrains.com/storage/products/company/brand/logos/IntelliJ_IDEA.png)
