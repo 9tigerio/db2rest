@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  db2rest-service:
+    image: kdhrubo/db2rest:latest
+    ports:
+      - 80:8080
+    environment:
+      DB_URL: "jdbc:postgresql://employee-postgres:5432/empdb"
+      DB_USER: "db2rest"
+      DB_PASSWORD: "db2rest"
+      INCLUDED_SCHEMAS: public,emp
+
+  employee-postgres:
+    image: "postgres:14.4"
+    container_name: "employee-postgres"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=db2rest
+      - POSTGRES_PASSWORD=db2rest
+      - POSTGRES_DB=empdb
