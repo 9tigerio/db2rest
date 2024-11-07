@@ -43,9 +43,7 @@ public class SchemaController implements SchemaRestApi{
         SchemaFilter schemaFilter = getSchemaFilter(filter);
 
         if(Objects.isNull(schemaFilter)) {
-
-            return dbTables.stream()
-                    .map(t -> new TableObject(t.schema(), t.name(), t.type())).toList();
+            return dbTables.stream().map(TableObject::new).toList();
         }
         else{
             log.info("schemaFilter - {}", schemaFilter);
@@ -64,7 +62,7 @@ public class SchemaController implements SchemaRestApi{
                                    && StringUtils.containsIgnoreCase(dbTable.type(), schemaFilter.value);
 
                     })
-                    .map(t -> new TableObject(t.schema(), t.name(), t.type())).toList();
+                    .map(TableObject::new).toList();
         }
 
     }
