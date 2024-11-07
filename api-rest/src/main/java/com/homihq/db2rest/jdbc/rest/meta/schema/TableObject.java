@@ -2,7 +2,9 @@ package com.homihq.db2rest.jdbc.rest.meta.schema;
 
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.Getter;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
 @Getter
 public class TableObject {
     private final String schema;
