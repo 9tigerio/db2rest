@@ -104,7 +104,7 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
     void getActorFilterByTimeStamp() throws Exception {
         mockMvc.perform(get(VERSION + "/mysqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                        .param("filter", "last_update == \"2024-03-15T09:30:45.00Z\""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
@@ -119,7 +119,7 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
     void deleteActorByTimeStamp() throws Exception {
         mockMvc.perform(delete(VERSION + "/mysqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                        .param("filter", "last_update == \"2024-03-15T09:30:45.00Z\""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())

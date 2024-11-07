@@ -101,7 +101,7 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
      */
     @Test
     void testGetObjectsValidFilter()  throws Exception {
-        mockMvc.perform(get("/v1/rdbms/1/$schemas")
+        mockMvc.perform(get(VERSION + "/1/$schemas")
                         .param("filter", "schema==schema")
                         .contentType("application/json"))
                 .andExpect(status().isOk())  // Expect 200 OK
@@ -123,7 +123,7 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
      */
     @Test
     void testGetObjectsInvalidFilterField()  throws Exception {
-        mockMvc.perform(get("/v1/rdbms/1/$schemas")
+        mockMvc.perform(get(VERSION + "/1/$schemas")
                         .param("filter", "someUnknownFilter==schema")
                         .contentType("application/json"))
                 .andExpect(status().isOk())  // Expect 200 OK

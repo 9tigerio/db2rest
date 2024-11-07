@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(203)
+//@Order(203)
 @TestPropertySource(properties = {"db2rest.defaultFetchLimit=5"})
 public class OracleReadControllerDefaultFetchLimitTest extends OracleBaseIntegrationTest {
 

@@ -106,7 +106,7 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
     void getActorFilterByTimeStamp() throws Exception {
         mockMvc.perform(get(VERSION + "/mariadb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                        .param("filter", "last_update == \"2024-03-15T09:30:45.00Z\""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
@@ -121,7 +121,7 @@ public class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
     void deleteActorByTimeStamp() throws Exception {
         mockMvc.perform(delete(VERSION + "/mariadb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                        .param("filter", "last_update == \"2024-03-15T09:30:45.00Z\""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
