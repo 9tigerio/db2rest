@@ -1,16 +1,17 @@
 package com.homihq.db2rest.jdbc.rest.meta.schema;
 
 import com.homihq.db2rest.jdbc.config.model.DbTable;
+import lombok.Getter;
 
-import java.util.List;
+@Getter
+public class TableObject {
+    private final String schema;
+    private final String name;
+    private final String type;
 
-public record TableObject(String schema, String name, String type, List<ColumnObject> columns) {
     public TableObject(DbTable dbTable) {
-        this(
-                dbTable.schema(),
-                dbTable.name(),
-                dbTable.type(),
-                dbTable.dbColumns().stream().map(ColumnObject::new).toList()
-        );
+        this.schema = dbTable.schema();
+        this.name = dbTable.name();
+        this.type = dbTable.type();
     };
 }
