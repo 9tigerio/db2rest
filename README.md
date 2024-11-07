@@ -93,7 +93,7 @@ Complex, error-prone maintenance-heavy file-based data exchange can be replaced 
 
 *Connect on Discord*
 
-[![](https://dcbadge.vercel.app/api/server/deQgNkgt8b?theme=discord)](https://discord.gg/gytFPNW656)
+[![](https://dcbadge.vercel.app/api/server/kqeDatPGwU?theme=discord)](https://discord.gg/gytFPNW656)
 
 # Contact
 
