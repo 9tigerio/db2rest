@@ -43,7 +43,7 @@ class SchemaControllerTest {
     void getObjectsNoFilter() {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));
         List<TableObject> actualTableObject = schemaController.getObjects("key",null);
-        List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(t-> new TableObject(t.schema(),t.name(),t.type())).toList();
+        List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(TableObject::new).toList();
         schemaController.getObjects("key",null);
         assertEquals(expectedTableObject,actualTableObject);
     }
@@ -56,7 +56,7 @@ class SchemaControllerTest {
     @Test
     void testGetObjectsValidFilter_schema(){
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));
-        List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(t-> new TableObject(t.schema(),t.name(),t.type())).toList();
+        List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(TableObject::new).toList();
         List<TableObject> actualTableObject = schemaController.getObjects("key","schema==schema");
         assertEquals(expectedTableObject,actualTableObject);
 
@@ -67,7 +67,7 @@ class SchemaControllerTest {
     @Test
     void testGetObjectsValidFilter_name() {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));
-        List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(t-> new TableObject(t.schema(),t.name(),t.type())).toList();
+        List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(TableObject::new).toList();
         List<TableObject> actualTableObject = schemaController.getObjects("key","name==name");
         assertEquals(expectedTableObject,actualTableObject);
 
@@ -77,7 +77,7 @@ class SchemaControllerTest {
     @Test
     void testGetObjectsValidFilter_type() {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));
-        List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(t-> new TableObject(t.schema(),t.name(),t.type())).toList();
+        List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(TableObject::new).toList();
         List<TableObject> actualTableObject = schemaController.getObjects("key","type==type");
         assertEquals(expectedTableObject,actualTableObject);
 

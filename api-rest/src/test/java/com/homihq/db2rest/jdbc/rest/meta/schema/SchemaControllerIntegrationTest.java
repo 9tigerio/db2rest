@@ -67,7 +67,8 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.*").isArray())
                 //.andExpect(jsonPath("$.*", hasSize(4)))
                 .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-                .andExpect(jsonPath("$[0].*", hasSize(3)))
+                .andExpect(jsonPath("$[0].*", hasSize(4)))
+                .andExpect(jsonPath("$[0].columns.*", hasSize(1)))
                 .andDo(document("schema-no-filter"));
     }
 
