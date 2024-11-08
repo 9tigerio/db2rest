@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * provides methods to filter and retrieve schema objects from a database
@@ -25,10 +26,11 @@ public class SchemaController implements SchemaRestApi{
     /** 
      * @param dbId database id from which to retrieve the schema objects
      * @param filter filter conditions to match against a schema, name, or type
+     * @param columns include the column information for a table
      * @return list of schema objects (schema, name, type) that match the filter conditions
      */
     @Override
-    public List<TableObject> getObjects(String dbId, String filter) {
+    public List<? extends TableObject> getObjects(String dbId, String filter, Boolean columns) {
 
         log.info("Filter - {}", filter);
 
@@ -38,14 +40,13 @@ public class SchemaController implements SchemaRestApi{
 
         if(Objects.isNull(dbMeta)) return List.of();
 
-        List<DbTable> dbTables = dbMeta.dbTables();
-
         SchemaFilter schemaFilter = getSchemaFilter(filter);
 
-        if(Objects.isNull(schemaFilter)) {
+        List<DbTable> dbTables = dbMeta.dbTables();
+        Function<DbTable, ? extends TableObject> tableMapper = columns ? TableWithColumnsObject::new : TableObject::new;
 
-            return dbTables.stream()
-                    .map(t -> new TableObject(t.schema(), t.name(), t.type())).toList();
+        if(Objects.isNull(schemaFilter)) {
+            return dbTables.stream().map(tableMapper).toList();
         }
         else{
             log.info("schemaFilter - {}", schemaFilter);
@@ -64,7 +65,7 @@ public class SchemaController implements SchemaRestApi{
                                    && StringUtils.containsIgnoreCase(dbTable.type(), schemaFilter.value);
 
                     })
-                    .map(t -> new TableObject(t.schema(), t.name(), t.type())).toList();
+                    .map(tableMapper).toList();
         }
 
     }
