@@ -28,14 +28,19 @@ public class DatabaseProperties {
     }
 
     public boolean isRdbmsConfigured() {
+
         if(Objects.isNull(databases)) {
-            log.info("*** No RDBMS configured.");
+            log.info("No database configuration found");
             return false;
         }
 
-        return databases.stream()
+        log.info("Database configuration found.");
+
+        boolean jdbcUrlFound = databases.stream()
                 .anyMatch(DatabaseConnectionDetail::isJdbcPresent);
 
+        log.info("JDBC Url found : {}" ,  jdbcUrlFound);
 
+        return jdbcUrlFound;
     }
 }

@@ -76,9 +76,9 @@ public class JdbcConfiguration {
     private Map<Object, Object> buildDataSources() {
         final Map<Object, Object> result = new HashMap<>();
 
-        log.info("Databases - {}", databaseProperties.getDatabases());
+        log.debug("Databases - {}", databaseProperties.getDatabases());
 
-        if(databaseProperties.isRdbmsConfigured()) {
+        if(!databaseProperties.isRdbmsConfigured()) {
             log.info("*** No RDBMS configured.");
             return result;
         }
