@@ -16,12 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 //@Order(203)
 @TestPropertySource(properties = {"db2rest.defaultFetchLimit=5"})
-public class OracleReadControllerDefaultFetchLimitTest extends OracleBaseIntegrationTest {
+class OracleReadControllerDefaultFetchLimitTest extends OracleBaseIntegrationTest {
 
     @Test
     @DisplayName("Get all with default fetch limit set to 5")
     void findAllPersonsWithDefaultFetchLimit5() throws Exception {
-        mockMvc.perform(get(VERSION + "/oradb/person")
+        mockMvc.perform(get(VERSION + "/oradb/PERSON")
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())

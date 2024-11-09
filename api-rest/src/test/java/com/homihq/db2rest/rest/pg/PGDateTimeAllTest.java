@@ -3,10 +3,15 @@ package com.homihq.db2rest.rest.pg;
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.homihq.db2rest.MariaDBBaseIntegrationTest;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import com.homihq.db2rest.rest.DateTimeUtil;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +21,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(192)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
+class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
 
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
@@ -43,7 +51,8 @@ public class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
         actorRequestWithDateTime.put("last_update", "2020-03-15T14:30:45.000");
 
         mockMvc.perform(post(VERSION + "/pgsqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithDateTime)))
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -54,14 +63,15 @@ public class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @Order(1)
     @DisplayName("Test Create an actor with error timestamp field")
-    void createActorWithErrorDateTimeField() throws Exception{
+    void createActorWithErrorDateTimeField() throws Exception {
         Map<String, Object> actorRequestWithErrorDateTime = new HashMap<>();
         actorRequestWithErrorDateTime.put("first_name", "Hero");
         actorRequestWithErrorDateTime.put("last_name", "shadow");
         actorRequestWithErrorDateTime.put("last_update", "2023-15-35T14:75:90");
 
         mockMvc.perform(post(VERSION + "/pgsqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -77,7 +87,8 @@ public class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
         updateActorRequestWithDateTime.put("last_update", dateTime);
 
         mockMvc.perform(patch(VERSION + "/pgsqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .param("filter", "last_name == Unconscious")
                         .content(objectMapper.writeValueAsString(updateActorRequestWithDateTime)))
                 .andDo(print())
@@ -106,7 +117,7 @@ public class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
     void getActorFilterByTimeStamp() throws Exception {
         mockMvc.perform(get(VERSION + "/pgsqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update == \"2024-03-15T09:30:45.00Z\""))
+                        .param("filter", "last_update == \"2024-03-15T10:30:45.00Z\""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
@@ -121,7 +132,7 @@ public class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
     void deleteActorByTimeStamp() throws Exception {
         mockMvc.perform(delete(VERSION + "/pgsqldb/actor")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update == \"2024-03-15T09:30:45.00Z\""))
+                        .param("filter", "last_update == \"2024-03-15T10:30:45.00Z\""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
