@@ -14,7 +14,11 @@ public record DatabaseConnectionDetail(String id, String type, String url, Strin
     }
 
     public boolean isJdbcPresent() {
-        return StringUtils.isNoneBlank(url)
+
+        System.out.println("StringUtils.isNotBlank(url) -- " + StringUtils.isNotBlank(url));
+        System.out.println("!StringUtils.equalsIgnoreCase -- {}" + !StringUtils.equalsIgnoreCase(url, "${DB_URL}"));
+
+        return StringUtils.isNotBlank(url)
                 && !StringUtils.equalsIgnoreCase(url, "${DB_URL}");
     }
 
