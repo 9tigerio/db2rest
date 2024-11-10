@@ -4,11 +4,18 @@
 name: Download from Central & Publish to DockerHub
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      DB2REST_VERSION:
+        description: 'DB2REST version that is already published in Maven Central'
+        required: true
+        default: '1.2.4'
+    
+  # release:
+  #   types: [created]
 
 jobs:
-  build:
+  build_docker_image:
 
     runs-on: ubuntu-latest
     permissions:
@@ -18,11 +25,11 @@ jobs:
     steps:
       - name: Download DB2REST packages from Maven Central
         run: |
-          echo "---------^^^^^^^^^^^^^^^^^^-------------"
-          echo "CHANGE THIS STEP SO THAT IT SUCCESSFULLY"
-          echo "  PULLS OUR DB2REST PACKAGE FROM MAVEN CENTRAL"
-          echo "  NOW THAT WE'RE ON THAT"
-          echo "  THEN UNCOMMENT THE REMAINING STEPS IN THIS WORKFLOW"
+          echo "CI--- Using DB2REST_VERSION: ${{ github.event.inputs.DB2REST_VERSION }}"
+          echo "CI--- Downloading DB2REST JAR from Maven Central"
+          wget https://search.maven.org/remotecontent?filepath=/io/9tiger/db2rest/$DB2REST_VERSION/db2rest-$DB2REST_VERSION.jar
+          echo "CI--- File downloaded successfully"
+          ls -l
 
       # - name: Login to DockerHub
       #   uses: docker/login-action@v1
