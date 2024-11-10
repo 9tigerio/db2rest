@@ -1,7 +1,7 @@
 # This workflow will download the Maven Central package and
 # build Docker image and publish to DockerHub  
 
-name: Download from Central & Publish to DockerHub
+name: Publish to DockerHub
 
 on:
   workflow_dispatch:
