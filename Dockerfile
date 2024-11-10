@@ -1,9 +1,11 @@
 FROM bellsoft/liberica-runtime-container:jre-21-cds-slim-musl
 
-ARG JAR_FILE
+# Sets default version of db2rest to download during ADD
+# Can be overridden during build with option like `--build-arg DB2REST_VERSION=1.2.4`
+ARG DB2REST_VERSION=1.2.4
 
-# cp target/db2rest.jar /opt/app/db2rest.jar
-COPY $JAR_FILE /opt/app/db2rest.jar
+# Adds remote db2rest jar into /opt/app/db2rest.jar
+ADD https://search.maven.org/remotecontent?filepath=io/9tiger/db2rest/$DB2REST_VERSION/db2rest-$DB2REST_VERSION.jar /opt/app/db2rest.jar
 
 # cd /opt/app
 WORKDIR /opt/app
