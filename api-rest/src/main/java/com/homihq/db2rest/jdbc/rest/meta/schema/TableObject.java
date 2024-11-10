@@ -1,4 +1,19 @@
 package com.homihq.db2rest.jdbc.rest.meta.schema;
 
-public record TableObject(String schema, String name, String type) {
+import com.homihq.db2rest.jdbc.config.model.DbTable;
+import lombok.Getter;
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
+@Getter
+public class TableObject {
+    private final String schema;
+    private final String name;
+    private final String type;
+
+    public TableObject(DbTable dbTable) {
+        this.schema = dbTable.schema();
+        this.name = dbTable.name();
+        this.type = dbTable.type();
+    };
 }

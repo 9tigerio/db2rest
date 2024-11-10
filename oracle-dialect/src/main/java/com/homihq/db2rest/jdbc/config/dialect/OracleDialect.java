@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -43,21 +45,28 @@ public class OracleDialect implements Dialect {
 
                 String columnDataTypeName = table.getColumnDataTypeName(columnName);
 
-
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
 
                     data.put(columnName, objectMapper.writeValueAsString(value));
+                } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "TIMESTAMP(6)")) {
+                    LocalDateTime v = convertToLocalDateTime((String) value);
+                    data.put(columnName, v);
                 }
 
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new GenericDataAccessException(exception.getMessage());
         }
 
     }
 
-
+    private LocalDateTime convertToLocalDateTime(String value) {
+        try {
+            return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to LocalDateTime type - " + e.getLocalizedMessage());
+        }
+    }
 
     private String getQuotedName(String name) {
         return coverChar + name + coverChar;
@@ -72,7 +81,6 @@ public class OracleDialect implements Dialect {
     public String renderTableNameWithoutAlias(DbTable table) {
         return getQuotedName(table.schema()) + "." + getQuotedName(table.name());
     }
-
 
 
 }

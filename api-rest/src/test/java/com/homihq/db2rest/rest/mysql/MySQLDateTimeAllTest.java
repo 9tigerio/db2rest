@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(92)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
+class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
 
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
@@ -42,7 +42,8 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
         actorRequestWithDateTime.put("last_update", "2020-03-15T14:30:45.000");
 
         mockMvc.perform(post(VERSION + "/mysqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithDateTime)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -52,14 +53,15 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
     @Test
     @Order(1)
     @DisplayName("Test Create an actor with error timestamp field")
-    void createActorWithErrorDateTimeField() throws Exception{
+    void createActorWithErrorDateTimeField() throws Exception {
         Map<String, Object> actorRequestWithErrorDateTime = new HashMap<>();
         actorRequestWithErrorDateTime.put("first_name", "Hero");
         actorRequestWithErrorDateTime.put("last_name", "shadow");
         actorRequestWithErrorDateTime.put("last_update", "2023-15-35T14:75:90");
 
         mockMvc.perform(post(VERSION + "/mysqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -75,7 +77,8 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
         updateActorRequestWithDateTime.put("last_update", dateTime);
 
         mockMvc.perform(patch(VERSION + "/mysqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .param("filter", "last_name == Unconscious")
                         .content(objectMapper.writeValueAsString(updateActorRequestWithDateTime)))
                 .andDo(print())
@@ -89,7 +92,8 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
     @DisplayName("Test get an actor with datetime fields")
     void getActorWithDateTimeFields() throws Exception {
         mockMvc.perform(get(VERSION + "/mysqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
                         .param("filter", "first_name == Collective"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -103,8 +107,9 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
     @DisplayName("Test get an actor filter by timestamp")
     void getActorFilterByTimeStamp() throws Exception {
         mockMvc.perform(get(VERSION + "/mysqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "last_update == \"2024-03-15T10:30:45.00Z\""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
@@ -118,8 +123,9 @@ public class MySQLDateTimeAllTest extends MySQLBaseIntegrationTest {
     @DisplayName("Test delete an actor by timestamp")
     void deleteActorByTimeStamp() throws Exception {
         mockMvc.perform(delete(VERSION + "/mysqldb/actor")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .param("filter", "last_update == \"2024-03-15T06:30:45.00Z\""))
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .param("filter", "last_update == \"2024-03-15T10:30:45.00Z\""))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())

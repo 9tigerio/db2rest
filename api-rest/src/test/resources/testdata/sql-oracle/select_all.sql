@@ -1,1 +1,1 @@
-SELECT * FROM film;
+SELECT * FROM film

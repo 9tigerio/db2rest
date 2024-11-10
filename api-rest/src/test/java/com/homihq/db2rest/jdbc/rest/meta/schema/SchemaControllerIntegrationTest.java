@@ -72,6 +72,29 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
     }
 
     /**
+     * This test tests the use case where we request for schema's columns
+     * @throws Exception
+     */
+    @Test
+    void testGetColumnObjects() throws Exception {
+        mockMvc.perform(get(VERSION + "/1/$schemas")
+                        .param("columns", "true")
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                //.andExpect(jsonPath("$.*", hasSize(4)))
+                .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
+                .andExpect(jsonPath("$[0].*", hasSize(4)))
+                .andExpect(jsonPath("$[0].columns.*", hasSize(1)))
+                .andExpect(jsonPath("$[0].columns[0].*", hasSize(3)))
+                .andExpect(jsonPath("$[0].columns[0].name").value("name"))
+                .andExpect(jsonPath("$[0].columns[0].pk").value(true))
+                .andExpect(jsonPath("$[0].columns[0].dataType").value("columnDataType"))
+                .andDo(document("schema-no-filter"));
+    }
+
+    /**
      * This test tests the use case where we are sending an invalid filter
      * i.e, we are sending a filter which is not valid.
      * @throws Exception
@@ -101,7 +124,7 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
      */
     @Test
     void testGetObjectsValidFilter()  throws Exception {
-        mockMvc.perform(get("/v1/rdbms/1/$schemas")
+        mockMvc.perform(get(VERSION + "/1/$schemas")
                         .param("filter", "schema==schema")
                         .contentType("application/json"))
                 .andExpect(status().isOk())  // Expect 200 OK
@@ -123,7 +146,7 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
      */
     @Test
     void testGetObjectsInvalidFilterField()  throws Exception {
-        mockMvc.perform(get("/v1/rdbms/1/$schemas")
+        mockMvc.perform(get(VERSION + "/1/$schemas")
                         .param("filter", "someUnknownFilter==schema")
                         .contentType("application/json"))
                 .andExpect(status().isOk())  // Expect 200 OK

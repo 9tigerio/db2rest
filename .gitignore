@@ -39,3 +39,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+## jte ##
+/api-rest/jte-classes/**
+/jte-classes/**
