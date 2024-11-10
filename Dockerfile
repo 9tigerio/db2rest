@@ -4,6 +4,7 @@ FROM bellsoft/liberica-runtime-container:jre-21-cds-slim-musl
 WORKDIR /opt/app
 
 # cp target/db2rest.jar /opt/app/db2rest.jar
+# ARG JAR_FILE is passed in from the Buildx `build-args` input during GitHub dockerhub-publish.yml action
 COPY ${JAR_FILE} db2rest.jar
 
 # uncomment EXPOSE if you wish to automatically expose
