@@ -50,4 +50,4 @@ jobs:
       # instead of PATH context `context: .`
           push: true
           tags: kdhrubo/db2rest:v${{ github.run_number }}, kdhrubo/db2rest:latest
-          build-args: JAR_FILE=db2rest.jar
+          build-args: JAR_FILE=./db2rest.jar
