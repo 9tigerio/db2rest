@@ -2,7 +2,7 @@ FROM bellsoft/liberica-runtime-container:jre-21-cds-slim-musl
 
 
 # Refer to Maven build -> finalName
-ARG JAR_FILE=api-rest/target/db2rest.jar
+ARG JAR_FILE=db2rest.jar
 
 # cd /opt/app
 WORKDIR /opt/app
