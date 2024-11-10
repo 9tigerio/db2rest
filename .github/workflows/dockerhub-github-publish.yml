@@ -46,7 +46,6 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
-          context: ./
-          file: ./Dockerfile
+          context: .
           push: true
           tags: kdhrubo/db2rest:v${{github.run_number}}, kdhrubo/db2rest:latest
