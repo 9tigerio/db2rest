@@ -32,6 +32,7 @@ jobs:
           wget --progress=bar:force:noscroll https://search.maven.org/remotecontent?filepath=io/9tiger/db2rest/$DB2REST_VERSION/db2rest-$DB2REST_VERSION.jar
           echo "CI--- File downloaded successfully"
           mv *.jar ${{ github.workspace }}/db2rest.jar
+          pwd
           ls -l
 
       - name: Set up Docker Buildx
