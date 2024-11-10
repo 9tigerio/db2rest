@@ -1,8 +1,9 @@
 FROM bellsoft/liberica-runtime-container:jre-21-cds-slim-musl
 
+ARG JAR_FILE
 
 # cp target/db2rest.jar /opt/app/db2rest.jar
-COPY ${{ github.workspace }}/db2rest.jar /opt/app/db2rest.jar
+COPY $JAR_FILE /opt/app/db2rest.jar
 
 # cd /opt/app
 WORKDIR /opt/app
