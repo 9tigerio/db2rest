@@ -90,7 +90,7 @@ public final class JdbcManager {
                     databaseConnectionDetail = connectionDetail.get();
                 }
 
-                log.info("Database connection details - {}", databaseConnectionDetail);
+                log.debug("Database connection details - {}", databaseConnectionDetail);
 
                 loadMetaData((String) dbId, ds, databaseConnectionDetail);
 
@@ -109,7 +109,7 @@ public final class JdbcManager {
     }
 
     private void loadMetaData(String dbId, DataSource ds, DatabaseConnectionDetail databaseConnectionDetail) {
-        log.info("Loading meta data - {}", ds);
+        log.debug("Loading meta data - {}", ds);
         try {
             Map<String,DbTable> dbTableMap = new ConcurrentHashMap<>();
 
@@ -120,6 +120,9 @@ public final class JdbcManager {
             if(Objects.nonNull(databaseConnectionDetail)) {
                 includeAllSchemas = databaseConnectionDetail.includeAllSchemas();
                 schemas = databaseConnectionDetail.schemas();
+
+                log.info("Include all schemas - {}", includeAllSchemas);
+                log.info("Schemas - {}", schemas);
             }
 
             //TODO Get from db config
