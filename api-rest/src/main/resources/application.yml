@@ -4,10 +4,10 @@ app:
 
   databases:
     - id: ${DB_ID:db}
-      url: ${DB_URL}
+      url: ${DB_URL:}
       username: ${DB_USER}
       password: ${DB_PASSWORD}
-      schemas: ${INCLUDED_SCHEMAS}
+      schemas: ${INCLUDED_SCHEMAS:}
 
 server:
   port: ${SERVER_PORT:8080}

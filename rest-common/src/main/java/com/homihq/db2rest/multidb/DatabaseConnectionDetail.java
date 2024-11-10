@@ -15,11 +15,9 @@ public record DatabaseConnectionDetail(String id, String type, String url, Strin
 
     public boolean isJdbcPresent() {
 
-        System.out.println("StringUtils.isNotBlank(url) -- " + StringUtils.isNotBlank(url));
-        System.out.println("!StringUtils.equalsIgnoreCase -- {}" + !StringUtils.equalsIgnoreCase(url, "${DB_URL}"));
+        return StringUtils.isNotBlank(url);
 
-        return StringUtils.isNotBlank(url)
-                && !StringUtils.equalsIgnoreCase(url, "${DB_URL}");
+                // && !StringUtils.equalsIgnoreCase(url, "${DB_URL}");
     }
 
     public boolean includeAllSchemas() {
