@@ -29,8 +29,9 @@ jobs:
         run: |
           echo "CI--- Using DB2REST_VERSION: ${{ github.event.inputs.DB2REST_VERSION }}"
           echo "CI--- Downloading DB2REST JAR from Maven Central"
-          wget -cO https://search.maven.org/remotecontent?filepath=io/9tiger/db2rest/$DB2REST_VERSION/db2rest-$DB2REST_VERSION.jar > db2rest.jar
+          wget https://search.maven.org/remotecontent?filepath=io/9tiger/db2rest/$DB2REST_VERSION/db2rest-$DB2REST_VERSION.jar
           echo "CI--- File downloaded successfully"
+          mv *.jar db2rest.jar
           ls -l
 
       # - name: Login to DockerHub
