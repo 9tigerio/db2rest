@@ -18,6 +18,8 @@ jobs:
   build_docker_image:
 
     runs-on: ubuntu-latest
+    env:
+      DB2REST_VERSION: ${{ github.event.inputs.DB2REST_VERSION }}
     permissions:
       contents: read
       packages: write
