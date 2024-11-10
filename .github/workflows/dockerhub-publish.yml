@@ -48,4 +48,4 @@ jobs:
       # instead of PATH context `context: .`
           push: true
           tags: kdhrubo/db2rest:v${{ github.run_number }}, kdhrubo/db2rest:latest
-          build_args: DB2REST_VERSION=${{ env.DB2REST_VERSION }}
+          build-args: DB2REST_VERSION=${{ env.DB2REST_VERSION }}
