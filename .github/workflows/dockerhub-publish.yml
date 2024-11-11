@@ -25,22 +25,16 @@ jobs:
       packages: write
 
     steps:
-      # - name: Download DB2REST packages from Maven Central
-      #   run: |
-      #     echo "CI--- Using DB2REST_VERSION: ${{ github.event.inputs.DB2REST_VERSION }}"
-      #     echo "CI--- Downloading DB2REST JAR from Maven Central"
-      #     wget --progress=bar:force:noscroll https://search.maven.org/remotecontent?filepath=io/9tiger/db2rest/$DB2REST_VERSION/db2rest-$DB2REST_VERSION.jar
-      #     echo "CI--- File downloaded successfully"
-      #     mv *.jar ${{ github.workspace }}/db2rest.jar
-      #     pwd
-      #     ls -l
-
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # In this following step, we use our Dockerfile
+      # to build the image (which has a `ADD` line to automatically
+      # download the versioned JAR file from Central Portal and
+      # adds it into a layer of the image)
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
