@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
         <!-- lookup parent from repository -->
     </parent>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>rdbms-common</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

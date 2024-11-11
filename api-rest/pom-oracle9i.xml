@@ -5,14 +5,13 @@
     <parent>
         <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
     </parent>
 
     <artifactId>db2rest-oracle9i</artifactId>
-    <version>1.2.4</version>
     <packaging>jar</packaging>
     <name>db2rest-oracle9i</name>
     <description>db2rest-oracle9i</description>
@@ -20,13 +19,6 @@
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>central</id>
-            <url>https://central.sonatype.com</url>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
 
