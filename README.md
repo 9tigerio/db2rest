@@ -36,6 +36,12 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 [Docker based installation guide](https://db2rest.com/docs/run-db2rest-on-docker).
 
+# Building
+Use `mvn verify` or `mvn clean package` , etc. from repo root folder, and pass in a value for `revision` to override the current default version in POMs:
+`mvn -Drevision="1.5.4-SNAPSHOT" clean package -DskipTests`
+
+# Testing
+Running tests simply requires a Docker daemon running, where the build will automatically pull and run testcontainers for the database tests.
 
 # Use Cases 
 
