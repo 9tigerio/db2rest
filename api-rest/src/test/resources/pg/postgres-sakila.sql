@@ -552,3 +552,43 @@ AS $$
 	END;
 $$;
 -- select GetMovieRentalRateFunc('ACADEMY DINOSAUR');
+
+--
+-- Table structure for table `product`
+--
+CREATE TABLE product (
+	product_id SERIAL PRIMARY KEY,
+	name varchar(255) NOT NULL,
+	description TEXT,
+	price DECIMAL(10, 2) NOT NULL,
+	createdat TIMESTAMP DEFAULT NOW() NOT NULL,
+	updatedat TIMESTAMP DEFAULT NOW() NOT NULL
+);
+
+--
+-- Table structure for table `product_variant`
+--
+
+CREATE TABLE product_variant (
+	variant_id SERIAL PRIMARY KEY,
+	product_id INT NOT NULL,
+	variant_name varchar(255) NOT NULL,
+	SKU VARCHAR(100) UNIQUE NOT NULL,
+	price DECIMAL(10, 2) NOT NULL,
+	stock_quantity INT DEFAULT 0,
+	createdat TIMESTAMP DEFAULT NOW() NOT NULL,
+	updatedat TIMESTAMP DEFAULT NOW() NOT NULL,
+	FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
+);
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE tags (
+	tag_id SERIAL PRIMARY KEY,
+	product_id INT NOT NULL,
+	tag_name varchar(100) NOT NULL,
+	createdat TIMESTAMP DEFAULT NOW() NOT NULL,
+	FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
+);

@@ -323,3 +323,33 @@ Insert into film_category
 (film_id,category_id,last_update)
 Values
     ('4','11','2006-02-15 05:07:09.000');
+
+-- product
+
+INSERT INTO product (name, description, price)
+VALUES
+	('Smartphone X', 'A high-end smartphone with OLED display and 5G connectivity', 799.99),
+	('Wireless Earbuds Pro', 'Noise cancelling wireless earbuds with high quality sound', 799.99),
+	('Smartwatch Fit', 'Fitness-focused smartwatch with heart-rate monitoring and GPS', 799.99);
+
+-- product_variant
+
+INSERT INTO product_variant (product_id, variant_name, SKU, price, stock_quantity)
+VALUES
+	(1, 'Smartphone X - 128GB', 'SKU_SX128', 799.99, 100),
+	(1, 'Smartphone X - 256GB', 'SKU_SX256', 899.99, 50),
+	(2, 'Wireless Earbuds Pro - Black', 'SKU_WEPB', 199.99, 200),
+	(2, 'Wireless Earbuds Pro - White', 'SKU_WEPW', 199.99, 75),
+	(3, 'Smartwatch Fit - Small', 'SKU_SWS', 149.99, 150),
+	(3, 'Smartwatch Fit - Large', 'SKU_SWL', 149.99, 100);
+
+-- tags
+
+INSERT INTO tags (product_id, tag_name)
+VALUES
+(1, 'Electronics'),
+(1, 'Smart Devices'),
+(2, 'Audio'),
+(2, 'Wireless'),
+(3, 'Wearable'),
+(3, 'Fitness');
