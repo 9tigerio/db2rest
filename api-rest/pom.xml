@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
 
         <!-- lookup parent from repository -->
@@ -16,76 +16,68 @@
     <name>db2rest</name>
     <description>db2rest</description>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/9tigerio/db2rest</url>
-        </repository>
-    </distributionManagement>
-
     <dependencies>
 
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>auth</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>db2rest-common</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>rest-common</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>mongo-support</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>rdbms-support</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>pg-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>mysql-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>mariadb-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>oracle-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>mssql-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
