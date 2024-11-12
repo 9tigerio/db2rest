@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to publish'
+        description: 'Version to publish, such as 1.3.0-SNAPSHOT'
         required: true
         default: '1.3.0-SNAPSHOT'
       ref:
-        description: 'Type the Branch, Tag or SHA to use for publishing Snapshot'
+        description: 'The Branch, Tag or SHA to use to publish Snapshot'
         required: false
         default: 'master'
 
@@ -27,7 +27,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.ref }}
 
-      - name: Set up Java 21
+      - name: Set up Java 21 and set GitHub for publishing in settings.xml
         uses: actions/setup-java@v4
         with:
           distribution: 'liberica'
@@ -36,6 +36,6 @@ jobs:
           server-id: github
 
       - name: Compile & Deploy to GitHub Packages
-        run: mvn -Drevision=${{ github.event.inputs.version }} -B deploy -DdeployAtEnd --file pom.xml
+        run: mvn -Drevision=${{ github.event.inputs.version }} --no-transfer-progress -B deploy -DdeployAtEnd --file pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

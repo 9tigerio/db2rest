@@ -17,7 +17,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 21
+      name: Checkout code for Tag
+      with:
+        ref: ${{ github.ref }}
+    - name: Echo Tag
+      run: "echo 'CHECKED OUT TAG: ${{ github.ref }}'"
+    - name: Set up JDK 21 and maven settings.xml
       uses: actions/setup-java@v4
       with:
         java-version: '21'
@@ -27,8 +32,8 @@ jobs:
         server-password: MAVEN_PASSWORD
         server-id: central
 
-    - name: Publish package
-      run: mvn -B deploy -P release -DskipTests
+    - name: Publish package DB2Rest
+      run: mvn -Drevision=${{ github.ref }} --no-transfer-progress -B deploy -P release -DskipTests
       # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
       # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
       env:
@@ -38,7 +43,7 @@ jobs:
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
     - name: Publish package Oracle9i
-      run: mvn -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
+      run: mvn -Drevision=${{ github.ref }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
