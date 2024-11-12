@@ -93,7 +93,6 @@
         <module>rdbms-common</module>
         <module>db2rest-common</module>
         <module>rdbms-support</module>
-        <module>rdbms-spring-boot-starter</module>
     </modules>
 
     <dependencies>
