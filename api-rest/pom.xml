@@ -11,6 +11,7 @@
         <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>io.9tiger</groupId>
     <artifactId>db2rest</artifactId>
     <packaging>jar</packaging>
     <name>db2rest</name>

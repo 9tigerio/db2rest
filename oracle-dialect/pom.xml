@@ -11,6 +11,7 @@
         <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>io.9tiger</groupId>
     <artifactId>oracle-dialect</artifactId>
     <name>oracle-dialect</name>
     <description>oracle-dialect</description>
