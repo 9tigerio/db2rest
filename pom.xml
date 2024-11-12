@@ -53,9 +53,21 @@
     </issueManagement>
 
     <distributionManagement>
+        <snapshotRepository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/9tigerio/db2rest</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </snapshotRepository>
         <repository>
             <id>central</id>
+            <name>Central Portal</name>
             <url>https://central.sonatype.com</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </distributionManagement>
 
