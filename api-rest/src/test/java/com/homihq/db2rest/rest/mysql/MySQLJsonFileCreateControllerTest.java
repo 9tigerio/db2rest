@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -24,16 +25,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestWithResources
 class MySQLJsonFileCreateControllerTest extends MySQLBaseIntegrationTest {
 
-    String actorFile = getClass().getResource("/testdata/actor.json").getPath();
-    String filmFile = getClass().getResource("/testdata/BULK_CREATE_FILM_REQUEST.json").getPath();
-    String nonArrayActorFile = getClass().getResource("/testdata/CREATE_ACTOR_REQUEST.json").getPath();
-    String directorFile = getClass().getResource("/testdata/director.json").getPath();
+    Path dir = FileSystems.getDefault().getPath("src/test/resources/testdata");
+
+    Path actorFile = dir.resolve("actor.json");
+    Path filmFile = dir.resolve("BULK_CREATE_FILM_REQUEST.json");
+    Path nonArrayActorFile = dir.resolve("CREATE_ACTOR_REQUEST.json");
+    Path directorFile = dir.resolve("director.json");
 
     @Test
     @DisplayName("Create many actors via JSON file upload.")
     void uploadActorsFile() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "actor.json",
-                "application/json", Files.readAllBytes(Path.of(actorFile)));
+                "application/json", Files.readAllBytes(actorFile));
 
         MvcResult mvcResult = mockMvc.perform(multipart(VERSION + "/mysqldb/actor/upload")
                         .file(file)
@@ -53,7 +56,7 @@ class MySQLJsonFileCreateControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Error create actor via JSON file upload.")
     void uploadActorFileNonJsonArray() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", nonArrayActorFile.toString(),
-                "application/json", Files.readAllBytes(Path.of(nonArrayActorFile)));
+                "application/json", Files.readAllBytes(nonArrayActorFile));
 
          mockMvc.perform(multipart(VERSION + "/mysqldb/actor/upload")
                         .file(file)
@@ -68,7 +71,7 @@ class MySQLJsonFileCreateControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Create many directors via file upload.")
     void createDirectorViaUpload() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "bulkDirector.json",
-                "application/json", Files.readAllBytes(Path.of(directorFile)));
+                "application/json", Files.readAllBytes(directorFile));
 
         MvcResult mvcResult = mockMvc.perform(multipart(VERSION + "/mysqldb/director/upload")
                         .file(file)
@@ -88,7 +91,7 @@ class MySQLJsonFileCreateControllerTest extends MySQLBaseIntegrationTest {
     @DisplayName("Create many films via file upload.")
     void createFilmsViaUpload() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "bulkFilm.json",
-                "application/json", Files.readAllBytes(Path.of(filmFile)));
+                "application/json", Files.readAllBytes(filmFile));
 
         MvcResult mvcResult = mockMvc.perform(multipart(VERSION + "/mysqldb/film/upload")
                         .file(file)
