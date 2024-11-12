@@ -5,7 +5,6 @@ import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 

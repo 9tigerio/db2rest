@@ -1,7 +1,6 @@
 package com.homihq.db2rest.rest.pg;
 
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
-import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 import org.springframework.mock.web.MockMultipartFile;
