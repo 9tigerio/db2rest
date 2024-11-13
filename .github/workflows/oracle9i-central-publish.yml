@@ -1,0 +1,44 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
+
+name: Oracle 9i Publish to Maven
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'The Tag to checkout & publish'
+        required: true
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+      name: Checkout code for Tag
+      with:
+        ref: ${{ github.event.inputs.ref }}
+    - name: Echo Tag
+      run: "echo 'CHECKED OUT TAG: ${{ github.event.inputs.ref }}'"
+    - name: Set up JDK 21 and maven settings.xml
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'liberica'
+        cache: 'maven'
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
+        server-id: central
+
+    - name: Publish package Oracle9i
+      run: mvn -Drevision=${{ github.event.inputs.ref }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
+      env:
+        MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
