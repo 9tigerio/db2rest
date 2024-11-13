@@ -68,6 +68,12 @@
 
         <dependency>
             <groupId>io.9tiger</groupId>
+            <artifactId>mssql-dialect</artifactId>
+            <version>${project.version}</version>        
+        </dependency>
+
+        <dependency>
+            <groupId>io.9tiger</groupId>
             <artifactId>oracle9i-dialect</artifactId>
             <version>${project.version}</version>
         </dependency>
