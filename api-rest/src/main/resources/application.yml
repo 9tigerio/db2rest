@@ -75,7 +75,8 @@ logging:
       springframework:
         web: INFO
         beans: INFO
-        jdbc: INFO
+        jdbc: DEBUG
+
 
 management:
   endpoints:
