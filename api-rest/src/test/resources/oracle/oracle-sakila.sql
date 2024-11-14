@@ -744,3 +744,39 @@ ALTER TABLE inventory ADD CONSTRAINT fk_inventory_store FOREIGN KEY (store_id) R
 ALTER TABLE staff ADD CONSTRAINT fk_staff_store FOREIGN KEY (store_id) REFERENCES store (store_id);
 
 ALTER TABLE payment ADD CONSTRAINT fk_payment_rental FOREIGN KEY (rental_id) REFERENCES rental (rental_id) ON DELETE SET NULL;
+
+
+
+CREATE OR REPLACE PROCEDURE GetMovieRentalRateProc (
+    movieTitle IN VARCHAR2,
+    p_rental_rate OUT NUMBER
+) IS
+    /*
+    * Purpose: Retrieves the rental rate for a given movie title
+    * Parameters:
+    *   p_movie_title - Input parameter for the movie title
+    *   p_rental_rate - Output parameter for the rental rate
+    * Returns: Rental rate via OUT parameter, -1 if movie not found
+    */
+BEGIN
+    -- Input parameter validation
+    IF movieTitle IS NULL THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Movie title cannot be null');
+END IF;
+
+    -- Get rental rate for the movie
+SELECT rental_rate
+INTO p_rental_rate
+FROM film
+WHERE UPPER(title) = UPPER(movieTitle);
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_rental_rate := -1;
+WHEN OTHERS THEN
+        -- Log error and re-raise
+        p_rental_rate := NULL;
+        RAISE_APPLICATION_ERROR(-20002,
+            'Error getting rental rate: ' || SQLERRM);
+END GetMovieRentalRateProc;
+/
