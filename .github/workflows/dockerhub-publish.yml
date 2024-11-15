@@ -9,7 +9,7 @@ on:
       DB2REST_VERSION:
         description: 'DB2REST version that is already published in Maven Central'
         required: true
-        default: '1.2.4'
+        default: '1.3.0'
     
   # release:
   #   types: [created]

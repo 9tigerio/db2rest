@@ -6,7 +6,7 @@ on:
       version:
         description: 'Version to publish, such as 1.3.0-SNAPSHOT'
         required: true
-        default: '1.3.0-SNAPSHOT'
+        default: '1.3.1-SNAPSHOT'
       ref:
         description: 'The Branch, Tag or SHA to use to publish Snapshot'
         required: false

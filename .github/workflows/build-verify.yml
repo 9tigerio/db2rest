@@ -1,16 +1,6 @@
 name: Build & Verify
 
 on:
-  workflow_dispatch:
-      inputs:
-        version:
-          description: 'Version to publish'
-          required: true
-          default: '1.3.0-SNAPSHOT'
-        ref:
-          description: 'Type the Branch, Tag or SHA to use for publishing Snapshot'
-          required: false
-          default: 'master'
   pull_request:
     paths-ignore:
       -
@@ -19,9 +9,13 @@ on:
   push:
     branches:
       - 'feature/**'
+
+env: 
+  VERSION: '1.3.1-SNAPSHOT'
+
 jobs:
   build:
-    name: Maven Build
+    name: Maven Build & Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,8 +26,8 @@ jobs:
           distribution: 'liberica'
           cache: 'maven'
 
-      - name: Build with Maven
-        run: ./mvnw -B verify --file pom.xml
+      - name: Build & Test
+        run: ./mvnw -Drevision=$VERSION --no-transfer-progress -B verify --file pom.xml
       
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       #- name: Update dependency graph
