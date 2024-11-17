@@ -1,12 +1,12 @@
 package com.homihq.db2rest.rest.pg;
 
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
-import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.junit.jupiter.api.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -24,16 +24,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestWithResources
 class PgJsonFileCreateControllerTest extends PostgreSQLBaseIntegrationTest {
 
-    String actorFile = getClass().getResource("/testdata/actor.json").getPath();
-    String filmFile = getClass().getResource("/testdata/BULK_CREATE_FILM_REQUEST.json").getPath();
-    String nonArrayActorFile = getClass().getResource("/testdata/CREATE_ACTOR_REQUEST.json").getPath();
-    String directorFile = getClass().getResource("/testdata/director.json").getPath();
+    Path dir = FileSystems.getDefault().getPath("src/test/resources/testdata");
+
+    Path actorFile = dir.resolve("actor.json");
+    Path filmFile = dir.resolve("BULK_CREATE_FILM_REQUEST.json");
+    Path nonArrayActorFile = dir.resolve("CREATE_ACTOR_REQUEST.json");
+    Path directorFile = dir.resolve("director.json");
 
     @Test
     @DisplayName("Create many actors via JSON file upload.")
     void uploadActorsFile() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("file", "actor.json",
-                "application/json", Files.readAllBytes(Path.of(actorFile)));
+        MockMultipartFile file = new MockMultipartFile("file", actorFile.toString(),
+                "application/json", Files.readAllBytes(actorFile));
 
         MvcResult mvcResult = mockMvc.perform(multipart(VERSION + "/pgsqldb/actor/upload")
                         .file(file)
@@ -53,7 +55,7 @@ class PgJsonFileCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Error create actor via JSON file upload.")
     void uploadActorFileNonJsonArray() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", nonArrayActorFile.toString(),
-                "application/json", Files.readAllBytes(Path.of(nonArrayActorFile)));
+                "application/json", Files.readAllBytes(nonArrayActorFile));
 
          mockMvc.perform(multipart(VERSION + "/pgsqldb/actor/upload")
                         .file(file)
@@ -67,8 +69,8 @@ class PgJsonFileCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @DisplayName("Create many directors via file upload.")
     void createDirectorViaUpload() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("file", "bulkDirector.json",
-                "application/json", Files.readAllBytes(Path.of(directorFile)));
+        MockMultipartFile file = new MockMultipartFile("file", directorFile.toString(),
+                "application/json", Files.readAllBytes(directorFile));
 
         MvcResult mvcResult = mockMvc.perform(multipart(VERSION + "/pgsqldb/director/upload")
                         .file(file)
@@ -87,8 +89,8 @@ class PgJsonFileCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     @Test
     @DisplayName("Create many films via file upload.")
     void createFilmsViaUpload() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("file", "bulkFilm.json",
-                "application/json", Files.readAllBytes(Path.of(filmFile)));
+        MockMultipartFile file = new MockMultipartFile("file", filmFile.toString(),
+                "application/json", Files.readAllBytes(filmFile));
 
         MvcResult mvcResult = mockMvc.perform(multipart(VERSION + "/pgsqldb/film/upload")
                         .file(file)

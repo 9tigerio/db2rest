@@ -11,10 +11,11 @@
         <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>io.9tiger</groupId>
     <artifactId>db2rest-oracle9i</artifactId>
-    <packaging>jar</packaging>
     <name>db2rest-oracle9i</name>
     <description>db2rest-oracle9i</description>
+    <packaging>jar</packaging>
     <properties>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
@@ -25,50 +26,56 @@
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>auth</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>rest-common</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>mongo-support</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>rdbms-support</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!--TODO - Remove -->
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>pg-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>mysql-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>mariadb-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.9tiger</groupId>
+            <artifactId>mssql-dialect</artifactId>
+            <version>${project.version}</version>        
         </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
             <artifactId>oracle9i-dialect</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

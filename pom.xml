@@ -12,9 +12,10 @@
 
     <groupId>io.9tiger</groupId>
     <artifactId>db2rest-parent</artifactId>
+    <name>db2rest-parent</name>
     <version>${revision}</version>
     <packaging>pom</packaging>
-    <name>DB2Rest parent</name>
+
     <description>An Open Source instant REST Data API for databases. This is the DB2Rest parent Maven project.</description>
 
     <!-- PROJECT ORGANIZATION METADATA -->
@@ -161,6 +162,32 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>flatten-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <configuration>
+                            <updatePomFile>true</updatePomFile>
+                            <flattenMode>oss</flattenMode>
+                            <flattenDependencyMode>all</flattenDependencyMode>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>flatten</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>flatten</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>flatten.clean</id>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <!-- Plugin to generate release source -->
                         <groupId>org.apache.maven.plugins</groupId>

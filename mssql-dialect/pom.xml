@@ -11,6 +11,7 @@
         <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>io.9tiger</groupId>
     <artifactId>mssql-dialect</artifactId>
     <name>mssql-dialect</name>
     <description>Microsoft SQL server dialect</description>
