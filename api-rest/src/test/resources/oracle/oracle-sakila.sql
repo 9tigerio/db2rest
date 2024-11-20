@@ -779,4 +779,4 @@ WHEN OTHERS THEN
         RAISE_APPLICATION_ERROR(-20002,
             'Error getting rental rate: ' || SQLERRM);
 END GetMovieRentalRateProc;
-/
+
