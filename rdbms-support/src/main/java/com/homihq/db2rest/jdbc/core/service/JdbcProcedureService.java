@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import java.util.Map;
@@ -33,9 +31,8 @@ public class JdbcProcedureService implements ProcedureService {
     }
 
     private Map<String, Object> doExecuteInternal(JdbcTemplate jdbcTemplate,
-                                  String subRoutineName, Map<String, Object> inParams) {
+                                                  String subRoutineName, Map<String, Object> inParams) {
         jdbcTemplate.setResultsMapCaseInsensitive(true);
-        SqlParameterSource in = new MapSqlParameterSource().addValues(inParams);
 
         try {
             return new SimpleJdbcCall(jdbcTemplate).withProcedureName(subRoutineName).execute(inParams);
