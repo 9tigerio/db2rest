@@ -13,6 +13,8 @@ on:
 env: 
   VERSION: '1.3.1-SNAPSHOT'
 
+permissions: read-all
+
 jobs:
   build:
     name: Maven Build & Test
