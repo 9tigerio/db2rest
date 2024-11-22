@@ -54,7 +54,7 @@ Database test configurations are found under: `\db2rest\api-rest\src\test\java\c
 
 ### Release Process
 
-See [.github/RELEASING.md](https://github.com/9tigerio/db2rest/.github/RELEASING.md)
+See [.github/RELEASING.md](https://github.com/9tigerio/db2rest/blob/master/.github/RELEASING.md)
 
 ## Think you found a bug?
 
