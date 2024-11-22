@@ -111,7 +111,7 @@ https://www.conventionalcommits.org/ or check out the
    commit type. `scope` is just a short id that describes the scope of work.
 
 3. Make and commit your changes following the
-   [commit convention](https://github.com/9tigerio/db2rest/blob/main/CONTRIBUTING.md#commit-convention).
+   [commit convention](https://github.com/9tigerio/db2rest/blob/master/CONTRIBUTING.md#commit-convention).
    As you develop, you can run `mvnw <module> compile` and
    `mvnw <module> test` to make sure everything works as expected. Please
    note that you might have to run `mvnw compile` first in order to build all
@@ -131,9 +131,9 @@ https://discord.gg/kqeDatPGwU. We would love to support you any way we can.
 Our docsite lives in a
 [separate repo](https://github.com/9tigerio/db2rest-web). If you're
 interested in contributing to the documentation, check out the
-[docsite contribution guide](https://github.com/9tigerio/db2rest-web/blob/main/CONTRIBUTING.md).
+[docsite contribution guide](https://github.com/9tigerio/db2rest-web/blob/master/CONTRIBUTING.md).
 
 ## License
 
 By contributing your code to the DB2Rest GitHub repository, you agree to
-license your contribution under the [Apache-2.0 license](https://github.com/9tigerio/db2rest/blob/main/LICENSE).
+license your contribution under the [Apache-2.0 license](https://github.com/9tigerio/db2rest/blob/master/LICENSE).
