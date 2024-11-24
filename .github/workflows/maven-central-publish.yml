@@ -33,7 +33,7 @@ jobs:
         server-id: central
 
     - name: Build & Publish package DB2Rest to Central
-      run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B package -P release -DskipTests
+      run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests
       # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
       # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
       env:
