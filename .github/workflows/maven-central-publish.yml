@@ -47,7 +47,7 @@ jobs:
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
       with:
-        path: staging/db2rest-*.jar
+        path: api-rest/target/db2rest-*.jar
 
     # - name: Build & Publish package Oracle9i to Central
     #   run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
@@ -66,7 +66,6 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
-        context: .
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
         build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=./api-rest/target/db2rest-${{ github.event.release.tag_name }}.jar
