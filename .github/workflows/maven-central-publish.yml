@@ -43,7 +43,7 @@ jobs:
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
     
     - name: Archive JAR artifact
-      uses: actions/uploads-artifacts@v4
+      uses: actions/upload-artifact@v4
       with:
         path: target/*.jar
 
