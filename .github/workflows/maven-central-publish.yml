@@ -8,7 +8,7 @@ on:
     types: [created]
 
 jobs:
-  build:
+  job1_publish_to_mavencentral:
 
     runs-on: ubuntu-latest
     permissions:
@@ -32,7 +32,7 @@ jobs:
         server-password: MAVEN_PASSWORD
         server-id: central
 
-    - name: Publish package DB2Rest
+    - name: Build & Publish package DB2Rest to Central
       run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests
       # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
       # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
@@ -41,11 +41,31 @@ jobs:
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
+    
+    - name: Archive JAR artifact
+      uses: actions/uploads-artifacts@v4
+      with:
+        path: target/*.jar
 
-    - name: Publish package Oracle9i
+    - name: Build & Publish package Oracle9i to Central
       run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v6
+      with:
+      # We use default Git context to build the Docker image,
+      # instead of PATH context `context: .`
+        push: true
+        tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
+        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }}
