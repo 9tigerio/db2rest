@@ -42,7 +42,10 @@ jobs:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
-    - run: mkdir staging && cp target/db2rest-*.jar staging
+    - run: |
+        mkdir staging
+        cp ./target/db2rest-*.jar staging
+        ls -ll staging
 
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
