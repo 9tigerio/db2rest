@@ -44,6 +44,7 @@ jobs:
 
     - run: |
         mkdir staging
+        ls -ll
         cp ./target/db2rest-*.jar staging
         ls -ll staging
 
