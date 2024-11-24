@@ -1,6 +1,6 @@
 FROM bellsoft/liberica-runtime-container:jre-21-cds-slim-musl
 
-ARG JAR_FILE=./target/*.jar
+ARG JAR_FILE=./api-rest/target/db2rest-*.jar
 
 COPY ${JAR_FILE} /opt/app/db2rest.jar
 
