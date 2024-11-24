@@ -45,7 +45,7 @@ jobs:
     - run: |
         mkdir staging
         ls -ll
-        cp ./target/db2rest-*.jar staging
+        cp target/*.jar staging
         ls -ll staging
 
     - name: Archive JAR artifact
@@ -53,23 +53,23 @@ jobs:
       with:
         path: staging
 
-    - name: Build & Publish package Oracle9i to Central
-      run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
-      env:
-        MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-        MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
+    # - name: Build & Publish package Oracle9i to Central
+    #   run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
+    #   env:
+    #     MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+    #     MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+    #     MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+    #     MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    # - name: Login to DockerHub
+    #   uses: docker/login-action@v3
+    #   with:
+    #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+    #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v6
-      with:
-        push: true
-        tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
-        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=staging/db2rest-${{ github.event.release.tag_name }}.jar
+    # - name: Build and push Docker image
+    #   uses: docker/build-push-action@v6
+    #   with:
+    #     push: true
+    #     tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
+    #     build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=staging/db2rest-${{ github.event.release.tag_name }}.jar
