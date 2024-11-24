@@ -45,3 +45,4 @@ build/
 ## jte ##
 /api-rest/jte-classes/**
 /jte-classes/**
+/env/
