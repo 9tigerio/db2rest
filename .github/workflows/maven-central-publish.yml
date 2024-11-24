@@ -43,6 +43,7 @@ jobs:
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
     - run: mkdir staging && cp target/*.jar staging
+    - run: ls -ll
 
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
