@@ -6,23 +6,25 @@ import javax.net.ssl.*;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
+import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateFactory;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
+import java.util.Date;
+import javax.security.auth.x500.X500Principal;
+import java.net.Socket;
+import java.security.cert.CertificateException;
+
 
 @Slf4j
 public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
     private final SSLSocketFactory factory;
+    private final X509Certificate cert;
 
     public EnvVarSSLSocketFactory() throws Exception {
-
-        log.info("Loading certificate from environment variables");
-
         // Get certificate content from environment variable
         String certContent = System.getenv("PG_CERT_CONTENT");
-
-        log.info("cert content: {}", certContent);
-
         if (certContent == null || certContent.trim().isEmpty()) {
             throw new IllegalStateException("PG_CERT_CONTENT environment variable is not set");
         }
@@ -36,32 +38,156 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
             certBytes = certContent.getBytes(StandardCharsets.UTF_8);
         }
 
+        // Create certificate from the content
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+        cert = (X509Certificate) cf.generateCertificate(
+                new ByteArrayInputStream(certBytes)
+        );
+
+        // Validate certificate immediately
+        validateCertificate(cert);
+
         // Create KeyStore and load the certificate
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         keyStore.load(null, null);
-
-        // Create certificate from the content
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
-        X509Certificate cert = (X509Certificate) cf.generateCertificate(
-            new ByteArrayInputStream(certBytes)
-        );
-
-        // Add certificate to keystore
         keyStore.setCertificateEntry("postgresql", cert);
 
-        // Create TrustManagerFactory
+        // Create TrustManagerFactory with custom TrustManager
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmf.init(keyStore);
 
-        // Create SSLContext
+        // Create SSLContext with custom TrustManager that includes hostname verification
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, tmf.getTrustManagers(), null);
+        TrustManager[] trustManagers = createTrustManagersWithHostnameVerification(tmf.getTrustManagers());
+        sslContext.init(null, trustManagers, null);
 
         // Get the factory
         this.factory = sslContext.getSocketFactory();
     }
 
-    // Delegate all SSLSocketFactory methods to the internal factory
+    private void validateCertificate(X509Certificate cert) throws CertificateException {
+        // Check certificate validity period
+        try {
+            cert.checkValidity(new Date());
+        } catch (CertificateExpiredException e) {
+            throw new CertificateException("Certificate has expired", e);
+        } catch (CertificateNotYetValidException e) {
+            throw new CertificateException("Certificate is not yet valid", e);
+        }
+
+        // Additional basic validation
+        if (cert.getSubjectX500Principal() == null ||
+                cert.getSubjectX500Principal().getName().isEmpty()) {
+            throw new CertificateException("Certificate has invalid subject");
+        }
+
+        // Check for basic constraints if it's a CA certificate
+        int basicConstraints = cert.getBasicConstraints();
+        if (basicConstraints != -1) {  // -1 indicates this is not a CA
+            if (basicConstraints < 0) {
+                throw new CertificateException("Invalid basic constraints for CA certificate");
+            }
+        }
+
+        // Log certificate information for debugging
+        log.debug("Certificate validated successfully:");
+        log.debug("Subject: {}", cert.getSubjectX500Principal().getName());
+        log.debug("Issuer: {}", cert.getIssuerX500Principal().getName());
+        log.debug("Valid from: {}", cert.getNotBefore());
+        log.debug("Valid until: {}", cert.getNotAfter());
+    }
+
+    private TrustManager[] createTrustManagersWithHostnameVerification(TrustManager[] trustManagers) {
+        TrustManager[] wrappedTrustManagers = new TrustManager[trustManagers.length];
+
+        for (int i = 0; i < trustManagers.length; i++) {
+            if (trustManagers[i] instanceof X509TrustManager) {
+                int finalI = i;
+                wrappedTrustManagers[i] = new X509TrustManager() {
+                    private final X509TrustManager delegate = (X509TrustManager) trustManagers[finalI];
+
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] chain, String authType)
+                            throws CertificateException {
+                        delegate.checkClientTrusted(chain, authType);
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] chain, String authType)
+                            throws CertificateException {
+                        delegate.checkServerTrusted(chain, authType);
+
+                        // Additional custom validation
+                        for (X509Certificate cert : chain) {
+                            validateCertificate(cert);
+                        }
+                    }
+
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return delegate.getAcceptedIssuers();
+                    }
+                };
+            } else {
+                wrappedTrustManagers[i] = trustManagers[i];
+            }
+        }
+
+        return wrappedTrustManagers;
+    }
+
+    @Override
+    public Socket createSocket(Socket socket, String host, int port, boolean autoClose)
+            throws java.io.IOException {
+        SSLSocket sslSocket = (SSLSocket) factory.createSocket(socket, host, port, autoClose);
+
+        // Enable hostname verification
+        SSLParameters sslParams = sslSocket.getSSLParameters();
+        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslSocket.setSSLParameters(sslParams);
+
+        return sslSocket;
+    }
+
+    // Other createSocket methods with hostname verification
+    @Override
+    public Socket createSocket(String host, int port) throws java.io.IOException {
+        SSLSocket sslSocket = (SSLSocket) factory.createSocket(host, port);
+        SSLParameters sslParams = sslSocket.getSSLParameters();
+        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslSocket.setSSLParameters(sslParams);
+        return sslSocket;
+    }
+
+    @Override
+    public Socket createSocket(String host, int port, java.net.InetAddress localHost, int localPort)
+            throws java.io.IOException {
+        SSLSocket sslSocket = (SSLSocket) factory.createSocket(host, port, localHost, localPort);
+        SSLParameters sslParams = sslSocket.getSSLParameters();
+        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslSocket.setSSLParameters(sslParams);
+        return sslSocket;
+    }
+
+    @Override
+    public Socket createSocket(java.net.InetAddress host, int port) throws java.io.IOException {
+        SSLSocket sslSocket = (SSLSocket) factory.createSocket(host, port);
+        SSLParameters sslParams = sslSocket.getSSLParameters();
+        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslSocket.setSSLParameters(sslParams);
+        return sslSocket;
+    }
+
+    @Override
+    public Socket createSocket(java.net.InetAddress address, int port, java.net.InetAddress localAddress,
+                               int localPort) throws java.io.IOException {
+        SSLSocket sslSocket = (SSLSocket) factory.createSocket(address, port, localAddress, localPort);
+        SSLParameters sslParams = sslSocket.getSSLParameters();
+        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslSocket.setSSLParameters(sslParams);
+        return sslSocket;
+    }
+
     @Override
     public String[] getDefaultCipherSuites() {
         return factory.getDefaultCipherSuites();
@@ -70,33 +196,5 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
     @Override
     public String[] getSupportedCipherSuites() {
         return factory.getSupportedCipherSuites();
-    }
-
-    @Override
-    public java.net.Socket createSocket(java.net.Socket socket, String host, int port, boolean autoClose)
-            throws java.io.IOException {
-        return factory.createSocket(socket, host, port, autoClose);
-    }
-
-    @Override
-    public java.net.Socket createSocket(String host, int port) throws java.io.IOException {
-        return factory.createSocket(host, port);
-    }
-
-    @Override
-    public java.net.Socket createSocket(String host, int port, java.net.InetAddress localHost, int localPort)
-            throws java.io.IOException {
-        return factory.createSocket(host, port, localHost, localPort);
-    }
-
-    @Override
-    public java.net.Socket createSocket(java.net.InetAddress host, int port) throws java.io.IOException {
-        return factory.createSocket(host, port);
-    }
-
-    @Override
-    public java.net.Socket createSocket(java.net.InetAddress address, int port, java.net.InetAddress localAddress,
-            int localPort) throws java.io.IOException {
-        return factory.createSocket(address, port, localAddress, localPort);
     }
 }
