@@ -43,15 +43,13 @@ jobs:
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
     - run: ls -ll
-    - run: mkdir staging && cp target/*.jar staging
-    - run: ls -ll
+    - run: mkdir staging && cp api-rest/target/*.jar staging
+    - run: cd staging && ls -ll
 
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
       with:
         path: target/db2rest-*.jar
-
-    - run: ls -ll staging
 
     # - name: Build & Publish package Oracle9i to Central
     #   run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
