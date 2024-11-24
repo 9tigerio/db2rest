@@ -42,6 +42,7 @@ jobs:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
+    - run: ls -ll
     - run: mkdir staging && cp target/*.jar staging
     - run: ls -ll
 
