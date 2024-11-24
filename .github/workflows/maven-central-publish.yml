@@ -42,12 +42,13 @@ jobs:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
+    - run: mkdir staging && cp api-rest/target/db2rest-*.jar staging
     - run: ls -ll
 
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
       with:
-        path: api-rest/target/db2rest-*.jar
+        path: staging
 
     # - name: Build & Publish package Oracle9i to Central
     #   run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
@@ -68,4 +69,4 @@ jobs:
       with:
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
-        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=./api-rest/target/db2rest-${{ github.event.release.tag_name }}.jar
+        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=staging/db2rest-${{ github.event.release.tag_name }}.jar
