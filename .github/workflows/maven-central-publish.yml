@@ -43,8 +43,6 @@ jobs:
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
     - run: ls -ll
-    - run: mkdir staging && cp api-rest/target/*.jar staging
-    - run: cd staging && ls -ll
 
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
@@ -59,16 +57,16 @@ jobs:
     #     MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
     #     MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
-    # - name: Login to DockerHub
-    #   uses: docker/login-action@v3
-    #   with:
-    #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-    #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # - name: Build and push Docker image
-    #   uses: docker/build-push-action@v6
-    #   with:
-    #     context: .
-    #     push: true
-    #     tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
-    #     build-args: DB2REST_VERSION=${{ github.event.release.tag_name }}
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
+        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=./api-rest/target/db2rest-${{ github.event.release.tag_name }}.jar
