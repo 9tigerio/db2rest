@@ -95,6 +95,11 @@ Complex, error-prone maintenance-heavy file-based data exchange can be replaced 
 - Amazon Lightsail PostgreSQL
 - Amazon Lightsail MySQL
 
+# Contributing
+Feel like contributing? That's awesome! We have a [contributing guide](https://github.com/9tigerio/db2rest/blob/master/CONTRIBUTING.md) to help guide you.
+
+Our docsite lives in a [separate repo](https://github.com/9tigerio/db2rest-web). If you're interested in contributing to the documentation, check out the docsite contribution guide.
+
 # Support
 
 *Connect on Discord*
