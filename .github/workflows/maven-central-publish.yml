@@ -45,6 +45,7 @@ jobs:
     - run: |
         mkdir staging
         ls -ll
+        ls -ll target
         cp target/*.jar staging
         ls -ll staging
 
