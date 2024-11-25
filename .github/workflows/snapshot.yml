@@ -13,7 +13,7 @@ on:
         default: 'master'
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -39,3 +39,5 @@ jobs:
         run: mvn -Drevision=${{ github.event.inputs.version }} --no-transfer-progress -B deploy -DdeployAtEnd --file pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update dependency graph
+        uses: advanced-security/maven-dependency-submission-action@v4.1.1
