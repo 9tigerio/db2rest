@@ -33,7 +33,7 @@ jobs:
         server-id: central
 
     - name: Build & Publish package DB2Rest to Central
-      run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B package -P release -DskipTests
+      run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests -DskipPublishing=true
       # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
       # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
       env:
@@ -42,8 +42,10 @@ jobs:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
-    - run: mkdir staging && cp api-rest/target/db2rest-*.jar staging
-    - run: ls -ll
+    - run: ls target
+    - run: ls central-publishing
+    - run: mkdir staging && cd target && cp db2rest-*.jar staging
+    - run: ls staging
 
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
