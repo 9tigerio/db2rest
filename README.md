@@ -26,9 +26,9 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 | Release              | Download/Docker Pull                                                              |
 |----------------------|-----------------------------------------------------------------------------------|
-| 1.4.0               | [DB2Rest-1.2.3](https://download.db2rest.com/db2rest-1.2.3.jar)                   |
+| 1.4.0                | [DB2Rest-1.4.0](https://repo1.maven.org/maven2/io/9tiger/db2rest/1.4.0/db2rest-1.4.0.jar) |
 | Oracle9i - 1.2.3     | [DB2Rest-Oracle9i-1.2.3](https://download.db2rest.com/db2rest-oracle9i-1.2.3.jar) |
-| 1.4.0 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.4.0 ` or ` docker pull kdhrubo/db2rest:latest `    |
+| 1.4.0 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.4.0 ` or ` docker pull kdhrubo/db2rest:latest `  |
 
 # Quick start guides
 
