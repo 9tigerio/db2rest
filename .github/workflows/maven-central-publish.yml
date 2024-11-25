@@ -51,7 +51,7 @@ jobs:
       run: |
         mkdir staging
         cp target/central-publishing/central-bundle.zip staging
-        unzip staging/central-bundle.zip
+        unzip staging/central-bundle.zip -d staging
         echo "JAR_FILE_PATH=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}" >> $GITHUB_ENV
         echo "JAR_FILE=db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_ENV
     
@@ -69,6 +69,7 @@ jobs:
     #     MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
     
     - run: ls staging
+    - run: ls io
     - run: ls staging/io
     - run: ls staging/io/9tiger
     - run: ls staging/io/9tiger/db2rest
