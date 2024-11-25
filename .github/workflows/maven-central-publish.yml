@@ -43,13 +43,13 @@ jobs:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
-    - run: ls target
-    - run: ls target/central-publishing
-    - run: mkdir staging
-    - run: cp target/central-publishing/central-bundle.zip staging
-    - run: cd staging
-    - run: unzip central-bundle.zip
-    - run: ls
+    - run: |
+        ls target
+        ls target/central-publishing
+        mkdir staging
+        cp target/central-publishing/central-bundle.zip staging
+        unzip staging/central-bundle.zip
+        ls staging
 
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
