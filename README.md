@@ -19,7 +19,7 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 # Website
 
-[DB2Rest](https://db2rest.com)
+[https://db2rest.com](https://db2rest.com)
 
 
 # Stable Releases
