@@ -16,6 +16,9 @@ jobs:
       contents: read
       packages: write
 
+    outputs:
+      JAR_FILE: ${{ steps.unzip.outputs.JAR_FILE }}
+
     steps:
     - uses: actions/checkout@v4
       name: Checkout code for Tag
@@ -51,7 +54,7 @@ jobs:
         mkdir staging
         cp target/central-publishing/central-bundle.zip staging
         unzip staging/central-bundle.zip
-        echo "staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}/db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_OUTPUT
+        echo "JAR_FILE=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}/db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_OUTPUT
     
     - name: Archive central-bundle JAR artifacts
       uses: actions/upload-artifact@v4
@@ -77,4 +80,4 @@ jobs:
       with:
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
-        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=${{ steps.unzip.outputs.stdout }}
+        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=${{ steps.unzip.outputs }}
