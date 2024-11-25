@@ -33,8 +33,9 @@ jobs:
         server-password: MAVEN_PASSWORD
         server-id: central
 
+      # We can skip publshing in here by setting the last -DskipPublishing property to true
     - name: Build & Publish package DB2Rest to Central
-      run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests -DskipPublishing=true
+      run: mvn --quiet -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests -DskipPublishing=true
       # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
       # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
       env:
@@ -43,38 +44,19 @@ jobs:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
-    - run: |
-        ls target
-        ls target/central-publishing
+      # we unzip the central-bundle.zip so that we can access
+      # the db2rest JAR file path easily for Docker image build
+    - name: unzip
+      run: |
         mkdir staging
         cp target/central-publishing/central-bundle.zip staging
         unzip staging/central-bundle.zip
-        ls staging
-
-    - name: Archive JAR artifact
+        echo "staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}/db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_OUTPUT
+    
+    - name: Archive central-bundle JAR artifacts
       uses: actions/upload-artifact@v4
       with:
-        path: staging
-    
-
-  # publish-job:
-  #   runs-on: ubuntu-latest
-  #   needs: [build_and_test]
-
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - uses: actions/setup-java@
-  #   - name: Build & Publish package DB2Rest to Central
-  #     run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests
-  #     # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
-  #     # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
-  #     env:
-  #       MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-  #       MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-  #       MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-  #       MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
-
-
+        path: staging/central-bundle.zip
 
     # - name: Build & Publish package Oracle9i to Central
     #   run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
@@ -84,15 +66,15 @@ jobs:
     #     MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
     #     MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
-    # - name: Login to DockerHub
-    #   uses: docker/login-action@v3
-    #   with:
-    #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-    #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # - name: Build and push Docker image
-    #   uses: docker/build-push-action@v6
-    #   with:
-    #     push: true
-    #     tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
-    #     build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=staging/db2rest-${{ github.event.release.tag_name }}.jar
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
+        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }} JAR_FILE=${{ steps.unzip.outputs.stdout }}
