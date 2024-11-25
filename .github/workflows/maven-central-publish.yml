@@ -56,6 +56,8 @@ jobs:
         echo "JAR_FILE=db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_ENV
         echo "JAR_PATH=${{ env.JAR_FILE_PATH }}/${{ env.JAR_FILE }}" >> $GITHUB_ENV
     
+    - run: ls ${{ env.JAR_FILE_PATH }}
+
     - name: Archive central-bundle JAR artifacts
       uses: actions/upload-artifact@v4
       with:
