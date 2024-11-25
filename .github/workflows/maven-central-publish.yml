@@ -81,6 +81,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
+        context: "${{ github.workspace }}/${{ env.JAR_PATH }}"
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
         build-args: |
