@@ -32,10 +32,11 @@ jobs:
         server-username: MAVEN_USERNAME
         server-password: MAVEN_PASSWORD
         server-id: central
-
-      # We can skip publshing in here by setting the last -DskipPublishing property to true
+      
+      # TROUBLESHOOTING: We can temporarily skip upload & publishing to Maven Central in here
+      # by setting the `run: mvn` line's last -DskipPublishing property to true
     - name: Build & Publish package DB2Rest to Central
-      run: mvn --quiet -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests -DskipPublishing=true
+      run: mvn --quiet -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests -DskipPublishing=false
       # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
       # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
       env:
