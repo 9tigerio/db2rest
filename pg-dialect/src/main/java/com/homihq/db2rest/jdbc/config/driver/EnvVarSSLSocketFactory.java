@@ -84,8 +84,8 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
         // Check for basic constraints if it's a CA certificate
         int basicConstraints = cert.getBasicConstraints();
         boolean isNotCA = basicConstraints != -1;
-        boolean isInvalidCA = basicConstraints < 0;
-        if (isNotCA && isInvalidCA) {
+        boolean isInvalid = basicConstraints < 0;
+        if (isNotCA && isInvalid) {
             throw new CertificateException("Certificate has invalid subject");
         }
 
