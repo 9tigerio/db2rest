@@ -209,6 +209,7 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.10.1</version>
                         <configuration>
+                            <doclint>all,-missing</doclint>
                             <bottom>
                                     <![CDATA[Copyright &#169; {inceptionYear}&#x2023;{currentYear} {organizationName}. Generated from source code published under the Apache-2.0 license. For more information, see the <a href="https://db2rest.com">DB2Rest website</a>]]></bottom>
                             <source>${java.version}</source>
