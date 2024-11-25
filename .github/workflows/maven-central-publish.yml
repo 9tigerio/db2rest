@@ -16,9 +16,6 @@ jobs:
       contents: read
       packages: write
 
-    outputs:
-      JAR_FILE: ${{ steps.unzip.outputs.JAR_FILE }}
-
     steps:
     - uses: actions/checkout@v4
       name: Checkout code for Tag
@@ -49,12 +46,13 @@ jobs:
 
       # we unzip the central-bundle.zip so that we can access
       # the db2rest JAR file path easily for Docker image build
-    - name: unzip
+    - name: Unzip the central-bundle.zip & output JAR_FILE
+      id: unzip
       run: |
         mkdir staging
         cp target/central-publishing/central-bundle.zip staging
         unzip staging/central-bundle.zip
-        echo "JAR_FILE=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}/db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_OUTPUT
+        echo "JAR_FILE=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}/db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_ENV
     
     - name: Archive central-bundle JAR artifacts
       uses: actions/upload-artifact@v4
@@ -80,4 +78,4 @@ jobs:
       with:
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
-        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }}, JAR_FILE=${{ steps.unzip.outputs.JAR_FILE }}
+        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }}, JAR_FILE=${{ env.JAR_FILE }}
