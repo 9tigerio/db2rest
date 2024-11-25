@@ -67,6 +67,8 @@ jobs:
     #     MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
     #     MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
     #     MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
+    
+    - run: ls ${{ env.JAR_FILE_PATH }}
 
     - name: Login to DockerHub
       uses: docker/login-action@v3
@@ -77,9 +79,8 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
-        context: ${{ env.JAR_FILE_PATH }}
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
         build-args: |
           DB2REST_VERSION=${{ github.event.release.tag_name }}
-          JAR_FILE=${{ env.JAR_FILE }}
+          JAR_FILE=${{ env.JAR_FILE_PATH }}/${{ env.JAR_FILE }}
