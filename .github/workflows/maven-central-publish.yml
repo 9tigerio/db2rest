@@ -45,8 +45,11 @@ jobs:
 
     - run: ls target
     - run: ls target/central-publishing
-    - run: mkdir staging && cd target && cp db2rest-*.jar staging
-    - run: ls staging
+    - run: mkdir staging
+    - run: cp target/central-publishing/central-bundle.zip staging
+    - run: cd staging
+    - run: unzip central-bundle.zip
+    - run: ls
 
     - name: Archive JAR artifact
       uses: actions/upload-artifact@v4
