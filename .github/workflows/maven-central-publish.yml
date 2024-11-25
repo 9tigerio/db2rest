@@ -68,7 +68,11 @@ jobs:
     #     MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
     #     MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
     
-    - run: ls ${{ env.JAR_FILE_PATH }}
+    - run: ls staging
+    - run: ls staging/io
+    - run: ls staging/io/9tiger
+    - run: ls staging/io/9tiger/db2rest
+    - run: ls staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}
 
     - name: Login to DockerHub
       uses: docker/login-action@v3
