@@ -52,13 +52,10 @@ jobs:
         mkdir staging
         cp target/central-publishing/central-bundle.zip staging
         unzip staging/central-bundle.zip -d staging
-        echo "JAR_FILE_PATH=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-        echo "JAR_FILE=db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_ENV
-        echo "JAR_FULL_PATH=${{ env.JAR_FILE_PATH }}/${{ env.JAR_FILE }}" >> $GITHUB_ENV
-    
-    - run: ls ${{ env.JAR_FILE_PATH }}
+        echo "JAR_FILE=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}/db2rest-${{ github.event.release.tag_name}}.jar" >> $GITHUB_ENV
+
+    - run: ls staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}    
     - run: ls ${{ env.JAR_FILE }}
-    - run: ls ${{ env.JAR_FULL_PATH }}
 
     - name: Archive central-bundle JAR artifacts
       uses: actions/upload-artifact@v4
@@ -82,8 +79,8 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
-        context: "${{ github.workspace }}/${{ env.JAR_PATH }}"
+        context: "${{ github.workspace }}"
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
         build-args: |
-          JAR_FILE=${{ env.JAR_PATH }}
+          JAR_FILE=${{ env.JAR_FILE }}
