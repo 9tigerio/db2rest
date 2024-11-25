@@ -79,4 +79,6 @@ jobs:
         context: .
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
-        build-args: DB2REST_VERSION=${{ github.event.release.tag_name }}, JAR_FILE=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}/db2rest-${{ github.event.release.tag_name }}.jar
+        build-args: |
+          DB2REST_VERSION=${{ github.event.release.tag_name }}
+          JAR_FILE=${{ env.JAR_FILE }}
