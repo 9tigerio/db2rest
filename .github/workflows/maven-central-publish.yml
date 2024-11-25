@@ -57,6 +57,7 @@ jobs:
         echo "JAR_PATH=${{ env.JAR_FILE_PATH }}/${{ env.JAR_FILE }}" >> $GITHUB_ENV
     
     - run: ls ${{ env.JAR_FILE_PATH }}
+    - run: ls ${{ env.JAR_PATH }}
 
     - name: Archive central-bundle JAR artifacts
       uses: actions/upload-artifact@v4
@@ -83,5 +84,4 @@ jobs:
         push: true
         tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
         build-args: |
-          DB2REST_VERSION=${{ github.event.release.tag_name }}
           JAR_FILE=${{ env.JAR_PATH }}
