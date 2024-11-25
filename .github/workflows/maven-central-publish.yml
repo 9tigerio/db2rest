@@ -44,7 +44,7 @@ jobs:
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
     - run: ls target
-    - run: ls central-publishing
+    - run: ls target/central-publishing
     - run: mkdir staging && cd target && cp db2rest-*.jar staging
     - run: ls staging
 
