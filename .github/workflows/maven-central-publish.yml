@@ -54,10 +54,11 @@ jobs:
         unzip staging/central-bundle.zip -d staging
         echo "JAR_FILE_PATH=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}" >> $GITHUB_ENV
         echo "JAR_FILE=db2rest-${{ github.event.release.tag_name }}.jar" >> $GITHUB_ENV
-        echo "JAR_PATH=${{ env.JAR_FILE_PATH }}/${{ env.JAR_FILE }}" >> $GITHUB_ENV
+        echo "JAR_FULL_PATH=${{ env.JAR_FILE_PATH }}/${{ env.JAR_FILE }}" >> $GITHUB_ENV
     
     - run: ls ${{ env.JAR_FILE_PATH }}
-    - run: ls ${{ env.JAR_PATH }}
+    - run: ls ${{ env.JAR_FILE }}
+    - run: ls ${{ env.JAR_FULL_PATH }}
 
     - name: Archive central-bundle JAR artifacts
       uses: actions/upload-artifact@v4
