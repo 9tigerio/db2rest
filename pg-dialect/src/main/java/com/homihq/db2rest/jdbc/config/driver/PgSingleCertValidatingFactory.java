@@ -99,6 +99,65 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
         km = new PKCS12KeyManager(sslkeyfile, getCallbackHandler(info));
     }
 
+    private KeyStore getKeyStoreInstance() throws Exception {
+        try {
+            return KeyStore.getInstance("jks");
+        } catch (KeyStoreException e) {
+            // this should never happen
+            throw new NoSuchAlgorithmException("jks KeyStore not available");
+        }
+    }
+
+    private FileInputStream getCertFis(String sslrootcertfile) throws Exception {
+        try {
+            return new FileInputStream(sslrootcertfile); // NOSONAR
+        } catch (FileNotFoundException ex) {
+            throw new PSQLException(
+                    GT.tr("Could not open SSL root certificate file {0}.", sslrootcertfile),
+                    PSQLState.CONNECTION_FAILURE, ex);
+        }
+    }
+
+    private TrustManagerFactory initTrustManagerFactory(InputStream fis, String sslrootcertfile) throws Exception {
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
+        KeyStore ks = getKeyStoreInstance();
+
+        try (fis) {
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            // Certificate[] certs = cf.generateCertificates(fis).toArray(new Certificate[]{}); //Does
+            // not work in java 1.4
+            Object[] certs = cf.generateCertificates(fis).toArray(new Certificate[]{});
+            ks.load(null, null);
+            for (int i = 0; i < certs.length; i++) {
+                ks.setCertificateEntry("cert" + i, (Certificate) certs[i]);
+            }
+            tmf.init(ks);
+            return tmf;
+        } catch (IOException ioex) {
+            throw new PSQLException(
+                    GT.tr("Could not read SSL root certificate file {0}.", sslrootcertfile),
+                    PSQLState.CONNECTION_FAILURE, ioex);
+        } catch (GeneralSecurityException gsex) {
+            throw new PSQLException(
+                    GT.tr("Loading the SSL root certificate {0} into a TrustManager failed.",
+                            sslrootcertfile),
+                    PSQLState.CONNECTION_FAILURE, gsex);
+        }
+    }
+
+    private SSLContext initContext(TrustManager[] tm) throws Exception {
+        SSLContext ctx = SSLContext.getInstance("TLS"); // or "SSL" ?
+        // finally we can initialize the context
+        try {
+            KeyManager km = this.km;
+            ctx.init(km == null ? null : new KeyManager[]{km}, tm, null);
+            return ctx;
+        } catch (KeyManagementException ex) {
+            throw new PSQLException(GT.tr("Could not initialize SSL context."),
+                    PSQLState.CONNECTION_FAILURE, ex);
+        }
+    }
+
     /**
      * @param info the connection parameters The following parameters are used:
      *        sslmode,sslcert,sslkey,sslrootcert,sslhostnameverifier,sslpasswordcallback,sslpassword
@@ -107,8 +166,6 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
     public PgSingleCertValidatingFactory(Properties info) throws Exception {
 
         try {
-            SSLContext ctx = SSLContext.getInstance("TLS"); // or "SSL" ?
-
             // Determining the default file location
             String pathsep = System.getProperty("file.separator");
             String defaultdir;
@@ -137,17 +194,6 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
                 // server validation is not required
                 tm = new TrustManager[]{new NonValidatingTM()};
             } else {
-                // Load the server certificate
-
-                TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
-                KeyStore ks;
-                try {
-                    ks = KeyStore.getInstance("jks");
-                } catch (KeyStoreException e) {
-                    // this should never happen
-                    throw new NoSuchAlgorithmException("jks KeyStore not available");
-                }
-
                 InputStream fis;
                 String sslFactoryArg = info.getProperty("sslfactoryarg");
                 String sslrootcertfile = PGProperty.SSL_ROOT_CERT.getOrDefault(info);
@@ -171,60 +217,18 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
                     }
 
                     fis = new ByteArrayInputStream(cert.getBytes(StandardCharsets.UTF_8));
-
                 }
                 else {
-
                     if (sslrootcertfile == null) { // Fall back to default
                         sslrootcertfile = defaultdir + "root.crt";
                     }
 
-                    try {
-                        fis = new FileInputStream(sslrootcertfile); // NOSONAR
-                    } catch (FileNotFoundException ex) {
-                        throw new PSQLException(
-                                GT.tr("Could not open SSL root certificate file {0}.", sslrootcertfile),
-                                PSQLState.CONNECTION_FAILURE, ex);
-                    }
-
+                    fis = getCertFis(sslrootcertfile);
                 }
-                try {
-                    CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                    // Certificate[] certs = cf.generateCertificates(fis).toArray(new Certificate[]{}); //Does
-                    // not work in java 1.4
-                    Object[] certs = cf.generateCertificates(fis).toArray(new Certificate[]{});
-                    ks.load(null, null);
-                    for (int i = 0; i < certs.length; i++) {
-                        ks.setCertificateEntry("cert" + i, (Certificate) certs[i]);
-                    }
-                    tmf.init(ks);
-                } catch (IOException ioex) {
-                    throw new PSQLException(
-                            GT.tr("Could not read SSL root certificate file {0}.", sslrootcertfile),
-                            PSQLState.CONNECTION_FAILURE, ioex);
-                } catch (GeneralSecurityException gsex) {
-                    throw new PSQLException(
-                            GT.tr("Loading the SSL root certificate {0} into a TrustManager failed.",
-                                    sslrootcertfile),
-                            PSQLState.CONNECTION_FAILURE, gsex);
-                } finally {
-                    try {
-                        fis.close();
-                    } catch (IOException e) {
-                        /* ignore */
-                    }
-                }
-                tm = tmf.getTrustManagers();
+                tm = initTrustManagerFactory(fis, sslrootcertfile).getTrustManagers();
             }
 
-            // finally we can initialize the context
-            try {
-                KeyManager km = this.km;
-                ctx.init(km == null ? null : new KeyManager[]{km}, tm, null);
-            } catch (KeyManagementException ex) {
-                throw new PSQLException(GT.tr("Could not initialize SSL context."),
-                        PSQLState.CONNECTION_FAILURE, ex);
-            }
+            SSLContext ctx = initContext(tm);
 
             factory = ctx.getSocketFactory();
         } catch (NoSuchAlgorithmException ex) {
