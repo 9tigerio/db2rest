@@ -14,12 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
-public class MariaDBDialect implements Dialect {
-
-    private final ObjectMapper objectMapper;
-
-    private String coverChar = "`";
+public class MariaDBDialect extends Dialect {
+    public MariaDBDialect(ObjectMapper objectMapper) {
+        super(objectMapper, "`");
+    }
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
@@ -37,7 +35,7 @@ public class MariaDBDialect implements Dialect {
 
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
 
-                    data.put(columnName, objectMapper.writeValueAsString(value));
+                    data.put(columnName, getObjectMapper().writeValueAsString(value));
                 }
 
             }
@@ -49,7 +47,7 @@ public class MariaDBDialect implements Dialect {
     }
 
     private String getQuotedName(String name) {
-        return coverChar + name + coverChar;
+        return getCoverChar() + name + getCoverChar();
     }
 
     @Override
@@ -77,6 +75,4 @@ public class MariaDBDialect implements Dialect {
 
         return dbColumn.tableAlias() + "."+ dbColumn.name();
     }
-
-
 }

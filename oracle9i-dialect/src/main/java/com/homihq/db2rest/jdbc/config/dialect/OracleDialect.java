@@ -12,13 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
-public class OracleDialect implements Dialect {
-
-    private final ObjectMapper objectMapper;
-
-    private String coverChar = "\"";
-
+public class OracleDialect extends Dialect {
+    public OracleDialect(ObjectMapper objectMapper) {
+        super(objectMapper, "\"");
+    }
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
@@ -48,7 +45,7 @@ public class OracleDialect implements Dialect {
 
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
 
-                    data.put(columnName, objectMapper.writeValueAsString(value));
+                    data.put(columnName, getObjectMapper().writeValueAsString(value));
                 }
 
             }
@@ -59,10 +56,8 @@ public class OracleDialect implements Dialect {
 
     }
 
-
-
     private String getQuotedName(String name) {
-        return coverChar + name + coverChar;
+        return getCoverChar() + name + getCoverChar();
     }
 
     @Override
@@ -74,7 +69,4 @@ public class OracleDialect implements Dialect {
     public String renderTableNameWithoutAlias(DbTable table) {
         return getQuotedName(table.schema()) + "." + getQuotedName(table.name());
     }
-
-
-
 }

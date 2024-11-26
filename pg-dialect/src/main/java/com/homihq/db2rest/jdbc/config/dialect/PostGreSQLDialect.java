@@ -19,12 +19,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
-@RequiredArgsConstructor
 @Slf4j
-public class PostGreSQLDialect implements Dialect {
-
-    private final ObjectMapper objectMapper;
-    private String coverChar = "\"";
+public class PostGreSQLDialect extends Dialect {
+    public PostGreSQLDialect(ObjectMapper objectMapper) {
+        super(objectMapper, "\"");
+    }
 
     //Use during insert, bulk-insert, update
     @Override
@@ -100,7 +99,7 @@ public class PostGreSQLDialect implements Dialect {
         try {
             PGobject pGobject = new PGobject();
             pGobject.setType(columnDataTypeName);
-            pGobject.setValue(objectMapper.writeValueAsString(value));
+            pGobject.setValue(getObjectMapper().writeValueAsString(value));
 
             return pGobject;
         } catch (Exception e) {
@@ -118,7 +117,7 @@ public class PostGreSQLDialect implements Dialect {
             String val = pGobject.getValue();
 
             try {
-                return objectMapper.readValue(val, Object.class);
+                return getObjectMapper().readValue(val, Object.class);
             } catch (JsonProcessingException e) {
                 throw new GenericDataAccessException("Error converting to JSON type - " + e.getLocalizedMessage());
             }
@@ -130,7 +129,7 @@ public class PostGreSQLDialect implements Dialect {
     }
 
     private String getQuotedName(String name) {
-        return coverChar + name + coverChar;
+        return getCoverChar() + name + getCoverChar();
     }
 
     @Override
@@ -160,9 +159,8 @@ public class PostGreSQLDialect implements Dialect {
             } catch (Exception e) {
                 throw new GenericDataAccessException("Error converting to Array type - " + e.getLocalizedMessage());
             }
-
         }
 
-        return Dialect.super.convertToStringArray(object);
+        return convertToStringArray(object);
     }
 }
