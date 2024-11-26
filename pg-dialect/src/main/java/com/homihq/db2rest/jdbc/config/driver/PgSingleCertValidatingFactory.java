@@ -118,7 +118,7 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
         }
     }
 
-    private void initTrustManagerFactory(InputStream fis, String sslrootcertfile) throws Exception {
+    private TrustManagerFactory initTrustManagerFactory(InputStream fis, String sslrootcertfile) throws Exception {
         TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
         KeyStore ks = getKeyStoreInstance();
 
@@ -132,6 +132,7 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
                 ks.setCertificateEntry("cert" + i, (Certificate) certs[i]);
             }
             tmf.init(ks);
+            return tmf;
         } catch (IOException ioex) {
             throw new PSQLException(
                     GT.tr("Could not read SSL root certificate file {0}.", sslrootcertfile),
@@ -193,8 +194,6 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
                 // server validation is not required
                 tm = new TrustManager[]{new NonValidatingTM()};
             } else {
-                TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
-
                 InputStream fis;
                 String sslFactoryArg = info.getProperty("sslfactoryarg");
                 String sslrootcertfile = PGProperty.SSL_ROOT_CERT.getOrDefault(info);
@@ -218,7 +217,6 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
                     }
 
                     fis = new ByteArrayInputStream(cert.getBytes(StandardCharsets.UTF_8));
-
                 }
                 else {
                     if (sslrootcertfile == null) { // Fall back to default
@@ -227,8 +225,7 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
 
                     fis = getCertFis(sslrootcertfile);
                 }
-                initTrustManagerFactory(fis, sslrootcertfile);
-                tm = tmf.getTrustManagers();
+                tm = initTrustManagerFactory(fis, sslrootcertfile).getTrustManagers();
             }
 
             SSLContext ctx = initContext(tm);
