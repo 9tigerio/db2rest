@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.rest.rpc;
 
-import com.homihq.db2rest.jdbc.core.service.FunctionService;
+import com.homihq.db2rest.jdbc.core.service.RpcService;
+import com.homihq.db2rest.jdbc.rest.RpcApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -11,19 +12,16 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @RestController
 @RequestMapping(VERSION + "/{dbId}/function")
 @Slf4j
-@RequiredArgsConstructor
-public class FunctionController {
-
-    private final FunctionService functionService;
+public class FunctionController extends RpcApi {
+    public FunctionController(RpcService functionService) {
+        super(functionService);
+    }
 
     @PostMapping("/{funcName}")
     public ResponseEntity<Map<String, Object>> execute(
                 @PathVariable String dbId,
                 @PathVariable String funcName,
                 @RequestBody Map<String,Object> inParams) {
-
-        log.debug("Execute function {} with IN params {}", funcName, inParams.entrySet());
-
-        return ResponseEntity.ok(functionService.execute(dbId, funcName, inParams));
+        return super.execute(dbId, funcName, inParams);
     }
 }

@@ -15,9 +15,15 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JdbcProcedureService implements ProcedureService {
-
+public class JdbcProcedureService implements RpcService {
     private final JdbcManager jdbcManager;
+
+    @Override
+    public SimpleJdbcCall getSimpleJdbcCall(String dbId, String subRoutineName) {
+        log.info("dbId - {}", dbId);
+        JdbcTemplate jdbcTemplate = jdbcManager.getNamedParameterJdbcTemplate(dbId).getJdbcTemplate();
+        return new SimpleJdbcCall(jdbcTemplate).withProcedureName(subRoutineName);
+    }
 
     @Override
     public Map<String, Object> execute(String dbId, String subRoutineName, Map<String, Object> inParams) {

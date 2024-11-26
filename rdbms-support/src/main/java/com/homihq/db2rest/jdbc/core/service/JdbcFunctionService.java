@@ -10,8 +10,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JdbcFunctionService implements FunctionService {
-
+public class JdbcFunctionService implements RpcService {
     private final JdbcManager jdbcManager;
 
     @Override

@@ -269,12 +269,12 @@ public class JdbcConfiguration {
 
     //RPC
     @Bean
-    public FunctionService functionService(JdbcManager jdbcManager) {
+    public RpcService functionService(JdbcManager jdbcManager) {
         return new JdbcFunctionService(jdbcManager);
     }
 
     @Bean
-    public ProcedureService procedureService(JdbcManager jdbcManager) {
+    public RpcService procedureService(JdbcManager jdbcManager) {
         return new JdbcProcedureService(jdbcManager);
     }
 
@@ -357,14 +357,14 @@ public class JdbcConfiguration {
 
     //RPC
     @Bean
-    @ConditionalOnBean(FunctionService.class)
-    public FunctionController functionController(FunctionService functionService) {
+    @ConditionalOnBean(RpcService.class)
+    public FunctionController functionController(RpcService functionService) {
         return new FunctionController(functionService);
     }
 
     @Bean
-    @ConditionalOnBean(ProcedureService.class)
-    public ProcedureController procedureController(ProcedureService procedureService) {
+    @ConditionalOnBean(RpcService.class)
+    public ProcedureController procedureController(RpcService procedureService) {
         return new ProcedureController(procedureService);
     }
 
