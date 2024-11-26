@@ -23,7 +23,7 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @Component
 public class DatabaseContextRequestInterceptor implements AsyncHandlerInterceptor {
 
-        private final List<String> WHITE_LIST = List.of(
+        private final List<String> whiteList = List.of(
                 "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**",
                 VERSION + "/$dbs");
 
@@ -58,7 +58,7 @@ public class DatabaseContextRequestInterceptor implements AsyncHandlerIntercepto
        }
 
     private boolean isWhileListed(String uri) {
-        return WHITE_LIST.stream().anyMatch(w -> antPathMatcher.match(w, uri));
+        return whiteList.stream().anyMatch(w -> antPathMatcher.match(w, uri));
     }
 
     @Override
