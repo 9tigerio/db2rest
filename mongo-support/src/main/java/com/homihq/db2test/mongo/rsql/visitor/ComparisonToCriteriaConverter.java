@@ -18,8 +18,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
 @RequiredArgsConstructor
 @Slf4j
 public class ComparisonToCriteriaConverter {
@@ -33,6 +31,32 @@ public class ComparisonToCriteriaConverter {
         converters.addAll(List.of(fieldSpecificConverters));
         converters.add(new EntityFieldTypeConverter(conversionService, mappingContext));
         converters.add(new NoOpConverter());
+    }
+
+    private static Criteria makeCriteria(String selector, Operator operator, List<Object> arguments) {
+        return switch (operator) {
+            case EQUAL -> Criteria.where(selector).is(getFirst(operator, arguments));
+            case NOT_EQUAL -> Criteria.where(selector).ne(getFirst(operator, arguments));
+            case GREATER_THAN -> Criteria.where(selector).gt(getFirst(operator, arguments));
+            case GREATER_THAN_OR_EQUAL ->
+                    Criteria.where(selector).gte(getFirst(operator, arguments));
+            case LESS_THAN -> Criteria.where(selector).lt(getFirst(operator, arguments));
+            case LESS_THAN_OR_EQUAL -> Criteria.where(selector).lte(getFirst(operator, arguments));
+            case REGEX -> Criteria.where(selector).regex((String) getFirst(operator, arguments));
+            case EXISTS -> Criteria.where(selector).exists((Boolean) getFirst(operator, arguments));
+            case IN -> Criteria.where(selector).in(arguments);
+            case NOT_IN -> Criteria.where(selector).nin(arguments);
+        };
+    }
+
+    private static Object getFirst(Operator operator, List<Object> arguments) {
+        if (arguments != null && arguments.size() == 1) {
+            return arguments.getFirst();
+        } else {
+            throw new UnsupportedOperationException(
+                    "You cannot perform the query operation " + operator.name()
+                            + " with anything except a single value.");
+        }
     }
 
     public Criteria asCriteria(ComparisonNode node, Class<?> targetEntityClass) {
@@ -51,30 +75,6 @@ public class ComparisonToCriteriaConverter {
         return LazyUtils.firstThatReturnsNonNull(converters.stream()
                 .map(converter -> converter.convert(conversionInfo))
                 .toList());
-    }
-
-    private static Criteria makeCriteria(String selector, Operator operator, List<Object> arguments) {
-        return switch (operator) {
-            case EQUAL -> Criteria.where(selector).is(getFirst(operator, arguments));
-            case NOT_EQUAL -> Criteria.where(selector).ne(getFirst(operator, arguments));
-            case GREATER_THAN -> Criteria.where(selector).gt(getFirst(operator, arguments));
-            case GREATER_THAN_OR_EQUAL -> Criteria.where(selector).gte(getFirst(operator, arguments));
-            case LESS_THAN -> Criteria.where(selector).lt(getFirst(operator, arguments));
-            case LESS_THAN_OR_EQUAL -> Criteria.where(selector).lte(getFirst(operator, arguments));
-            case REGEX -> Criteria.where(selector).regex((String) getFirst(operator, arguments));
-            case EXISTS -> Criteria.where(selector).exists((Boolean) getFirst(operator, arguments));
-            case IN -> Criteria.where(selector).in(arguments);
-            case NOT_IN -> Criteria.where(selector).nin(arguments);
-        };
-    }
-
-    private static Object getFirst(Operator operator, List<Object> arguments) {
-        if (arguments != null && arguments.size() == 1) {
-            return arguments.getFirst();
-        } else {
-            throw new UnsupportedOperationException("You cannot perform the query operation " + operator.name()
-                    + " with anything except a single value.");
-        }
     }
 
 }

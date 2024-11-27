@@ -6,7 +6,6 @@ import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
 import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.jdbc.PgArray;
@@ -16,7 +15,11 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 @Slf4j
@@ -35,7 +38,9 @@ public class PostGreSQLDialect extends Dialect {
             String columnDataTypeName = table.getColumnDataTypeName(columnName);
 
             log.info("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
-            if (Objects.isNull(value)) continue;
+            if (Objects.isNull(value)) {
+                continue;
+            }
 
             if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json", "jsonb")) {
                 Object v = convertToJson(value, columnDataTypeName);
@@ -55,16 +60,13 @@ public class PostGreSQLDialect extends Dialect {
                 data.put(columnName, Long.valueOf(value.toString().trim()));
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "numeric")) {
                 data.put(columnName, Double.valueOf(value.toString().trim()));
-            }
-            else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "year")) {
+            } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "year")) {
                 data.put(columnName, Integer.valueOf(value.toString().trim()));
-            }
-            else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "_varchar")) {
+            } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "_varchar")) {
 
                 log.info("Array type found");
 
-                data.put(columnName, new ArrayTypeValueHolder("java.sql.Array", "varchar",
-                        ((ArrayList) value).toArray() ));
+                data.put(columnName, new ArrayTypeValueHolder("java.sql.Array", "varchar", ((ArrayList) value).toArray()));
             }
 
         }
@@ -110,7 +112,7 @@ public class PostGreSQLDialect extends Dialect {
     @Override
     public Object convertJsonToVO(Object object) {
 
-        if(Objects.nonNull(object)) {
+        if (Objects.nonNull(object)) {
 
             PGobject pGobject = (PGobject) object;
 
@@ -121,8 +123,7 @@ public class PostGreSQLDialect extends Dialect {
             } catch (JsonProcessingException e) {
                 throw new GenericDataAccessException("Error converting to JSON type - " + e.getLocalizedMessage());
             }
-        }
-        else{
+        } else {
             return null;
         }
 
@@ -150,12 +151,12 @@ public class PostGreSQLDialect extends Dialect {
     @Override
     public List<String> convertToStringArray(Object object) {
 
-        if(Objects.nonNull(object)) {
+        if (Objects.nonNull(object)) {
 
-            PgArray pgArray = (PgArray)object;
+            PgArray pgArray = (PgArray) object;
             try {
                 Object o = pgArray.getArray();
-                return Arrays.asList((String[])o);
+                return Arrays.asList((String[]) o);
             } catch (Exception e) {
                 throw new GenericDataAccessException("Error converting to Array type - " + e.getLocalizedMessage());
             }

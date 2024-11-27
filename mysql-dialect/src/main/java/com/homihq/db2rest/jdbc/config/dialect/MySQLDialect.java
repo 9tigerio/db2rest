@@ -5,10 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +38,7 @@ public class MySQLDialect extends Dialect {
                 }
 
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new GenericDataAccessException(exception.getMessage());
         }
 
