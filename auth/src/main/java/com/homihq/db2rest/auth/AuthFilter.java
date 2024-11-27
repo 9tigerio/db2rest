@@ -21,7 +21,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
-
     private final AbstractAuthProvider authProvider;
     private final ObjectMapper objectMapper;
     private final UrlPathHelper urlPathHelper = new UrlPathHelper();
@@ -90,5 +89,4 @@ public class AuthFilter extends OncePerRequestFilter {
 
         objectMapper.writeValue(response.getWriter(), body);
     }
-
 }
