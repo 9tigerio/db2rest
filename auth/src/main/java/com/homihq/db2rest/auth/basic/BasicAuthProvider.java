@@ -4,6 +4,7 @@ import com.homihq.db2rest.auth.common.AbstractAuthProvider;
 import com.homihq.db2rest.auth.common.AuthDataProvider;
 import com.homihq.db2rest.auth.common.User;
 import com.homihq.db2rest.auth.common.UserDetail;
+import com.homihq.db2rest.auth.data.FileAuthDataProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,15 +42,14 @@ public class BasicAuthProvider extends AbstractAuthProvider {
         String username = parts[0];
         String password = parts[1];
 
-
-        Optional<User> user = authDataProvider.getUserByUsername(username);
-
-        if(user.isPresent() && StringUtils.equals(password, user.get().password())) {
-            return new UserDetail(username, user.get().roles());
+        if(authDataProvider instanceof FileAuthDataProvider fileAuthDataProvider) {
+            User user = fileAuthDataProvider.getUserByUsername(username).orElse(null);
+            if(user != null && StringUtils.equals(password, user.password())) {
+                return new UserDetail(username, user.roles());
+            }
         }
 
         return null;
-
     }
 
     @Override

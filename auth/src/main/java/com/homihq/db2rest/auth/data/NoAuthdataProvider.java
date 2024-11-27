@@ -27,11 +27,6 @@ public class NoAuthdataProvider implements AuthDataProvider {
     }
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
-        return Optional.empty();
-    }
-
-    @Override
     public List<User> getUsers() {
         return List.of();
     }

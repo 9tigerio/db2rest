@@ -15,7 +15,6 @@ import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
 public interface MetaDataExtraction {
     boolean canHandle(String database);
 
-
     List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllSchemas, List<String> includedSchemas);
 
     default boolean include(String schemaOrCatalog, List<String> excludedSchemasOrCatalogs) {

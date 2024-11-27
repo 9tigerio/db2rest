@@ -52,7 +52,6 @@ public class FileAuthDataProvider implements AuthDataProvider {
         return authDataSource.excludedResources();
     }
 
-    @Override
     public Optional<User> getUserByUsername(String username) {
         return getUsers().stream()
                 .filter(u -> StringUtils.equals(u.username(), username)).findFirst();
