@@ -6,43 +6,12 @@ import com.homihq.db2rest.bulk.FileSubject;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
-import com.homihq.db2rest.jdbc.config.dialect.Dialect;
-import com.homihq.db2rest.jdbc.config.dialect.MariaDBDialect;
-import com.homihq.db2rest.jdbc.config.dialect.MsSQLServerDialect;
-import com.homihq.db2rest.jdbc.config.dialect.MySQLDialect;
-import com.homihq.db2rest.jdbc.config.dialect.OracleDialect;
-import com.homihq.db2rest.jdbc.config.dialect.PostGreSQLDialect;
+import com.homihq.db2rest.jdbc.config.dialect.*;
 import com.homihq.db2rest.jdbc.config.jinjava.DisabledExpressionTokenScannerSymbols;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
-import com.homihq.db2rest.jdbc.core.service.BulkCreateService;
-import com.homihq.db2rest.jdbc.core.service.CountQueryService;
-import com.homihq.db2rest.jdbc.core.service.CreateService;
-import com.homihq.db2rest.jdbc.core.service.DeleteService;
-import com.homihq.db2rest.jdbc.core.service.ExistsQueryService;
-import com.homihq.db2rest.jdbc.core.service.FindOneService;
-import com.homihq.db2rest.jdbc.core.service.FunctionService;
-import com.homihq.db2rest.jdbc.core.service.JdbcBulkCreateService;
-import com.homihq.db2rest.jdbc.core.service.JdbcCountQueryService;
-import com.homihq.db2rest.jdbc.core.service.JdbcCreateService;
-import com.homihq.db2rest.jdbc.core.service.JdbcDeleteService;
-import com.homihq.db2rest.jdbc.core.service.JdbcExistsQueryService;
-import com.homihq.db2rest.jdbc.core.service.JdbcFindOneService;
-import com.homihq.db2rest.jdbc.core.service.JdbcFunctionService;
-import com.homihq.db2rest.jdbc.core.service.JdbcProcedureService;
-import com.homihq.db2rest.jdbc.core.service.JdbcReadService;
-import com.homihq.db2rest.jdbc.core.service.JdbcUpdateService;
-import com.homihq.db2rest.jdbc.core.service.JinJavaTemplateExecutorService;
-import com.homihq.db2rest.jdbc.core.service.ProcedureService;
-import com.homihq.db2rest.jdbc.core.service.ReadService;
-import com.homihq.db2rest.jdbc.core.service.SQLTemplateExecutorService;
-import com.homihq.db2rest.jdbc.core.service.UpdateService;
+import com.homihq.db2rest.jdbc.core.service.*;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
-import com.homihq.db2rest.jdbc.processor.JoinProcessor;
-import com.homihq.db2rest.jdbc.processor.OrderByProcessor;
-import com.homihq.db2rest.jdbc.processor.ReadProcessor;
-import com.homihq.db2rest.jdbc.processor.RootTableFieldProcessor;
-import com.homihq.db2rest.jdbc.processor.RootTableProcessor;
-import com.homihq.db2rest.jdbc.processor.RootWhereProcessor;
+import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
@@ -86,10 +55,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JdbcConfiguration {
 
-
     private final DatabaseProperties databaseProperties;
     private final ObjectMapper objectMapper;
-
 
     @Bean
     @ConditionalOnMissingBean(DataSource.class)
