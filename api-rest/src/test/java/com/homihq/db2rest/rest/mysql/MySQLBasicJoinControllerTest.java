@@ -6,21 +6,26 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.AnyOf.anyOf;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(10)
@@ -32,22 +37,20 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/LEFT_JOIN.json")
-    List<Map<String,Object>> LEFT_JOIN;
+    List<Map<String, Object>> LEFT_JOIN;
 
     @GivenJsonResource("/testdata/RIGHT_JOIN.json")
-    List<Map<String,Object>> RIGHT_JOIN;
+    List<Map<String, Object>> RIGHT_JOIN;
 
     @Disabled
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mysqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
-               // .andDo(print())
+                // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(4)))
@@ -67,8 +70,6 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Test right Join")
     void testRightJoin() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mysqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
@@ -88,16 +89,11 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$[1].username", nullValue()))
                 .andExpect(jsonPath("$[1].firstname", equalTo("Tom")))
 
-
                 .andExpect(jsonPath("$[3].auid", equalTo(7)))
                 .andExpect(jsonPath("$[3].apid", equalTo(7)))
                 .andExpect(jsonPath("$[3].username", nullValue()))
                 .andExpect(jsonPath("$[3].firstname", equalTo("Ivan")))
 
                 .andDo(document("mysql-right-join"));
-
-
     }
-
-
 }

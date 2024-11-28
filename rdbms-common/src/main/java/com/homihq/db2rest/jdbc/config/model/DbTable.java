@@ -3,6 +3,7 @@ package com.homihq.db2rest.jdbc.config.model;
 import com.homihq.db2rest.core.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 @Slf4j
@@ -15,11 +16,11 @@ public record DbTable(String schema, String name, String fullName, String alias,
 
     public DbTable copyWithAlias(String tableAlias) {
         List<DbColumn> columns =
-        dbColumns.stream()
-                .map(col -> col.copyWithTableAlias(tableAlias))
-                .toList();
+                dbColumns.stream()
+                        .map(col -> col.copyWithTableAlias(tableAlias))
+                        .toList();
 
-        return new DbTable(schema, name, fullName, tableAlias,  columns, type, coverChar);
+        return new DbTable(schema, name, fullName, tableAlias, columns, type, coverChar);
     }
 
     public DbColumn buildColumn(String columnName) {
@@ -33,53 +34,47 @@ public record DbTable(String schema, String name, String fullName, String alias,
 
     private DbColumn getDbColumn(DbAlias dbAlias) {
         return
-        this.dbColumns.stream()
-                .filter(dbColumn -> StringUtils.equalsAnyIgnoreCase(dbAlias.name(), dbColumn.name()))
-                .map(dbColumn -> dbColumn.copyWithAlias(dbAlias))
-                .findFirst().orElseThrow(() -> new InvalidColumnException(name,dbAlias.name()));
+                this.dbColumns.stream()
+                        .filter(dbColumn -> StringUtils.equalsAnyIgnoreCase(dbAlias.name(), dbColumn.name()))
+                        .map(dbColumn -> dbColumn.copyWithAlias(dbAlias))
+                        .findFirst().orElseThrow(() -> new InvalidColumnException(name, dbAlias.name()));
     }
 
     private DbAlias getAlias(String name) {
         log.info("Name - {}", name);
-        String [] aliasParts = name.split(":");
+        String[] aliasParts = name.split(":");
 
         String columnName = aliasParts[0];
         String colName = columnName;
         String jsonParts = "";
 
-        if(StringUtils.contains(columnName, "->")) {
+        if (StringUtils.contains(columnName, "->")) {
             colName = columnName.substring(0, columnName.indexOf("->"));
             jsonParts = columnName.substring(columnName.indexOf("->"));
-        }
-        else if(StringUtils.contains(columnName, "->>")) {
+        } else if (StringUtils.contains(columnName, "->>")) {
             colName = columnName.substring(0, columnName.indexOf("->>"));
             jsonParts = columnName.substring(columnName.indexOf("->>"));
-        }
-        else if(StringUtils.contains(columnName, "#>")) {
+        } else if (StringUtils.contains(columnName, "#>")) {
 
             colName = columnName.substring(0, columnName.indexOf("#>"));
             jsonParts = columnName.substring(columnName.indexOf("#>"));
             jsonParts = jsonParts.replace(".", ","); //specific attribute
-        }
-        else if(StringUtils.contains(columnName, "#>>")) {
+        } else if (StringUtils.contains(columnName, "#>>")) {
 
             colName = columnName.substring(0, columnName.indexOf("#>>"));
             jsonParts = columnName.substring(columnName.indexOf("#>>"));
             jsonParts = jsonParts.replace(".", ","); //specific attribute
-        }
-        else if(StringUtils.contains(columnName, "**")) {
+        } else if (StringUtils.contains(columnName, "**")) {
             colName = columnName.substring(0, columnName.indexOf("**"));
             jsonParts = "->>" + "'" + columnName.substring(columnName.indexOf("**") + 2) + "'";
-        }
-        else if(StringUtils.contains(columnName, "*")) {
+        } else if (StringUtils.contains(columnName, "*")) {
             colName = columnName.substring(0, columnName.indexOf("*"));
             jsonParts = "->" + "'" + columnName.substring(columnName.indexOf("*") + 1) + "'";
         }
 
-        if(aliasParts.length == 2) {
+        if (aliasParts.length == 2) {
             return new DbAlias(colName.trim(), aliasParts[1], jsonParts);
-        }
-        else {
+        } else {
             return new DbAlias(colName.trim(), "", jsonParts);
         }
     }
@@ -95,7 +90,7 @@ public record DbTable(String schema, String name, String fullName, String alias,
                 .toList();
     }
 
-    public String [] getKeyColumnNames() {
+    public String[] getKeyColumnNames() {
         return buildPkColumns()
                 .stream()
                 .map(DbColumn::name)
@@ -111,6 +106,6 @@ public record DbTable(String schema, String name, String fullName, String alias,
         return dbColumns.stream()
                 .filter(dbColumn -> StringUtils.equalsAnyIgnoreCase(columnName, dbColumn.name()))
                 .findFirst()
-                .orElseThrow(()-> new InvalidColumnException(name, columnName));
+                .orElseThrow(() -> new InvalidColumnException(name, columnName));
     }
 }

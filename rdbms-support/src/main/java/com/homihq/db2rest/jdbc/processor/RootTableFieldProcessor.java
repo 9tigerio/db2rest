@@ -1,12 +1,11 @@
 package com.homihq.db2rest.jdbc.processor;
 
 
-import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
+import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,24 +29,23 @@ public class RootTableFieldProcessor implements ReadProcessor {
 
         log.debug("Fields - {}", fields);
 
-        if(Objects.isNull(fields)) { //most likely count query
+        if (Objects.isNull(fields)) { //most likely count query
             return;
         }
 
         List<DbColumn> columnList = new ArrayList<>();
-        if(StringUtils.equals("*", fields)) {
+        if (StringUtils.equals("*", fields)) {
 
             //include all fields of root table
             columnList.addAll(readContext.getRoot().buildColumns());
-        }
-        else{ //query has specific columns so parse and map it.
+        } else { //query has specific columns so parse and map it.
             List<DbColumn> columns =
                     Arrays.stream(readContext.getFields().split(","))
                             .map(col -> readContext.getRoot().buildColumn(col))
                             .toList();
             columnList.addAll(columns);
         }
-        log.debug("Column List - {}" , columnList);
+        log.debug("Column List - {}", columnList);
         readContext.setCols(columnList);
 
     }

@@ -6,12 +6,43 @@ import com.homihq.db2rest.bulk.FileSubject;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
-import com.homihq.db2rest.jdbc.config.dialect.*;
+import com.homihq.db2rest.jdbc.config.dialect.Dialect;
+import com.homihq.db2rest.jdbc.config.dialect.MariaDBDialect;
+import com.homihq.db2rest.jdbc.config.dialect.MsSQLServerDialect;
+import com.homihq.db2rest.jdbc.config.dialect.MySQLDialect;
+import com.homihq.db2rest.jdbc.config.dialect.OracleDialect;
+import com.homihq.db2rest.jdbc.config.dialect.PostGreSQLDialect;
 import com.homihq.db2rest.jdbc.config.jinjava.DisabledExpressionTokenScannerSymbols;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
-import com.homihq.db2rest.jdbc.core.service.*;
+import com.homihq.db2rest.jdbc.core.service.BulkCreateService;
+import com.homihq.db2rest.jdbc.core.service.CountQueryService;
+import com.homihq.db2rest.jdbc.core.service.CreateService;
+import com.homihq.db2rest.jdbc.core.service.DeleteService;
+import com.homihq.db2rest.jdbc.core.service.ExistsQueryService;
+import com.homihq.db2rest.jdbc.core.service.FindOneService;
+import com.homihq.db2rest.jdbc.core.service.FunctionService;
+import com.homihq.db2rest.jdbc.core.service.JdbcBulkCreateService;
+import com.homihq.db2rest.jdbc.core.service.JdbcCountQueryService;
+import com.homihq.db2rest.jdbc.core.service.JdbcCreateService;
+import com.homihq.db2rest.jdbc.core.service.JdbcDeleteService;
+import com.homihq.db2rest.jdbc.core.service.JdbcExistsQueryService;
+import com.homihq.db2rest.jdbc.core.service.JdbcFindOneService;
+import com.homihq.db2rest.jdbc.core.service.JdbcFunctionService;
+import com.homihq.db2rest.jdbc.core.service.JdbcProcedureService;
+import com.homihq.db2rest.jdbc.core.service.JdbcReadService;
+import com.homihq.db2rest.jdbc.core.service.JdbcUpdateService;
+import com.homihq.db2rest.jdbc.core.service.JinJavaTemplateExecutorService;
+import com.homihq.db2rest.jdbc.core.service.ProcedureService;
+import com.homihq.db2rest.jdbc.core.service.ReadService;
+import com.homihq.db2rest.jdbc.core.service.SQLTemplateExecutorService;
+import com.homihq.db2rest.jdbc.core.service.UpdateService;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
-import com.homihq.db2rest.jdbc.processor.*;
+import com.homihq.db2rest.jdbc.processor.JoinProcessor;
+import com.homihq.db2rest.jdbc.processor.OrderByProcessor;
+import com.homihq.db2rest.jdbc.processor.ReadProcessor;
+import com.homihq.db2rest.jdbc.processor.RootTableFieldProcessor;
+import com.homihq.db2rest.jdbc.processor.RootTableProcessor;
+import com.homihq.db2rest.jdbc.processor.RootWhereProcessor;
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
@@ -49,7 +80,6 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Configuration
@@ -78,7 +108,7 @@ public class JdbcConfiguration {
 
         log.debug("Databases - {}", databaseProperties.getDatabases());
 
-        if(!databaseProperties.isRdbmsConfigured()) {
+        if (!databaseProperties.isRdbmsConfigured()) {
             log.info("*** No RDBMS configured.");
             return result;
         }
@@ -86,7 +116,7 @@ public class JdbcConfiguration {
 
         for (DatabaseConnectionDetail connectionDetail : databaseProperties.getDatabases()) {
 
-            if(connectionDetail.isJdbcPresent())
+            if (connectionDetail.isJdbcPresent())
                 result.put(connectionDetail.id(), this.buildDataSource(connectionDetail));
         }
 
@@ -227,7 +257,7 @@ public class JdbcConfiguration {
             SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcExistsQueryService(jdbcManager,dbOperationService, processorList, sqlCreatorTemplate);
+        return new JdbcExistsQueryService(jdbcManager, dbOperationService, processorList, sqlCreatorTemplate);
     }
 
     @Bean
@@ -236,7 +266,7 @@ public class JdbcConfiguration {
             SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcFindOneService(jdbcManager,sqlCreatorTemplate, processorList, dbOperationService);
+        return new JdbcFindOneService(jdbcManager, sqlCreatorTemplate, processorList, dbOperationService);
     }
 
     @Bean
@@ -336,7 +366,7 @@ public class JdbcConfiguration {
 
     @Bean
     @ConditionalOnBean(ReadService.class)
-    public ReadController readController(ReadService readService,  Db2RestConfigProperties configProperties) {
+    public ReadController readController(ReadService readService, Db2RestConfigProperties configProperties) {
         return new ReadController(readService, configProperties);
     }
 
@@ -381,7 +411,7 @@ public class JdbcConfiguration {
     ) {
         return new SQLTemplateController(sqlTemplateExecutorService);
     }
-  
+
     @ConditionalOnBean(JdbcManager.class)
     public DbInfoController dbInfoController(JdbcManager jdbcManager) {
         return new DbInfoController(jdbcManager);

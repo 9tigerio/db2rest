@@ -182,7 +182,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("timestamp", Instant.now());
         return new ResponseEntity<>(body, headers, status);
     }
-
-
-
 }

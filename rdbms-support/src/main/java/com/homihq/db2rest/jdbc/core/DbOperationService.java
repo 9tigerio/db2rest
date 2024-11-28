@@ -24,13 +24,13 @@ public interface DbOperationService {
 
     CountResponse count(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql);
 
-    Object queryCustom(NamedParameterJdbcTemplate namedParameterJdbcTemplate,boolean single, String sql, Map<String, Object> params);
+    Object queryCustom(NamedParameterJdbcTemplate namedParameterJdbcTemplate, boolean single, String sql, Map<String, Object> params);
 
     int delete(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> params, String sql);
 
-    CreateResponse create(NamedParameterJdbcTemplate namedParameterJdbcTemplate,Map<String, Object> data, String sql, DbTable dbTable);
+    CreateResponse create(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> data, String sql, DbTable dbTable);
 
-    CreateBulkResponse batchUpdate(NamedParameterJdbcTemplate namedParameterJdbcTemplate,List<Map<String, Object>> dataList, String sql, DbTable dbTable);
+    CreateBulkResponse batchUpdate(NamedParameterJdbcTemplate namedParameterJdbcTemplate, List<Map<String, Object>> dataList, String sql, DbTable dbTable);
 
     CreateBulkResponse batchUpdate(NamedParameterJdbcTemplate namedParameterJdbcTemplate, List<Map<String, Object>> dataList, String sql);
 }

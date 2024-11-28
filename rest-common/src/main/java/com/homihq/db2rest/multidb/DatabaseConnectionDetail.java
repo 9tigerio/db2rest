@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public record DatabaseConnectionDetail(String id, String type, String url, String username, String password, String database
-                                        ,List<String> catalog, List<String>  schemas, List<String>  tables,
-    Map<String,String> connectionProperties, EnvironmentProperties envProperties) {
+public record DatabaseConnectionDetail(String id, String type, String url, String username,
+                                       String password, String database
+        , List<String> catalog, List<String> schemas, List<String> tables,
+                                       Map<String, String> connectionProperties,
+                                       EnvironmentProperties envProperties) {
     public boolean isMongo() {
         return StringUtils.equalsIgnoreCase(type, "MONGO");
     }
@@ -17,7 +19,7 @@ public record DatabaseConnectionDetail(String id, String type, String url, Strin
 
         return StringUtils.isNotBlank(url);
 
-                // && !StringUtils.equalsIgnoreCase(url, "${DB_URL}");
+        // && !StringUtils.equalsIgnoreCase(url, "${DB_URL}");
     }
 
     public boolean includeAllSchemas() {

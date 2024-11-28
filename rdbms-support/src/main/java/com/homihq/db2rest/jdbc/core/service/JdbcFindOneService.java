@@ -1,11 +1,11 @@
 package com.homihq.db2rest.jdbc.core.service;
 
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
-import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -23,7 +23,7 @@ public class JdbcFindOneService implements FindOneService {
     private final DbOperationService dbOperationService;
 
     @Override
-    public Map<String,Object> findOne(ReadContext readContext) {
+    public Map<String, Object> findOne(ReadContext readContext) {
 
         for (ReadProcessor processor : processorList) {
             processor.process(readContext);
@@ -39,9 +39,8 @@ public class JdbcFindOneService implements FindOneService {
             return dbOperationService.findOne(
                     jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbId()),
                     sql, bindValues);
-        }
-        catch (DataAccessException e) {
-            log.error("Error in read op : " , e);
+        } catch (DataAccessException e) {
+            log.error("Error in read op : ", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
     }

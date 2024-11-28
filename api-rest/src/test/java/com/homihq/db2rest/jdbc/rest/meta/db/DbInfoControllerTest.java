@@ -9,30 +9,31 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 class DbInfoControllerTest {
 
     Map<String, DbMeta> metadataMap;
+
     @BeforeEach
     void setUp() {
         List<DbTable> dbTableList = new ArrayList<>();
         List<DbColumn> dbColumns = new ArrayList<>();
-        dbColumns.add(new DbColumn("tableName","name","alias",
-                "tableAlias",true,"columnDataType",false,false,
-                null,"coverChar","jsonParts"));
+        dbColumns.add(new DbColumn("tableName", "name", "alias",
+                "tableAlias", true, "columnDataType", false, false,
+                null, "coverChar", "jsonParts"));
 
-        dbTableList.add(new DbTable("schema","name","fullName",
-                "alias",dbColumns,"type","coverChar"));
+        dbTableList.add(new DbTable("schema", "name", "fullName",
+                "alias", dbColumns, "type", "coverChar"));
 
         metadataMap = new HashMap<>();
-        metadataMap.put("key",new DbMeta("productName",2,"driverName",
-                "driverVersion",dbTableList));
+        metadataMap.put("key", new DbMeta("productName", 2, "driverName",
+                "driverVersion", dbTableList));
     }
 
     @Test
@@ -44,7 +45,7 @@ class DbInfoControllerTest {
         List<DbInfoObject> actualDbInfoList = dbInfoController.getObjects();
         List<DbInfoObject> expectedDbInfoList = new ArrayList<>();
         metadataMap.forEach(
-                (k,v) -> expectedDbInfoList.add(new DbInfoObject(k, v.productName(), v.majorVersion(), v.driverName(), v.driverVersion()))
+                (k, v) -> expectedDbInfoList.add(new DbInfoObject(k, v.productName(), v.majorVersion(), v.driverName(), v.driverVersion()))
         );
 
         assertEquals(expectedDbInfoList, actualDbInfoList);

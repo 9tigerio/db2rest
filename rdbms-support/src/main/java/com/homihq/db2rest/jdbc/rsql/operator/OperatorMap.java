@@ -3,18 +3,19 @@ package com.homihq.db2rest.jdbc.rsql.operator;
 
 import com.homihq.db2rest.core.exception.InvalidOperatorException;
 import org.apache.commons.lang3.StringUtils;
+
 import java.util.Map;
 
 public class OperatorMap {
 
-    static Map<String,String> opMap = Map.of(
-            "==","=",
-            "=gt=",">",
-            "=gte=",">=",
-            "=lt=","<",
-            "=lte=","<=",
-            "=notnull=","IS NOT NULL",
-            "=isnull=","IS NULL");
+    static Map<String, String> opMap = Map.of(
+            "==", "=",
+            "=gt=", ">",
+            "=gte=", ">=",
+            "=lt=", "<",
+            "=lte=", "<=",
+            "=notnull=", "IS NOT NULL",
+            "=isnull=", "IS NULL");
 
 
     public static String getSQLOperator(String rSQLOperator) {

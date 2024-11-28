@@ -28,37 +28,37 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @Slf4j
 public abstract class BaseIntegrationTest {
 
-	@Autowired
-	public MockMvc mockMvc;
+    @Autowired
+    public MockMvc mockMvc;
 
-	@Autowired
-	protected ApplicationContext applicationContext;
+    @Autowired
+    protected ApplicationContext applicationContext;
 
-	@Autowired
-	protected Db2RestConfigProperties db2RestConfigProperties;
+    @Autowired
+    protected Db2RestConfigProperties db2RestConfigProperties;
 
-	@BeforeEach
-	void setUp(WebApplicationContext webApplicationContext,
-	           RestDocumentationContextProvider restDocumentation) {
-		mockMvc = MockMvcBuilders
-				.webAppContextSetup(webApplicationContext)
-				.apply(documentationConfiguration(restDocumentation)
-						.snippets().withTemplateFormat(TemplateFormats.markdown())
-				)
-				.build();
-		setupEnv();
-	}
+    @BeforeEach
+    void setUp(WebApplicationContext webApplicationContext,
+               RestDocumentationContextProvider restDocumentation) {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .apply(documentationConfiguration(restDocumentation)
+                        .snippets().withTemplateFormat(TemplateFormats.markdown())
+                )
+                .build();
+        setupEnv();
+    }
 
-	void setupEnv() {
-		var templatesLocation = db2RestConfigProperties.getTemplates();
-		if (templatesLocation.startsWith(ResourceLoader.CLASSPATH_URL_PREFIX)) {
-			try {
-				Resource resource = applicationContext.getResource(templatesLocation);
-				var resolvedTemplatesLocation = String.valueOf(Paths.get(resource.getFile().getAbsolutePath()));
-				db2RestConfigProperties.setTemplates(resolvedTemplatesLocation);
-			} catch (IOException ioe) {
-				log.debug("Error while resolve _sql templates location for testing", ioe);
-			}
-		}
-	}
+    void setupEnv() {
+        var templatesLocation = db2RestConfigProperties.getTemplates();
+        if (templatesLocation.startsWith(ResourceLoader.CLASSPATH_URL_PREFIX)) {
+            try {
+                Resource resource = applicationContext.getResource(templatesLocation);
+                var resolvedTemplatesLocation = String.valueOf(Paths.get(resource.getFile().getAbsolutePath()));
+                db2RestConfigProperties.setTemplates(resolvedTemplatesLocation);
+            } catch (IOException ioe) {
+                log.debug("Error while resolve _sql templates location for testing", ioe);
+            }
+        }
+    }
 }

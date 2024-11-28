@@ -19,6 +19,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(313)
 @TestWithResources
@@ -29,13 +30,11 @@ class MariaDBInnerJoinMultiTableControllerTest extends MariaDBBaseIntegrationTes
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/INNER_JOIN_MULTI_TABLE.json")
-    List<Map<String,Object>> INNER_JOIN_MULTI_TABLE;
+    List<Map<String, Object>> INNER_JOIN_MULTI_TABLE;
 
     @Test
     @DisplayName("Test inner multi-table Join")
     void testInnerMultiTable() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mariadb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
@@ -50,13 +49,6 @@ class MariaDBInnerJoinMultiTableControllerTest extends MariaDBBaseIntegrationTes
                 .andExpect(jsonPath("$[0].actor_id", equalTo(1)))
                 .andExpect(jsonPath("$[0].first_name", equalTo("PENELOPE")))
                 .andExpect(jsonPath("$[0].last_name", equalTo("GUINESS")))
-
-
                 .andDo(document("mariadb-inner-multi-table-join"));
-
-
     }
-
-
-
 }

@@ -2,8 +2,8 @@ package com.homihq.db2rest.jdbc.processor;
 
 
 import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.config.model.DbWhere;
+import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
 import cz.jirutka.rsql.parser.ast.Node;
@@ -17,9 +17,10 @@ import org.springframework.core.annotation.Order;
 @RequiredArgsConstructor
 public class RootWhereProcessor implements ReadProcessor {
     private final JdbcManager jdbcManager;
+
     @Override
     public void process(ReadContext readContext) {
-        if(StringUtils.isNotBlank(readContext.getFilter())) {
+        if (StringUtils.isNotBlank(readContext.getFilter())) {
             readContext.createParamMap();
 
             DbWhere dbWhere = new DbWhere(

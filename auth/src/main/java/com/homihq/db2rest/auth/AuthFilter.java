@@ -40,14 +40,14 @@ public class AuthFilter extends OncePerRequestFilter {
 
         log.info("Request URI - {}", requestUri);
 
-        if(!authProvider.isExcluded(requestUri, method)) {
+        if (!authProvider.isExcluded(requestUri, method)) {
 
             //authenticate
             UserDetail userDetail = authProvider.authenticate(request);
 
             log.info("user detail - {}", userDetail);
 
-            if(Objects.isNull(userDetail)) {
+            if (Objects.isNull(userDetail)) {
                 String errorMessage = "Authentication failure.";
                 addError(errorMessage, request, response);
                 return;
@@ -57,13 +57,12 @@ public class AuthFilter extends OncePerRequestFilter {
             boolean authorized =
                     authProvider.authorize(userDetail, requestUri, method);
 
-            if(!authorized) {
+            if (!authorized) {
                 String errorMessage = "Authorization failure.";
                 addError(errorMessage, request, response);
                 return;
             }
-        }
-        else {
+        } else {
             log.info("URI in whitelist. Security checks not applied.");
         }
 
@@ -74,7 +73,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
     private void addError(
             String errorMessage,
-            HttpServletRequest request , HttpServletResponse response) throws IOException{
+            HttpServletRequest request, HttpServletResponse response) throws IOException {
         var body = new LinkedHashMap<>();
         body.put("type", "https://db2rest/unauthorized");
         body.put("title", "Auth Error");

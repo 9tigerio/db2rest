@@ -6,18 +6,22 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import java.util.Map;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(70)
 @TestWithResources
@@ -28,21 +32,20 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/UPDATE_FILM_REQUEST.json")
-    Map<String,Object> UPDATE_FILM_REQUEST;
+    Map<String, Object> UPDATE_FILM_REQUEST;
 
     @GivenJsonResource("/testdata/UPDATE_NON_EXISTING_FILM_REQUEST.json")
-    Map<String,Object> UPDATE_NON_EXISTING_FILM_REQUEST;
+    Map<String, Object> UPDATE_NON_EXISTING_FILM_REQUEST;
 
     @GivenJsonResource("/testdata/UPDATE_NON_EXISTING_TABLE.json")
-    Map<String,Object> UPDATE_NON_EXISTING_TABLE;
+    Map<String, Object> UPDATE_NON_EXISTING_TABLE;
 
     @GivenJsonResource("/testdata/UPDATE_FILMS_REQUEST.json")
-    Map<String,Object> UPDATE_FILMS_REQUEST;
+    Map<String, Object> UPDATE_FILMS_REQUEST;
 
     @Test
     @DisplayName("Update an existing film")
     void updateExistingFilm() throws Exception {
-
         mockMvc.perform(patch(VERSION + "/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"ACADEMY DINOSAUR\"")
@@ -57,7 +60,6 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Update a non-existing film")
     void updateNonExistingFilm() throws Exception {
-
         mockMvc.perform(patch(VERSION + "/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"BAAHUBALI\"")
@@ -72,7 +74,6 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Update non-existing table")
     void updateNonExistingTable() throws Exception {
-
         mockMvc.perform(patch(VERSION + "/mysqldb/unknown_table")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
@@ -86,7 +87,6 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Updating multiple films")
     void updateMultipleColumns() throws Exception {
-
         mockMvc.perform(patch(VERSION + "/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
@@ -99,8 +99,5 @@ class MySQLUpdateControllerTest extends MySQLBaseIntegrationTest {
     }
 
     //TODO - Add a test to update date field.
-
     //TODO - Greater than, less than , equal to , between test for date
-
-
 }

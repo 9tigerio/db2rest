@@ -20,12 +20,12 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class CSVDataProcessor implements DataProcessor{
+public class CSVDataProcessor implements DataProcessor {
 
     private final CsvMapper csvMapper = new CsvMapper();
 
     @Override
-    public List<Map<String, Object>> getData(InputStream inputStream) throws Exception{
+    public List<Map<String, Object>> getData(InputStream inputStream) throws Exception {
 
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
 
@@ -51,10 +51,10 @@ public class CSVDataProcessor implements DataProcessor{
     }
 
 
-    private Map<String,Object> transform(Map<String,String> data) {
-        Map<String,Object> objectMap = new HashMap<>();
+    private Map<String, Object> transform(Map<String, String> data) {
+        Map<String, Object> objectMap = new HashMap<>();
 
-        for(String key : data.keySet()) {
+        for (String key : data.keySet()) {
             String val = data.get(key);
             objectMap.put(key, val);
         }

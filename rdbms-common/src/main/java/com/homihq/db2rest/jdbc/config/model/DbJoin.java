@@ -3,7 +3,6 @@ package com.homihq.db2rest.jdbc.config.model;
 
 import lombok.Data;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,19 +25,20 @@ public class DbJoin {
 
         String str = joinType + " JOIN " + tableName + " " + alias + "\n";
 
-        if(Objects.nonNull(onLeft)) {
+        if (Objects.nonNull(onLeft)) {
             str += " ON " + onLeft.render() + " " + onOperator + " " + onRight.render();
         }
 
-        if(Objects.nonNull(andConditions) && !andConditions.isEmpty()) {
-            for(DbJoinAndCondition dbJoinAndCondition : andConditions) {
-                str += "\n AND " + dbJoinAndCondition.leftColumn.render() + " " + dbJoinAndCondition.operator + " "
+        if (Objects.nonNull(andConditions) && !andConditions.isEmpty()) {
+            for (DbJoinAndCondition dbJoinAndCondition : andConditions) {
+                str += "\n AND " + dbJoinAndCondition.leftColumn.render() + " "
+                        + dbJoinAndCondition.operator + " "
                         + dbJoinAndCondition.rightColumn.render();
             }
         }
 
-        if(Objects.nonNull(additionalWhere) && !additionalWhere.isEmpty()) {//filters
-            for(String where : additionalWhere) {
+        if (Objects.nonNull(additionalWhere) && !additionalWhere.isEmpty()) {//filters
+            for (String where : additionalWhere) {
                 str += "\n AND " + where;
             }
         }
@@ -53,17 +53,22 @@ public class DbJoin {
     }
 
     public void addAndCondition(DbColumn leftColumn, String operator, DbColumn rightColumn) {
-        if(Objects.isNull(andConditions)) andConditions = new ArrayList<>();
+        if (Objects.isNull(andConditions)) {
+            andConditions = new ArrayList<>();
+        }
 
         andConditions.add(new DbJoinAndCondition(leftColumn, operator, rightColumn));
 
     }
 
     public void addAdditionalWhere(String where) {
-        if(Objects.isNull(additionalWhere)) additionalWhere = new ArrayList<>();
+        if (Objects.isNull(additionalWhere)) {
+            additionalWhere = new ArrayList<>();
+        }
 
         additionalWhere.add(where);
     }
 
-    private record DbJoinAndCondition(DbColumn leftColumn, String operator, DbColumn rightColumn) {}
+    private record DbJoinAndCondition(DbColumn leftColumn, String operator, DbColumn rightColumn) {
+    }
 }

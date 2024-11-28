@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class PostgreSQLDataExclusion implements MetaDataExtraction {
 
-   List<String> excludedSchemas = Arrays.asList("pg_catalog","information_schema");
+    List<String> excludedSchemas = Arrays.asList("pg_catalog", "information_schema");
 
 
     @Override
@@ -32,11 +32,12 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
         try {
             List<String> includedSchemas = includeSchemas;
 
-            if(includeAllSchemas) includedSchemas = getAllSchemas(databaseMetaData, excludedSchemas);
+            if (includeAllSchemas)
+                includedSchemas = getAllSchemas(databaseMetaData, excludedSchemas);
 
             List<DbTable> dbTables = new ArrayList<>();
 
-            for(String schema : includedSchemas) {
+            for (String schema : includedSchemas) {
 
                 log.info("Loading meta tables for schema - {}", schema);
 
@@ -56,8 +57,7 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
 
 
             return dbTables;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -69,15 +69,16 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
 
         List<DbColumn> dbColumns = new ArrayList<>();
 
-        try(ResultSet columns = databaseMetaData.getColumns(catalog,schema, tableName, null)){
+        try (ResultSet columns = databaseMetaData.getColumns(catalog, schema, tableName, null)) {
 
-            while(columns.next()) {
+            while (columns.next()) {
                 String columnName = columns.getString(ColumnLabel.COLUMN_NAME.name());
                 int datatype = columns.getInt(ColumnLabel.DATA_TYPE.name());
                 String isAutoIncrement = columns.getString(ColumnLabel.IS_AUTOINCREMENT.name());
                 String typeName = columns.getString(ColumnLabel.TYPE_NAME.name());
 
-                Class<?> javaType = JdbcTypeJavaClassMappings.INSTANCE.determineJavaClassForJdbcTypeCode(datatype);
+                Class<?> javaType =
+                        JdbcTypeJavaClassMappings.INSTANCE.determineJavaClassForJdbcTypeCode(datatype);
 
                 DbColumn dbColumn =
                         new DbColumn(tableName, columnName,
@@ -86,8 +87,8 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
                                 pkColumns.contains(columnName),
                                 typeName,
                                 false,
-                                StringUtils.equalsAnyIgnoreCase(isAutoIncrement,"YES"),
-                                javaType, "\"" , ""
+                                StringUtils.equalsAnyIgnoreCase(isAutoIncrement, "YES"),
+                                javaType, "\"", ""
                         );
 
                 dbColumns.add(dbColumn);
@@ -102,23 +103,19 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
     private DbTable getDbTable(DatabaseMetaData databaseMetaData, MetaDataTable metaDataTable) {
         try {
             List<DbColumn> columns = getAllColumns(databaseMetaData, metaDataTable.catalog(),
-                            metaDataTable.schema(),
-                            metaDataTable.tableName(),
-                            metaDataTable.tableAlias());
+                    metaDataTable.schema(),
+                    metaDataTable.tableName(),
+                    metaDataTable.tableAlias());
 
             String schemaName = StringUtils.isNotBlank(metaDataTable.schema())
                     ? metaDataTable.schema() : metaDataTable.catalog();
 
             return new DbTable(
-                    schemaName, metaDataTable.tableName() ,schemaName + "." + metaDataTable.tableName(),
-                    metaDataTable.tableAlias(),columns, metaDataTable.tableType(), "\"");
+                    schemaName, metaDataTable.tableName(),
+                    schemaName + "." + metaDataTable.tableName(),
+                    metaDataTable.tableAlias(), columns, metaDataTable.tableType(), "\"");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
-
-
-
-
 }

@@ -5,7 +5,7 @@ import java.util.List;
 public record UserDetail(String principal, List<String> roles) {
 
 
-    public String [] getRoles() {
+    public String[] getRoles() {
         return roles.toArray(new String[0]);
     }
 

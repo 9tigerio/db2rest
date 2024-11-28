@@ -4,16 +4,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
-public record DbColumn(String tableName, String name, String alias, String tableAlias,
-                       boolean pk, String columnDataTypeName, boolean generated, boolean autoIncremented
-                        ,Class<?> typeMappedClass , String coverChar, String jsonParts) {
+public record DbColumn(
+        String tableName,
+        String name,
+        String alias,
+        String tableAlias,
+        boolean pk,
+        String columnDataTypeName,
+        boolean generated,
+        boolean autoIncremented,
+        Class<?> typeMappedClass,
+        String coverChar,
+        String jsonParts
+) {
 
     @Deprecated
     private String getQuotedName() {
-        if(StringUtils.isBlank(jsonParts)) {
+        if (StringUtils.isBlank(jsonParts)) {
             return coverChar + name + coverChar;
-        }
-        else {
+        } else {
             return coverChar + name + coverChar + jsonParts;
         }
     }
@@ -25,15 +34,15 @@ public record DbColumn(String tableName, String name, String alias, String table
 
     @Deprecated
     public String render() {
-        return tableAlias + "."+ getQuotedName() ;
+        return tableAlias + "." + getQuotedName();
     }
 
     @Deprecated
     public String renderWithAlias() {
 
-        String firstPart = tableAlias + "."+ getQuotedName();
+        String firstPart = tableAlias + "." + getQuotedName();
 
-        if(StringUtils.isNotBlank(alias)) {
+        if (StringUtils.isNotBlank(alias)) {
 
             return firstPart + " as " + getQuotedAlias();
         }
@@ -43,10 +52,14 @@ public record DbColumn(String tableName, String name, String alias, String table
 
 
     @Deprecated
-    public String getAliasedName() {return tableAlias + "."+ name;}
+    public String getAliasedName() {
+        return tableAlias + "." + name;
+    }
 
     @Deprecated
-    public String getAliasedNameParam() {return tableAlias + "_"+ name;}
+    public String getAliasedNameParam() {
+        return tableAlias + "_" + name;
+    }
 
     @Deprecated
     public boolean isDateTimeFamily() {
@@ -59,10 +72,11 @@ public record DbColumn(String tableName, String name, String alias, String table
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
                 "SMALLINT", "BIGINT", "int8", "int4", "BIGINT UNSIGNED", "INTEGER", "NUMBER");
     }
+
     @Deprecated
     public boolean isStringFamily() {
         return StringUtils.equalsAnyIgnoreCase(columnDataTypeName,
-                "VARCHAR","TEXT", "VARCHAR2");
+                "VARCHAR", "TEXT", "VARCHAR2");
     }
 
     public DbColumn copyWithAlias(DbAlias columnAlias) {

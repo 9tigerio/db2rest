@@ -16,7 +16,8 @@ import java.util.List;
 @Slf4j
 public class MySQLDataExtraction implements MetaDataExtraction {
 
-   List<String> excludedCatalogs = Arrays.asList("mysql", "sys", "information_schema","performance_schema");
+    List<String> excludedCatalogs =
+            Arrays.asList("mysql", "sys", "information_schema", "performance_schema");
 
     @Override
     public boolean canHandle(String database) {
@@ -30,11 +31,13 @@ public class MySQLDataExtraction implements MetaDataExtraction {
         try {
             List<String> includedCatalogs = includeCatalogs;
 
-            if(includeAllCatalogs) includedCatalogs = getAllCatalogs(databaseMetaData, excludedCatalogs);
+            if (includeAllCatalogs) {
+                includedCatalogs = getAllCatalogs(databaseMetaData, excludedCatalogs);
+            }
 
             List<DbTable> dbTables = new ArrayList<>();
 
-            for(String catalog : includedCatalogs) {
+            for (String catalog : includedCatalogs) {
 
                 log.info("Loading meta tables for catalog - {}", catalog);
 
@@ -55,8 +58,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
 
 
             return dbTables;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -68,15 +70,15 @@ public class MySQLDataExtraction implements MetaDataExtraction {
 
         List<DbColumn> dbColumns = new ArrayList<>();
 
-        try(ResultSet columns = databaseMetaData
-                .getColumns(catalog,schema, tableName, null)){
-            while(columns.next()) {
+        try (ResultSet columns = databaseMetaData.getColumns(catalog, schema, tableName, null)) {
+            while (columns.next()) {
                 String columnName = columns.getString(ColumnLabel.COLUMN_NAME.name());
                 int datatype = columns.getInt(ColumnLabel.DATA_TYPE.name());
                 String isAutoIncrement = columns.getString(ColumnLabel.IS_AUTOINCREMENT.name());
                 String typeName = columns.getString(ColumnLabel.TYPE_NAME.name());
 
-                Class<?> javaType = JdbcTypeJavaClassMappings.INSTANCE.determineJavaClassForJdbcTypeCode(datatype);
+                Class<?> javaType =
+                        JdbcTypeJavaClassMappings.INSTANCE.determineJavaClassForJdbcTypeCode(datatype);
 
                 DbColumn dbColumn =
                         new DbColumn(tableName, columnName,
@@ -85,7 +87,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
                                 pkColumns.contains(columnName),
                                 typeName,
                                 false,
-                                StringUtils.equalsAnyIgnoreCase(isAutoIncrement,"YES"),
+                                StringUtils.equalsAnyIgnoreCase(isAutoIncrement, "YES"),
                                 javaType, "`", ""
                         );
 
@@ -100,17 +102,22 @@ public class MySQLDataExtraction implements MetaDataExtraction {
     private DbTable getDbTable(DatabaseMetaData databaseMetaData, MetaDataTable metaDataTable) {
         try {
             List<DbColumn> columns = getAllColumns(databaseMetaData,
-                                            metaDataTable.catalog(),
-                                            metaDataTable.schema(),
-                                            metaDataTable.tableName(),
-                                            metaDataTable.tableAlias());
+                    metaDataTable.catalog(),
+                    metaDataTable.schema(),
+                    metaDataTable.tableName(),
+                    metaDataTable.tableAlias());
 
             String schemaName = StringUtils.isNotBlank(metaDataTable.schema()) ?
                     metaDataTable.schema() : metaDataTable.catalog();
 
             return new DbTable(
-                    schemaName, metaDataTable.tableName() ,schemaName + "." + metaDataTable.tableName(),
-                    metaDataTable.tableAlias(),columns, metaDataTable.tableType(),"`");
+                    schemaName, metaDataTable.tableName(),
+                    schemaName + "." + metaDataTable.tableName(),
+                    metaDataTable.tableAlias(),
+                    columns,
+                    metaDataTable.tableType(),
+                    "`"
+            );
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

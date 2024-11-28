@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
 @RequestMapping(VERSION + "/$dbs")
@@ -14,7 +15,9 @@ public interface DbInfoRestApi {
 
 
     @Operation(summary = "Get all database info details",
-            description = "Get all database info details", tags = { "DB Info Objects" })
+            description = "Get all database info details",
+            tags = {"DB Info Objects"}
+    )
     @GetMapping()
     List<DbInfoObject> getObjects();
 

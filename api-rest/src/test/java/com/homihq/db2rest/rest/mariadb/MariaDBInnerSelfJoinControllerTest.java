@@ -28,13 +28,11 @@ class MariaDBInnerSelfJoinControllerTest extends MariaDBBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/INNER_SELF_JOIN.json")
-    List<Map<String,Object>> INNER_SELF_JOIN;
+    List<Map<String, Object>> INNER_SELF_JOIN;
 
     @Test
     @DisplayName("Test inner self Join")
     void testInnerSelfJoin() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mariadb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_SELF_JOIN))
@@ -49,13 +47,6 @@ class MariaDBInnerSelfJoinControllerTest extends MariaDBBaseIntegrationTest {
                 //.andExpect(jsonPath("$[0].actor_id", equalTo(1)))
                 //.andExpect(jsonPath("$[0].first_name", equalTo("PENELOPE")))
                 //.andExpect(jsonPath("$[0].last_name", equalTo("GUINESS")))
-
-
                 .andDo(document("mariadb-inner-multi-table-join"));
-
-
     }
-
-
-
 }

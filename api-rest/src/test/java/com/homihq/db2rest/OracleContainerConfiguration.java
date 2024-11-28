@@ -1,7 +1,6 @@
 package com.homihq.db2rest;
 
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +18,14 @@ import java.util.Map;
 public class OracleContainerConfiguration {
 
     private static final List<String> oracleScripts = List.of("oracle/oracle-sakila.sql"
-        ,"oracle/oracle-sakila-data.sql");
+            , "oracle/oracle-sakila-data.sql");
 
-    private static final OracleContainer testOracle10g = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
-            .withDatabaseName("testDB")
-            .withUsername("testUser")
-            .withPassword("testPassword")
-            .withReuse(true);
+    private static final OracleContainer testOracle10g =
+            new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
+                    .withDatabaseName("testDB")
+                    .withUsername("testUser")
+                    .withPassword("testPassword")
+                    .withReuse(true);
 
     static {
         testOracle10g.start();
