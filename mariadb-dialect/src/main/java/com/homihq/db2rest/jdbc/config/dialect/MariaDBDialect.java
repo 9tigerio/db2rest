@@ -6,7 +6,6 @@ import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,8 +38,7 @@ public class MariaDBDialect extends Dialect {
                 }
 
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new GenericDataAccessException(exception.getMessage());
         }
 
@@ -53,10 +51,9 @@ public class MariaDBDialect extends Dialect {
     @Override
     public String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp) {
 
-        if(containsWhere && !deleteOp) {
+        if (containsWhere && !deleteOp) {
             return getQuotedName(table.schema()) + "." + getQuotedName(table.name()) + " AS " + table.alias();
-        }
-        else {
+        } else {
             return this.renderTableNameWithoutAlias(table);
         }
 
@@ -69,10 +66,10 @@ public class MariaDBDialect extends Dialect {
 
     @Override
     public String getAliasedName(DbColumn dbColumn, boolean deleteOp) {
-        if(deleteOp) {
+        if (deleteOp) {
             return dbColumn.name();
         }
 
-        return dbColumn.tableAlias() + "."+ dbColumn.name();
+        return dbColumn.tableAlias() + "." + dbColumn.name();
     }
 }
