@@ -33,10 +33,9 @@ public class Db2RestConfigProperties {
 
     public boolean isAllSchema() {
 
-        if(Objects.isNull(includeSchemas)) {
+        if (Objects.isNull(includeSchemas)) {
             return true;
-        }
-        else{
+        } else {
             return includeSchemas.size() == 1 && includeSchemas.get(0).equals("#{null}");
         }
 

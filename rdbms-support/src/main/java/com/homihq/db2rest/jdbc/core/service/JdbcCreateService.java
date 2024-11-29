@@ -41,8 +41,9 @@ public class JdbcCreateService implements CreateService {
             DbTable dbTable = jdbcManager.getTable(dbId, schemaName, tableName);
 
             //2. determine the columns to be included in insert statement
-            List<String> insertableColumns = isEmpty(includedColumns) ? new ArrayList<>(data.keySet().stream().toList()) :
-                    new ArrayList<>(includedColumns);
+            List<String> insertableColumns = isEmpty(includedColumns)
+                    ? new ArrayList<>(data.keySet().stream().toList())
+                    : new ArrayList<>(includedColumns);
 
             //3. check if tsId is enabled and add those values for PK.
             Map<String, Object> tsIdMap = null;
@@ -111,8 +112,6 @@ public class JdbcCreateService implements CreateService {
             log.error("Error", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
-
-
     }
 
 }

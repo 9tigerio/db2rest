@@ -34,9 +34,18 @@ public class MongoController implements MongoRestApi {
 
     private final Db2RestConfigProperties db2RestConfigProperties;
 
+    private static Optional<FieldSort> sortDirection(List<String> sorts) {
+        return sorts.stream()
+                .map(sort -> sort.split(";"))
+                .filter(sortParts -> sortParts.length == 2)
+                .map(sortParts -> new FieldSort(sortParts[0], sortParts[1].equalsIgnoreCase("DESC") ?
+                        Sort.Direction.DESC : Sort.Direction.ASC))
+                .findFirst();
+    }
+
     @Override
     public CreateResponse save(String dbId,
-                                String collectionName,
+                               String collectionName,
                                List<String> includeFields,
                                Map<String, Object> data) {
         return mongoRepository
@@ -45,14 +54,15 @@ public class MongoController implements MongoRestApi {
     }
 
     @Override
-    public CreateBulkResponse saveAll(String dbId,String collectionName,
+    public CreateBulkResponse saveAll(String dbId,
+                                      String collectionName,
                                       List<String> includeFields,
                                       List<Map<String, Object>> dataList) {
         return mongoRepository.saveAll(collectionName, includeFields, dataList);
     }
 
     @Override
-    public UpdateResponse patch(String dbId,String collectionName, Map<String, Object> data, String filter) {
+    public UpdateResponse patch(String dbId, String collectionName, Map<String, Object> data, String filter) {
         log.debug("Filter - {}", filter);
         var query = new Query();
         addCriteria(filter, query);
@@ -60,7 +70,7 @@ public class MongoController implements MongoRestApi {
     }
 
     @Override
-    public DeleteResponse delete(String dbId,String collectionName, String filter) {
+    public DeleteResponse delete(String dbId, String collectionName, String filter) {
         log.debug("Filter - {}", filter);
         db2RestConfigProperties.checkDeleteAllowed(filter);
         var query = new Query();
@@ -69,7 +79,7 @@ public class MongoController implements MongoRestApi {
     }
 
     @Override
-    public Object findAll(String dbId,String collectionName, String fields, String filter, List<String> sorts,
+    public Object findAll(String dbId, String collectionName, String fields, String filter, List<String> sorts,
                           int limit, long offset) {
         fields = StringUtils.trim(fields);
         log.debug("Filter - {}", filter);
@@ -94,20 +104,8 @@ public class MongoController implements MongoRestApi {
         return mongoRepository.find(query, collectionName);
     }
 
-    private static Optional<FieldSort> sortDirection(List<String> sorts) {
-        return sorts.stream()
-                .map(sort -> sort.split(";"))
-                .filter(sortParts -> sortParts.length == 2)
-                .map(sortParts -> new FieldSort(sortParts[0], sortParts[1].equalsIgnoreCase("DESC") ?
-                        Sort.Direction.DESC : Sort.Direction.ASC))
-                .findFirst();
-    }
-
-    private record FieldSort(String field, Sort.Direction sortDirection) {
-    }
-
     @Override
-    public Map<String, Object> findOne(String dbId,String collectionName, String fields, String filter) {
+    public Map<String, Object> findOne(String dbId, String collectionName, String fields, String filter) {
         var query = new Query();
         addCriteria(filter, query);
         includeFields(fields, query);
@@ -115,14 +113,14 @@ public class MongoController implements MongoRestApi {
     }
 
     @Override
-    public CountResponse count(String dbId,String collectionName, String filter) {
+    public CountResponse count(String dbId, String collectionName, String filter) {
         var query = new Query();
         addCriteria(filter, query);
         return mongoRepository.count(query, collectionName);
     }
 
     @Override
-    public ExistsResponse exists(String dbId,String collectionName, String filter) {
+    public ExistsResponse exists(String dbId, String collectionName, String filter) {
         if (StringUtils.isBlank(filter)) {
             throw new GenericDataAccessException("Required parameter 'filter' is not present.");
         }
@@ -145,5 +143,9 @@ public class MongoController implements MongoRestApi {
 
     private void sortFields(FieldSort fieldSort, Query query) {
         query.with(Sort.by(fieldSort.sortDirection, fieldSort.field));
+    }
+
+
+    private record FieldSort(String field, Sort.Direction sortDirection) {
     }
 }

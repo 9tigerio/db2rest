@@ -21,15 +21,13 @@ public class JwtProperties {
 
     @NotNull
     private JWSAlgorithm algorithm;
+    private SecretKey key;
+    private String jwksUrl;
 
     @AssertTrue(message = "Key or jwksUrl must be present!")
     public boolean isKeyOrJwksUrlPresent() {
         return this.getJwksUrl() != null || this.getKey() != null;
     }
-
-    private SecretKey key;
-
-    private String jwksUrl;
 
     public void setAlgorithm(String algorithm) {
         this.algorithm = JWSAlgorithm.parse(algorithm);

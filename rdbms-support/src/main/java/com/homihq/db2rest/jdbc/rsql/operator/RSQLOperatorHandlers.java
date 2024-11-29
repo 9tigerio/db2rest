@@ -1,8 +1,6 @@
 package com.homihq.db2rest.jdbc.rsql.operator;
 
 
-import com.homihq.db2rest.jdbc.rsql.operator.CustomRSQLOperators;
-import com.homihq.db2rest.jdbc.rsql.operator.OperatorHandler;
 import com.homihq.db2rest.jdbc.rsql.operator.handler.*;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
 

@@ -6,11 +6,16 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-
 import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
+
 import java.util.Map;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,29 +26,30 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(80)
 @TestWithResources
 class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
+
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST.json")
-    Map<String,Object> CREATE_FILM_REQUEST;
+    Map<String, Object> CREATE_FILM_REQUEST;
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST_ERROR.json")
-    Map<String,Object> CREATE_FILM_REQUEST_ERROR;
+    Map<String, Object> CREATE_FILM_REQUEST_ERROR;
 
     @GivenJsonResource("/testdata/CREATE_VANITY_VAN_REQUEST.json")
-    Map<String,Object> CREATE_VANITY_VAN_REQUEST;
+    Map<String, Object> CREATE_VANITY_VAN_REQUEST;
 
     @GivenJsonResource("/testdata/CREATE_DIRECTOR_REQUEST.json")
-    Map<String,Object> CREATE_DIRECTOR_REQUEST;
+    Map<String, Object> CREATE_DIRECTOR_REQUEST;
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST_MISSING_PAYLOAD.json")
-    Map<String,Object> CREATE_FILM_REQUEST_MISSING_PAYLOAD;
+    Map<String, Object> CREATE_FILM_REQUEST_MISSING_PAYLOAD;
 
     @Test
     @DisplayName("Create a film.")
@@ -100,15 +106,13 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 //.andExpect(jsonPath("$.keys.director_id").exists())
-               // .andExpect(jsonPath("$.keys.director_id").isNumber())
+                // .andExpect(jsonPath("$.keys.director_id").isNumber())
                 .andDo(document("mysql-create-a-director-tsid-enabled"));
-
     }
 
     @Test
     @DisplayName("Create a director - with TSID explicitly OFF")
     void createDirectorWithTSIDOff() throws Exception {
-
         mockMvc.perform(post(VERSION + "/mysqldb/director")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "false")
@@ -116,14 +120,13 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
                 .andDo(document("mysql-create-a-director-with-tsid-OFF"));
-
     }
 
     @Test
     @DisplayName("Test Create a Vanity Van - with varchar tsid type")
     void createVanityVanWithVarcharTsIdType() throws Exception {
         //TODO - MySQL return keys not working
-        mockMvc.perform(post(VERSION+ "/mysqldb/vanity_van")
+        mockMvc.perform(post(VERSION + "/mysqldb/vanity_van")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
                         .content(objectMapper.writeValueAsString(CREATE_VANITY_VAN_REQUEST)))
@@ -142,7 +145,7 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
-               .andDo(print())
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys").exists())
@@ -201,31 +204,26 @@ class MySQLCreateControllerTest extends MySQLBaseIntegrationTest {
     @Test
     @DisplayName("Column is present in columns param but not in payload")
     void columnIsPresentInColumnsQueryParamButNotInPayload() throws Exception {
-
-        var result = mockMvc.perform(post(VERSION + "/mysqldb/film")
+        mockMvc.perform(post(VERSION + "/mysqldb/film")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_MISSING_PAYLOAD))) //description is not in payload will be set to null
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
-                .andDo(document("mysql-create-a-film-missing-payload-attribute-error"))
-                .andReturn();
-
-
+                .andDo(document("mysql-create-a-film-missing-payload-attribute-error"));
     }
 
     @Test
     @DisplayName("Column violates not-null constraint")
     void column_violates_not_null_constraint() throws Exception {
-
         mockMvc.perform(post(VERSION + "/mysqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description")
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
-                       containsString("Field 'language_id' doesn't have a default value")))
+                        containsString("Field 'language_id' doesn't have a default value")))
                 //.andDo(print())
                 .andDo(document("mysql-create-a-film-not-null-constraint"));
     }

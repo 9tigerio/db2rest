@@ -1,22 +1,19 @@
 package com.homihq.db2rest.jdbc.core.service;
 
-import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.core.DbOperationService;
-import com.homihq.db2rest.jdbc.dto.UpdateContext;
-import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
-
+import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.jdbc.config.model.DbWhere;
-
+import com.homihq.db2rest.jdbc.core.DbOperationService;
+import com.homihq.db2rest.jdbc.dto.UpdateContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -54,7 +51,7 @@ public class JdbcUpdateService implements UpdateService {
 
     }
 
-    private int executeUpdate(String dbId,String filter, DbTable table, UpdateContext context) {
+    private int executeUpdate(String dbId, String filter, DbTable table, UpdateContext context) {
 
         addWhere(filter, table, context);
         String sql =
@@ -70,7 +67,7 @@ public class JdbcUpdateService implements UpdateService {
                         jdbcManager.getNamedParameterJdbcTemplate(dbId),
                         context.getParamMap(), sql);
             } catch (DataAccessException e) {
-                log.error("Error in delete op : " , e);
+                log.error("Error in delete op : ", e);
                 status.setRollbackOnly();
                 throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
             }
@@ -84,11 +81,15 @@ public class JdbcUpdateService implements UpdateService {
 
     private void addWhere(String filter, DbTable table, UpdateContext context) {
 
-        if(StringUtils.isNotBlank(filter)) {
+        if (StringUtils.isNotBlank(filter)) {
 
             DbWhere dbWhere = new DbWhere(
                     context.getTableName(),
-                    table, null ,context.getParamMap(), "update");
+                    table,
+                    null,
+                    context.getParamMap(),
+                    "update"
+            );
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(filter);
 
@@ -96,7 +97,6 @@ public class JdbcUpdateService implements UpdateService {
                     .accept(new BaseRSQLVisitor(
                             dbWhere, jdbcManager.getDialect(context.getDbId())));
             context.setWhere(where);
-
         }
     }
 

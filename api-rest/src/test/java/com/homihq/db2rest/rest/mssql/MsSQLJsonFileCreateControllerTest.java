@@ -1,7 +1,11 @@
 package com.homihq.db2rest.rest.mssql;
 
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockMultipartFile;
@@ -31,7 +35,7 @@ class MsSQLJsonFileCreateControllerTest extends MsSQLBaseIntegrationTest {
     Path filmFile = dir.resolve("BULK_CREATE_FILM_REQUEST.json");
     Path nonArrayActorFile = dir.resolve("CREATE_ACTOR_REQUEST.json");
     Path directorFile = dir.resolve("director.json");
-    
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -65,7 +69,7 @@ class MsSQLJsonFileCreateControllerTest extends MsSQLBaseIntegrationTest {
         MockMultipartFile file = new MockMultipartFile("file", nonArrayActorFile.toString(),
                 "application/json", Files.readAllBytes(nonArrayActorFile));
 
-         mockMvc.perform(multipart(VERSION + "/mssql/actor/upload")
+        mockMvc.perform(multipart(VERSION + "/mssql/actor/upload")
                         .file(file)
                         .contentType("multipart/form-data")
                         .accept(APPLICATION_JSON))

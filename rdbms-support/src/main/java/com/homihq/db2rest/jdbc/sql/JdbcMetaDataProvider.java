@@ -46,7 +46,9 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         log.info("All schema/catalog - {}", includeAllSchemas);
         Optional<MetaDataExtraction> metaDataExclusion = getMetaDataExtraction(productName);
 
-        if(metaDataExclusion.isEmpty()) throw new RuntimeException("Unable to extract metadata. No extractor");
+        if (metaDataExclusion.isEmpty()) {
+            throw new RuntimeException("Unable to extract metadata. No extractor");
+        }
 
         log.info("Fetching meta data for selected schemas.");
 
@@ -59,13 +61,9 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         return new DbMeta(productName, majorVersion, driverName, driverVersion, dbTables);
     }
 
-
-
     private Optional<MetaDataExtraction> getMetaDataExtraction(String productName) {
         return this.exclusions.stream().filter(
                 metaDataExtraction -> metaDataExtraction.canHandle(productName)
         ).findFirst();
     }
-
-
 }

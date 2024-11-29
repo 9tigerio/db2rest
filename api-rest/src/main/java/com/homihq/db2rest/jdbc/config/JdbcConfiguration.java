@@ -49,17 +49,14 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class JdbcConfiguration {
 
-
     private final DatabaseProperties databaseProperties;
     private final ObjectMapper objectMapper;
-
 
     @Bean
     @ConditionalOnMissingBean(DataSource.class)
@@ -78,7 +75,7 @@ public class JdbcConfiguration {
 
         log.debug("Databases - {}", databaseProperties.getDatabases());
 
-        if(!databaseProperties.isRdbmsConfigured()) {
+        if (!databaseProperties.isRdbmsConfigured()) {
             log.info("*** No RDBMS configured.");
             return result;
         }
@@ -86,7 +83,7 @@ public class JdbcConfiguration {
 
         for (DatabaseConnectionDetail connectionDetail : databaseProperties.getDatabases()) {
 
-            if(connectionDetail.isJdbcPresent())
+            if (connectionDetail.isJdbcPresent())
                 result.put(connectionDetail.id(), this.buildDataSource(connectionDetail));
         }
 
@@ -227,7 +224,7 @@ public class JdbcConfiguration {
             SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcExistsQueryService(jdbcManager,dbOperationService, processorList, sqlCreatorTemplate);
+        return new JdbcExistsQueryService(jdbcManager, dbOperationService, processorList, sqlCreatorTemplate);
     }
 
     @Bean
@@ -236,7 +233,7 @@ public class JdbcConfiguration {
             SqlCreatorTemplate sqlCreatorTemplate,
             List<ReadProcessor> processorList,
             DbOperationService dbOperationService) {
-        return new JdbcFindOneService(jdbcManager,sqlCreatorTemplate, processorList, dbOperationService);
+        return new JdbcFindOneService(jdbcManager, sqlCreatorTemplate, processorList, dbOperationService);
     }
 
     @Bean
@@ -336,7 +333,7 @@ public class JdbcConfiguration {
 
     @Bean
     @ConditionalOnBean(ReadService.class)
-    public ReadController readController(ReadService readService,  Db2RestConfigProperties configProperties) {
+    public ReadController readController(ReadService readService, Db2RestConfigProperties configProperties) {
         return new ReadController(readService, configProperties);
     }
 
@@ -381,7 +378,7 @@ public class JdbcConfiguration {
     ) {
         return new SQLTemplateController(sqlTemplateExecutorService);
     }
-  
+
     @ConditionalOnBean(JdbcManager.class)
     public DbInfoController dbInfoController(JdbcManager jdbcManager) {
         return new DbInfoController(jdbcManager);

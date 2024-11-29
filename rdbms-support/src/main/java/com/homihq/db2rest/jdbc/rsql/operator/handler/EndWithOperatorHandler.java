@@ -17,15 +17,15 @@ public class EndWithOperatorHandler implements OperatorHandler {
         //Always a string
         Object vo = "%" + value;
 
-        if(dialect.supportAlias()) {
+        if (dialect.supportAlias()) {
 
-            String key = reviewAndSetParam(dialect.getAliasedNameParam(column, dbWhere.isDelete()), vo, paramMap);
+            String key =
+                    reviewAndSetParam(dialect.getAliasedNameParam(column, dbWhere.isDelete()), vo, paramMap);
             return dialect.getAliasedName(column, dbWhere.isDelete()) + OPERATOR + PREFIX + key;
-        }
-        else{
+        } else {
 
             String key = reviewAndSetParam(column.name(), vo, paramMap);
-            return column.name() + OPERATOR + PREFIX + key ;
+            return column.name() + OPERATOR + PREFIX + key;
         }
     }
 

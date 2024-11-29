@@ -25,5 +25,5 @@ public interface SubRoutine {
         }
     }
 
-    SimpleJdbcCall getSimpleJdbcCall(String dbId,String subRoutineName);
+    SimpleJdbcCall getSimpleJdbcCall(String dbId, String subRoutineName);
 }

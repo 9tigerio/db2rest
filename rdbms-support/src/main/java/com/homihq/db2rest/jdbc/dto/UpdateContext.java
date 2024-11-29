@@ -25,24 +25,24 @@ public class UpdateContext {
     String tableName;
     DbTable table;
     String where;
-    Map<String,Object> paramMap;
+    Map<String, Object> paramMap;
     List<String> updatableColumns;
 
 
     public String renderSetColumns() {
         return StringUtils.join(
-        updatableColumns.stream().map(i -> i + " = " + ":set_" + i).toList(),
-        ","
+                updatableColumns.stream().map(i -> i + " = " + ":set_" + i).toList(),
+                ","
         );
     }
 
     public void createParamMap(Map<String, Object> data) {
-        if(Objects.isNull(paramMap)) {
+        if (Objects.isNull(paramMap)) {
             paramMap = new HashMap<>();
         }
 
-        for(String key : data.keySet()) {
-            paramMap.put("set_" + key , data.get(key));
+        for (String key : data.keySet()) {
+            paramMap.put("set_" + key, data.get(key));
         }
     }
 }

@@ -1,14 +1,14 @@
 package com.homihq.db2rest.jdbc.core.service;
 
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.JdbcManager;
+import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.homihq.db2rest.jdbc.config.model.DbWhere;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.DeleteContext;
-import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
-import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.config.model.DbWhere;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +29,8 @@ public class JdbcDeleteService implements DeleteService {
 
     @Override
     @Transactional
-    public int delete(String dbId,String schemaName, String tableName, String filter) {
-
-
-        DbTable dbTable = jdbcManager.getTable(dbId, schemaName,tableName);
+    public int delete(String dbId, String schemaName, String tableName, String filter) {
+        DbTable dbTable = jdbcManager.getTable(dbId, schemaName, tableName);
 
         DeleteContext context = DeleteContext.builder()
                 .dbId(dbId)
@@ -59,7 +57,7 @@ public class JdbcDeleteService implements DeleteService {
                         context.getParamMap(),
                         sql);
             } catch (DataAccessException e) {
-                log.error("Error in delete op : " , e);
+                log.error("Error in delete op : ", e);
                 throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
             }
         });
@@ -71,12 +69,16 @@ public class JdbcDeleteService implements DeleteService {
 
     private void addWhere(String dbId, String filter, DbTable table, DeleteContext context) {
 
-        if(StringUtils.isNotBlank(filter)) {
+        if (StringUtils.isNotBlank(filter)) {
             context.createParamMap();
 
             DbWhere dbWhere = new DbWhere(
                     context.getTableName(),
-                    table, null ,context.getParamMap(), "delete");
+                    table,
+                    null,
+                    context.getParamMap(),
+                    "delete"
+            );
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(filter);
 

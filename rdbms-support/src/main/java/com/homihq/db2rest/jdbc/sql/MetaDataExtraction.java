@@ -22,15 +22,15 @@ public interface MetaDataExtraction {
         return excludedSchemasOrCatalogs.stream().noneMatch(i -> StringUtils.equalsIgnoreCase(schemaOrCatalog, i));
     }
 
-    default List<String> getAllCatalogs(DatabaseMetaData databaseMetaData, List<String> excludedCatalogs) throws Exception{
+    default List<String> getAllCatalogs(DatabaseMetaData databaseMetaData, List<String> excludedCatalogs) throws Exception {
         List<String> includedCatalogs = new ArrayList<>();
-        try(ResultSet resultSet = databaseMetaData.getCatalogs()){
+        try (ResultSet resultSet = databaseMetaData.getCatalogs()) {
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
 
                 String catalog = resultSet.getString("TABLE_CAT");
 
-                if(include(catalog, excludedCatalogs)) {
+                if (include(catalog, excludedCatalogs)) {
                     includedCatalogs.add(catalog);
                 }
 
@@ -40,14 +40,14 @@ public interface MetaDataExtraction {
         return includedCatalogs;
     }
 
-    default List<String> getAllSchemas(DatabaseMetaData databaseMetaData, List<String> excludedSchemas) throws Exception{
+    default List<String> getAllSchemas(DatabaseMetaData databaseMetaData, List<String> excludedSchemas) throws Exception {
         List<String> includedSchemas = new ArrayList<>();
-        try(ResultSet resultSet = databaseMetaData.getSchemas()){
+        try (ResultSet resultSet = databaseMetaData.getSchemas()) {
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 String schema = resultSet.getString(ColumnLabel.TABLE_SCHEM.name());
 
-                if(include(schema, excludedSchemas)) {
+                if (include(schema, excludedSchemas)) {
                     includedSchemas.add(schema);
                 }
 
@@ -59,22 +59,23 @@ public interface MetaDataExtraction {
 
 
     default List<MetaDataTable>
-        getMetaTables(DatabaseMetaData databaseMetaData, String catalogPattern, String schemaPattern) throws SQLException {
+    getMetaTables(DatabaseMetaData databaseMetaData, String catalogPattern, String schemaPattern) throws SQLException {
 
         List<MetaDataTable> tables = new ArrayList<>();
 
-        try(ResultSet resultSet = databaseMetaData.getTables(
+        try (ResultSet resultSet = databaseMetaData.getTables(
                 catalogPattern,
                 schemaPattern,
                 null,
-                new String[]{"TABLE", "VIEW"})){
-            while(resultSet.next()) {
+                new String[] {"TABLE", "VIEW"})) {
+            while (resultSet.next()) {
                 String tableName = resultSet.getString(ColumnLabel.TABLE_NAME.name());
                 String catalog = resultSet.getString(ColumnLabel.TABLE_CAT.name());
                 String schema = resultSet.getString(ColumnLabel.TABLE_SCHEM.name());
                 String tableType = resultSet.getString(ColumnLabel.TABLE_TYPE.name());
                 String tableAlias = getAlias(tableName);
-                MetaDataTable metaDataTable = new MetaDataTable(tableName, catalog, schema, tableType, tableAlias);
+                MetaDataTable metaDataTable =
+                        new MetaDataTable(tableName, catalog, schema, tableType, tableAlias);
 
                 tables.add(metaDataTable);
 
@@ -86,8 +87,8 @@ public interface MetaDataExtraction {
     default List<String> getAllPrimaryKeys(DatabaseMetaData databaseMetaData, String catalog, String schema, String tableName) throws SQLException {
         List<String> pkColumns = new ArrayList<>();
 
-        try(ResultSet primaryKeys = databaseMetaData.getPrimaryKeys(catalog, schema, tableName)){
-            while(primaryKeys.next()){
+        try (ResultSet primaryKeys = databaseMetaData.getPrimaryKeys(catalog, schema, tableName)) {
+            while (primaryKeys.next()) {
                 String primaryKeyColumnName = primaryKeys.getString(ColumnLabel.COLUMN_NAME.name());
 
                 pkColumns.add(primaryKeyColumnName);

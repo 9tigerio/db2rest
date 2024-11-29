@@ -16,18 +16,16 @@ import java.util.List;
 public class DbInfoController implements DbInfoRestApi {
 
     private final JdbcManager jdbcManager;
+
     @Override
     public List<DbInfoObject> getObjects() {
         List<DbInfoObject> dbInfoObjects = new ArrayList<>();
         jdbcManager.getDbMetaMap().forEach(
-                (k,v) -> dbInfoObjects.add(new DbInfoObject(k, v.productName(), v.majorVersion(), v.driverName(), v.driverVersion()))
+                (k, v) -> dbInfoObjects.add(new DbInfoObject(k, v.productName(), v.majorVersion(), v.driverName(), v.driverVersion()))
         );
 
         return dbInfoObjects;
     }
-
-
-
 
 
 

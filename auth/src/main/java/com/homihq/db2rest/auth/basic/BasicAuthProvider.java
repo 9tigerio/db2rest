@@ -44,7 +44,7 @@ public class BasicAuthProvider extends AbstractAuthProvider {
 
         Optional<User> user = authDataProvider.getUserByUsername(username);
 
-        if(user.isPresent() && StringUtils.equals(password, user.get().password())) {
+        if (user.isPresent() && StringUtils.equals(password, user.get().password())) {
             return new UserDetail(username, user.get().roles());
         }
 

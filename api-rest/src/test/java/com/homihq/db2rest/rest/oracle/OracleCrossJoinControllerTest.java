@@ -6,11 +6,17 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.OracleBaseIntegrationTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -19,7 +25,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(211)
 @TestWithResources
@@ -31,10 +37,10 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CROSS_JOIN_USERS_ORACLE.json")
-    List<Map<String,Object>> CROSS_JOIN;
+    List<Map<String, Object>> CROSS_JOIN;
 
     @GivenJsonResource("/testdata/CROSS_JOIN_TOPS_ORACLE.json")
-    List<Map<String,Object>> CROSS_JOIN_TOPS;
+    List<Map<String, Object>> CROSS_JOIN_TOPS;
 
 
     @Test
@@ -59,15 +65,11 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
                 .andExpect(jsonPath("$[1].FIRSTNAME", equalTo("Jack")))
 
                 .andDo(document("oracle-cross-join-users"));
-
-
     }
 
     @Test
     @DisplayName("Test cross Join - Tops")
     void testCrossJoinTops() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/oradb/TOPS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
@@ -83,10 +85,7 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
                 .andExpect(jsonPath("$[0].COLOR", equalTo("red")))
                 .andExpect(jsonPath("$[0].botColor", equalTo("blue")))
 
-
                 .andDo(document("oracle-cross-join-tops"));
-
-
     }
 
 }

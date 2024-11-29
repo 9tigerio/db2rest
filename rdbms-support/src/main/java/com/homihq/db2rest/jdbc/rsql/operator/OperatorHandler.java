@@ -15,23 +15,22 @@ public interface OperatorHandler {
 
     String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap);
 
-    default String reviewAndSetParam(String key, Object value, Map<String,Object> paramMap) {
+    default String reviewAndSetParam(String key, Object value, Map<String, Object> paramMap) {
         Random random = new Random();
 
-        if(paramMap.containsKey(key)) {
+        if (paramMap.containsKey(key)) {
             String newKey = key + "_" + random.nextInt(20);
             paramMap.put(newKey, value);
 
             return newKey;
-        }
-        else{
+        } else {
             paramMap.put(key, value);
             return key;
         }
     }
 
     default String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, List<String> value, Class type, Map<String, Object> paramMap) {
-        return handle(dialect,column, dbWhere, value.get(0), type, paramMap);
+        return handle(dialect, column, dbWhere, value.get(0), type, paramMap);
     }
 
 

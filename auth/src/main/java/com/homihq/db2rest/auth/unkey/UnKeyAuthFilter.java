@@ -12,11 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Optional;
-
 
 @RequiredArgsConstructor
 @Slf4j
@@ -41,15 +41,14 @@ public class UnKeyAuthFilter extends OncePerRequestFilter {
 
         Optional<UnKeyVerifyResponse> verifyResponse = unKeyAuthService.verify(token);
 
-        if(verifyResponse.isPresent()) {
+        if (verifyResponse.isPresent()) {
             //TODO convert and add to request attributes
             log.info("Unkey response - {}", verifyResponse.get());
-            if(!verifyResponse.get().isValidKey()) {
+            if (!verifyResponse.get().isValidKey()) {
                 addAuthenticationError(request, response);
                 return;
             }
-        }
-        else{
+        } else {
             addAuthenticationError(request, response);
             return;
         }
@@ -59,7 +58,7 @@ public class UnKeyAuthFilter extends OncePerRequestFilter {
         logger.info("Completed UnKey Auth Filter");
     }
 
-    private void addAuthenticationError(HttpServletRequest request , HttpServletResponse response) throws IOException{
+    private void addAuthenticationError(HttpServletRequest request, HttpServletResponse response) throws IOException {
         var body = new LinkedHashMap<>();
         body.put("type", "https://db2rest/unauthorized");
         body.put("title", "Unauthorized");
@@ -76,7 +75,7 @@ public class UnKeyAuthFilter extends OncePerRequestFilter {
         objectMapper.writeValue(response.getWriter(), body);
     }
 
-    private void addMissingApiKeyError(HttpServletRequest request , HttpServletResponse response) throws IOException{
+    private void addMissingApiKeyError(HttpServletRequest request, HttpServletResponse response) throws IOException {
         var body = new LinkedHashMap<>();
         body.put("type", "https://db2rest/api-key-not-found");
         body.put("title", "API Key not provided in header");

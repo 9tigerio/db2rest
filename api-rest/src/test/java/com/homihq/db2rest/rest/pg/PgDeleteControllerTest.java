@@ -2,16 +2,20 @@ package com.homihq.db2rest.rest.pg;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(190)
 class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {

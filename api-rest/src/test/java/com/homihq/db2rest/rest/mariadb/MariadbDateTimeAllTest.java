@@ -34,11 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
 
+    private final String dateTime = "2024-03-15T10:30:45.000";
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
-
-    private final String dateTime = "2024-03-15T10:30:45.000";
 
     @Test
     @Order(1)

@@ -8,20 +8,20 @@ import java.util.UUID;
 
 public class IsUUIDValidator implements ConstraintValidator {
 
-	@Override
-	public void validate(Object value, String placeholderName) throws PlaceholderConstraintException {
-		if (!(value instanceof String) || !isValidUUID((String) value)) {
-			throw new PlaceholderConstraintException(placeholderName, "must be a valid UUID.");
-		}
-	}
+    @Override
+    public void validate(Object value, String placeholderName) throws PlaceholderConstraintException {
+        if (!(value instanceof String) || !isValidUUID((String) value)) {
+            throw new PlaceholderConstraintException(placeholderName, "must be a valid UUID.");
+        }
+    }
 
-	private boolean isValidUUID(String value) {
-		try {
-			UUID.fromString(value);
-			return true;
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
-	}
+    private boolean isValidUUID(String value) {
+        try {
+            UUID.fromString(value);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 
 }

@@ -7,12 +7,16 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.OracleBaseIntegrationTest;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -22,7 +26,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(281)
 @TestWithResources
@@ -33,10 +36,10 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/BULK_CREATE_FILM_REQUEST.json")
-    List<Map<String,Object>> BULK_CREATE_FILM_REQUEST;
+    List<Map<String, Object>> BULK_CREATE_FILM_REQUEST;
 
     @GivenJsonResource("/testdata/BULK_CREATE_FILM_BAD_REQUEST.json")
-    List<Map<String,Object>> BULK_CREATE_FILM_BAD_REQUEST;
+    List<Map<String, Object>> BULK_CREATE_FILM_BAD_REQUEST;
 
     @GivenTextResource("/testdata/CREATE_FILM_REQUEST_CSV.csv")
     String CREATE_FILM_REQUEST_CSV;
@@ -45,19 +48,17 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
     String CREATE_FILM_BAD_REQUEST_CSV;
 
     @GivenJsonResource("/testdata/BULK_CREATE_DIRECTOR_REQUEST.json")
-    List<Map<String,Object>> BULK_CREATE_DIRECTOR_REQUEST;
+    List<Map<String, Object>> BULK_CREATE_DIRECTOR_REQUEST;
 
     @GivenJsonResource("/testdata/BULK_CREATE_DIRECTOR_BAD_REQUEST.json")
-    List<Map<String,Object>> BULK_CREATE_DIRECTOR_BAD_REQUEST;
+    List<Map<String, Object>> BULK_CREATE_DIRECTOR_BAD_REQUEST;
 
     @GivenJsonResource("/testdata/BULK_CREATE_REVIEW_REQUEST.json")
-    List<Map<String,Object>> BULK_CREATE_REVIEW_REQUEST;
-
+    List<Map<String, Object>> BULK_CREATE_REVIEW_REQUEST;
 
     @Test
     @DisplayName("Create many films.")
     void create() throws Exception {
-
         mockMvc.perform(post(VERSION + "/oradb/FILM/bulk")
                         .queryParam("sequences", "film_id:film_sequence")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
@@ -73,7 +74,6 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
                 //.andExpect(jsonPath("$.generated_keys", allOf(notNullValue())))
                 //.andDo(print())
                 .andDo(document("oracle-bulk-create-films"));
-
     }
 
     @Test
@@ -155,13 +155,11 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
                 .andDo(document("oracle-bulk-create-directors-with-wrong-tsid-type"));
-
     }
 
     @Test
     @DisplayName("Create reviews with default tsid type.")
     void createReviewWithDefaultTsidType() throws Exception {
-
         mockMvc.perform(post(VERSION + "/oradb/REVIEW/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
@@ -170,7 +168,6 @@ class OracleBulkCreateControllerTest extends OracleBaseIntegrationTest {
                 .andExpect(status().isCreated())
                 //.andDo(print())
                 .andDo(document("oracle-bulk-create-reviews-with-default-tsid-type"));
-
     }
 
 }

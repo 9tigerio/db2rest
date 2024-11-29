@@ -15,15 +15,18 @@ public abstract class Dialect {
     private final ObjectMapper objectMapper;
     private final String coverChar;
 
-    public abstract boolean isSupportedDb(String productName, int majorVersion);
-    public abstract void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
-    public abstract String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp);
-    public abstract String renderTableNameWithoutAlias(DbTable table);
-
     protected Dialect(ObjectMapper objectMapper, String coverChar) {
         this.objectMapper = objectMapper;
         this.coverChar = coverChar;
     }
+
+    public abstract boolean isSupportedDb(String productName, int majorVersion);
+
+    public abstract void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data);
+
+    public abstract String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp);
+
+    public abstract String renderTableNameWithoutAlias(DbTable table);
 
     protected ObjectMapper getObjectMapper() {
         return objectMapper;
@@ -36,6 +39,7 @@ public abstract class Dialect {
     public boolean supportBatchReturnKeys() {
         return true;
     }
+
     public boolean supportAlias() {
         return true;
     }
@@ -45,11 +49,11 @@ public abstract class Dialect {
     }
 
     public String getAliasedName(DbColumn dbColumn, boolean deleteOp) {
-        return dbColumn.tableAlias() + "."+ dbColumn.name();
+        return dbColumn.tableAlias() + "." + dbColumn.name();
     }
 
     public String getAliasedNameParam(DbColumn dbColumn, boolean deleteOp) {
-        return dbColumn.tableAlias() + "_"+ dbColumn.name();
+        return dbColumn.tableAlias() + "_" + dbColumn.name();
     }
 
     public List<Object> parseListValues(List<String> values, Class type) {
@@ -66,35 +70,32 @@ public abstract class Dialect {
         if (String.class == type) {
             //return "'" + value + "'";
             return value;
-        }
-        else if (Boolean.class == type || boolean.class == type) {
+        } else if (Boolean.class == type || boolean.class == type) {
             Boolean aBoolean = Boolean.valueOf(value);
             return aBoolean ? "1" : "0";
-        }
-        else if (Integer.class == type || int.class == type) {
+        } else if (Integer.class == type || int.class == type) {
             return Integer.valueOf(value);
-        }
-        else if (Long.class == type || long.class == type) {
+        } else if (Long.class == type || long.class == type) {
             return Long.valueOf(value);
-        }
-        else if (Short.class == type || short.class == type) {
+        } else if (Short.class == type || short.class == type) {
             return Short.valueOf(value);
-        }
-        else if (java.sql.Date.class == type) {
+        } else if (java.sql.Date.class == type) {
             return LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
-        }
-        else if(java.sql.Timestamp.class == type) {
+        } else if (java.sql.Timestamp.class == type) {
             return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-        }
-        else {
+        } else {
             return value;
         }
 
     }
 
-    public List<String> convertToStringArray(Object object) {return List.of();}
+    public List<String> convertToStringArray(Object object) {
+        return List.of();
+    }
 
-    public Object convertJsonToVO(Object object) {return null;}
+    public Object convertJsonToVO(Object object) {
+        return null;
+    }
 
     public String getCountSqlTemplate() {
         return "count";

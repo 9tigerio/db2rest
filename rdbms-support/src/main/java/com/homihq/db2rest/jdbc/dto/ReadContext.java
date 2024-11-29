@@ -11,8 +11,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Builder
 @AllArgsConstructor
@@ -38,12 +41,12 @@ public class ReadContext {
     DbTable root;
     List<DbColumn> cols;
     String rootWhere;
-    Map<String,Object> paramMap;
+    Map<String, Object> paramMap;
     List<DbJoin> dbJoins;
     List<DbSort> dbSortList;
 
     public void createParamMap() {
-        if(Objects.isNull(paramMap)) {
+        if (Objects.isNull(paramMap)) {
             paramMap = new HashMap<>();
         }
     }
@@ -53,7 +56,8 @@ public class ReadContext {
     }
 
     public void addJoin(DbJoin join) {
-        if(Objects.isNull(dbJoins)) dbJoins = new ArrayList<>();
+        if (Objects.isNull(dbJoins))
+            dbJoins = new ArrayList<>();
         dbJoins.add(join);
     }
 }

@@ -54,12 +54,13 @@ public class JdbcOperationService implements DbOperationService {
                 (rs, rowNum) -> rs.getString(1)
         );
 
-        if (queryResult.isEmpty()) return new ExistsResponse(false);
-        return new ExistsResponse(true);
+        return queryResult.isEmpty()
+                ? new ExistsResponse(false)
+                : new ExistsResponse(true);
     }
 
     @Override
-    public CountResponse count(NamedParameterJdbcTemplate namedParameterJdbcTemplate,Map<String, Object> paramMap, String sql) {
+    public CountResponse count(NamedParameterJdbcTemplate namedParameterJdbcTemplate, Map<String, Object> paramMap, String sql) {
         Long itemCount = namedParameterJdbcTemplate.queryForObject(sql, paramMap, Long.class);
         return new CountResponse(itemCount);
     }
@@ -87,12 +88,11 @@ public class JdbcOperationService implements DbOperationService {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
 
-        for(String key : data.keySet()) {
+        for (String key : data.keySet()) {
 
             Object value = data.get(key);
 
-            if(value instanceof ArrayTypeValueHolder) {
-                ArrayTypeValueHolder val = (ArrayTypeValueHolder) value;
+            if (value instanceof ArrayTypeValueHolder val) {
                 value = processArrayValue(namedParameterJdbcTemplate, val);
             }
 
@@ -111,7 +111,7 @@ public class JdbcOperationService implements DbOperationService {
 
         try {
             Connection connection =
-                namedParameterJdbcTemplate.getJdbcTemplate().getDataSource().getConnection();
+                    namedParameterJdbcTemplate.getJdbcTemplate().getDataSource().getConnection();
 
             log.info("connection - {}", connection);
 
@@ -131,7 +131,8 @@ public class JdbcOperationService implements DbOperationService {
         int[] updateCounts;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        updateCounts = namedParameterJdbcTemplate.batchUpdate(sql, batch, keyHolder, dbTable.getKeyColumnNames());
+        updateCounts =
+                namedParameterJdbcTemplate.batchUpdate(sql, batch, keyHolder, dbTable.getKeyColumnNames());
 
         return new CreateBulkResponse(updateCounts, keyHolder.getKeyList());
     }

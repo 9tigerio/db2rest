@@ -4,11 +4,9 @@ import com.homihq.db2rest.BaseIntegrationTest;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import com.homihq.db2rest.jdbc.rest.meta.schema.SchemaController;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
@@ -17,13 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.core.AnyOf.anyOf;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,20 +30,21 @@ class DbInfoControllerIntegrationTest extends BaseIntegrationTest {
     JdbcManager jdbcManager;
 
     DbInfoController dbInfoController;
+
     @BeforeEach
     void setUp() {
         List<DbTable> dbTableList = new ArrayList<>();
         List<DbColumn> dbColumns = new ArrayList<>();
-        dbColumns.add(new DbColumn("tableName","name","alias",
-                "tableAlias",true,"columnDataType",false,false,
-                null,"coverChar","jsonParts"));
+        dbColumns.add(new DbColumn("tableName", "name", "alias",
+                "tableAlias", true, "columnDataType", false, false,
+                null, "coverChar", "jsonParts"));
 
-        dbTableList.add(new DbTable("schema","name","fullName",
-                "alias",dbColumns,"type","coverChar"));
+        dbTableList.add(new DbTable("schema", "name", "fullName",
+                "alias", dbColumns, "type", "coverChar"));
 
         metadataMap = new HashMap<>();
-        metadataMap.put("1",new DbMeta("productName",2,"driverName",
-                "driverVersion",dbTableList));
+        metadataMap.put("1", new DbMeta("productName", 2, "driverName",
+                "driverVersion", dbTableList));
         dbInfoController = new DbInfoController(jdbcManager);
         when(jdbcManager.getDbMetaMap()).thenReturn(metadataMap);
     }

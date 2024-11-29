@@ -18,55 +18,55 @@ import java.util.Objects;
 
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 
-
 @Slf4j
 @Component
 public class DatabaseContextRequestInterceptor implements AsyncHandlerInterceptor {
 
-        private final List<String> whiteList = List.of(
-                "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**",
-                VERSION + "/$dbs");
+    private final List<String> whiteList = List.of(
+            "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**",
+            VERSION + "/$dbs");
 
-        private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-       @Override
-       public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-           log.debug("Pre handle - {}", request.getRequestURI());
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        log.debug("Pre handle - {}", request.getRequestURI());
 
-           if(!isWhileListed(request.getRequestURI())) {
-               final Map<String, String> pathVariables = (Map<String, String>) request
-                       .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        if (!isWhileListed(request.getRequestURI())) {
+            final Map<String, String> pathVariables = (Map<String, String>) request
+                    .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
-               log.debug("pathVariables - {}", pathVariables);
+            log.debug("pathVariables - {}", pathVariables);
 
-               if(Objects.isNull(pathVariables)) throw new GenericDataAccessException("Database ID not found.");
+            if (Objects.isNull(pathVariables)) {
+                throw new GenericDataAccessException("Database ID not found.");
+            }
 
-               String dbId = pathVariables.get("dbId");
+            String dbId = pathVariables.get("dbId");
 
-               log.debug("Db identifier : {}", dbId);
+            log.debug("Db identifier : {}", dbId);
 
-               if(StringUtils.isNotBlank(dbId)) {
-                   this.setTenantContext(dbId);
-               }
-               else{
-                   log.info("DB could not be determined.");
-                   throw new GenericDataAccessException("Database ID not found.");
-               }
-           }
+            if (StringUtils.isNotBlank(dbId)) {
+                this.setTenantContext(dbId);
+            } else {
+                log.info("DB could not be determined.");
+                throw new GenericDataAccessException("Database ID not found.");
+            }
+        }
 
-           return true;
-       }
+        return true;
+    }
 
     private boolean isWhileListed(String uri) {
         return whiteList.stream().anyMatch(w -> antPathMatcher.match(w, uri));
     }
 
     @Override
-       public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-           DatabaseContextHolder.clear();
-       }
-         
-       private void setTenantContext(String tenant) {
-           DatabaseContextHolder.setCurrentDbId(tenant);
-       }
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+        DatabaseContextHolder.clear();
+    }
+
+    private void setTenantContext(String tenant) {
+        DatabaseContextHolder.setCurrentDbId(tenant);
+    }
 }

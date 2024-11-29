@@ -1,16 +1,15 @@
 package com.homihq.db2rest.jdbc.core.service;
 
+import com.homihq.db2rest.core.dto.ExistsResponse;
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
-import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
-import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
-
 
 import java.util.List;
 
@@ -18,13 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JdbcExistsQueryService implements ExistsQueryService {
     private final JdbcManager jdbcManager;
-	private final DbOperationService dbOperationService;
-	private final List<ReadProcessor> processorList;
-	private final SqlCreatorTemplate sqlCreatorTemplate;
+    private final DbOperationService dbOperationService;
+    private final List<ReadProcessor> processorList;
+    private final SqlCreatorTemplate sqlCreatorTemplate;
 
-	@Override
+    @Override
     public ExistsResponse exists(ReadContext readContext) {
-		 for (ReadProcessor processor : processorList) {
+        for (ReadProcessor processor : processorList) {
             processor.process(readContext);
         }
 
@@ -33,16 +32,16 @@ public class JdbcExistsQueryService implements ExistsQueryService {
         log.debug("{}", readContext.getParamMap());
 
         try {
-			return dbOperationService.exists(
+            return dbOperationService.exists(
                     jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbId()),
                     readContext.getParamMap(),
                     sql);
 
-		} catch (DataAccessException e) {
-            log.error("Error in exists op : " , e);
+        } catch (DataAccessException e) {
+            log.error("Error in exists op : ", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
         }
-	}
+    }
 
 
 }

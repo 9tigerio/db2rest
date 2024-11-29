@@ -1,8 +1,6 @@
 package com.homihq.db2rest;
 
-
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -22,11 +20,12 @@ public class MySQLContainerConfiguration {
     private static final List<String> mySqlScripts = List.of("mysql/mysql-sakila.sql",
             "mysql/mysql-sakila-data.sql", "mysql/mysql-wakila-all.sql");
 
-    private static final MySQLContainer mySQLContainer = (MySQLContainer) new MySQLContainer("mysql:8.2")
-            .withDatabaseName("sakila")
-            .withUsername("root")
-            //.withPassword("mysql")
-            .withReuse(true);
+    private static final MySQLContainer mySQLContainer =
+            (MySQLContainer) new MySQLContainer("mysql:8.2")
+                    .withDatabaseName("sakila")
+                    .withUsername("root")
+                    //.withPassword("mysql")
+                    .withReuse(true);
 
     static {
         mySQLContainer.start();
