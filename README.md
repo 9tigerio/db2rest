@@ -24,11 +24,12 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 # Stable Releases
 
-| Release              | Download/Docker Pull                                                              |
-|----------------------|-----------------------------------------------------------------------------------|
-| 1.4.0                | [DB2Rest-1.4.0](https://repo1.maven.org/maven2/io/9tiger/db2rest/1.4.0/db2rest-1.4.0.jar) |
-| Oracle9i - 1.2.3     | [DB2Rest-Oracle9i-1.2.3](https://download.db2rest.com/db2rest-oracle9i-1.2.3.jar) |
-| 1.4.0 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.4.0 ` or ` docker pull kdhrubo/db2rest:latest `  |
+| Release                             | Download/Docker Pull                                                              |
+|-------------------------------------|-----------------------------------------------------------------------------------|
+| 1.4.1                               | [DB2Rest-1.4.1](https://download.db2rest.com/db2rest-1.4.1.jar)                   |
+| 1.4.1 (Docker Image)                | ` docker pull kdhrubo/db2rest:v1.4.1 ` or ` docker pull kdhrubo/db2rest:latest `  |
+| Oracle9i - 1.2.3 <mark>Final</mark> | [DB2Rest-Oracle9i-1.2.3](https://download.db2rest.com/db2rest-oracle9i-1.2.3.jar) |
+
 
 # Quick start guides
 
@@ -36,12 +37,6 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 [Docker based installation guide](https://db2rest.com/docs/run-db2rest-on-docker).
 
-# Building
-Use `mvn verify` or `mvn clean package` , etc. from repo root folder, and pass in a value for `revision` to override the current default version in POMs:
-`mvn -Drevision="1.5.4-SNAPSHOT" clean package -DskipTests`
-
-# Testing
-Running tests simply requires a Docker daemon running, where the build will automatically pull and run testcontainers for the database tests.
 
 # Use Cases 
 
@@ -100,6 +95,14 @@ Feel like contributing? That's awesome! We have a [contributing guide](https://g
 
 Our docsite lives in a [separate repo](https://github.com/9tigerio/db2rest-web). If you're interested in contributing to the documentation, check out the docsite contribution guide.
 
+# Building
+Use `mvn verify` or `mvn clean package` , etc. from repo root folder, and pass in a value for `revision` to override the current default version in POMs:
+`mvn -Drevision="1.5.4-SNAPSHOT" clean package -DskipTests`
+
+# Testing
+Running tests simply requires a Docker daemon running, where the build will automatically pull and run testcontainers for the database tests.
+
+
 # Support
 
 *Connect on Discord*
@@ -118,3 +121,5 @@ Refer to [open roadmap](https://db2rest.com/roadmap/) items.
 # IDE Sponsor
 
 ![JetBrains logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)
+
+
