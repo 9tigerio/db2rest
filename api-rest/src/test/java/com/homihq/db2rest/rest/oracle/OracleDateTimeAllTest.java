@@ -155,12 +155,12 @@ class OracleDateTimeAllTest extends OracleBaseIntegrationTest {
     @MethodSource("isoDateTimeFormats")
     @Order(5)
     @DisplayName("Test ISO Date Time formats")
-    void createActorWithIsoDateTimeWithoutOffset(String input) throws Exception {
+    void createActorWithIsoDateTimeFormats(String isoDateTime) throws Exception {
         // Prepare the request with datetime fields
         Map<String, Object> actorRequestWithDateTime = new HashMap<>();
         actorRequestWithDateTime.put("first_name", "Graeme");
         actorRequestWithDateTime.put("last_name", "Smith");
-        actorRequestWithDateTime.put("last_update", input);
+        actorRequestWithDateTime.put("last_update", isoDateTime);
         var result = mockMvc.perform(post(VERSION + "/oradb/ACTOR")
                         .queryParam("sequences", "actor_id:actor_sequence")
                         .contentType(APPLICATION_JSON)
@@ -174,18 +174,6 @@ class OracleDateTimeAllTest extends OracleBaseIntegrationTest {
 
         var pk = JsonPath.read(result.getResponse().getContentAsString(), "$.keys.ACTOR_ID");
         assertTrue(deleteRow("actor", "actor_id", (int) pk));
-    }
-
-    private static List<Arguments> isoDateTimeFormats() {
-        return List.of(Arguments.of("2011-12-03T10:15:30"),
-                Arguments.of("2011-12-03T10:15:30.123"),
-                Arguments.of("2011-12-03T10:15:30+01:00"),
-                Arguments.of("2011-12-03T10:15:30-05:00"),
-                Arguments.of("2011-12-03T10:15:30Z"),
-                Arguments.of("2011-12-03T10:15:30.123Z"),
-                Arguments.of("2011-12-03T10:15:30.123+05:30"),
-                Arguments.of("2011-12-03T10:15:30+01:00[Europe/Paris]"),
-                Arguments.of("2011-12-03T10:15:30.123+01:00[Europe/Paris]"));
     }
 
 }
