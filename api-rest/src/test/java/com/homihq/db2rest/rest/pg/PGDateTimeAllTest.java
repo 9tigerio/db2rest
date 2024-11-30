@@ -150,8 +150,8 @@ class PGDateTimeAllTest extends PostgreSQLBaseIntegrationTest {
     void createActorWithIsoDateTimeFormats(String isoDateTime) throws Exception {
         // Prepare the request with datetime fields
         Map<String, Object> actorRequestWithDateTime = new HashMap<>();
-        actorRequestWithDateTime.put("first_name", "Collective");
-        actorRequestWithDateTime.put("last_name", "Unconscious");
+        actorRequestWithDateTime.put("first_name", "Graeme");
+        actorRequestWithDateTime.put("last_name", "Smith");
         actorRequestWithDateTime.put("last_update", isoDateTime);
 
         var result = mockMvc.perform(post(VERSION + "/pgsqldb/actor")
