@@ -12,7 +12,7 @@ public class NotLikeOperatorHandler implements OperatorHandler {
     private static final String OPERATOR = " not like ";
 
     @Override
-    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
+    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class<?> type, Map<String, Object> paramMap) {
         //value is always string for like operator
         String vo = "%" + value + "%";
 

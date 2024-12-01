@@ -14,7 +14,7 @@ public abstract class AbstractAuthProvider {
 
     private static final String AUTH_HEADER = "Authorization";
 
-    private final String[] DEFAULT_WHITELIST = {"/actuator/**"};
+    private static final String[] DEFAULT_WHITELIST = {"/actuator/**"};
 
     public abstract boolean canHandle(HttpServletRequest request);
 

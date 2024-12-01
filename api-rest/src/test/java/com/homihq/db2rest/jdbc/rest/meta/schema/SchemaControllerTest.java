@@ -42,8 +42,7 @@ class SchemaControllerTest {
     }
 
     private List<TableObject> getActualTableObject(String filter) {
-        List<TableObject> actualTableObject = (List<TableObject>) schemaController.getObjects("key", filter, Boolean.FALSE);
-        return actualTableObject;
+        return (List<TableObject>) schemaController.getObjects("key", filter, Boolean.FALSE);
     }
 
     private void testFilter(String goodFilter, String badFilter) {

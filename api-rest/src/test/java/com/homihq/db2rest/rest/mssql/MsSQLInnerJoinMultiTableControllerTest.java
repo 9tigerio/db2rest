@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLInnerJoinMultiTableControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/INNER_JOIN_MULTI_TABLE.json")
-    List<Map<String, Object>> INNER_JOIN_MULTI_TABLE;
+    List<Map<String, Object>> innerJoinMultiTable;
 
     @Test
     @DisplayName("Inner multi-table Join")
@@ -31,7 +31,7 @@ class MsSQLInnerJoinMultiTableControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/film/_expand")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
+                        .content(objectMapper.writeValueAsString(innerJoinMultiTable))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

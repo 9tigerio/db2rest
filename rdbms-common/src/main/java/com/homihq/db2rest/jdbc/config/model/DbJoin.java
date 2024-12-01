@@ -22,28 +22,43 @@ public class DbJoin {
     private List<String> additionalWhere;
 
     public String render() {
-
-        String str = joinType + " JOIN " + tableName + " " + alias + "\n";
+        StringBuilder builder = new StringBuilder();
+        builder.append(joinType)
+                .append(" JOIN ")
+                .append(tableName)
+                .append(" ")
+                .append(alias)
+                .append("\n");
 
         if (Objects.nonNull(onLeft)) {
-            str += " ON " + onLeft.render() + " " + onOperator + " " + onRight.render();
+            builder.append(" ON ")
+                    .append(onLeft.render())
+                    .append(" ")
+                    .append(onOperator);
+        }
+
+        if (Objects.nonNull(onRight)) {
+            builder.append(" ").append(onRight.render());
         }
 
         if (Objects.nonNull(andConditions) && !andConditions.isEmpty()) {
             for (DbJoinAndCondition dbJoinAndCondition : andConditions) {
-                str += "\n AND " + dbJoinAndCondition.leftColumn.render() + " "
-                        + dbJoinAndCondition.operator + " "
-                        + dbJoinAndCondition.rightColumn.render();
+                builder.append("\n AND ")
+                        .append(dbJoinAndCondition.leftColumn.render())
+                        .append(" ")
+                        .append(dbJoinAndCondition.operator)
+                        .append(" ")
+                        .append(dbJoinAndCondition.rightColumn.render());
             }
         }
 
         if (Objects.nonNull(additionalWhere) && !additionalWhere.isEmpty()) {//filters
             for (String where : additionalWhere) {
-                str += "\n AND " + where;
+                builder.append("\n AND ").append(where);
             }
         }
 
-        return str + " \n ";
+        return builder.append("\n").toString();
     }
 
     public void addOn(DbColumn leftColumn, String operator, DbColumn rightColumn) {

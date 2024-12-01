@@ -60,10 +60,10 @@ class OracleDeleteControllerTest extends OracleBaseIntegrationTest {
                 .andDo(document("oracle-delete-a-director"));
     }
 
-    @Disabled
+    @Disabled("fix")
     @Test
     @DisplayName("Foreign Key Constraint Violation")
-    void foreign_key_constraint_violation() throws Exception {
+    void foreignKeyConstraintViolation() throws Exception {
         mockMvc.perform(delete(VERSION + "/oradb/LANGUAGE")
                         .accept(APPLICATION_JSON)
                         .param("filter", "name==\"English\""))

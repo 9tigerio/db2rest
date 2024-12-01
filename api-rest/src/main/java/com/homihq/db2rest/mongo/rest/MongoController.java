@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@SuppressWarnings("java:S1192")
 @RestController
 @Slf4j
 @RequiredArgsConstructor

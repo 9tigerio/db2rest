@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings({"java:S1123", "java:S1172", "java:S1133", "java:S6355"})
 public abstract class Dialect {
     private final ObjectMapper objectMapper;
     private final String coverChar;
@@ -56,7 +57,7 @@ public abstract class Dialect {
         return dbColumn.tableAlias() + "_" + dbColumn.name();
     }
 
-    public List<Object> parseListValues(List<String> values, Class type) {
+    public List<Object> parseListValues(List<String> values, Class<?> type) {
         return
                 values.stream()
                         .map(v -> processValue(v, type, null))
@@ -66,12 +67,10 @@ public abstract class Dialect {
     //TODO use Spring converter
     @Deprecated
     public Object processValue(String value, Class<?> type, String format) {
-        //System.out.println("type " + type);
         if (String.class == type) {
-            //return "'" + value + "'";
             return value;
         } else if (Boolean.class == type || boolean.class == type) {
-            Boolean aBoolean = Boolean.valueOf(value);
+            boolean aBoolean = Boolean.parseBoolean(value);
             return aBoolean ? "1" : "0";
         } else if (Integer.class == type || int.class == type) {
             return Integer.valueOf(value);

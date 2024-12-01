@@ -32,23 +32,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestWithResources
 class OracleCreateControllerTest extends OracleBaseIntegrationTest {
     @WithJacksonMapper
-    ObjectMapper objectMapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
+    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST.json")
-    Map<String, Object> CREATE_FILM_REQUEST;
+    Map<String, Object> createFilmRequest;
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST_ERROR.json")
-    Map<String, Object> CREATE_FILM_REQUEST_ERROR;
+    Map<String, Object> createFilmRequestError;
 
     @GivenJsonResource("/testdata/CREATE_VANITY_VAN_REQUEST.json")
-    Map<String, Object> CREATE_VANITY_VAN_REQUEST;
+    Map<String, Object> createVanityVanRequest;
 
     @GivenJsonResource("/testdata/CREATE_DIRECTOR_REQUEST.json")
-    Map<String, Object> CREATE_DIRECTOR_REQUEST;
+    Map<String, Object> createDirectorRequest;
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST_MISSING_PAYLOAD.json")
-    Map<String, Object> CREATE_FILM_REQUEST_MISSING_PAYLOAD;
+    Map<String, Object> createFilmRequestMissingPayload;
 
     @Test
     @DisplayName("Create a film.")
@@ -57,7 +56,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/oradb/FILM")
                         .queryParam("sequences", "film_id:film_sequence")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(createFilmRequest))
                 )
                 //.andDo(print())
                 .andExpect(status().isCreated())
@@ -74,7 +73,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/oradb/FILM")
                         .queryParam("sequences", "film_id:film_sequence")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_ERROR)))
+                        .content(objectMapper.writeValueAsString(createFilmRequestError)))
                 //.andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document("oracle-create-a-film-error"));
@@ -87,7 +86,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/oradb/FILMS")
                         .queryParam("sequences", "film_id:film_sequence")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isNotFound())
                 //.andDo(print())
                 .andDo(document("oracle-create-a-film-no-table"));
@@ -100,7 +99,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/oradb/DIRECTOR")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createDirectorRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -117,7 +116,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/oradb/DIRECTOR")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "false")
-                        .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createDirectorRequest)))
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
                 .andDo(document("oracle-create-a-director-with-tsid-OFF"));
@@ -131,7 +130,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/oradb/VANITY_VAN")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(CREATE_VANITY_VAN_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createVanityVanRequest)))
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -147,7 +146,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
                         .queryParam("sequences", "film_id:film_sequence")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -180,7 +179,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
                         .queryParam("sequences", "film_id:film_sequence")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -212,7 +211,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .queryParam("columns", "title,description,language_id")
-                .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_MISSING_PAYLOAD))) //description is not in payload will be set to null
+                .content(objectMapper.writeValueAsString(createFilmRequestMissingPayload))) //description is not in payload will be set to null
         .andExpect(status().isBadRequest())
         //.andDo(print())
         .andDo(document("oracle-create-a-film-missing-payload-attribute-error"));
@@ -224,7 +223,7 @@ class OracleCreateControllerTest extends OracleBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/oradb/FILM")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("ORA-01400: cannot insert NULL")))

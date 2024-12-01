@@ -1,19 +1,21 @@
 package com.homihq.db2rest.multidb;
 
-public abstract class DatabaseContextHolder {
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
+public class DatabaseContextHolder {
 
-    private static final ThreadLocal<String> currentDb = new ThreadLocal<>();
+    private final ThreadLocal<String> currentDb = new ThreadLocal<>();
 
-    public static String getCurrentDbId() {
+    public String getCurrentDbId() {
         return currentDb.get();
     }
 
-    public static void setCurrentDbId(String tenant) {
+    public void setCurrentDbId(String tenant) {
         currentDb.set(tenant);
     }
 
-    public static void clear() {
+    public void clear() {
         currentDb.remove();
     }
 

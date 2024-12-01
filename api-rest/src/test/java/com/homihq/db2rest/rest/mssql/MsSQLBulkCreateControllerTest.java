@@ -25,32 +25,32 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/BULK_CREATE_FILM_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_FILM_REQUEST;
+    List<Map<String, Object>> bulkCreateFilmRequest;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/BULK_CREATE_FILM_BAD_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_FILM_BAD_REQUEST;
+    List<Map<String, Object>> bulkCreateFilmBadRequest;
 
     @GivenTextResource(TEST_JSON_FOLDER + "/CREATE_FILM_REQUEST_CSV.csv")
-    String CREATE_FILM_REQUEST_CSV;
+    String createFilmRequestCSV;
 
     @GivenTextResource(TEST_JSON_FOLDER + "/CREATE_FILM_BAD_REQUEST_CSV.csv")
-    String CREATE_FILM_BAD_REQUEST_CSV;
+    String createFilmBadRequestCSV;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/BULK_CREATE_DIRECTOR_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_DIRECTOR_REQUEST;
+    List<Map<String, Object>> bulkCreateDirectorRequest;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/BULK_CREATE_DIRECTOR_BAD_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_DIRECTOR_BAD_REQUEST;
+    List<Map<String, Object>> bulkCreateDirectorBadRequest;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/BULK_CREATE_REVIEW_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_REVIEW_REQUEST;
+    List<Map<String, Object>> bulkCreateReviewRequest;
 
     @Test
     @DisplayName("Bulk create films with JSON type.")
     void bulkCreateFilmsWithJsonType() throws Exception {
         mockMvc.perform(post(getPrefixApiUrl() + "/film/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateFilmRequest))
                 )
                 .andExpect(status().isCreated())
                 .andDo(print())
@@ -65,7 +65,7 @@ class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
     void bulkCreateFilmsWithCsvType() throws Exception {
         mockMvc.perform(post(getPrefixApiUrl() + "/film/bulk")
                         .contentType(new MediaType("text", "csv"))
-                        .content(CREATE_FILM_REQUEST_CSV))
+                        .content(createFilmRequestCSV))
                 .andExpect(status().isCreated())
                 .andDo(print())
                 .andExpect(jsonPath("$.rows").isArray())
@@ -80,7 +80,7 @@ class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/film/bulk")
                         .contentType(new MediaType("text", "csv"))
                         .accept(APPLICATION_JSON)
-                        .content(CREATE_FILM_BAD_REQUEST_CSV))
+                        .content(createFilmBadRequestCSV))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document(DB_NAME + "-bulk-create-films-with-csv-type-error"));
@@ -92,7 +92,7 @@ class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/film/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_BAD_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateFilmBadRequest))
                 )
                 .andExpect(status().isBadRequest())
                 .andDo(print())
@@ -105,7 +105,7 @@ class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/director/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateDirectorRequest))
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -120,7 +120,7 @@ class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
                         .accept(APPLICATION_JSON)
                         .param("tsid", "director_id")
                         .param("tsidType", "string")
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_BAD_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateDirectorBadRequest))
                 )
                 .andExpect(status().isBadRequest())
                 .andDo(print())
@@ -134,7 +134,7 @@ class MsSQLBulkCreateControllerTest extends MsSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_REVIEW_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateReviewRequest))
                 )
                 .andExpect(status().isCreated())
                 .andDo(print())

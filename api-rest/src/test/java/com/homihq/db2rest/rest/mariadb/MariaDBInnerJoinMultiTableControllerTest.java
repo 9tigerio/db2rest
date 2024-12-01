@@ -30,14 +30,14 @@ class MariaDBInnerJoinMultiTableControllerTest extends MariaDBBaseIntegrationTes
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/INNER_JOIN_MULTI_TABLE.json")
-    List<Map<String, Object>> INNER_JOIN_MULTI_TABLE;
+    List<Map<String, Object>> innerJoinMultiTable;
 
     @Test
     @DisplayName("Test inner multi-table Join")
     void testInnerMultiTable() throws Exception {
         mockMvc.perform(post(VERSION + "/mariadb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
+                        .content(objectMapper.writeValueAsString(innerJoinMultiTable))
                 )
                 //.andDo(print())
                 .andExpect(status().isOk())

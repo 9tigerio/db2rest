@@ -37,18 +37,18 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/LEFT_JOIN.json")
-    List<Map<String, Object>> LEFT_JOIN;
+    List<Map<String, Object>> leftJoin;
 
     @GivenJsonResource("/testdata/RIGHT_JOIN.json")
-    List<Map<String, Object>> RIGHT_JOIN;
+    List<Map<String, Object>> rightJoin;
 
-    @Disabled
+    @Disabled("to fix")
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
         mockMvc.perform(post(VERSION + "/mysqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(LEFT_JOIN))
+                        .content(objectMapper.writeValueAsString(leftJoin))
                 )
                 // .andDo(print())
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ class MySQLBasicJoinControllerTest extends MySQLBaseIntegrationTest {
     void testRightJoin() throws Exception {
         mockMvc.perform(post(VERSION + "/mysqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(RIGHT_JOIN))
+                        .content(objectMapper.writeValueAsString(rightJoin))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLExistsControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/INNER_JOIN_MULTI_TABLE.json")
-    List<Map<String, Object>> INNER_JOIN_MULTI_TABLE;
+    List<Map<String, Object>> innerJoinMultiTable;
 
     @Test
     @DisplayName("Actor exists by first_name")
@@ -55,7 +55,7 @@ class MsSQLExistsControllerTest extends MsSQLBaseIntegrationTest {
     void existsInnerJoin() throws Exception {
         mockMvc.perform(post(getPrefixApiUrl() + "/film/exists/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
+                        .content(objectMapper.writeValueAsString(innerJoinMultiTable))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -70,7 +70,7 @@ class MsSQLExistsControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/film/exists/_expand")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
+                        .content(objectMapper.writeValueAsString(innerJoinMultiTable))
                         .param("filter", "film_id==2")
                 )
                 .andDo(print())

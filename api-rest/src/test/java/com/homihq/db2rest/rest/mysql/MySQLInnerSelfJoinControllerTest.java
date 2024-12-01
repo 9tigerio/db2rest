@@ -33,14 +33,14 @@ class MySQLInnerSelfJoinControllerTest extends MySQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/INNER_SELF_JOIN.json")
-    List<Map<String, Object>> INNER_SELF_JOIN;
+    List<Map<String, Object>> innerSelfJoin;
 
     @Test
     @DisplayName("Test inner self Join")
     void testInnerSelfJoin() throws Exception {
         mockMvc.perform(post(VERSION + "/mysqldb/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_SELF_JOIN))
+                        .content(objectMapper.writeValueAsString(innerSelfJoin))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

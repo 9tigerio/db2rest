@@ -7,6 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @Import(MariaDBContainerConfiguration.class)
 @ActiveProfiles("it-mariadb")
+@SuppressWarnings("java:S2187")
 public class MariaDBBaseIntegrationTest extends BaseIntegrationTest {
 
     @Autowired

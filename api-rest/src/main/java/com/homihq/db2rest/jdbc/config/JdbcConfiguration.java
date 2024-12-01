@@ -129,10 +129,7 @@ public class JdbcConfiguration {
 
     @Bean
     public TemplateEngine templateEngine() {
-        CodeResolver codeResolver =
-                new ResourceCodeResolver("sql-templates");
-        return TemplateEngine
-                .createPrecompiled(ContentType.Plain);
+        return TemplateEngine.createPrecompiled(ContentType.Plain);
     }
 
     @Bean

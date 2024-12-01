@@ -125,8 +125,6 @@ public class OracleMetaDataExtraction implements MetaDataExtraction {
                 Class<?> javaType =
                         JdbcTypeJavaClassMappings.INSTANCE.determineJavaClassForJdbcTypeCode(datatype);
 
-                //log.debug("{} , {} , {}, {}, {}", columnName, javaType, isNullable, isAutoIncrement, typeName);
-
                 DbColumn dbColumn =
                         new DbColumn(tableName, columnName,
                                 "",

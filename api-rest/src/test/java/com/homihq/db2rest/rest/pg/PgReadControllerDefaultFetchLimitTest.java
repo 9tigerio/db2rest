@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(103)
 @TestPropertySource(properties = {"db2rest.defaultFetchLimit=5"})
-public class PgReadControllerDefaultFetchLimitTest extends PostgreSQLBaseIntegrationTest {
+class PgReadControllerDefaultFetchLimitTest extends PostgreSQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Get all with default fetch limit set to 5")

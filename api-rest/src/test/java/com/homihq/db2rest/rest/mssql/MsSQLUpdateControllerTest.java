@@ -21,16 +21,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLUpdateControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/UPDATE_FILM_REQUEST.json")
-    Map<String, Object> UPDATE_FILM_REQUEST;
+    Map<String, Object> updateFilmRequest;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/UPDATE_NON_EXISTING_FILM_REQUEST.json")
-    Map<String, Object> UPDATE_NON_EXISTING_FILM_REQUEST;
+    Map<String, Object> updateNonExistingFilmRequest;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/UPDATE_NON_EXISTING_TABLE.json")
-    Map<String, Object> UPDATE_NON_EXISTING_TABLE;
+    Map<String, Object> updateNonExistingTable;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/UPDATE_FILMS_REQUEST.json")
-    Map<String, Object> UPDATE_FILMS_REQUEST;
+    Map<String, Object> updateFilmsRequest;
 
     @Test
     @DisplayName("Update an existing film")
@@ -38,7 +38,7 @@ class MsSQLUpdateControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(patch(getPrefixApiUrl() + "/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"ACADEMY DINOSAUR\"")
-                        .content(objectMapper.writeValueAsString(UPDATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateFilmRequest))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -53,7 +53,7 @@ class MsSQLUpdateControllerTest extends MsSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "title==\"BAAHUBALI\"")
-                        .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateNonExistingFilmRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(0)))
@@ -67,7 +67,7 @@ class MsSQLUpdateControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(patch(getPrefixApiUrl() + "/unknown_table")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
-                        .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_TABLE))
+                        .content(objectMapper.writeValueAsString(updateNonExistingTable))
                 )
                 .andExpect(status().isNotFound())
                 .andDo(print())
@@ -80,7 +80,7 @@ class MsSQLUpdateControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(patch(getPrefixApiUrl() + "/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
-                        .content(objectMapper.writeValueAsString(UPDATE_FILMS_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateFilmsRequest))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

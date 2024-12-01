@@ -7,6 +7,7 @@ import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ class DbInfoControllerIntegrationTest extends BaseIntegrationTest {
     }
 
 
-    //@Test
+    @Test
     void getObjects() throws Exception {
         mockMvc.perform(get(VERSION + "/$dbs")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))

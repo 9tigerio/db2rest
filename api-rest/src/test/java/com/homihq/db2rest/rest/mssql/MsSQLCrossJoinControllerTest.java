@@ -23,10 +23,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLCrossJoinControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/CROSS_JOIN_USERS_MSSQL.json")
-    List<Map<String, Object>> CROSS_JOIN_USERS;
+    List<Map<String, Object>> crossJoinUsers;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/CROSS_JOIN_TOPS_MSSQL.json")
-    List<Map<String, Object>> CROSS_JOIN_TOPS;
+    List<Map<String, Object>> crossJoinTops;
 
     @Test
     @DisplayName("Cross Join Users")
@@ -34,7 +34,7 @@ class MsSQLCrossJoinControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/users/_expand")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CROSS_JOIN_USERS))
+                        .content(objectMapper.writeValueAsString(crossJoinUsers))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -58,7 +58,7 @@ class MsSQLCrossJoinControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/tops/_expand")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
+                        .content(objectMapper.writeValueAsString(crossJoinTops))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -226,8 +226,7 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
         SSLContext ctx = SSLContext.getInstance("TLS"); // or "SSL" ?
         // finally we can initialize the context
         try {
-            KeyManager km = this.km;
-            ctx.init(km == null ? null : new KeyManager[] {km}, tm, null);
+            ctx.init(this.km == null ? null : new KeyManager[] {this.km}, tm, null);
             return ctx;
         } catch (KeyManagementException ex) {
             throw new PSQLException(GT.tr("Could not initialize SSL context."),
@@ -235,7 +234,7 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
         }
     }
 
-    public String base64Encode(String p10) throws Exception {
+    public String base64Encode(String p10) {
         return new String(Base64.getDecoder().decode(p10));
     }
 
@@ -246,11 +245,11 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
      */
     public void throwKeyManagerException() throws PSQLException {
         if (km != null) {
-            if (km instanceof LazyKeyManager) {
-                ((LazyKeyManager) km).throwKeyManagerException();
+            if (km instanceof LazyKeyManager lazyKeyManager) {
+                lazyKeyManager.throwKeyManagerException();
             }
-            if (km instanceof PKCS12KeyManager) {
-                ((PKCS12KeyManager) km).throwKeyManagerException();
+            if (km instanceof PKCS12KeyManager pkcs12KeyManager) {
+                pkcs12KeyManager.throwKeyManagerException();
             }
         }
     }
@@ -277,18 +276,17 @@ public class PgSingleCertValidatingFactory extends WrappedFactory {
          *                                      PasswordCallback is supplied
          */
         @Override
-        public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+        public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
             Console cons = System.console();
-            char[] password = this.password;
-            if (cons == null && password == null) {
+            if (cons == null && this.password == null) {
                 throw new UnsupportedCallbackException(callbacks[0], "Console is not available");
             }
             for (Callback callback : callbacks) {
                 if (!(callback instanceof PasswordCallback pwdCallback)) {
                     throw new UnsupportedCallbackException(callback);
                 }
-                if (password != null) {
-                    pwdCallback.setPassword(password);
+                if (this.password != null) {
+                    pwdCallback.setPassword(this.password);
                     continue;
                 }
                 // It is used instead of cons.readPassword(prompt), because the prompt may contain '%'

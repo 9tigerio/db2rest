@@ -32,6 +32,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public final class JdbcManager {
 
+    private static final String DB_NOT_FOUND_ERROR = "DB not found.";
+
     private final DataSource dataSource;
     private final List<Dialect> availableDialects;
     private final DatabaseProperties databaseProperties;
@@ -76,18 +78,20 @@ public final class JdbcManager {
     private void loadAllMetaData() {
         log.info("Attempting to load meta-data for all relational data-sources.");
 
-        if (dataSource instanceof RoutingDataSource) {
-            Map<Object, DataSource> dataSourceMap =
-                    ((RoutingDataSource) dataSource).getResolvedDataSources();
+        if (dataSource instanceof RoutingDataSource routingDataSource) {
+            Map<Object, DataSource> dataSourceMap = routingDataSource.getResolvedDataSources();
 
-            if (dataSourceMap.isEmpty())
+            if (dataSourceMap.isEmpty()) {
                 log.info("**** No datasource to load.");
+            }
 
-            for (Object dbId : dataSourceMap.keySet()) {
-                DataSource ds = dataSourceMap.get(dbId);
+            for (Map.Entry<Object, DataSource> dataSourceEntry : dataSourceMap.entrySet()) {
+                DataSource ds = dataSourceEntry.getValue();
+                String dbId = (String) dataSourceEntry.getKey();
+
                 DatabaseConnectionDetail databaseConnectionDetail = null;
                 Optional<DatabaseConnectionDetail> connectionDetail = this.databaseProperties
-                        .getDatabase((String) dbId);
+                        .getDatabase(dbId);
 
                 if (connectionDetail.isPresent()) {
                     databaseConnectionDetail = connectionDetail.get();
@@ -95,15 +99,14 @@ public final class JdbcManager {
 
                 log.debug("Database connection details - {}", databaseConnectionDetail);
 
-                loadMetaData((String) dbId, ds, databaseConnectionDetail);
+                loadMetaData(dbId, ds, databaseConnectionDetail);
 
-                this.namedParameterJdbcTemplateMap.put((String) dbId, new NamedParameterJdbcTemplate(ds));
+                this.namedParameterJdbcTemplateMap.put(dbId, new NamedParameterJdbcTemplate(ds));
 
                 JdbcTransactionManager jdbcTransactionManager = new JdbcTransactionManager(ds);
 
-                this.jdbcTransactionManagerMap.put((String) dbId, jdbcTransactionManager);
-                this.transactionTemplateMap.put((String) dbId, new TransactionTemplate(jdbcTransactionManager));
-
+                this.jdbcTransactionManagerMap.put(dbId, jdbcTransactionManager);
+                this.transactionTemplateMap.put(dbId, new TransactionTemplate(jdbcTransactionManager));
             }
         } else {
             log.info("Not routing data source. Unable to load database metadata.");
@@ -158,7 +161,7 @@ public final class JdbcManager {
         DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbId);
 
         if (Objects.isNull(dbDetailHolder)) {
-            throw new GenericDataAccessException("DB not found.");
+            throw new GenericDataAccessException(DB_NOT_FOUND_ERROR);
         }
 
         DbTable table = dbDetailHolder.dbTableMap().get(tableName);
@@ -177,7 +180,7 @@ public final class JdbcManager {
         DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbId);
 
         if (Objects.isNull(dbDetailHolder)) {
-            throw new GenericDataAccessException("DB not found.");
+            throw new GenericDataAccessException(DB_NOT_FOUND_ERROR);
         }
 
         DbMeta dbMeta = dbDetailHolder.dbMeta();
@@ -208,7 +211,7 @@ public final class JdbcManager {
         DbDetailHolder dbDetailHolder = this.dbDetailHolderMap.get(dbId);
 
         if (Objects.isNull(dbDetailHolder)) {
-            throw new GenericDataAccessException("DB not found.");
+            throw new GenericDataAccessException(DB_NOT_FOUND_ERROR);
         }
 
         return dbDetailHolder.dialect();

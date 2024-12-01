@@ -18,25 +18,29 @@ import java.util.Objects;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final String ERROR_CATEGORY = "errorCategory";
+    private static final String TIMESTAMP = "timestamp";
+    private static final String SQL_TEMPLATE_ERROR_TITLE = "SQL Template Processing Error";
+    private static final String SQL_TEMPLATE_ERROR_CATEGORY = "SQL-Template-Processing-error";
+    private static final String SQL_TEMPLATE_ERROR_TYPE = "https://db2rest.com/error/sql-template-error";
+
     @ExceptionHandler(DeleteOpNotAllowedException.class)
     ProblemDetail handleDeleteOpNotAllowedException(DeleteOpNotAllowedException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Delete Operation Not allowed");
         problemDetail.setType(URI.create("https://github.com/kdhrubo/db2rest/delete-bad-request"));
-        problemDetail.setProperty("errorCategory", "Delete-Error");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Delete-Error");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
-
     }
-
 
     @ExceptionHandler(AuthenticationFailedException.class)
     ProblemDetail handleAuthenticationFailedException(AuthenticationFailedException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage());
         problemDetail.setTitle("Failed authentication");
         problemDetail.setType(URI.create("https://db2rest.com/error/invalid-auth-key"));
-        problemDetail.setProperty("errorCategory", "Invalid-AuthKey");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Invalid-AuthKey");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
@@ -44,10 +48,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({SqlTemplateNotFoundException.class})
     ProblemDetail handleTemplateException(SqlTemplateNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
-        problemDetail.setTitle("SQL Template Processing Error");
-        problemDetail.setType(URI.create("https://db2rest.com/error/sql-template-error"));
-        problemDetail.setProperty("errorCategory", "SQL-Template-Processing-error");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setTitle(SQL_TEMPLATE_ERROR_TITLE);
+        problemDetail.setType(URI.create(SQL_TEMPLATE_ERROR_TYPE));
+        problemDetail.setProperty(ERROR_CATEGORY, SQL_TEMPLATE_ERROR_CATEGORY);
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
@@ -55,10 +59,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({SqlTemplateReadException.class})
     ProblemDetail handleTemplateException(SqlTemplateReadException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
-        problemDetail.setTitle("SQL Template Processing Error");
-        problemDetail.setType(URI.create("https://db2rest.com/error/sql-template-error"));
-        problemDetail.setProperty("errorCategory", "SQL-Template-Processing-error");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setTitle(SQL_TEMPLATE_ERROR_TITLE);
+        problemDetail.setType(URI.create(SQL_TEMPLATE_ERROR_TYPE));
+        problemDetail.setProperty(ERROR_CATEGORY, SQL_TEMPLATE_ERROR_CATEGORY);
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
@@ -66,10 +70,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({PathVariableNamesMissingException.class})
     ProblemDetail handleTemplateException(PathVariableNamesMissingException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
-        problemDetail.setTitle("SQL Template Processing Error");
-        problemDetail.setType(URI.create("https://db2rest.com/error/sql-template-error"));
-        problemDetail.setProperty("errorCategory", "SQL-Template-Processing-error");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setTitle(SQL_TEMPLATE_ERROR_TITLE);
+        problemDetail.setType(URI.create(SQL_TEMPLATE_ERROR_TYPE));
+        problemDetail.setProperty(ERROR_CATEGORY, SQL_TEMPLATE_ERROR_CATEGORY);
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
@@ -77,10 +81,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({PathVariableValuesMissingException.class})
     ProblemDetail handleTemplateException(PathVariableValuesMissingException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
-        problemDetail.setTitle("SQL Template Processing Error");
-        problemDetail.setType(URI.create("https://db2rest.com/error/sql-template-error"));
-        problemDetail.setProperty("errorCategory", "SQL-Template-Processing-error");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setTitle(SQL_TEMPLATE_ERROR_TITLE);
+        problemDetail.setType(URI.create(SQL_TEMPLATE_ERROR_TYPE));
+        problemDetail.setProperty(ERROR_CATEGORY, SQL_TEMPLATE_ERROR_CATEGORY);
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
@@ -90,8 +94,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Placeholder Constraint Error");
         problemDetail.setType(URI.create("https://db2rest.com/error/placeholder-constraint"));
-        problemDetail.setProperty("errorCategory", "Placeholder-Constraint-Error");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Placeholder-Constraint-Error");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
     }
 
@@ -100,8 +104,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Unsupported Constraint Error");
         problemDetail.setType(URI.create("https://db2rest.com/error/unsupported-constraint"));
-        problemDetail.setProperty("errorCategory", "Unsupported-Constraint-Error");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Unsupported-Constraint-Error");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
     }
 
@@ -110,8 +114,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Invalid Procedure/Function name or IN parameter mismatch");
         problemDetail.setType(URI.create("https://db2rest.com/error/invalid-subroutine-request"));
-        problemDetail.setProperty("errorCategory", "Invalid-SubRoutine-Request");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Invalid-SubRoutine-Request");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
@@ -121,20 +125,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problemDetail.setTitle("Missing Table Error");
         problemDetail.setType(URI.create("https://db2rest.com/error/missing-table"));
-        problemDetail.setProperty("errorCategory", "Missing-Table");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Missing-Table");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
-
     }
-
 
     @ExceptionHandler(InvalidOperatorException.class)
     ProblemDetail handleInvalidOperatorException(InvalidOperatorException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Invalid Operator Error");
         problemDetail.setType(URI.create("https://db2rest.com/error/invalid-operator"));
-        problemDetail.setProperty("errorCategory", "Invalid-Operator");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Invalid-Operator");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
@@ -144,8 +146,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Generic Data Access Error");
         problemDetail.setType(URI.create("https://db2rest.com/error/generic-error"));
-        problemDetail.setProperty("errorCategory", "Data-access-error");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Data-access-error");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
@@ -155,13 +157,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problemDetail.setTitle("Missing Column Error");
         problemDetail.setType(URI.create("https://db2rest.com/error/missing-column"));
-        problemDetail.setProperty("errorCategory", "Missing-Column");
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(ERROR_CATEGORY, "Missing-Column");
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
         return problemDetail;
 
     }
-
-
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -178,8 +178,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .toList();
         body.put("detail", errors);
         body.put("instance", ((ServletWebRequest) request).getRequest().getRequestURI());
-        body.put("errorCategory", "Invalid-Arguments");
-        body.put("timestamp", Instant.now());
+        body.put(ERROR_CATEGORY, "Invalid-Arguments");
+        body.put(TIMESTAMP, Instant.now());
         return new ResponseEntity<>(body, headers, status);
     }
 }

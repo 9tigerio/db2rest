@@ -36,26 +36,26 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST.json")
-    Map<String, Object> CREATE_FILM_REQUEST;
+    Map<String, Object> createFilmRequest;
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST_ERROR.json")
-    Map<String, Object> CREATE_FILM_REQUEST_ERROR;
+    Map<String, Object> createFilmRequestError;
 
     @GivenJsonResource("/testdata/CREATE_VANITY_VAN_REQUEST.json")
-    Map<String, Object> CREATE_VANITY_VAN_REQUEST;
+    Map<String, Object> createVanityVanRequest;
 
     @GivenJsonResource("/testdata/CREATE_DIRECTOR_REQUEST.json")
-    Map<String, Object> CREATE_DIRECTOR_REQUEST;
+    Map<String, Object> createDirectorRequest;
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST_MISSING_PAYLOAD.json")
-    Map<String, Object> CREATE_FILM_REQUEST_MISSING_PAYLOAD;
+    Map<String, Object> createFilmRequestMissingPayload;
 
     @Test
     @DisplayName("Create a film.")
     void create() throws Exception {
         mockMvc.perform(post(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(createFilmRequest))
                 )
                 //.andDo(print())
                 .andExpect(status().isCreated())
@@ -71,7 +71,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
 
         mockMvc.perform(post(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_ERROR)))
+                        .content(objectMapper.writeValueAsString(createFilmRequestError)))
                 //                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document("mariadb-create-a-film-error"));
@@ -82,7 +82,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     void createNonExistentTable() throws Exception {
         mockMvc.perform(post(VERSION + "/mariadb/films")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(document("mariadb-create-a-film-no-table"));
@@ -95,7 +95,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mariadb/director")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createDirectorRequest)))
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -110,7 +110,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mariadb/director")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "false")
-                        .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createDirectorRequest)))
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
                 .andDo(document("mariadb-create-a-director-with-tsid-OFF"));
@@ -124,7 +124,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mariadb/vanity_van")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(CREATE_VANITY_VAN_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createVanityVanRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -139,7 +139,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         var result = mockMvc.perform(post(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -171,7 +171,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         var result = mockMvc.perform(post(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -199,16 +199,14 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
     @Test
     @DisplayName("Column is present in columns param but not in payload")
     void columnIsPresentInColumnsQueryParamButNotInPayload() throws Exception {
-
-        var result = mockMvc.perform(post(VERSION + "/mariadb/film")
+        mockMvc.perform(post(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_MISSING_PAYLOAD))) //description is not in payload will be set to null
+                        .content(objectMapper.writeValueAsString(createFilmRequestMissingPayload))) //description is not in payload will be set to null
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
-                .andDo(document("mariadb-create-a-film-missing-payload-attribute-error"))
-                .andReturn();
+                .andDo(document("mariadb-create-a-film-missing-payload-attribute-error"));
     }
 
     @Test
@@ -217,7 +215,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Field 'language_id' doesn't have a default value")))

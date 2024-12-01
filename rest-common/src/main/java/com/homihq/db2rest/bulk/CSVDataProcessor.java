@@ -50,16 +50,8 @@ public class CSVDataProcessor implements DataProcessor {
         return StringUtils.equalsIgnoreCase(contentType, "text/csv");
     }
 
-
     private Map<String, Object> transform(Map<String, String> data) {
-        Map<String, Object> objectMap = new HashMap<>();
-
-        for (String key : data.keySet()) {
-            String val = data.get(key);
-            objectMap.put(key, val);
-        }
-
-        return objectMap;
+        return new HashMap<>(data);
     }
 
 }

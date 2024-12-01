@@ -1,10 +1,6 @@
 package com.homihq.db2rest.rest.pg;
 
-import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
-import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.junit.jupiter.api.ClassOrderer;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +8,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestClassOrder;
 import org.springframework.http.MediaType;
-
-import java.util.Map;
 
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.hasSize;
@@ -29,19 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Order(101)
 @TestWithResources
 class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
-
-    @WithJacksonMapper
-    ObjectMapper objectMapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
-
-    @GivenJsonResource("/testdata/SINGLE_RESULT_ACTOR_QUERY.json")
-    Map<String, Object> SINGLE_RESULT_ACTOR_QUERY;
-
-    @GivenJsonResource("/testdata/BULK_RESULT_ACTOR_QUERY.json")
-    Map<String, Object> BULK_RESULT_ACTOR_QUERY;
-
-    @GivenJsonResource("/testdata/EMPTY_ACTOR_QUERY.json")
-    Map<String, Object> EMPTY_ACTOR_QUERY;
 
     @Test
     @DisplayName("Test find all films - all columns.")

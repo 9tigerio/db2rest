@@ -36,19 +36,19 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST.json")
-    Map<String, Object> CREATE_FILM_REQUEST;
+    Map<String, Object> createFilmRequest;
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST_ERROR.json")
-    Map<String, Object> CREATE_FILM_REQUEST_ERROR;
+    Map<String, Object> createFilmRequestError;
 
     @GivenJsonResource("/testdata/CREATE_VANITY_VAN_REQUEST.json")
-    Map<String, Object> CREATE_VANITY_VAN_REQUEST;
+    Map<String, Object> createVanityVanRequest;
 
     @GivenJsonResource("/testdata/CREATE_DIRECTOR_REQUEST.json")
-    Map<String, Object> CREATE_DIRECTOR_REQUEST;
+    Map<String, Object> createDirectorRequest;
 
     @GivenJsonResource("/testdata/CREATE_FILM_REQUEST_MISSING_PAYLOAD.json")
-    Map<String, Object> CREATE_FILM_REQUEST_MISSING_PAYLOAD;
+    Map<String, Object> createFilmRequestMissingPayload;
 
     @Test
     @DisplayName("Create a film.")
@@ -56,7 +56,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
 
         mockMvc.perform(post(VERSION + "/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(createFilmRequest))
                 )
                 //.andDo(print())
                 .andExpect(status().isCreated())
@@ -71,7 +71,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     void createError() throws Exception {
         mockMvc.perform(post(VERSION + "/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_ERROR)))
+                        .content(objectMapper.writeValueAsString(createFilmRequestError)))
                 //.andDo(print())
                 .andExpect(status().isNotFound())
                 .andDo(document("pg-create-a-film-error"));
@@ -82,7 +82,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
     void createNonExistentTable() throws Exception {
         mockMvc.perform(post(VERSION + "/pgsqldb/films")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isNotFound())
                 //.andDo(print())
                 .andDo(document("pg-create-a-film-no-table"));
@@ -94,7 +94,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/director")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createDirectorRequest)))
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -109,7 +109,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/director")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "false")
-                        .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createDirectorRequest)))
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
                 .andDo(document("pg-create-a-director-with-tsid-OFF"));
@@ -121,7 +121,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/vanity_van")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(CREATE_VANITY_VAN_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createVanityVanRequest)))
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -136,7 +136,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         var result = mockMvc.perform(post(VERSION + "/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -167,7 +167,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         var result = mockMvc.perform(post(VERSION + "/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys").exists())
@@ -198,7 +198,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_MISSING_PAYLOAD))) //description is not in payload will be set to null
+                        .content(objectMapper.writeValueAsString(createFilmRequestMissingPayload))) //description is not in payload will be set to null
                 .andExpect(status().isBadRequest())
                 //.andDo(print())
                 .andDo(document("pg-create-a-film-missing-payload-attribute-error"));
@@ -210,7 +210,7 @@ class PgCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("null value in column \"language_id\" of relation \"film\" violates not-null constraint")))

@@ -32,16 +32,16 @@ class MariaDBUpdateControllerTest extends MariaDBBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/UPDATE_FILM_REQUEST.json")
-    Map<String, Object> UPDATE_FILM_REQUEST;
+    Map<String, Object> updateFilmRequest;
 
     @GivenJsonResource("/testdata/UPDATE_NON_EXISTING_FILM_REQUEST.json")
-    Map<String, Object> UPDATE_NON_EXISTING_FILM_REQUEST;
+    Map<String, Object> updateNonExistingFilmRequest;
 
     @GivenJsonResource("/testdata/UPDATE_NON_EXISTING_TABLE.json")
-    Map<String, Object> UPDATE_NON_EXISTING_TABLE;
+    Map<String, Object> updateNonExistingTable;
 
     @GivenJsonResource("/testdata/UPDATE_FILMS_REQUEST.json")
-    Map<String, Object> UPDATE_FILMS_REQUEST;
+    Map<String, Object> updateFilmsRequest;
 
     @Test
     @DisplayName("Update an existing film")
@@ -49,7 +49,7 @@ class MariaDBUpdateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(patch(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"ACADEMY DINOSAUR\"")
-                        .content(objectMapper.writeValueAsString(UPDATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateFilmRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
@@ -63,7 +63,7 @@ class MariaDBUpdateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(patch(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "title==\"BAAHUBALI\"")
-                        .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateNonExistingFilmRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(0)))
@@ -77,7 +77,7 @@ class MariaDBUpdateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(patch(VERSION + "/mariadb/unknown_table")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "sample_col==\"sample value 1\"")
-                        .content(objectMapper.writeValueAsString(UPDATE_NON_EXISTING_TABLE))
+                        .content(objectMapper.writeValueAsString(updateNonExistingTable))
                 )
                 .andExpect(status().isNotFound())
                 //.andDo(print())
@@ -90,7 +90,7 @@ class MariaDBUpdateControllerTest extends MariaDBBaseIntegrationTest {
         mockMvc.perform(patch(VERSION + "/mariadb/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("filter", "rating==\"G\"")
-                        .content(objectMapper.writeValueAsString(UPDATE_FILMS_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateFilmsRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(2)))

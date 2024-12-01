@@ -32,7 +32,7 @@ class MySQLCreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTes
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CREATE_EMP_REQUEST.json")
-    Map<String, Object> CREATE_EMP_REQUEST;
+    Map<String, Object> createEmpRequest;
 
     @Test
     @DisplayName("Create emp diff schema")
@@ -41,7 +41,7 @@ class MySQLCreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTes
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "sakila")
-                        .content(objectMapper.writeValueAsString(CREATE_EMP_REQUEST))
+                        .content(objectMapper.writeValueAsString(createEmpRequest))
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -54,7 +54,7 @@ class MySQLCreateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTes
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "wakila")
-                        .content(objectMapper.writeValueAsString(CREATE_EMP_REQUEST))
+                        .content(objectMapper.writeValueAsString(createEmpRequest))
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())

@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@SuppressWarnings("java:S6548")
 public class JdbcTypeJavaClassMappings {
 
     public static final JdbcTypeJavaClassMappings INSTANCE = new JdbcTypeJavaClassMappings();
@@ -68,7 +69,6 @@ public class JdbcTypeJavaClassMappings {
         workMap.put(Instant.class, SqlTypes.TIMESTAMP_UTC);
         workMap.put(Blob.class, SqlTypes.BLOB);
         workMap.put(Clob.class, SqlTypes.CLOB);
-        //workMap.put( Array.class, SqlTypes.ARRAY );
         workMap.put(Struct.class, SqlTypes.STRUCT);
         workMap.put(Ref.class, SqlTypes.REF);
         workMap.put(Class.class, SqlTypes.JAVA_OBJECT);
@@ -84,8 +84,6 @@ public class JdbcTypeJavaClassMappings {
         // additional "common sense" registrations
         workMap.put(Character.class, SqlTypes.CHAR);
         workMap.put(char[].class, SqlTypes.VARCHAR);
-        //		workMap.put( Character[].class, SqlTypes.VARCHAR );
-        //		workMap.put( Byte[].class, SqlTypes.VARBINARY );
         workMap.put(java.util.Date.class, SqlTypes.TIMESTAMP);
         workMap.put(Calendar.class, SqlTypes.TIMESTAMP);
 
@@ -123,7 +121,6 @@ public class JdbcTypeJavaClassMappings {
         workMap.put(SqlTypes.BLOB, Blob.class);
         workMap.put(SqlTypes.CLOB, Clob.class);
         workMap.put(SqlTypes.NCLOB, NClob.class);
-        //workMap.put( SqlTypes.ARRAY, Array.class );
         workMap.put(SqlTypes.STRUCT, Struct.class);
         workMap.put(SqlTypes.REF, Ref.class);
         workMap.put(SqlTypes.JAVA_OBJECT, Class.class);

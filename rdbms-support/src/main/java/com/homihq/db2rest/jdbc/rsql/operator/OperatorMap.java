@@ -1,14 +1,15 @@
 package com.homihq.db2rest.jdbc.rsql.operator;
 
-
 import com.homihq.db2rest.core.exception.InvalidOperatorException;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
+@UtilityClass
 public class OperatorMap {
 
-    static Map<String, String> opMap = Map.of(
+    private static final Map<String, String> OP_MAP = Map.of(
             "==", "=",
             "=gt=", ">",
             "=gte=", ">=",
@@ -18,12 +19,12 @@ public class OperatorMap {
             "=isnull=", "IS NULL");
 
 
-    public static String getSQLOperator(String rSQLOperator) {
-        return opMap.get(rSQLOperator);
+    public String getSQLOperator(String rSQLOperator) {
+        return OP_MAP.get(rSQLOperator);
     }
 
-    public static String getRSQLOperator(String expression) {
-        return opMap.keySet()
+    public String getRSQLOperator(String expression) {
+        return OP_MAP.keySet()
                 .stream()
                 .filter(operator -> StringUtils.containsIgnoreCase(expression, operator))
                 .findFirst().orElseThrow(() -> new InvalidOperatorException("Operator not supported", ""));

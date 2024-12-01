@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
+@SuppressWarnings({"java:S1123", "java:S1133", "java:S6355"})
 public record DbColumn(
         String tableName,
         String name,

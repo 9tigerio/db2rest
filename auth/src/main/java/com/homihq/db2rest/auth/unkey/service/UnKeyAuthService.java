@@ -22,16 +22,16 @@ public class UnKeyAuthService {
     private final RestTemplateBuilder restTemplateBuilder;
 
     @Value("${db2rest.unKeyDev.url}")
-    String UNKEY_URL;
+    private String unKeyUrl;
 
     @Value("${db2rest.unKeyDev.rootKey}")
-    String ROOT_KEY;
+    private String unKeyRootKey;
 
     public Optional<UnKeyVerifyResponse> verify(String apiKey) {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(ROOT_KEY);
+        headers.setBearerAuth(unKeyRootKey);
 
         RestTemplate restTemplate = restTemplateBuilder.build();
 
@@ -41,7 +41,7 @@ public class UnKeyAuthService {
 
         try {
             UnKeyVerifyResponse response = restTemplate
-                    .postForObject(UNKEY_URL, request, UnKeyVerifyResponse.class);
+                    .postForObject(unKeyUrl, request, UnKeyVerifyResponse.class);
 
             return Optional.ofNullable(response);
 
