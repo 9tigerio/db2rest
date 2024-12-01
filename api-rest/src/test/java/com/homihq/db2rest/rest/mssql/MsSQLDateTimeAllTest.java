@@ -3,8 +3,10 @@ package com.homihq.db2rest.rest.mssql;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.ClassOrderer;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestClassOrder;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -22,10 +24,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(506)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MsSQLDateTimeAllTest extends MsSQLBaseIntegrationTest {
 
     @ParameterizedTest
     @MethodSource("isoDateTimeFormats")
+    @Order(1)
     @DisplayName("Test ISO Date Time formats")
     void createActorWithIsoDateTimeFormats(String isoDateTime) throws Exception {
         // Prepare the request with datetime fields

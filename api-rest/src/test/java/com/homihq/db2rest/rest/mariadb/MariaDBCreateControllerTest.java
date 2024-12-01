@@ -60,8 +60,8 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
-                //.andExpect(jsonPath("$.keys.GENERATED_KEY").exists())
-                //.andExpect(jsonPath("$.keys.GENERATED_KEY", equalTo(5)))
+                .andExpect(jsonPath("$.keys.insert_id").exists())
+                .andExpect(jsonPath("$.keys.insert_id", equalTo(5)))
                 .andDo(document("mariadb-create-a-film"));
     }
 
@@ -99,8 +99,8 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
-                //.andExpect(jsonPath("$.keys.director_id").exists())
-                // .andExpect(jsonPath("$.keys.director_id").isNumber())
+                .andExpect(jsonPath("$.keys.director_id").exists())
+                .andExpect(jsonPath("$.keys.director_id").isNumber())
                 .andDo(document("mariadb-create-a-director-tsid-enabled"));
     }
 
@@ -128,8 +128,8 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
-                //.andExpect(jsonPath("$.keys.vanity_van_id").exists())
-                //.andExpect(jsonPath("$.keys.vanity_van_id").isString())
+                .andExpect(jsonPath("$.keys.van_id").exists())
+                .andExpect(jsonPath("$.keys.van_id").isString())
                 .andDo(document("mariadb-create-a-vanity-van-tsid-varchar"));
     }
 
@@ -144,7 +144,7 @@ class MariaDBCreateControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
                 .andExpect(jsonPath("$.keys").exists())
-                //                .andExpect(jsonPath("$.keys.GENERATED_KEY",  equalTo(5)))
+                //.andExpect(jsonPath("$.keys.insert_id", equalTo(5)))
                 .andExpect(jsonPath("$.keys.insert_id").isNumber())
                 .andDo(document("mariadb-create-a-film"))
                 .andReturn();
