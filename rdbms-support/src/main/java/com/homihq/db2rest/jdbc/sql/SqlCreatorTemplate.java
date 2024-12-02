@@ -42,13 +42,9 @@ public class SqlCreatorTemplate {
         DbTable table = updateContext.getTable();
         Dialect dialect = jdbcManager.getDialect(updateContext.getDbId());
 
-        if (dialect.supportAlias()) {
-            params.put(ROOT_TABLE, table.render());
-        } else {
-            params.put(ROOT_TABLE, table.name());
-        }
+        params.put(ROOT_TABLE, dialect.supportAlias() ? table.render() : table.name());
 
-        params.put(ROOT_TABLE, updateContext.getWhere());
+        params.put(ROOT_WHERE, updateContext.getWhere());
         params.put("columnSets", updateContext.renderSetColumns());
         params.put(ROOT_TABLE_ALIAS, table.alias());
 

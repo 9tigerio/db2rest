@@ -51,7 +51,11 @@ public class CSVDataProcessor implements DataProcessor {
     }
 
     private Map<String, Object> transform(Map<String, String> data) {
-        return new HashMap<>(data);
+        Map<String, Object> objectMap = new HashMap<>();
+
+        objectMap.putAll(data);
+
+        return objectMap;
     }
 
 }
