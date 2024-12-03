@@ -49,14 +49,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MongoDBControllerTest extends MongoBaseIntegrationTest {
 
     @WithJacksonMapper
-    ObjectMapper objectMapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
+    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
     @GivenJsonResource("/testdata/CREATE_ACTOR_REQUEST.json")
-    Map<String, Object> CREATE_ACTOR_REQUEST;
+    Map<String, Object> createActorRequest;
+
     @GivenJsonResource("/testdata/BULK_CREATE_ACTOR_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_ACTOR_REQUEST;
+    List<Map<String, Object>> bulkCreateActorRequest;
+
     @GivenJsonResource("/testdata/UPDATE_ACTOR_REQUEST.json")
-    Map<String, Object> UPDATE_ACTOR_REQUEST;
+    Map<String, Object> updateActorRequest;
 
     @Autowired
     private RoutingMongoTemplate routingMongoTemplate;
@@ -68,7 +70,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_ACTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(createActorRequest))
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -91,7 +93,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("fields", "FirstName, LastName")
-                        .content(objectMapper.writeValueAsString(CREATE_ACTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(createActorRequest))
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -113,7 +115,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/mongo/Sakila_actors/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_ACTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateActorRequest))
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows").isArray())
@@ -145,7 +147,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("fields", "FirstName, LastName")
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_ACTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateActorRequest))
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows").isArray())
@@ -177,7 +179,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==PENELOPE")
-                        .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateActorRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
@@ -192,7 +194,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==Michael")
-                        .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateActorRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(0)))
@@ -207,7 +209,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "FirstName==Michael")
-                        .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateActorRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(0)))
@@ -222,7 +224,7 @@ class MongoDBControllerTest extends MongoBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("filter", "LastName==ZELLWEGER")
-                        .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateActorRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(2)))

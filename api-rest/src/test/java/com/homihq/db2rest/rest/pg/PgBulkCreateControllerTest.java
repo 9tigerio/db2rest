@@ -37,25 +37,25 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/BULK_CREATE_FILM_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_FILM_REQUEST;
+    List<Map<String, Object>> bulkCreateFilmRequest;
 
     @GivenJsonResource("/testdata/BULK_CREATE_FILM_BAD_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_FILM_BAD_REQUEST;
+    List<Map<String, Object>> bulkCreateFilmBadRequest;
 
     @GivenTextResource("/testdata/CREATE_FILM_REQUEST_CSV.csv")
-    String CREATE_FILM_REQUEST_CSV;
+    String createFilmRequestCSV;
 
     @GivenTextResource("/testdata/CREATE_FILM_BAD_REQUEST_CSV.csv")
-    String CREATE_FILM_BAD_REQUEST_CSV;
+    String createFilmBadRequestCSV;
 
     @GivenJsonResource("/testdata/BULK_CREATE_DIRECTOR_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_DIRECTOR_REQUEST;
+    List<Map<String, Object>> bulkCreateDirectorRequest;
 
     @GivenJsonResource("/testdata/BULK_CREATE_DIRECTOR_BAD_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_DIRECTOR_BAD_REQUEST;
+    List<Map<String, Object>> bulkCreateDirectorBadRequest;
 
     @GivenJsonResource("/testdata/BULK_CREATE_REVIEW_REQUEST.json")
-    List<Map<String, Object>> BULK_CREATE_REVIEW_REQUEST;
+    List<Map<String, Object>> bulkCreateReviewRequest;
 
     @Test
     @DisplayName("Create many films.")
@@ -63,7 +63,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/film/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateFilmRequest))
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows").isArray())
@@ -83,7 +83,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/film/bulk")
                         .contentType("text/csv")
                         .accept(APPLICATION_JSON)
-                        .content(CREATE_FILM_REQUEST_CSV))
+                        .content(createFilmRequestCSV))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows", hasSize(2)))
                 .andExpect(jsonPath("$.rows", hasItem(1)))
@@ -99,7 +99,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/film/bulk")
                         .contentType("text/csv")
                         .accept(APPLICATION_JSON)
-                        .content(CREATE_FILM_BAD_REQUEST_CSV))
+                        .content(createFilmBadRequestCSV))
                 .andExpect(status().isNotFound())
                 //.andDo(print())
                 .andDo(document("pg-bulk-create-films-csv-error"));
@@ -113,7 +113,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/film/bulk")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_FILM_BAD_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateFilmBadRequest))
                 )
                 .andExpect(status().isNotFound())
                 // .andDo(print())
@@ -126,7 +126,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/director/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateDirectorRequest))
                 )
                 .andExpect(status().isCreated())
                 //.andDo(print())
@@ -139,7 +139,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/director/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_BAD_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateDirectorBadRequest))
                 )
                 .andExpect(status().isCreated())
                 //.andDo(print())
@@ -152,7 +152,7 @@ class PgBulkCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         mockMvc.perform(post(VERSION + "/pgsqldb/review/bulk")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(BULK_CREATE_REVIEW_REQUEST))
+                        .content(objectMapper.writeValueAsString(bulkCreateReviewRequest))
                 )
                 .andExpect(status().isCreated())
                 //.andDo(print())

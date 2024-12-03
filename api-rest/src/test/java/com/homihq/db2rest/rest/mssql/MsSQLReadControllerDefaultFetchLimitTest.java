@@ -1,6 +1,5 @@
 package com.homihq.db2rest.rest.mssql;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Order(306)
 @TestPropertySource(properties = {"db2rest.defaultFetchLimit=5"})
-public class MsSQLReadControllerDefaultFetchLimitTest extends MsSQLBaseIntegrationTest {
+class MsSQLReadControllerDefaultFetchLimitTest extends MsSQLBaseIntegrationTest {
 
     @Test
     @DisplayName("Get all with default fetch limit set to 5")

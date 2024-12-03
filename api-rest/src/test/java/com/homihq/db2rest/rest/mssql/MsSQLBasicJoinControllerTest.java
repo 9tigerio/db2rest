@@ -24,17 +24,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLBasicJoinControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/LEFT_JOIN.json")
-    List<Map<String, Object>> LEFT_JOIN;
+    List<Map<String, Object>> leftJoin;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/RIGHT_JOIN.json")
-    List<Map<String, Object>> RIGHT_JOIN;
+    List<Map<String, Object>> rightJoin;
 
     @Test
     @DisplayName("Left Join")
     void leftJoin() throws Exception {
         mockMvc.perform(post(getPrefixApiUrl() + "/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(LEFT_JOIN))
+                        .content(objectMapper.writeValueAsString(leftJoin))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -60,7 +60,7 @@ class MsSQLBasicJoinControllerTest extends MsSQLBaseIntegrationTest {
     void rightJoin() throws Exception {
         mockMvc.perform(post(getPrefixApiUrl() + "/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(RIGHT_JOIN))
+                        .content(objectMapper.writeValueAsString(rightJoin))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

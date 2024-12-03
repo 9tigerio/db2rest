@@ -14,7 +14,7 @@ public class GreaterThanOperatorHandler implements OperatorHandler {
     private static final String OPERATOR = " > ";
 
     @Override
-    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
+    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class<?> type, Map<String, Object> paramMap) {
 
         log.debug("value - {}", value);
         log.debug("type - {}", type);

@@ -34,17 +34,17 @@ class MySQLCrossJoinControllerTest extends MySQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CROSS_JOIN_USERS.json")
-    List<Map<String, Object>> CROSS_JOIN;
+    List<Map<String, Object>> crossJoinUsers;
 
     @GivenJsonResource("/testdata/CROSS_JOIN_TOPS.json")
-    List<Map<String, Object>> CROSS_JOIN_TOPS;
+    List<Map<String, Object>> crossJoinTops;
 
     @Test
     @DisplayName("Test cross Join - Users")
     void testCrossJoin() throws Exception {
         mockMvc.perform(post(VERSION + "/mysqldb//users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CROSS_JOIN))
+                        .content(objectMapper.writeValueAsString(crossJoinUsers))
                 )
                 // .andDo(print())
                 .andExpect(status().isOk())
@@ -67,7 +67,7 @@ class MySQLCrossJoinControllerTest extends MySQLBaseIntegrationTest {
     void testCrossJoinTops() throws Exception {
         mockMvc.perform(post(VERSION + "/mysqldb//tops/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
+                        .content(objectMapper.writeValueAsString(crossJoinTops))
                 )
                 //.andDo(print())
                 .andExpect(status().isOk())

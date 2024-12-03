@@ -26,6 +26,13 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SqlCreatorTemplate {
 
+    private static final String ROOT_TABLE = "rootTable";
+    private static final String ROOT_WHERE = "rootWhere";
+    private static final String ROOT_TABLE_ALIAS = "rootTableAlias";
+    private static final String COLUMNS = "columns";
+    private static final String JOINS = "joins";
+    private static final String LIMIT = "limit";
+
     private final TemplateEngine templateEngine;
     private final JdbcManager jdbcManager;
 
@@ -35,15 +42,11 @@ public class SqlCreatorTemplate {
         DbTable table = updateContext.getTable();
         Dialect dialect = jdbcManager.getDialect(updateContext.getDbId());
 
-        if (dialect.supportAlias()) {
-            params.put("rootTable", table.render());
-        } else {
-            params.put("rootTable", table.name());
-        }
+        params.put(ROOT_TABLE, dialect.supportAlias() ? table.render() : table.name());
 
-        params.put("rootWhere", updateContext.getWhere());
+        params.put(ROOT_WHERE, updateContext.getWhere());
         params.put("columnSets", updateContext.renderSetColumns());
-        params.put("rootTableAlias", table.alias());
+        params.put(ROOT_TABLE_ALIAS, table.alias());
 
         return renderSqlTemplate(dialect.getUpdateSqlTemplate(), params);
     }
@@ -60,9 +63,9 @@ public class SqlCreatorTemplate {
         log.info("rendererTableName - {}", rendererTableName);
 
         Map<String, Object> params = new HashMap<>();
-        params.put("rootTable", rendererTableName);
-        params.put("rootWhere", deleteContext.getWhere());
-        params.put("rootTableAlias", deleteContext.getTable().alias());
+        params.put(ROOT_TABLE, rendererTableName);
+        params.put(ROOT_WHERE, deleteContext.getWhere());
+        params.put(ROOT_TABLE_ALIAS, deleteContext.getTable().alias());
 
         return this.renderSqlTemplate(dialect.getDeleteSqlTemplate(), params);
     }
@@ -72,7 +75,7 @@ public class SqlCreatorTemplate {
         Map<String, Object> params = new HashMap<>();
 
         params.put("table", createContext.table().fullName());
-        params.put("columns", createContext.renderColumns());
+        params.put(COLUMNS, createContext.renderColumns());
         params.put("parameters", createContext.renderParams());
 
         Dialect dialect = jdbcManager.getDialect(createContext.dbId());
@@ -82,9 +85,9 @@ public class SqlCreatorTemplate {
 
     public String findOne(ReadContext readContext) {
         Map<String, Object> params = new HashMap<>();
-        params.put("columns", projections(readContext.getCols()));
-        params.put("rootTable", readContext.getRoot().render());
-        params.put("rootWhere", readContext.getRootWhere());
+        params.put(COLUMNS, projections(readContext.getCols()));
+        params.put(ROOT_TABLE, readContext.getRoot().render());
+        params.put(ROOT_WHERE, readContext.getRootWhere());
 
         Dialect dialect = jdbcManager.getDialect(readContext.getDbId());
 
@@ -94,8 +97,8 @@ public class SqlCreatorTemplate {
     public String count(ReadContext readContext) {
         Map<String, Object> params = new HashMap<>();
 
-        params.put("rootTable", readContext.getRoot().render());
-        params.put("rootWhere", readContext.getRootWhere());
+        params.put(ROOT_TABLE, readContext.getRoot().render());
+        params.put(ROOT_WHERE, readContext.getRootWhere());
 
         Dialect dialect = jdbcManager.getDialect(readContext.getDbId());
 
@@ -105,9 +108,9 @@ public class SqlCreatorTemplate {
     public String exists(ReadContext readContext) {
         Map<String, Object> params = new HashMap<>();
 
-        params.put("rootTable", readContext.getRoot().render());
-        params.put("rootWhere", readContext.getRootWhere());
-        params.put("joins", readContext.getDbJoins());
+        params.put(ROOT_TABLE, readContext.getRoot().render());
+        params.put(ROOT_WHERE, readContext.getRootWhere());
+        params.put(JOINS, readContext.getDbJoins());
 
         Dialect dialect = jdbcManager.getDialect(readContext.getDbId());
 
@@ -119,10 +122,10 @@ public class SqlCreatorTemplate {
         log.debug("**** Preparing to render ****");
 
         Map<String, Object> params = new HashMap<>();
-        params.put("columns", projections(readContext.getCols()));
-        params.put("rootTable", readContext.getRoot().render());
-        params.put("rootWhere", readContext.getRootWhere());
-        params.put("joins", readContext.getDbJoins());
+        params.put(COLUMNS, projections(readContext.getCols()));
+        params.put(ROOT_TABLE, readContext.getRoot().render());
+        params.put(ROOT_WHERE, readContext.getRootWhere());
+        params.put(JOINS, readContext.getDbJoins());
 
         if (Objects.nonNull(readContext.getDbSortList())
                 && !readContext.getDbSortList().isEmpty()) {
@@ -135,11 +138,11 @@ public class SqlCreatorTemplate {
 
 
         if (readContext.getLimit() > -1) {
-            params.put("limit", readContext.getLimit());
+            params.put(LIMIT, readContext.getLimit());
         }
 
         if (readContext.getLimit() == -1) {
-            params.put("limit", readContext.getDefaultFetchLimit());
+            params.put(LIMIT, readContext.getDefaultFetchLimit());
         }
 
         if (readContext.getOffset() > -1) {

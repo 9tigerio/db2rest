@@ -23,14 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLInnerSelfJoinControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/INNER_SELF_JOIN.json")
-    List<Map<String, Object>> INNER_SELF_JOIN;
+    List<Map<String, Object>> innerSelfJoin;
 
     @Test
     @DisplayName("Inner self Join")
     void innerSelfJoin() throws Exception {
         mockMvc.perform(post(getPrefixApiUrl() + "/film/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_SELF_JOIN))
+                        .content(objectMapper.writeValueAsString(innerSelfJoin))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

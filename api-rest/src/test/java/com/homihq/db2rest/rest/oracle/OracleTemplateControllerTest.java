@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Parameterized SQL template")
 class OracleTemplateControllerTest extends OracleBaseIntegrationTest {
 
-    public final static int ID = 1;
+    public static final int ID = 1;
 
     @Test
     @DisplayName("Test find all films with sql template")
@@ -131,32 +131,32 @@ class OracleTemplateControllerTest extends OracleBaseIntegrationTest {
     @Test
     @DisplayName("Conditional render join: skip render join, select film by id")
     void selectWithConditionalRenderJoinWithoutInput() throws Exception {
-        var film_id = 1;
+        var filmId = 1;
         mockMvc.perform(get(VERSION + "/oradb/sql/conditional_render_join")
-                        .param("film_id", String.valueOf(film_id))
+                        .param("film_id", String.valueOf(filmId))
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-                .andExpect(jsonPath("$[0].FILM_ID").value(film_id))
+                .andExpect(jsonPath("$[0].FILM_ID").value(filmId))
                 .andDo(document("ora-template-conditional-render-join-skip-render"));
     }
 
     @Test
     @DisplayName("Conditional render join: execute rendered join")
     void selectWithConditionalRenderJoin() throws Exception {
-        var film_id = 1;
-        var language_id = 1;
+        var filmId = 1;
+        var languageId = 1;
         mockMvc.perform(get(VERSION + "/oradb/sql/conditional_render_join")
-                        .param("film_id", String.valueOf(film_id))
-                        .param("language_id", String.valueOf(language_id))
+                        .param("film_id", String.valueOf(filmId))
+                        .param("language_id", String.valueOf(languageId))
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
 
 
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
-                .andExpect(jsonPath("$[0].FILM_ID").value(film_id))
+                .andExpect(jsonPath("$[0].FILM_ID").value(filmId))
                 //.andExpect(jsonPath("$[0].LANGUAGE_NAME").value("English")) //TODO Fix
                 .andDo(document("ora-template-conditional-render-join"));
     }

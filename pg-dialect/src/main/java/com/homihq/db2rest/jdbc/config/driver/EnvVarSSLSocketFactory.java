@@ -21,9 +21,11 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 import java.util.Date;
 
-
 @Slf4j
 public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
+
+    private static final String HTTPS_ALGORITHM = "HTTPS";
+
     private final SSLSocketFactory factory;
     private final X509Certificate cert;
 
@@ -126,8 +128,8 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
                         delegate.checkServerTrusted(chain, authType);
 
                         // Additional custom validation
-                        for (X509Certificate cert : chain) {
-                            validateCertificate(cert);
+                        for (X509Certificate certificate : chain) {
+                            validateCertificate(certificate);
                         }
                     }
 
@@ -151,7 +153,7 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
 
         // Enable hostname verification
         SSLParameters sslParams = sslSocket.getSSLParameters();
-        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslParams.setEndpointIdentificationAlgorithm(HTTPS_ALGORITHM);
         sslSocket.setSSLParameters(sslParams);
 
         return sslSocket;
@@ -162,7 +164,7 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
     public Socket createSocket(String host, int port) throws java.io.IOException {
         SSLSocket sslSocket = (SSLSocket) factory.createSocket(host, port);
         SSLParameters sslParams = sslSocket.getSSLParameters();
-        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslParams.setEndpointIdentificationAlgorithm(HTTPS_ALGORITHM);
         sslSocket.setSSLParameters(sslParams);
         return sslSocket;
     }
@@ -172,7 +174,7 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
             throws java.io.IOException {
         SSLSocket sslSocket = (SSLSocket) factory.createSocket(host, port, localHost, localPort);
         SSLParameters sslParams = sslSocket.getSSLParameters();
-        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslParams.setEndpointIdentificationAlgorithm(HTTPS_ALGORITHM);
         sslSocket.setSSLParameters(sslParams);
         return sslSocket;
     }
@@ -181,7 +183,7 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
     public Socket createSocket(java.net.InetAddress host, int port) throws java.io.IOException {
         SSLSocket sslSocket = (SSLSocket) factory.createSocket(host, port);
         SSLParameters sslParams = sslSocket.getSSLParameters();
-        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslParams.setEndpointIdentificationAlgorithm(HTTPS_ALGORITHM);
         sslSocket.setSSLParameters(sslParams);
         return sslSocket;
     }
@@ -192,7 +194,7 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
         SSLSocket sslSocket =
                 (SSLSocket) factory.createSocket(address, port, localAddress, localPort);
         SSLParameters sslParams = sslSocket.getSSLParameters();
-        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+        sslParams.setEndpointIdentificationAlgorithm(HTTPS_ALGORITHM);
         sslSocket.setSSLParameters(sslParams);
         return sslSocket;
     }

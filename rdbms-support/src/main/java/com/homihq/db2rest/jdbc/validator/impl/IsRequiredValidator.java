@@ -6,8 +6,8 @@ import com.homihq.db2rest.jdbc.validator.ConstraintValidator;
 public class IsRequiredValidator implements ConstraintValidator {
 
     @Override
-    public void validate(Object value, String placeholderName) throws PlaceholderConstraintException {
-        if (value == null || (value instanceof String && ((String) value).trim().isEmpty())) {
+    public void validate(Object object, String placeholderName) throws PlaceholderConstraintException {
+        if (object == null || (object instanceof String value && value.trim().isEmpty())) {
             throw new PlaceholderConstraintException(placeholderName, "is required and cannot be null.");
         }
     }

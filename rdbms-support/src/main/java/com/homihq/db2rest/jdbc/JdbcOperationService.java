@@ -88,15 +88,13 @@ public class JdbcOperationService implements DbOperationService {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
 
-        for (String key : data.keySet()) {
-
-            Object value = data.get(key);
-
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            Object value = entry.getValue();
             if (value instanceof ArrayTypeValueHolder val) {
                 value = processArrayValue(namedParameterJdbcTemplate, val);
             }
 
-            parameterSource.addValue(key, value);
+            parameterSource.addValue(entry.getKey(), value);
         }
 
         int row = namedParameterJdbcTemplate.update(sql, parameterSource,

@@ -33,18 +33,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class OracleInnerJoinControllerTest extends OracleBaseIntegrationTest {
 
     @WithJacksonMapper
-    ObjectMapper objectMapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
+    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/INNER_JOIN_ORACLE.json")
-    List<Map<String, Object>> INNER_JOIN;
+    List<Map<String, Object>> innerJoin;
 
     @Test
     @DisplayName("Test inner Join")
     void testInnerJoin() throws Exception {
         mockMvc.perform(post(VERSION + "/oradb/REVIEW/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_JOIN))
+                        .content(objectMapper.writeValueAsString(innerJoin))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

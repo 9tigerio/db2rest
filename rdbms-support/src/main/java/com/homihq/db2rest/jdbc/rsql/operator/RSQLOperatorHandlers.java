@@ -3,10 +3,12 @@ package com.homihq.db2rest.jdbc.rsql.operator;
 
 import com.homihq.db2rest.jdbc.rsql.operator.handler.*;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
+import lombok.experimental.UtilityClass;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@UtilityClass
 public class RSQLOperatorHandlers {
 
     private static final Map<String, OperatorHandler> OPERATOR_HANDLER_MAP = new HashMap<>();
@@ -38,7 +40,7 @@ public class RSQLOperatorHandlers {
 
     }
 
-    public static OperatorHandler getOperatorHandler(String symbol) {
+    public OperatorHandler getOperatorHandler(String symbol) {
         return OPERATOR_HANDLER_MAP.get(symbol);
     }
 }

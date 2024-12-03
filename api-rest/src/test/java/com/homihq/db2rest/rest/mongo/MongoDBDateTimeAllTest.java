@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(492)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MongoDBDateTimeAllTest extends MongoBaseIntegrationTest {
+class MongoDBDateTimeAllTest extends MongoBaseIntegrationTest {
 
     private final String dateTime = "2024-03-15T10:30:45Z";
     @WithJacksonMapper
@@ -59,22 +59,6 @@ public class MongoDBDateTimeAllTest extends MongoBaseIntegrationTest {
                 .andExpect(jsonPath("$.keys.date").isString())
                 .andDo(document("mongodb-create-an-actor-with-datetime"));
     }
-
-    //    @Test
-    //    @Order(1)
-    //    @DisplayName("Test Create an actor with error timestamp field in MongoDB")
-    //    void createActorWithErrorDateTimeField() throws Exception {
-    //        Document actorRequestWithErrorDateTime = new Document()
-    //                .append("first_name", "Hero")
-    //                .append("last_name", "shadow")
-    //                .append("last_update", "2019-15-35T14:75:90"); // Invalid date string
-    //
-    //        mockMvc.perform(post(VERSION + "/mongo/Sakila_actors")
-    //                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-    //                        .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
-    //                .andExpect(status().isBadRequest())
-    //                .andDo(document("mongodb-create-an-actor-with-error-timestamp"));
-    //    }
 
     @Test
     @Order(2)

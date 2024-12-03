@@ -31,9 +31,8 @@ class MySQLUpdateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTes
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
 
-
     @GivenJsonResource("/testdata/UPDATE_EMPLOYEE_REQUEST.json")
-    Map<String, Object> UPDATE_EMPLOYEE_REQUEST;
+    Map<String, Object> updateEmployeeRequest;
 
     @Test
     @DisplayName("Update employee diff schema")
@@ -43,7 +42,7 @@ class MySQLUpdateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTes
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "sakila")
                         .param("filter", "emp_id==1")
-                        .content(objectMapper.writeValueAsString(UPDATE_EMPLOYEE_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateEmployeeRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
@@ -55,7 +54,7 @@ class MySQLUpdateTwoTablesSameNameDiffSchemaTest extends MySQLBaseIntegrationTes
                         .accept(APPLICATION_JSON)
                         .header("Content-Profile", "wakila")
                         .param("filter", "emp_id==1")
-                        .content(objectMapper.writeValueAsString(UPDATE_EMPLOYEE_REQUEST))
+                        .content(objectMapper.writeValueAsString(updateEmployeeRequest))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))

@@ -37,10 +37,10 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CROSS_JOIN_USERS_ORACLE.json")
-    List<Map<String, Object>> CROSS_JOIN;
+    List<Map<String, Object>> crossJoinUsers;
 
     @GivenJsonResource("/testdata/CROSS_JOIN_TOPS_ORACLE.json")
-    List<Map<String, Object>> CROSS_JOIN_TOPS;
+    List<Map<String, Object>> crossJoinTops;
 
 
     @Test
@@ -49,7 +49,7 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
 
         mockMvc.perform(post(VERSION + "/oradb/USERS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CROSS_JOIN))
+                        .content(objectMapper.writeValueAsString(crossJoinUsers))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ class OracleCrossJoinControllerTest extends OracleBaseIntegrationTest {
     void testCrossJoinTops() throws Exception {
         mockMvc.perform(post(VERSION + "/oradb/TOPS/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
+                        .content(objectMapper.writeValueAsString(crossJoinTops))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
