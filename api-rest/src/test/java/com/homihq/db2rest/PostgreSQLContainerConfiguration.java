@@ -21,11 +21,12 @@ public class PostgreSQLContainerConfiguration {
     private static final List<String> postgresScripts = List.of("pg/postgres-sakila.sql",
             "pg/postgres-sakila-data.sql");
 
-    private static final PostgreSQLContainer testPostgres = (PostgreSQLContainer) new PostgreSQLContainer("postgres:15.2-alpine")
-            .withDatabaseName("postgres")
-            .withUsername("postgres")
-            .withPassword("postgres")
-            .withReuse(true);
+    private static final PostgreSQLContainer testPostgres =
+            (PostgreSQLContainer) new PostgreSQLContainer("postgres:15.2-alpine")
+                    .withDatabaseName("postgres")
+                    .withUsername("postgres")
+                    .withPassword("postgres")
+                    .withReuse(true);
 
     static {
         testPostgres.start();
@@ -40,7 +41,7 @@ public class PostgreSQLContainerConfiguration {
         dataSourceBuilder.url(testPostgres.getJdbcUrl() + "&escapeSyntaxCallMode=callIfNoReturn");
         dataSourceBuilder.username(testPostgres.getUsername());
         dataSourceBuilder.password(testPostgres.getPassword());
-        DataSource dataSource =  dataSourceBuilder.build();
+        DataSource dataSource = dataSourceBuilder.build();
 
         final RoutingDataSource routingDataSource = new RoutingDataSource();
         routingDataSource.setTargetDataSources(Map.of("pgsqldb", dataSource));

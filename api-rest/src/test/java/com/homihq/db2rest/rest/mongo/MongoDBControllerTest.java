@@ -19,9 +19,11 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.MediaType;
+
 import java.util.List;
 import java.util.Map;
 
+import static com.homihq.db2rest.mongo.rest.api.MongoRestApi.VERSION;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -39,7 +41,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.mongo.rest.api.MongoRestApi.VERSION;
 
 @TestWithResources
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -47,23 +48,18 @@ import static com.homihq.db2rest.mongo.rest.api.MongoRestApi.VERSION;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MongoDBControllerTest extends MongoBaseIntegrationTest {
 
-
-    @Autowired
-    private RoutingMongoTemplate routingMongoTemplate;
-
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
-
     @GivenJsonResource("/testdata/CREATE_ACTOR_REQUEST.json")
     Map<String, Object> CREATE_ACTOR_REQUEST;
-
     @GivenJsonResource("/testdata/BULK_CREATE_ACTOR_REQUEST.json")
     List<Map<String, Object>> BULK_CREATE_ACTOR_REQUEST;
-
     @GivenJsonResource("/testdata/UPDATE_ACTOR_REQUEST.json")
     Map<String, Object> UPDATE_ACTOR_REQUEST;
 
+    @Autowired
+    private RoutingMongoTemplate routingMongoTemplate;
 
     @Test
     @Order(1)

@@ -2,8 +2,12 @@ package com.homihq.db2rest.auth.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-
-import com.homihq.db2rest.auth.common.*;
+import com.homihq.db2rest.auth.common.ApiExcludedResource;
+import com.homihq.db2rest.auth.common.ApiKey;
+import com.homihq.db2rest.auth.common.AuthDataProvider;
+import com.homihq.db2rest.auth.common.AuthDataSource;
+import com.homihq.db2rest.auth.common.ResourceRole;
+import com.homihq.db2rest.auth.common.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,9 +20,10 @@ import java.util.Optional;
 public class FileAuthDataProvider implements AuthDataProvider {
 
     private AuthDataSource authDataSource;
+
     public FileAuthDataProvider(String authFileFullPath) {
 
-        try(InputStream inputStream = new FileInputStream(authFileFullPath.replace("file:",""))) {
+        try (InputStream inputStream = new FileInputStream(authFileFullPath.replace("file:", ""))) {
             ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
 
             authDataSource = objectMapper.readValue(inputStream, AuthDataSource.class);
@@ -28,7 +33,7 @@ public class FileAuthDataProvider implements AuthDataProvider {
 
         } catch (Exception e) {
 
-            log.error("Unable to load auth data: " , e);
+            log.error("Unable to load auth data: ", e);
         }
     }
 

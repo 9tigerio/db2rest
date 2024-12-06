@@ -9,16 +9,15 @@ import java.util.Map;
 
 public class IsNotNullOperatorHandler implements OperatorHandler {
 
-   private static final String OPERATOR = " is not null ";
+    private static final String OPERATOR = " is not null ";
 
     @Override
     public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
 
-        if(dialect.supportAlias()) {
-            return dialect.getAliasedName(column, dbWhere.isDelete()) + OPERATOR ;
-        }
-        else{
-            return column.name() + OPERATOR ;
+        if (dialect.supportAlias()) {
+            return dialect.getAliasedName(column, dbWhere.isDelete()) + OPERATOR;
+        } else {
+            return column.name() + OPERATOR;
         }
     }
 

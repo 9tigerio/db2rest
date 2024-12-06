@@ -1,15 +1,15 @@
 package com.homihq.db2rest.jdbc.core.service;
 
+import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.processor.ReadProcessor;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
-import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import cz.jirutka.rsql.parser.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+
 import java.util.List;
 
 
@@ -38,11 +38,10 @@ public class JdbcReadService implements ReadService {
                     jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbId()),
                     readContext.getParamMap(), sql, jdbcManager.getDialect(readContext.getDbId()));
         } catch (DataAccessException e) {
-            log.error("Error in read op : " , e);
+            log.error("Error in read op : ", e);
             throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
-        }
-        catch (Exception e) {
-            log.error("Error in read op : " , e);
+        } catch (Exception e) {
+            log.error("Error in read op : ", e);
             throw new GenericDataAccessException("Failed to parse RQL - " + e.getMessage());
         }
     }

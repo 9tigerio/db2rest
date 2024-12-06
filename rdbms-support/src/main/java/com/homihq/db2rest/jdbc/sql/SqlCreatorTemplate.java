@@ -31,14 +31,13 @@ public class SqlCreatorTemplate {
 
     public String updateQuery(UpdateContext updateContext) {
 
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         DbTable table = updateContext.getTable();
         Dialect dialect = jdbcManager.getDialect(updateContext.getDbId());
 
-        if(dialect.supportAlias()) {
+        if (dialect.supportAlias()) {
             params.put("rootTable", table.render());
-        }
-        else{
+        } else {
             params.put("rootTable", table.name());
         }
 
@@ -53,14 +52,14 @@ public class SqlCreatorTemplate {
         Dialect dialect = jdbcManager.getDialect(deleteContext.getDbId());
 
         String rendererTableName = dialect.renderTableName(
-            deleteContext.getTable(),
-            StringUtils.isNotBlank(deleteContext.getWhere()),
-            true
+                deleteContext.getTable(),
+                StringUtils.isNotBlank(deleteContext.getWhere()),
+                true
         );
 
         log.info("rendererTableName - {}", rendererTableName);
 
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("rootTable", rendererTableName);
         params.put("rootWhere", deleteContext.getWhere());
         params.put("rootTableAlias", deleteContext.getTable().alias());
@@ -70,7 +69,7 @@ public class SqlCreatorTemplate {
 
     public String create(CreateContext createContext) {
 
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
 
         params.put("table", createContext.table().fullName());
         params.put("columns", createContext.renderColumns());
@@ -82,7 +81,7 @@ public class SqlCreatorTemplate {
     }
 
     public String findOne(ReadContext readContext) {
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("columns", projections(readContext.getCols()));
         params.put("rootTable", readContext.getRoot().render());
         params.put("rootWhere", readContext.getRootWhere());
@@ -93,7 +92,7 @@ public class SqlCreatorTemplate {
     }
 
     public String count(ReadContext readContext) {
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
 
         params.put("rootTable", readContext.getRoot().render());
         params.put("rootWhere", readContext.getRootWhere());
@@ -119,13 +118,14 @@ public class SqlCreatorTemplate {
 
         log.debug("**** Preparing to render ****");
 
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("columns", projections(readContext.getCols()));
         params.put("rootTable", readContext.getRoot().render());
         params.put("rootWhere", readContext.getRootWhere());
         params.put("joins", readContext.getDbJoins());
 
-        if(Objects.nonNull(readContext.getDbSortList()) && !readContext.getDbSortList().isEmpty()) {
+        if (Objects.nonNull(readContext.getDbSortList())
+                && !readContext.getDbSortList().isEmpty()) {
             params.put("sorts", orderBy(readContext.getDbSortList()));
         }
 
@@ -134,10 +134,17 @@ public class SqlCreatorTemplate {
         log.debug("offset - {}", readContext.getOffset());
 
 
-        if(readContext.getLimit() > -1) params.put("limit", readContext.getLimit());
-        if(readContext.getLimit() == -1) params.put("limit", readContext.getDefaultFetchLimit());
+        if (readContext.getLimit() > -1) {
+            params.put("limit", readContext.getLimit());
+        }
 
-        if(readContext.getOffset() > -1) params.put("offset", readContext.getOffset());
+        if (readContext.getLimit() == -1) {
+            params.put("limit", readContext.getDefaultFetchLimit());
+        }
+
+        if (readContext.getOffset() > -1) {
+            params.put("offset", readContext.getOffset());
+        }
 
         log.debug("data - {}", params);
 
@@ -146,7 +153,7 @@ public class SqlCreatorTemplate {
         return this.renderSqlTemplate(dialect.getReadSqlTemplate(), params);
     }
 
-    private String renderSqlTemplate(String template, Map<String,Object> params) {
+    private String renderSqlTemplate(String template, Map<String, Object> params) {
         TemplateOutput output = new StringOutput();
 
         this.templateEngine.render(template + ".jte", params, output);
@@ -155,8 +162,7 @@ public class SqlCreatorTemplate {
     }
 
     private String projections(List<DbColumn> columns) {
-        List<String> columList =
-        columns.stream().map(DbColumn::renderWithAlias).toList();
+        List<String> columList = columns.stream().map(DbColumn::renderWithAlias).toList();
 
         return StringUtils.join(columList, "\n\t,");
     }

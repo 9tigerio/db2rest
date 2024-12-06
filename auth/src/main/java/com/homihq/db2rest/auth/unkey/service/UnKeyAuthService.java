@@ -1,6 +1,5 @@
 package com.homihq.db2rest.auth.unkey.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.auth.unkey.to.UnKeyVerifyRequest;
 import com.homihq.db2rest.auth.unkey.to.UnKeyVerifyResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ public class UnKeyAuthService {
 
     private final RestTemplateBuilder restTemplateBuilder;
 
-
     @Value("${db2rest.unKeyDev.url}")
     String UNKEY_URL;
 
@@ -39,17 +37,16 @@ public class UnKeyAuthService {
 
         UnKeyVerifyRequest unKeyVerifyRequest = new UnKeyVerifyRequest(apiKey);
 
-        var request = new HttpEntity<>(unKeyVerifyRequest , headers);
+        var request = new HttpEntity<>(unKeyVerifyRequest, headers);
 
         try {
             UnKeyVerifyResponse response = restTemplate
-                    .postForObject(UNKEY_URL,
-                    request, UnKeyVerifyResponse.class);
+                    .postForObject(UNKEY_URL, request, UnKeyVerifyResponse.class);
 
             return Optional.ofNullable(response);
 
         } catch (RestClientException restClientException) {
-            log.error("Error with UnKey verification " , restClientException);
+            log.error("Error with UnKey verification ", restClientException);
             return Optional.empty();
         }
 

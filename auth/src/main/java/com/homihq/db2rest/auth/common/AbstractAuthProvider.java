@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public abstract class AbstractAuthProvider{
+public abstract class AbstractAuthProvider {
 
     private static final String AUTH_HEADER = "Authorization";
 
-    private final String [] DEFAULT_WHITELIST = {"/actuator/**"} ;
+    private final String[] DEFAULT_WHITELIST = {"/actuator/**"};
 
     public abstract boolean canHandle(HttpServletRequest request);
 
@@ -24,8 +24,12 @@ public abstract class AbstractAuthProvider{
 
     public abstract boolean isExcluded(String requestUri, String method);
 
-    protected boolean isExcludedInternal(String requestUri, String method,  List<ApiExcludedResource> excludedResources,
-                                 AntPathMatcher antPathMatcher) {
+    protected boolean isExcludedInternal(
+            String requestUri,
+            String method,
+            List<ApiExcludedResource> excludedResources,
+            AntPathMatcher antPathMatcher
+    ) {
 
         //check in default whitelist first
 
@@ -33,7 +37,7 @@ public abstract class AbstractAuthProvider{
                 Arrays.stream(DEFAULT_WHITELIST)
                         .anyMatch(r -> antPathMatcher.match(r, requestUri));
 
-        if(!match) {
+        if (!match) {
 
             return
                     excludedResources
@@ -51,8 +55,13 @@ public abstract class AbstractAuthProvider{
         return request.getHeader(AUTH_HEADER);
     }
 
-    protected boolean authorizeInternal(UserDetail userDetail, String requestUri, String method,
-                                   List<ResourceRole> resourceRoleList, AntPathMatcher antPathMatcher) {
+    protected boolean authorizeInternal(
+            UserDetail userDetail,
+            String requestUri,
+            String method,
+            List<ResourceRole> resourceRoleList,
+            AntPathMatcher antPathMatcher
+    ) {
 
         //resource mapping
         Optional<ResourceRole> resourceRole =
@@ -63,7 +72,7 @@ public abstract class AbstractAuthProvider{
                         .findFirst();
 
         //resource to role mapping
-        if(resourceRole.isPresent()) {
+        if (resourceRole.isPresent()) {
             ResourceRole rr = resourceRole.get();
             boolean roleMatch =
                     rr.roles()

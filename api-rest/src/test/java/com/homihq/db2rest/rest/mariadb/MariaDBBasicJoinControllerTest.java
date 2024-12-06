@@ -29,22 +29,19 @@ class MariaDBBasicJoinControllerTest extends MariaDBBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/LEFT_JOIN.json")
-    List<Map<String,Object>> LEFT_JOIN;
+    List<Map<String, Object>> LEFT_JOIN;
 
     @GivenJsonResource("/testdata/RIGHT_JOIN.json")
-    List<Map<String,Object>> RIGHT_JOIN;
-
+    List<Map<String, Object>> RIGHT_JOIN;
 
     @Test
     @DisplayName("Test left Join")
     void testLeftJoin() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mariadb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(LEFT_JOIN))
                 )
-               // .andDo(print())
+                // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(4)))
@@ -57,16 +54,11 @@ class MariaDBBasicJoinControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$[3].apid", nullValue()))
                 .andExpect(jsonPath("$[3].firstname", nullValue()))
                 .andDo(document("mariadb-left-join"));
-
-
     }
-
 
     @Test
     @DisplayName("Test right Join")
     void testRightJoin() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mariadb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(RIGHT_JOIN))
@@ -86,16 +78,11 @@ class MariaDBBasicJoinControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$[1].username", nullValue()))
                 .andExpect(jsonPath("$[1].firstname", equalTo("Tom")))
 
-
                 .andExpect(jsonPath("$[3].auid", equalTo(7)))
                 .andExpect(jsonPath("$[3].apid", equalTo(7)))
                 .andExpect(jsonPath("$[3].username", nullValue()))
                 .andExpect(jsonPath("$[3].firstname", equalTo("Ivan")))
 
                 .andDo(document("mariadb-right-join"));
-
-
     }
-
-
 }

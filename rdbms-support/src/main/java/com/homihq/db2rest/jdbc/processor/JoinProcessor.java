@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
 import static com.homihq.db2rest.jdbc.rsql.operator.OperatorMap.getRSQLOperator;
 import static com.homihq.db2rest.jdbc.rsql.operator.OperatorMap.getSQLOperator;
+import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
 
 
 @Slf4j
@@ -36,19 +36,22 @@ public class JoinProcessor implements ReadProcessor {
     public void process(ReadContext readContext) {
         List<JoinDetail> joins = readContext.getJoins();
 
-        if(Objects.isNull(joins) || joins.isEmpty()) return;
+        if (Objects.isNull(joins) || joins.isEmpty()) {
+            return;
+        }
 
         DbTable rootTable = readContext.getRoot();
 
         List<DbTable> allJoinTables = new ArrayList<>();
         allJoinTables.add(rootTable);
 
-        for(JoinDetail joinDetail : joins) {
+        for (JoinDetail joinDetail : joins) {
 
             rootTable = reviewRootTable(readContext.getDbId(), allJoinTables, joinDetail, rootTable);
 
             String tableName = joinDetail.table();
-            DbTable table = jdbcManager.getTable(readContext.getDbId(), readContext.getSchemaName(), tableName);
+            DbTable table = jdbcManager
+                    .getTable(readContext.getDbId(), readContext.getSchemaName(), tableName);
 
 
             table = table.copyWithAlias(getAlias(tableName));
@@ -64,9 +67,11 @@ public class JoinProcessor implements ReadProcessor {
     }
 
     private DbTable reviewRootTable(String dbId, List<DbTable> allJoinTables, JoinDetail joinDetail, DbTable rootTable) {
-        if(allJoinTables.size() == 1) return rootTable;
+        if (allJoinTables.size() == 1) {
+            return rootTable;
+        }
 
-        if(joinDetail.hasWith()) {
+        if (joinDetail.hasWith()) {
             //check if existing table
             String withTable = joinDetail.withTable();
             Optional<DbTable> newRoot = allJoinTables.stream()
@@ -95,12 +100,12 @@ public class JoinProcessor implements ReadProcessor {
 
     private void processFilter(DbTable table, JoinDetail joinDetail, DbJoin join,
                                ReadContext readContext) {
-        if(joinDetail.hasFilter()){
+        if (joinDetail.hasFilter()) {
             readContext.createParamMap();
 
             DbWhere dbWhere = new DbWhere(
                     table.name(),
-                    table,table.buildColumns(), readContext.getParamMap(), "read");
+                    table, table.buildColumns(), readContext.getParamMap(), "read");
 
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(joinDetail.filter());
@@ -116,9 +121,9 @@ public class JoinProcessor implements ReadProcessor {
 
     private void addCondition(DbTable table, DbTable rootTable, JoinDetail joinDetail, DbJoin dbJoin) {
 
-        if(joinDetail.hasOn()) {
+        if (joinDetail.hasOn()) {
             int onIdx = 1;
-            for(String on : joinDetail.on()) {
+            for (String on : joinDetail.on()) {
                 processOn(on, onIdx, table, rootTable, dbJoin);
                 onIdx++;
             }
@@ -131,16 +136,16 @@ public class JoinProcessor implements ReadProcessor {
         String operator = getSQLOperator(rSqlOperator);
 
         String left = onExpression.substring(0, onExpression.indexOf(rSqlOperator)).trim();
-        String right = onExpression.substring(onExpression.indexOf(rSqlOperator) + rSqlOperator.length()).trim();
+        String right = onExpression.substring(
+                onExpression.indexOf(rSqlOperator) + rSqlOperator.length()).trim();
 
 
         DbColumn leftColumn = rootTable.buildColumn(left);
         DbColumn rightColumn = table.buildColumn(right);
 
-        if(onIdx == 1) {
+        if (onIdx == 1) {
             dbJoin.addOn(leftColumn, operator, rightColumn);
-        }
-        else{
+        } else {
             dbJoin.addAndCondition(leftColumn, operator, rightColumn);
         }
 
@@ -156,10 +161,9 @@ public class JoinProcessor implements ReadProcessor {
 
         List<DbColumn> columnList = new ArrayList<>();
 
-        if(Objects.isNull(fields)) {//include all fields of root table
-            columnList.addAll( table.buildColumns());
-        }
-        else{ //query has specific columns so parse and map it.
+        if (Objects.isNull(fields)) {//include all fields of root table
+            columnList.addAll(table.buildColumns());
+        } else { //query has specific columns so parse and map it.
             List<DbColumn> columns =
                     fields.stream()
                             .map(table::buildColumn)

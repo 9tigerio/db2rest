@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MariaDBBaseIntegrationTest;
 import com.homihq.db2rest.rest.DateTimeUtil;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.ClassOrderer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestClassOrder;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +22,7 @@ import java.util.Map;
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
@@ -34,11 +38,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
 
+    private final String dateTime = "2024-03-15T10:30:45.000";
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
-
-    private final String dateTime = "2024-03-15T10:30:45.000";
 
     @Test
     @Order(1)
@@ -142,5 +145,29 @@ class MariadbDateTimeAllTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
                 .andDo(document("mariadb-delete-an-actor-by-timestamp"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("isoDateTimeFormats")
+    @Order(5)
+    @DisplayName("Test ISO Date Time formats")
+    void createActorWithIsoDateTimeFormats(String isoDateTime) throws Exception {
+        // Prepare the request with datetime fields
+        Map<String, Object> actorRequestWithDateTime = new HashMap<>();
+        actorRequestWithDateTime.put("first_name", "Graeme");
+        actorRequestWithDateTime.put("last_name", "Smith");
+        actorRequestWithDateTime.put("last_update", isoDateTime);
+
+        var result = mockMvc.perform(post(VERSION + "/mariadb/actor")
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(actorRequestWithDateTime)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.row", equalTo(1)))
+                .andDo(document("mariadb-create-an-actor-with-datetime"))
+                .andReturn();
+
+        var pk = JsonPath.read(result.getResponse().getContentAsString(), "$.keys.insert_id");
+        assertTrue(deleteRow("actor", "actor_id", (int) pk));
     }
 }

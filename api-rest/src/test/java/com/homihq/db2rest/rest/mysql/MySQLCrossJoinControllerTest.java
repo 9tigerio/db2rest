@@ -6,19 +6,24 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MySQLBaseIntegrationTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.*;
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(11)
 @TestWithResources
@@ -29,22 +34,19 @@ class MySQLCrossJoinControllerTest extends MySQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CROSS_JOIN_USERS.json")
-    List<Map<String,Object>> CROSS_JOIN;
+    List<Map<String, Object>> CROSS_JOIN;
 
     @GivenJsonResource("/testdata/CROSS_JOIN_TOPS.json")
-    List<Map<String,Object>> CROSS_JOIN_TOPS;
-
+    List<Map<String, Object>> CROSS_JOIN_TOPS;
 
     @Test
     @DisplayName("Test cross Join - Users")
     void testCrossJoin() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mysqldb//users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN))
                 )
-               // .andDo(print())
+                // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(16)))
@@ -58,15 +60,11 @@ class MySQLCrossJoinControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$[1].firstname", equalTo("Jack")))
 
                 .andDo(document("mysql-cross-join-users"));
-
-
     }
 
     @Test
     @DisplayName("Test cross Join - Tops")
     void testCrossJoinTops() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mysqldb//tops/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
@@ -81,11 +79,7 @@ class MySQLCrossJoinControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$[0].bottom_item", equalTo("jeans")))
                 .andExpect(jsonPath("$[0].color", equalTo("white")))
                 .andExpect(jsonPath("$[0].botColor", equalTo("blue")))
-
-
                 .andDo(document("mysql-cross-join-tops"));
-
-
     }
 
 }

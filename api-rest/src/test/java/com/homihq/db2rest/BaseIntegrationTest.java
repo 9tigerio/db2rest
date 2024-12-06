@@ -4,6 +4,7 @@ import com.homihq.db2rest.config.Db2RestConfigProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
@@ -28,37 +30,49 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @Slf4j
 public abstract class BaseIntegrationTest {
 
-	@Autowired
-	public MockMvc mockMvc;
+    @Autowired
+    public MockMvc mockMvc;
 
-	@Autowired
-	protected ApplicationContext applicationContext;
+    @Autowired
+    protected ApplicationContext applicationContext;
 
-	@Autowired
-	protected Db2RestConfigProperties db2RestConfigProperties;
+    @Autowired
+    protected Db2RestConfigProperties db2RestConfigProperties;
 
-	@BeforeEach
-	void setUp(WebApplicationContext webApplicationContext,
-	           RestDocumentationContextProvider restDocumentation) {
-		mockMvc = MockMvcBuilders
-				.webAppContextSetup(webApplicationContext)
-				.apply(documentationConfiguration(restDocumentation)
-						.snippets().withTemplateFormat(TemplateFormats.markdown())
-				)
-				.build();
-		setupEnv();
-	}
+    @BeforeEach
+    void setUp(WebApplicationContext webApplicationContext,
+               RestDocumentationContextProvider restDocumentation) {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .apply(documentationConfiguration(restDocumentation)
+                        .snippets().withTemplateFormat(TemplateFormats.markdown())
+                )
+                .build();
+        setupEnv();
+    }
 
-	void setupEnv() {
-		var templatesLocation = db2RestConfigProperties.getTemplates();
-		if (templatesLocation.startsWith(ResourceLoader.CLASSPATH_URL_PREFIX)) {
-			try {
-				Resource resource = applicationContext.getResource(templatesLocation);
-				var resolvedTemplatesLocation = String.valueOf(Paths.get(resource.getFile().getAbsolutePath()));
-				db2RestConfigProperties.setTemplates(resolvedTemplatesLocation);
-			} catch (IOException ioe) {
-				log.debug("Error while resolve _sql templates location for testing", ioe);
-			}
-		}
-	}
+    void setupEnv() {
+        var templatesLocation = db2RestConfigProperties.getTemplates();
+        if (templatesLocation.startsWith(ResourceLoader.CLASSPATH_URL_PREFIX)) {
+            try {
+                Resource resource = applicationContext.getResource(templatesLocation);
+                var resolvedTemplatesLocation = String.valueOf(Paths.get(resource.getFile().getAbsolutePath()));
+                db2RestConfigProperties.setTemplates(resolvedTemplatesLocation);
+            } catch (IOException ioe) {
+                log.debug("Error while resolve _sql templates location for testing", ioe);
+            }
+        }
+    }
+
+    static List<Arguments> isoDateTimeFormats() {
+        return List.of(Arguments.of("2011-12-03T10:15:30"),
+                Arguments.of("2011-12-03T10:15:30.123"),
+                Arguments.of("2011-12-03T10:15:30+01:00"),
+                Arguments.of("2011-12-03T10:15:30-05:00"),
+                Arguments.of("2011-12-03T10:15:30Z"),
+                Arguments.of("2011-12-03T10:15:30.123Z"),
+                Arguments.of("2011-12-03T10:15:30.123+05:30"),
+                Arguments.of("2011-12-03T10:15:30+01:00[Europe/Paris]"),
+                Arguments.of("2011-12-03T10:15:30.123+01:00[Europe/Paris]"));
+    }
 }

@@ -30,7 +30,7 @@ class MariaDBJsonFileCreateControllerTest extends MariaDBBaseIntegrationTest {
     Path filmFile = dir.resolve("BULK_CREATE_FILM_REQUEST.json");
     Path nonArrayActorFile = dir.resolve("CREATE_ACTOR_REQUEST.json");
     Path directorFile = dir.resolve("director.json");
-    
+
     @Test
     @DisplayName("Create many actors via JSON file upload.")
     void uploadActorsFile() throws Exception {
@@ -57,7 +57,7 @@ class MariaDBJsonFileCreateControllerTest extends MariaDBBaseIntegrationTest {
         MockMultipartFile file = new MockMultipartFile("file", nonArrayActorFile.toString(),
                 "application/json", Files.readAllBytes(nonArrayActorFile));
 
-         mockMvc.perform(multipart(VERSION + "/mariadb/actor/upload")
+        mockMvc.perform(multipart(VERSION + "/mariadb/actor/upload")
                         .file(file)
                         .contentType("multipart/form-data")
                         .accept(APPLICATION_JSON))

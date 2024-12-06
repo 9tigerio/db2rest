@@ -7,7 +7,6 @@ import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.Map;
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.AnyOf.anyOf;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -39,16 +37,16 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
     void setUp() {
         List<DbTable> dbTableList = new ArrayList<>();
         List<DbColumn> dbColumns = new ArrayList<>();
-        dbColumns.add(new DbColumn("tableName","name","alias",
-                "tableAlias",true,"columnDataType",false,false,
-                null,"coverChar","jsonParts"));
+        dbColumns.add(new DbColumn("tableName", "name", "alias",
+                "tableAlias", true, "columnDataType", false, false,
+                null, "coverChar", "jsonParts"));
 
-        dbTableList.add(new DbTable("schema","name","fullName",
-                "alias",dbColumns,"type","coverChar"));
+        dbTableList.add(new DbTable("schema", "name", "fullName",
+                "alias", dbColumns, "type", "coverChar"));
 
         metadataMap = new HashMap<>();
-        metadataMap.put("key",new DbMeta("productName",2,"driverName",
-                "driverVersion",dbTableList));
+        metadataMap.put("key", new DbMeta("productName", 2, "driverName",
+                "driverVersion", dbTableList));
         schemaController = new SchemaController(jdbcManager);
         when(jdbcManager.getDbMetaByDbId(anyString())).thenReturn(metadataMap.get("key"));
     }
@@ -56,6 +54,7 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
     /**
      * This test tests the use case where we request for all schemas without
      * providing any filter.
+     *
      * @throws Exception
      */
     @Test
@@ -73,6 +72,7 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
 
     /**
      * This test tests the use case where we request for schema's columns
+     *
      * @throws Exception
      */
     @Test
@@ -97,12 +97,13 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
     /**
      * This test tests the use case where we are sending an invalid filter
      * i.e, we are sending a filter which is not valid.
+     *
      * @throws Exception
      */
     @Test
     void testGetObjectsInvalidFilter() throws Exception {
         mockMvc.perform(get(VERSION + "/1/$schemas")
-                        .param("filter","name=employee")
+                        .param("filter", "name=employee")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$.type").value("https://db2rest.com/error/generic-error"))
@@ -120,10 +121,11 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
      * Valid filters include
      * 1. == sign in between filter field and filter value
      * 2. A string to the left of == and a string value to the right of it.
+     *
      * @throws Exception
      */
     @Test
-    void testGetObjectsValidFilter()  throws Exception {
+    void testGetObjectsValidFilter() throws Exception {
         mockMvc.perform(get(VERSION + "/1/$schemas")
                         .param("filter", "schema==schema")
                         .contentType("application/json"))
@@ -139,13 +141,14 @@ class SchemaControllerIntegrationTest extends BaseIntegrationTest {
      * This test checks for the use case where we send a request to /$schemas,
      * but we do not have a valid filter field.
      * NOTE: In this use case, the filter in itself is valid because it contains ==.
-     *  Currently, we have filters based on schema, type and name.
+     * Currently, we have filters based on schema, type and name.
      * This test checks the response and ensures it is empty if the filter argument
      * is not in (schema,type, name)
+     *
      * @throws Exception
      */
     @Test
-    void testGetObjectsInvalidFilterField()  throws Exception {
+    void testGetObjectsInvalidFilterField() throws Exception {
         mockMvc.perform(get(VERSION + "/1/$schemas")
                         .param("filter", "someUnknownFilter==schema")
                         .contentType("application/json"))

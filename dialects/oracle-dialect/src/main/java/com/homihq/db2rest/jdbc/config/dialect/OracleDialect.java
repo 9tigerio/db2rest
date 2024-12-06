@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,12 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
-public class OracleDialect implements Dialect {
-
-    private final ObjectMapper objectMapper;
-
-    private String coverChar = "\"";
+public class OracleDialect extends Dialect {
+    public OracleDialect(ObjectMapper objectMapper) {
+        super(objectMapper, "\"");
+    }
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
@@ -47,7 +44,7 @@ public class OracleDialect implements Dialect {
 
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
 
-                    data.put(columnName, objectMapper.writeValueAsString(value));
+                    data.put(columnName, getObjectMapper().writeValueAsString(value));
                 } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "TIMESTAMP(6)")) {
                     LocalDateTime v = convertToLocalDateTime((String) value);
                     data.put(columnName, v);
@@ -69,7 +66,7 @@ public class OracleDialect implements Dialect {
     }
 
     private String getQuotedName(String name) {
-        return coverChar + name + coverChar;
+        return getCoverChar() + name + getCoverChar();
     }
 
     @Override
@@ -81,6 +78,4 @@ public class OracleDialect implements Dialect {
     public String renderTableNameWithoutAlias(DbTable table) {
         return getQuotedName(table.schema()) + "." + getQuotedName(table.name());
     }
-
-
 }

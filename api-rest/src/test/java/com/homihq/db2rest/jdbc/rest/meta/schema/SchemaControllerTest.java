@@ -14,35 +14,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 class SchemaControllerTest {
     Map<String, DbMeta> metadataMap;
     JdbcManager jdbcManager;
     SchemaController schemaController;
+
     @BeforeEach
     void setUp() {
         List<DbTable> dbTableList = new ArrayList<>();
         List<DbColumn> dbColumns = new ArrayList<>();
-        dbColumns.add(new DbColumn("tableName","name","alias",
-                "tableAlias",true,"columnDataType",false,false,
-                null,"coverChar","jsonParts"));
+        dbColumns.add(new DbColumn("tableName", "name", "alias",
+                "tableAlias", true, "columnDataType", false, false,
+                null, "coverChar", "jsonParts"));
 
-        dbTableList.add(new DbTable("schema","name","fullName",
-                "alias",dbColumns,"type","coverChar"));
+        dbTableList.add(new DbTable("schema", "name", "fullName",
+                "alias", dbColumns, "type", "coverChar"));
 
         metadataMap = new HashMap<>();
-        metadataMap.put("key",new DbMeta("productName",2,"driverName",
-                "driverVersion",dbTableList));
+        metadataMap.put("key", new DbMeta("productName", 2, "driverName",
+                "driverVersion", dbTableList));
         jdbcManager = Mockito.mock(JdbcManager.class);
         schemaController = new SchemaController(jdbcManager);
     }
 
     private List<TableObject> getActualTableObject(String filter) {
-        List<TableObject> actualTableObject = (List<TableObject>) schemaController.getObjects("key",filter, Boolean.FALSE);
+        List<TableObject> actualTableObject = (List<TableObject>) schemaController.getObjects("key", filter, Boolean.FALSE);
         return actualTableObject;
-    };
+    }
 
     private void testFilter(String goodFilter, String badFilter) {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));
@@ -51,7 +53,7 @@ class SchemaControllerTest {
         assertEquals(expectedTableObject, actualTableObject);
 
         actualTableObject = getActualTableObject(badFilter);
-        assertEquals(0,actualTableObject.size());
+        assertEquals(0, actualTableObject.size());
     }
 
     @Test
@@ -59,37 +61,44 @@ class SchemaControllerTest {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));
         List<TableObject> actualTableObject = getActualTableObject(null);
         List<TableObject> expectedTableObject = metadataMap.get("key").dbTables().stream().map(TableObject::new).toList();
-        assertEquals(expectedTableObject,actualTableObject);
+        assertEquals(expectedTableObject, actualTableObject);
     }
+
     @Test
     void testGetObjectsFilterInvalid() {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));
-        Throwable exception = assertThrows(GenericDataAccessException.class,() -> schemaController.getObjects("key","invalidFilter", Boolean.FALSE));
-        assertEquals("Invalid filter condition. Only == supported for schema filter using a single value only.",exception.getMessage());
+        Throwable exception = assertThrows(GenericDataAccessException.class, () -> schemaController.getObjects("key", "invalidFilter", Boolean.FALSE));
+        assertEquals("Invalid filter condition. Only == supported for schema filter using a single value only.", exception.getMessage());
     }
+
     @Test
-    void testGetObjectsValidFilter_schema(){
+    void testGetObjectsValidFilter_schema() {
         testFilter("schema==schema", "schema==notPresentInList");
     }
+
     @Test
     void testGetObjectsValidFilter_name() {
         testFilter("name==name", "name==notPresentInList");
     }
+
     @Test
     void testGetObjectsValidFilter_type() {
         testFilter("type==type", "type==notPresentInList");
     }
+
     @Test
     void testGetObjectsValidFilter_invalidFieldFilter() {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));
         List<TableObject> actualTableObject = getActualTableObject("invalidFilterField==notPresentInList");
-        assertEquals(0,actualTableObject.size());
+        assertEquals(0, actualTableObject.size());
     }
+
     @Test
-    void testGetObjectsDbIDInvalid(){
+    void testGetObjectsDbIDInvalid() {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(null);
-        assertEquals(0, schemaController.getObjects("key","filter", Boolean.FALSE).size());
+        assertEquals(0, schemaController.getObjects("key", "filter", Boolean.FALSE).size());
     }
+
     @Test
     void testGetObjectsWithColumns() {
         when(jdbcManager.getDbMetaByDbId("key")).thenReturn(metadataMap.get("key"));

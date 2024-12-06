@@ -12,9 +12,9 @@ AliasGenerator {
     public static String getAlias(String sqlIdentifier) {
         int LENGTH = 4;
         return
-        sqlIdentifier.length() > LENGTH ?
-                sqlIdentifier.substring(0, LENGTH) + "_" +random.nextInt(100)
-            :   sqlIdentifier + "_" +random.nextInt(1000);
+                sqlIdentifier.length() > LENGTH ?
+                        sqlIdentifier.substring(0, LENGTH) + "_" + random.nextInt(100)
+                        : sqlIdentifier + "_" + random.nextInt(1000);
 
     }
 }

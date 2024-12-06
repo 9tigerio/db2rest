@@ -5,13 +5,18 @@ import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.homihq.db2rest.MySQLBaseIntegrationTest;
 import com.homihq.db2rest.OracleBaseIntegrationTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -20,7 +25,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(213)
 @TestWithResources
@@ -32,18 +37,16 @@ class OracleInnerJoinMultiTableControllerTest extends OracleBaseIntegrationTest 
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/INNER_JOIN_MULTI_TABLE_ORACLE.json")
-    List<Map<String,Object>> INNER_JOIN_MULTI_TABLE;
+    List<Map<String, Object>> INNER_JOIN_MULTI_TABLE;
 
     @Test
     @DisplayName("Test inner multi-table Join")
     void testInnerMultiTable() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/oradb/FILM/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(INNER_JOIN_MULTI_TABLE))
                 )
-                 .andDo(print())
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(1)))
@@ -53,13 +56,7 @@ class OracleInnerJoinMultiTableControllerTest extends OracleBaseIntegrationTest 
                 .andExpect(jsonPath("$[0].ACTOR_ID", equalTo(1)))
                 .andExpect(jsonPath("$[0].FIRST_NAME", equalTo("PENELOPE")))
                 .andExpect(jsonPath("$[0].LAST_NAME", equalTo("GUINESS")))
-
-
                 .andDo(document("oracle-inner-multi-table-join"));
-
-
     }
-
-
 
 }

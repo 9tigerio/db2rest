@@ -19,13 +19,13 @@ import java.util.function.Function;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class SchemaController implements SchemaRestApi{
+public class SchemaController implements SchemaRestApi {
 
     private final JdbcManager jdbcManager;
-    
-    /** 
-     * @param dbId database id from which to retrieve the schema objects
-     * @param filter filter conditions to match against a schema, name, or type
+
+    /**
+     * @param dbId    database id from which to retrieve the schema objects
+     * @param filter  filter conditions to match against a schema, name, or type
      * @param columns include the column information for a table
      * @return list of schema objects (schema, name, type) that match the filter conditions
      */
@@ -38,54 +38,56 @@ public class SchemaController implements SchemaRestApi{
 
         log.info("dbMeta - {}", dbMeta);
 
-        if(Objects.isNull(dbMeta)) return List.of();
+        if (Objects.isNull(dbMeta)) {
+            return List.of();
+        }
 
         SchemaFilter schemaFilter = getSchemaFilter(filter);
 
         List<DbTable> dbTables = dbMeta.dbTables();
-        Function<DbTable, ? extends TableObject> tableMapper = columns ? TableWithColumnsObject::new : TableObject::new;
+        Function<DbTable, ? extends TableObject> tableMapper = columns
+                ? TableWithColumnsObject::new
+                : TableObject::new;
 
-        if(Objects.isNull(schemaFilter)) {
+        if (Objects.isNull(schemaFilter)) {
             return dbTables.stream().map(tableMapper).toList();
-        }
-        else{
+        } else {
             log.info("schemaFilter - {}", schemaFilter);
             return dbTables.stream()
                     .filter(dbTable -> {
 
-                       if(StringUtils.equals(schemaFilter.field, "schema")
-                               && StringUtils.containsIgnoreCase(dbTable.schema(), schemaFilter.value)) {
+                        if (StringUtils.equals(schemaFilter.field, "schema")
+                                && StringUtils.containsIgnoreCase(dbTable.schema(), schemaFilter.value)) {
                             return true;
-                       }
-                       else if(StringUtils.equals(schemaFilter.field, "name")
-                               && StringUtils.containsIgnoreCase(dbTable.name(), schemaFilter.value)) {
-                           return true;
-                       }
-                       else return StringUtils.equals(schemaFilter.field, "type")
-                                   && StringUtils.containsIgnoreCase(dbTable.type(), schemaFilter.value);
+                        } else if (StringUtils.equals(schemaFilter.field, "name")
+                                && StringUtils.containsIgnoreCase(dbTable.name(), schemaFilter.value)) {
+                            return true;
+                        } else {
+                            return StringUtils.equals(schemaFilter.field, "type")
+                                    && StringUtils.containsIgnoreCase(dbTable.type(), schemaFilter.value);
+                        }
 
                     })
                     .map(tableMapper).toList();
         }
-
     }
 
     private SchemaFilter getSchemaFilter(String filter) {
-        if(StringUtils.isBlank(filter))
+        if (StringUtils.isBlank(filter)) {
             return null;
+        }
 
-        String [] fragments = filter.split("==");
+        String[] fragments = filter.split("==");
 
-        if(fragments.length != 2) throw new GenericDataAccessException("Invalid filter condition. Only == supported for schema filter using a single value only.");
+        if (fragments.length != 2) {
+            throw new GenericDataAccessException("Invalid filter condition. Only == supported for schema filter using a single value only.");
+        }
 
         return new SchemaFilter(fragments[0], fragments[1]);
-
     }
 
 
-    private record SchemaFilter(String field, String value){}
-
-
-
+    private record SchemaFilter(String field, String value) {
+    }
 
 }

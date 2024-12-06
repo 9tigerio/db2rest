@@ -13,16 +13,15 @@ import com.homihq.db2test.mongo.rsql.visitor.ComparisonToCriteriaConverter;
 import com.mongodb.client.MongoClients;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Configuration
@@ -38,22 +37,22 @@ public class MongoConfiguration {
 
         RoutingMongoTemplate routingMongoTemplate = new RoutingMongoTemplate();
 
-        if(Objects.isNull(databaseProperties.getDatabases())) return routingMongoTemplate;
+        if (Objects.isNull(databaseProperties.getDatabases())) {
+            return routingMongoTemplate;
+        }
 
         List<DatabaseConnectionDetail> mongoDbs =
-        databaseProperties.getDatabases()
-                .stream()
-                .filter(DatabaseConnectionDetail::isMongo)
-                .toList();
+                databaseProperties.getDatabases()
+                        .stream()
+                        .filter(DatabaseConnectionDetail::isMongo)
+                        .toList();
 
-        if(!mongoDbs.isEmpty()) {
-
-            for(DatabaseConnectionDetail mongo : mongoDbs){
+        if (!mongoDbs.isEmpty()) {
+            for (DatabaseConnectionDetail mongo : mongoDbs) {
                 routingMongoTemplate.add(mongo.id(),
                         mongoTemplate(mongo.url(), mongo.database()));
             }
-        }
-        else{
+        } else {
             log.info("*** No MongoDB configured.");
         }
 

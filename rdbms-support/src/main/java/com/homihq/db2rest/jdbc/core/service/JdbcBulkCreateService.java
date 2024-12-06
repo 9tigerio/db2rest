@@ -22,7 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -41,13 +44,13 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
     /**
      * Saves bulk data into the specified table.
      *
-     * @param dbId the database ID
-     * @param schemaName the schema name
-     * @param tableName the table name
+     * @param dbId            the database ID
+     * @param schemaName      the schema name
+     * @param tableName       the table name
      * @param includedColumns the columns to include
-     * @param dataList the data to insert
-     * @param tsIdEnabled whether TSID is enabled
-     * @param sequences the sequences to use
+     * @param dataList        the data to insert
+     * @param tsIdEnabled     whether TSID is enabled
+     * @param sequences       the sequences to use
      * @return the response of the bulk create operation
      */
     public CreateBulkResponse saveBulk(
@@ -57,7 +60,9 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
             List<Map<String, Object>> dataList,
             boolean tsIdEnabled, List<String> sequences) {
 
-        if (Objects.isNull(dataList) || dataList.isEmpty()) throw new GenericDataAccessException("No data provided");
+        if (Objects.isNull(dataList) || dataList.isEmpty()) {
+            throw new GenericDataAccessException("No data provided");
+        }
 
         log.debug("** Bulk Insert **");
 
@@ -93,7 +98,7 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
      * Asynchronously saves a multipart file by streaming its content and performing a bulk insert.
      *
      * @param fileUploadContext the context containing details about the file upload request
-     * @param file the multipart file to be saved
+     * @param file              the multipart file to be saved
      * @return a CompletableFuture containing the response of the create operation
      */
     @Async
@@ -135,8 +140,14 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
                     context.tsIdEnabled(), context.sequences());
 
             context = new FileUploadContext(
-                    context.dbId(), context.schemaName(), context.tableName(), context.includeColumns(),
-                    context.tsIdEnabled(), context.sequences(), context.rows() + response.rows().length);
+                    context.dbId(),
+                    context.schemaName(),
+                    context.tableName(),
+                    context.includeColumns(),
+                    context.tsIdEnabled(),
+                    context.sequences(),
+                    context.rows() + response.rows().length
+            );
 
         } catch (Exception e) {
             fileSubject.unregister();
@@ -150,7 +161,7 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
      * Determines the columns that can be inserted.
      *
      * @param includedColumns the columns to include
-     * @param dataList the data to insert
+     * @param dataList        the data to insert
      * @return a list of insertable columns
      */
     private List<String> determineInsertableColumns(
@@ -163,10 +174,10 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
     /**
      * Handles TSID processing for the data.
      *
-     * @param tsIdEnabled whether TSID is enabled
-     * @param dbTable the database table
+     * @param tsIdEnabled       whether TSID is enabled
+     * @param dbTable           the database table
      * @param insertableColumns the columns that can be inserted
-     * @param dataList the data to insert
+     * @param dataList          the data to insert
      * @return a list of TSID maps
      */
     private List<Map<String, Object>> handleTsId(
@@ -193,8 +204,8 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
      * Converts the insertable columns to a list of InsertableColumn objects.
      *
      * @param insertableColumns the columns that can be inserted
-     * @param sequences the sequences to use
-     * @param dbTable the database table
+     * @param sequences         the sequences to use
+     * @param dbTable           the database table
      * @return a list of InsertableColumn objects
      */
     private List<InsertableColumn> convertToInsertableColumnList(
@@ -220,10 +231,10 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
     /**
      * Processes the types of the data.
      *
-     * @param dbId the database ID
-     * @param dbTable the database table
+     * @param dbId              the database ID
+     * @param dbTable           the database table
      * @param insertableColumns the columns that can be inserted
-     * @param dataList the data to insert
+     * @param dataList          the data to insert
      */
     private void processTypes(
             String dbId, DbTable dbTable, List<String> insertableColumns, List<Map<String, Object>> dataList) {
@@ -236,10 +247,10 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
     /**
      * Executes a batch update for the data.
      *
-     * @param dbId the database ID
+     * @param dbId     the database ID
      * @param dataList the data to insert
-     * @param sql the SQL query
-     * @param dbTable the database table
+     * @param sql      the SQL query
+     * @param dbTable  the database table
      * @return the response of the bulk create operation
      */
     private CreateBulkResponse executeBatchUpdate(

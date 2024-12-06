@@ -1,6 +1,7 @@
 package com.homihq.db2rest.jdbc.config.dialect;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 
@@ -10,40 +11,52 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+public abstract class Dialect {
+    private final ObjectMapper objectMapper;
+    private final String coverChar;
 
-public interface Dialect {
-
-    boolean isSupportedDb(String productName, int majorVersion);
-
-    default boolean supportBatchReturnKeys() {
-        return true;
-    }
-    default boolean supportAlias() {
-        return true;
+    protected Dialect(ObjectMapper objectMapper, String coverChar) {
+        this.objectMapper = objectMapper;
+        this.coverChar = coverChar;
     }
 
-    default int getMajorVersion() {
+    public abstract boolean isSupportedDb(String productName, int majorVersion);
+
+    public abstract void processTypes(DbTable table, List<String> insertableColumns, Map<String, Object> data);
+
+    public abstract String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp);
+
+    public abstract String renderTableNameWithoutAlias(DbTable table);
+
+    protected ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
+
+    protected String getCoverChar() {
+        return coverChar;
+    }
+
+    public boolean supportBatchReturnKeys() {
+        return true;
+    }
+
+    public boolean supportAlias() {
+        return true;
+    }
+
+    public int getMajorVersion() {
         return -1;
     }
 
-
-    void processTypes(DbTable table, List<String> insertableColumns, Map<String,Object> data);
-
-    String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp);
-
-    String renderTableNameWithoutAlias(DbTable table);
-
-    default String getAliasedName(DbColumn dbColumn, boolean deleteOp) {
-        return dbColumn.tableAlias() + "."+ dbColumn.name();
+    public String getAliasedName(DbColumn dbColumn, boolean deleteOp) {
+        return dbColumn.tableAlias() + "." + dbColumn.name();
     }
 
-    default String getAliasedNameParam(DbColumn dbColumn, boolean deleteOp) {
-        return dbColumn.tableAlias() + "_"+ dbColumn.name();
+    public String getAliasedNameParam(DbColumn dbColumn, boolean deleteOp) {
+        return dbColumn.tableAlias() + "_" + dbColumn.name();
     }
 
-
-
-    default List<Object> parseListValues(List<String> values, Class type) {
+    public List<Object> parseListValues(List<String> values, Class type) {
         return
                 values.stream()
                         .map(v -> processValue(v, type, null))
@@ -52,67 +65,63 @@ public interface Dialect {
 
     //TODO use Spring converter
     @Deprecated
-    default Object processValue(String value, Class<?> type, String format) {
+    public Object processValue(String value, Class<?> type, String format) {
         //System.out.println("type " + type);
         if (String.class == type) {
             //return "'" + value + "'";
             return value;
-        }
-        else if (Boolean.class == type || boolean.class == type) {
+        } else if (Boolean.class == type || boolean.class == type) {
             Boolean aBoolean = Boolean.valueOf(value);
             return aBoolean ? "1" : "0";
-        }
-        else if (Integer.class == type || int.class == type) {
+        } else if (Integer.class == type || int.class == type) {
             return Integer.valueOf(value);
-        }
-        else if (Long.class == type || long.class == type) {
+        } else if (Long.class == type || long.class == type) {
             return Long.valueOf(value);
-        }
-        else if (Short.class == type || short.class == type) {
+        } else if (Short.class == type || short.class == type) {
             return Short.valueOf(value);
-        }
-        else if (java.sql.Date.class == type) {
+        } else if (java.sql.Date.class == type) {
             return LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
-        }
-        else if(java.sql.Timestamp.class == type) {
+        } else if (java.sql.Timestamp.class == type) {
             return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-        }
-        else {
+        } else {
             return value;
         }
 
     }
 
-    default List<String> convertToStringArray(Object object) {return List.of();}
+    public List<String> convertToStringArray(Object object) {
+        return List.of();
+    }
 
-    default  Object convertJsonToVO(Object object) {return null;}
+    public Object convertJsonToVO(Object object) {
+        return null;
+    }
 
-    default String getCountSqlTemplate() {
+    public String getCountSqlTemplate() {
         return "count";
     }
 
-    default String getDeleteSqlTemplate() {
+    public String getDeleteSqlTemplate() {
         return "delete";
     }
 
-    default String getExistSqlTemplate() {
+    public String getExistSqlTemplate() {
         return "exists";
     }
 
-    default String getFindOneSqlTemplate() {
+    public String getFindOneSqlTemplate() {
         return "find-one";
     }
 
-    default String getInsertSqlTemplate() {
+    public String getInsertSqlTemplate() {
         return "insert";
     }
 
-    default String getReadSqlTemplate() {
+    public String getReadSqlTemplate() {
         return "read";
     }
 
-    default String getUpdateSqlTemplate() {
+    public String getUpdateSqlTemplate() {
         return "update";
     }
-
 }

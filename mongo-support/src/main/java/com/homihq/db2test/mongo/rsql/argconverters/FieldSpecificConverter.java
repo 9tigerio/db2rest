@@ -18,7 +18,9 @@ public class FieldSpecificConverter implements StringToQueryValueConverter {
     @Override
     public Lazy<Object> convert(final ConversionInfo info) {
         return Lazy.fromFunc(() -> {
-            if (info.targetEntityClass().equals(objectClass) && info.pathToField().equals(pathToField)) {
+            if (info.targetEntityClass().equals(objectClass)
+                    && info.pathToField().equals(pathToField)
+            ) {
                 return converter.apply(info.argument());
             }
 

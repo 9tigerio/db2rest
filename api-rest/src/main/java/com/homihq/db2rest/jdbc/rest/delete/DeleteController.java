@@ -1,11 +1,11 @@
 package com.homihq.db2rest.jdbc.rest.delete;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
-import com.homihq.db2rest.jdbc.core.service.DeleteService;
 import com.homihq.db2rest.core.dto.DeleteResponse;
+import com.homihq.db2rest.jdbc.core.service.DeleteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
@@ -20,7 +20,8 @@ public class DeleteController implements DeleteRestApi {
             String dbId,
             String schemaName,
             String tableName,
-                                 String filter) {
+            String filter
+    ) {
 
         db2RestConfigProperties.checkDeleteAllowed(filter);
 

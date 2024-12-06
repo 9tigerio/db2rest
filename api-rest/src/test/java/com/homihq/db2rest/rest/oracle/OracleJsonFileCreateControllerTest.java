@@ -2,7 +2,11 @@ package com.homihq.db2rest.rest.oracle;
 
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import com.homihq.db2rest.OracleBaseIntegrationTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -24,12 +28,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestWithResources
 class OracleJsonFileCreateControllerTest extends OracleBaseIntegrationTest {
 
-        Path dir = FileSystems.getDefault().getPath("src/test/resources/testdata");
+    Path dir = FileSystems.getDefault().getPath("src/test/resources/testdata");
 
-        Path actorFile = dir.resolve("actor.json");
-        Path filmFile = dir.resolve("BULK_CREATE_FILM_REQUEST.json");
-        Path nonArrayActorFile = dir.resolve("CREATE_ACTOR_REQUEST.json");
-        Path directorFile = dir.resolve("director.json");
+    Path actorFile = dir.resolve("actor.json");
+    Path filmFile = dir.resolve("BULK_CREATE_FILM_REQUEST.json");
+    Path nonArrayActorFile = dir.resolve("CREATE_ACTOR_REQUEST.json");
+    Path directorFile = dir.resolve("director.json");
+
     @Test
     @DisplayName("Create many actors via JSON file upload.")
     void uploadActorsFile() throws Exception {
@@ -56,7 +61,7 @@ class OracleJsonFileCreateControllerTest extends OracleBaseIntegrationTest {
         MockMultipartFile file = new MockMultipartFile("file", nonArrayActorFile.toString(),
                 "application/json", Files.readAllBytes(nonArrayActorFile));
 
-         mockMvc.perform(multipart(VERSION + "/oradb/ACTOR/upload")
+        mockMvc.perform(multipart(VERSION + "/oradb/ACTOR/upload")
                         .file(file)
                         .contentType("multipart/form-data")
                         .accept(APPLICATION_JSON))

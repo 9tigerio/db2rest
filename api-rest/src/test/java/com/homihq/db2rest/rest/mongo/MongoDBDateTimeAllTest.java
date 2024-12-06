@@ -4,24 +4,26 @@ import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MongoBaseIntegrationTest;
-import com.homihq.db2rest.rest.DateTimeUtil;
 import org.bson.Document;
-import org.junit.jupiter.api.*;
-import org.springdoc.api.ErrorMessage;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
+import org.junit.jupiter.api.TestMethodOrder;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.homihq.db2rest.mongo.rest.api.MongoRestApi.VERSION;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,11 +33,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MongoDBDateTimeAllTest extends MongoBaseIntegrationTest {
 
+    private final String dateTime = "2024-03-15T10:30:45Z";
     @WithJacksonMapper
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
-
-    private final String dateTime = "2024-03-15T10:30:45Z";
 
     @Test
     @Order(1)
@@ -45,8 +46,8 @@ public class MongoDBDateTimeAllTest extends MongoBaseIntegrationTest {
         Document actorRequestWithDateTime = new Document();
         actorRequestWithDateTime.put("first_name", "Collective");
         actorRequestWithDateTime.put("last_name", "Unconscious");
-        actorRequestWithDateTime.put("last_update", LocalDateTime.of(2020,03,15,
-                14,30,45));
+        actorRequestWithDateTime.put("last_update", LocalDateTime.of(2020, 03, 15,
+                14, 30, 45));
 
         mockMvc.perform(post(VERSION + "/mongo/Sakila_actors")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
@@ -59,21 +60,21 @@ public class MongoDBDateTimeAllTest extends MongoBaseIntegrationTest {
                 .andDo(document("mongodb-create-an-actor-with-datetime"));
     }
 
-//    @Test
-//    @Order(1)
-//    @DisplayName("Test Create an actor with error timestamp field in MongoDB")
-//    void createActorWithErrorDateTimeField() throws Exception {
-//        Document actorRequestWithErrorDateTime = new Document()
-//                .append("first_name", "Hero")
-//                .append("last_name", "shadow")
-//                .append("last_update", "2019-15-35T14:75:90"); // Invalid date string
-//
-//        mockMvc.perform(post(VERSION + "/mongo/Sakila_actors")
-//                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
-//                .andExpect(status().isBadRequest())
-//                .andDo(document("mongodb-create-an-actor-with-error-timestamp"));
-//    }
+    //    @Test
+    //    @Order(1)
+    //    @DisplayName("Test Create an actor with error timestamp field in MongoDB")
+    //    void createActorWithErrorDateTimeField() throws Exception {
+    //        Document actorRequestWithErrorDateTime = new Document()
+    //                .append("first_name", "Hero")
+    //                .append("last_name", "shadow")
+    //                .append("last_update", "2019-15-35T14:75:90"); // Invalid date string
+    //
+    //        mockMvc.perform(post(VERSION + "/mongo/Sakila_actors")
+    //                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+    //                        .content(objectMapper.writeValueAsString(actorRequestWithErrorDateTime)))
+    //                .andExpect(status().isBadRequest())
+    //                .andDo(document("mongodb-create-an-actor-with-error-timestamp"));
+    //    }
 
     @Test
     @Order(2)

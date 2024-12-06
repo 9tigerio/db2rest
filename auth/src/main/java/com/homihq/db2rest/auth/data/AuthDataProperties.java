@@ -26,5 +26,7 @@ public class AuthDataProperties {
         return StringUtils.startsWith(source, "file");
     }
 
-    public boolean isApiDataProvider() {return StringUtils.startsWithAny(source, "http", "https");}
+    public boolean isApiDataProvider() {
+        return StringUtils.startsWithAny(source, "http", "https");
+    }
 }

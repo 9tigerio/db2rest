@@ -30,22 +30,19 @@ class MariaDBCrossJoinControllerTest extends MariaDBBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CROSS_JOIN_USERS.json")
-    List<Map<String,Object>> CROSS_JOIN;
+    List<Map<String, Object>> CROSS_JOIN;
 
     @GivenJsonResource("/testdata/CROSS_JOIN_TOPS.json")
-    List<Map<String,Object>> CROSS_JOIN_TOPS;
-
+    List<Map<String, Object>> CROSS_JOIN_TOPS;
 
     @Test
     @DisplayName("Test cross Join - Users")
     void testCrossJoin() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mariadb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN))
                 )
-               // .andDo(print())
+                // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(16)))
@@ -59,15 +56,11 @@ class MariaDBCrossJoinControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$[1].firstname", equalTo("Jack")))
 
                 .andDo(document("mariadb-cross-join-users"));
-
-
     }
 
     @Test
     @DisplayName("Test cross Join - Tops")
     void testCrossJoinTops() throws Exception {
-
-
         mockMvc.perform(post(VERSION + "/mariadb/tops/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
@@ -82,11 +75,7 @@ class MariaDBCrossJoinControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$[0].bottom_item", equalTo("jeans")))
                 .andExpect(jsonPath("$[0].color", equalTo("red")))
                 .andExpect(jsonPath("$[0].botColor", equalTo("blue")))
-
-
                 .andDo(document("mariadb-cross-join-tops"));
-
-
     }
 
 }

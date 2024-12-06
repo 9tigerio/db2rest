@@ -4,5 +4,11 @@ import com.homihq.db2rest.jdbc.config.model.DbTable;
 
 import java.util.List;
 
-public record DbMeta(String productName, int majorVersion, String driverName, String driverVersion, List<DbTable> dbTables) {
+public record DbMeta(
+        String productName,
+        int majorVersion,
+        String driverName,
+        String driverVersion,
+        List<DbTable> dbTables
+) {
 }

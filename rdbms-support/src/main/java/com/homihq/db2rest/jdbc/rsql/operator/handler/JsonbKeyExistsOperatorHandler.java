@@ -9,18 +9,18 @@ import java.util.Map;
 
 public class JsonbKeyExistsOperatorHandler implements OperatorHandler {
 
-   private static final String OPERATOR = " is not null ";
+    private static final String OPERATOR = " is not null ";
 
     @Override
     public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
 
         //Object vo = dialect.processValue(value, type, null);
 
-        if(dialect.supportAlias()) {
+        if (dialect.supportAlias()) {
             // String key = reviewAndSetParam(dialect.getAliasedNameParam(column, dbWhere.isDelete()), vo, paramMap);
-            return dialect.getAliasedName(column, dbWhere.isDelete()) + column.jsonParts() + OPERATOR ;
-        }
-        else{
+            return dialect.getAliasedName(column, dbWhere.isDelete()) + column.jsonParts()
+                    + OPERATOR;
+        } else {
             //String key = reviewAndSetParam(column.name(), vo, paramMap);
             return column.name() + column.jsonParts() + OPERATOR;
         }

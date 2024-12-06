@@ -2,7 +2,11 @@ package com.homihq.db2rest.rest.pg;
 
 import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -57,7 +61,7 @@ class PgJsonFileCreateControllerTest extends PostgreSQLBaseIntegrationTest {
         MockMultipartFile file = new MockMultipartFile("file", nonArrayActorFile.toString(),
                 "application/json", Files.readAllBytes(nonArrayActorFile));
 
-         mockMvc.perform(multipart(VERSION + "/pgsqldb/actor/upload")
+        mockMvc.perform(multipart(VERSION + "/pgsqldb/actor/upload")
                         .file(file)
                         .contentType("multipart/form-data")
                         .accept(APPLICATION_JSON))

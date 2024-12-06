@@ -2,19 +2,24 @@ package com.homihq.db2rest.jdbc.config.driver;
 
 import lombok.extern.slf4j.Slf4j;
 
-import javax.net.ssl.*;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 import java.io.ByteArrayInputStream;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
 import java.util.Date;
-import javax.security.auth.x500.X500Principal;
-import java.net.Socket;
-import java.security.cert.CertificateException;
 
 
 @Slf4j
@@ -53,12 +58,14 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
         keyStore.setCertificateEntry("postgresql", cert);
 
         // Create TrustManagerFactory with custom TrustManager
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        TrustManagerFactory tmf =
+                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmf.init(keyStore);
 
         // Create SSLContext with custom TrustManager that includes hostname verification
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        TrustManager[] trustManagers = createTrustManagersWithHostnameVerification(tmf.getTrustManagers());
+        TrustManager[] trustManagers =
+                createTrustManagersWithHostnameVerification(tmf.getTrustManagers());
         sslContext.init(null, trustManagers, null);
 
         // Get the factory
@@ -83,10 +90,10 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
 
         // Check for basic constraints if it's a CA certificate
         int basicConstraints = cert.getBasicConstraints();
-        if (basicConstraints != -1) {  // -1 indicates this is not a CA
-            if (basicConstraints < 0) {
-                throw new CertificateException("Invalid basic constraints for CA certificate");
-            }
+        boolean isNotCA = basicConstraints != -1;
+        boolean isInvalid = basicConstraints < 0;
+        if (isNotCA && isInvalid) {
+            throw new CertificateException("Certificate has invalid subject");
         }
 
         // Log certificate information for debugging
@@ -104,7 +111,8 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
             if (trustManagers[i] instanceof X509TrustManager) {
                 int finalI = i;
                 wrappedTrustManagers[i] = new X509TrustManager() {
-                    private final X509TrustManager delegate = (X509TrustManager) trustManagers[finalI];
+                    private final X509TrustManager delegate =
+                            (X509TrustManager) trustManagers[finalI];
 
                     @Override
                     public void checkClientTrusted(X509Certificate[] chain, String authType)
@@ -181,7 +189,8 @@ public class EnvVarSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
     @Override
     public Socket createSocket(java.net.InetAddress address, int port, java.net.InetAddress localAddress,
                                int localPort) throws java.io.IOException {
-        SSLSocket sslSocket = (SSLSocket) factory.createSocket(address, port, localAddress, localPort);
+        SSLSocket sslSocket =
+                (SSLSocket) factory.createSocket(address, port, localAddress, localPort);
         SSLParameters sslParams = sslSocket.getSSLParameters();
         sslParams.setEndpointIdentificationAlgorithm("HTTPS");
         sslSocket.setSSLParameters(sslParams);

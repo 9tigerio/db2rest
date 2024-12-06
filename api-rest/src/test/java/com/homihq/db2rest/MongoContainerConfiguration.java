@@ -23,15 +23,20 @@ public class MongoContainerConfiguration {
             .withCopyFileToContainer(MountableFile.forClasspathResource("./mongo/mongo-sakila.js"),
                     "/docker-entrypoint-initdb.d/mongo-sakila.js");
 
-   static  {
+    static {
         mongodbContainer.start();
     }
 
+    private static String getUri() {
+        return "mongodb://admin:admin@" + mongodbContainer.getHost() + ":"
+                + mongodbContainer.getFirstMappedPort()
+                + "/SampleCollections";
+    }
 
     @Bean
     public RoutingMongoTemplate routingMongoTemplate() {
-       String mongoUri = MongoContainerConfiguration.getUri();
-       String databaseName = "SampleCollections";
+        String mongoUri = MongoContainerConfiguration.getUri();
+        String databaseName = "SampleCollections";
 
         RoutingMongoTemplate routingMongoTemplate = new RoutingMongoTemplate();
 
@@ -45,10 +50,5 @@ public class MongoContainerConfiguration {
         routingMongoTemplate.add("mongo", mongoTemplate);
 
         return routingMongoTemplate;
-    }
-
-    private static String getUri() {
-        return "mongodb://admin:admin@" + mongodbContainer.getHost() + ":" + mongodbContainer.getFirstMappedPort()
-                + "/SampleCollections";
     }
 }

@@ -6,20 +6,19 @@ import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
-public class MariaDBDialect implements Dialect {
-
-    private final ObjectMapper objectMapper;
-
-    private String coverChar = "`";
+public class MariaDBDialect extends Dialect {
+    public MariaDBDialect(ObjectMapper objectMapper) {
+        super(objectMapper, "`");
+    }
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
@@ -37,28 +36,29 @@ public class MariaDBDialect implements Dialect {
 
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
 
-                    data.put(columnName, objectMapper.writeValueAsString(value));
+                    data.put(columnName, getObjectMapper().writeValueAsString(value));
+                } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "TIMESTAMP")) {
+                    LocalDateTime v = convertToLocalDateTime((String) value);
+                    data.put(columnName, v);
                 }
 
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new GenericDataAccessException(exception.getMessage());
         }
 
     }
 
     private String getQuotedName(String name) {
-        return coverChar + name + coverChar;
+        return getCoverChar() + name + getCoverChar();
     }
 
     @Override
     public String renderTableName(DbTable table, boolean containsWhere, boolean deleteOp) {
 
-        if(containsWhere && !deleteOp) {
+        if (containsWhere && !deleteOp) {
             return getQuotedName(table.schema()) + "." + getQuotedName(table.name()) + " AS " + table.alias();
-        }
-        else {
+        } else {
             return this.renderTableNameWithoutAlias(table);
         }
 
@@ -71,12 +71,18 @@ public class MariaDBDialect implements Dialect {
 
     @Override
     public String getAliasedName(DbColumn dbColumn, boolean deleteOp) {
-        if(deleteOp) {
+        if (deleteOp) {
             return dbColumn.name();
         }
 
-        return dbColumn.tableAlias() + "."+ dbColumn.name();
+        return dbColumn.tableAlias() + "." + dbColumn.name();
     }
 
-
+    private LocalDateTime convertToLocalDateTime(String value) {
+        try {
+            return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to LocalDateTime type - " + e.getLocalizedMessage());
+        }
+    }
 }

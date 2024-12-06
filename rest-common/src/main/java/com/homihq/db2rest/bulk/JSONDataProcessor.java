@@ -10,15 +10,15 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-
 @Component
 @Slf4j
-public class JSONDataProcessor implements DataProcessor{
+public class JSONDataProcessor implements DataProcessor {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
-    public List<Map<String, Object>> getData(InputStream inputStream) throws Exception{
-        return objectMapper.readValue(inputStream, new TypeReference<List<Map<String, Object>>>(){});
+    public List<Map<String, Object>> getData(InputStream inputStream) throws Exception {
+        return objectMapper.readValue(inputStream, new TypeReference<>() {});
     }
 
     @Override

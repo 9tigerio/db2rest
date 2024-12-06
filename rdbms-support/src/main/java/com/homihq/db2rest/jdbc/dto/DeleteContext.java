@@ -17,16 +17,16 @@ import java.util.Objects;
 @NoArgsConstructor
 @Data
 @Slf4j
-public class DeleteContext{
+public class DeleteContext {
     String dbId;
     String tableName;
     DbTable table;
     String where;
-    Map<String,Object> paramMap;
-    Map<String,Object> data;
+    Map<String, Object> paramMap;
+    Map<String, Object> data;
 
     public void createParamMap() {
-        if(Objects.isNull(paramMap)) {
+        if (Objects.isNull(paramMap)) {
             paramMap = new HashMap<>();
         }
     }

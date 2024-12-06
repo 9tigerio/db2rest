@@ -10,6 +10,13 @@ import java.util.function.Supplier;
  */
 public class Lazy<T> implements Supplier<T> {
 
+    private T value;
+    private boolean hasRun;
+    private Supplier<T> supplier;
+
+    private Lazy() {
+    }
+
     public static <S> Lazy<S> empty() {
         Lazy<S> lazy = new Lazy<>();
         lazy.hasRun = true;
@@ -28,13 +35,6 @@ public class Lazy<T> implements Supplier<T> {
         lazy.supplier = supplier;
         return lazy;
     }
-
-    private Lazy() {
-    }
-
-    private T value;
-    private boolean hasRun;
-    private Supplier<T> supplier;
 
     @Override
     public T get() {

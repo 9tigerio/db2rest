@@ -7,5 +7,6 @@ import java.util.Map;
 
 public interface FunctionService extends SubRoutine {
     SimpleJdbcCall getSimpleJdbcCall(String dbId, String subRoutineName);
+
     Map<String, Object> execute(String dbId, String subRoutineName, Map<String, Object> inParams);
 }

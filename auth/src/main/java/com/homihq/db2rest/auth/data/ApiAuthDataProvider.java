@@ -1,7 +1,12 @@
 package com.homihq.db2rest.auth.data;
 
 
-import com.homihq.db2rest.auth.common.*;
+import com.homihq.db2rest.auth.common.ApiExcludedResource;
+import com.homihq.db2rest.auth.common.ApiKey;
+import com.homihq.db2rest.auth.common.AuthDataProvider;
+import com.homihq.db2rest.auth.common.AuthDataSource;
+import com.homihq.db2rest.auth.common.ResourceRole;
+import com.homihq.db2rest.auth.common.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
@@ -16,15 +21,15 @@ public class ApiAuthDataProvider implements AuthDataProvider {
 
     public ApiAuthDataProvider(String apiEndPoint, String apiKey) {
         RestClient restClient = RestClient.builder()
-                 .baseUrl(apiEndPoint)
-                 .defaultHeader("x-api-key", apiKey)
-                 .build();
+                .baseUrl(apiEndPoint)
+                .defaultHeader("x-api-key", apiKey)
+                .build();
 
         authDataSource =
-        restClient.get()
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .body(AuthDataSource.class);
+                restClient.get()
+                        .accept(MediaType.APPLICATION_JSON)
+                        .retrieve()
+                        .body(AuthDataSource.class);
 
         log.info("Auth data - {}", authDataSource);
     }
@@ -53,6 +58,5 @@ public class ApiAuthDataProvider implements AuthDataProvider {
     public Optional<User> getUserByUsername(String username) {
         return Optional.empty();
     }
-
 
 }
