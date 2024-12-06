@@ -86,12 +86,12 @@
         <module>auth</module>
         <module>mongo-support</module>
         <module>rest-common</module>
-        <module>pg-dialect</module>
-        <module>mssql-dialect</module>
-        <module>mysql-dialect</module>
-        <module>mariadb-dialect</module>
-        <module>oracle-dialect</module>
-        <module>oracle9i-dialect</module>
+        <module>dialects/pg-dialect</module>
+        <module>dialects/mssql-dialect</module>
+        <module>dialects/mysql-dialect</module>
+        <module>dialects/mariadb-dialect</module>
+        <module>dialects/oracle-dialect</module>
+        <module>dialects/oracle9i-dialect</module>
         <module>rdbms-common</module>
         <module>db2rest-common</module>
         <module>rdbms-support</module>

@@ -6,20 +6,24 @@
         <groupId>io.9tiger</groupId>
         <artifactId>db2rest-parent</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
-
+        <relativePath>../../pom.xml</relativePath>
         <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>io.9tiger</groupId>
-    <artifactId>mariadb-dialect</artifactId>
-    <name>mariadb-dialect</name>
-    <description>mariadb-dialect</description>
+    <artifactId>pg-dialect</artifactId>
+    <name>pg-dialect</name>
+    <description>pg-dialect</description>
     <dependencies>
+
         <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker-qual</artifactId>
+            <version>3.42.0</version>
         </dependency>
 
         <dependency>
@@ -28,5 +32,7 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+
+
 
 </project>
