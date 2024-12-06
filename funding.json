@@ -1,0 +1,70 @@
+{
+   "name": "DB2Rest",
+   "description": "An open-source, no-code REST data API layer for databases, enabling ultra-fast, secure, and scalable data access.",
+   "url": "https://db2rest.com",
+   "repository": "https://github.com/9tigerio/db2rest",
+   "issues": "https://github.com/9tigerio/db2rest/issues",
+   "features": {
+     "main": [
+       "Eliminates the need for boilerplate database access code",
+       "No ORM overhead for performance efficiency",
+       "Supports multiple databases and cloud platforms",
+       "Secure with authentication and role-based access control",
+       "Advanced features like query batching and database caching",
+       "Legacy modernization - instantly and securely expose databases to other systems",
+       "Simplify integration - elimiate file extracts, FTP based integrations with modern API based data share",
+       "Makes it super easy to support GenAI/LLM function calling"
+     ],
+     "unique": [
+       "Leverages Java 21 virtual threads for high scalability",
+       "No coding required",
+       "No SQL expertise required",
+       "Multi-tenancy built-in",
+       "Easy support for Database Agent AI"
+     ]
+   },
+   "funding_goals": [
+     {
+       "name": "Documentation and Tutorials",
+       "description": "Enhance documentation and provide more learning resources for onboarding users. Invest in articles, videos to make developer experience easy.",
+       "amount": 2500,
+       "currency": "USD"
+     },
+     {
+       "name": "Feature Enhancements",
+       "description": "Develop new features such as sharding, federated, query and data security. Will require to spend on cloud resources.",
+       "amount": 20000,
+       "currency": "USD"
+     },
+     {
+       "name": "Community Support",
+       "description": "Provide dedicated support for the open-source community via Slack and Discord.",
+       "amount": 2500,
+       "currency": "USD"
+     }
+   ],
+   "maintainers": [
+     {
+       "name": "Dhrubo",
+       "email": "dhrubo@9tiger.io",
+       "role": "Primary Maintainer"
+     },
+     {
+        "name": "Thad",
+        "email": "thad@9tiger.io",
+        "role": "Primary Maintainer"
+      }
+   ],
+   "licensing": "Apache 2.0",
+   "backing_methods": [
+     {
+       "method": "GitHub Sponsors",
+       "url": "https://github.com/sponsors/9tigerio"
+     },
+     {
+       "method": "PayPal",
+       "url": "https://www.paypal.me/db2rest"
+     }
+   ]
+ }
+ 
