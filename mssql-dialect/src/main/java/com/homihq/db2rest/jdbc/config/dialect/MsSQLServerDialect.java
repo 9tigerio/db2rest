@@ -7,6 +7,8 @@ import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,9 @@ public class MsSQLServerDialect extends Dialect {
 
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
                     data.put(columnName, getObjectMapper().writeValueAsString(value));
+                } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "datetime")) {
+                    LocalDateTime v = convertToLocalDateTime((String) value);
+                    data.put(columnName, v);
                 }
             }
         } catch (Exception exception) {
@@ -79,5 +84,13 @@ public class MsSQLServerDialect extends Dialect {
     @Override
     public String getUpdateSqlTemplate() {
         return "update-mssql";
+    }
+
+    private LocalDateTime convertToLocalDateTime(String value) {
+        try {
+            return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to LocalDateTime type - " + e.getLocalizedMessage());
+        }
     }
 }

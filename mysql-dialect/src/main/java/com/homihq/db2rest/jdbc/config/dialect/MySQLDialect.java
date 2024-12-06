@@ -8,6 +8,8 @@ import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,9 @@ public class MySQLDialect extends Dialect {
                 if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
 
                     data.put(columnName, getObjectMapper().writeValueAsString(value));
+                } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "TIMESTAMP")) {
+                    LocalDateTime v = convertToLocalDateTime((String) value);
+                    data.put(columnName, v);
                 }
 
             }
@@ -56,5 +61,13 @@ public class MySQLDialect extends Dialect {
     @Override
     public String renderTableNameWithoutAlias(DbTable table) {
         return getQuotedName(table.schema()) + "." + getQuotedName(table.name());
+    }
+
+    private LocalDateTime convertToLocalDateTime(String value) {
+        try {
+            return LocalDateTime.parse(value, DateTimeFormatter.ISO_DATE_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to LocalDateTime type - " + e.getLocalizedMessage());
+        }
     }
 }
