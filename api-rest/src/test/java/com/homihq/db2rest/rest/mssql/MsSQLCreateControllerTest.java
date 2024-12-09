@@ -27,19 +27,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/CREATE_FILM_REQUEST.json")
-    Map<String, Object> CREATE_FILM_REQUEST;
+    Map<String, Object> createFilmRequest;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/CREATE_FILM_REQUEST_ERROR.json")
-    Map<String, Object> CREATE_FILM_REQUEST_ERROR;
+    Map<String, Object> createFilmRequestError;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/CREATE_VANITY_VAN_REQUEST.json")
-    Map<String, Object> CREATE_VANITY_VAN_REQUEST;
+    Map<String, Object> createVanityVanRequest;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/CREATE_DIRECTOR_REQUEST.json")
-    Map<String, Object> CREATE_DIRECTOR_REQUEST;
+    Map<String, Object> createDirectorRequest;
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/CREATE_FILM_REQUEST_MISSING_PAYLOAD.json")
-    Map<String, Object> CREATE_FILM_REQUEST_MISSING_PAYLOAD;
+    Map<String, Object> createFilmRequestMissingPayload;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -50,7 +50,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/film")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST))
+                        .content(objectMapper.writeValueAsString(createFilmRequest))
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -65,7 +65,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
     void createFilmError() throws Exception {
         mockMvc.perform(post(getPrefixApiUrl() + "/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_ERROR)))
+                        .content(objectMapper.writeValueAsString(createFilmRequestError)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document(DB_NAME + "-create-film-error"));
@@ -77,7 +77,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/films")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(document(DB_NAME + "-create-item-in-non-existing-table"));
@@ -90,7 +90,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createDirectorRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -104,7 +104,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "false")
-                        .content(objectMapper.writeValueAsString(CREATE_DIRECTOR_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createDirectorRequest)))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document(DB_NAME + "-create-a-director-with-tsid-OFF"));
@@ -117,7 +117,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .param("tsIdEnabled", "true")
-                        .content(objectMapper.writeValueAsString(CREATE_VANITY_VAN_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createVanityVanRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -130,7 +130,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
         var result = mockMvc.perform(post(getPrefixApiUrl() + "/film")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createVanityVanRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -161,7 +161,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .queryParam("columns", "")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.row", equalTo(1)))
@@ -191,7 +191,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description,language_id")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_MISSING_PAYLOAD))) //description is not in payload will be set to null
+                        .content(objectMapper.writeValueAsString(createFilmRequestMissingPayload))) //description is not in payload will be set to null
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document(DB_NAME + "-create-a-film-missing-payload-attribute-error"))
@@ -205,7 +205,7 @@ class MsSQLCreateControllerTest extends MsSQLBaseIntegrationTest {
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .queryParam("columns", "title,description")
-                        .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
+                        .content(objectMapper.writeValueAsString(createFilmRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Cannot insert the value NULL into column 'language_id'")))

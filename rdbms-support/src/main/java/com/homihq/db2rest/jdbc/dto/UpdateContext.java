@@ -41,8 +41,8 @@ public class UpdateContext {
             paramMap = new HashMap<>();
         }
 
-        for (String key : data.keySet()) {
-            paramMap.put("set_" + key, data.get(key));
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            paramMap.put("set_" + entry.getKey(), entry.getValue());
         }
     }
 }

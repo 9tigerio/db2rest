@@ -2,6 +2,7 @@ package com.homihq.db2rest.jdbc.sql;
 
 
 import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.homihq.db2rest.jdbc.util.AliasGenerator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.DatabaseMetaData;
@@ -9,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
 
 public interface MetaDataExtraction {
     boolean canHandle(String database);
@@ -73,7 +72,7 @@ public interface MetaDataExtraction {
                 String catalog = resultSet.getString(ColumnLabel.TABLE_CAT.name());
                 String schema = resultSet.getString(ColumnLabel.TABLE_SCHEM.name());
                 String tableType = resultSet.getString(ColumnLabel.TABLE_TYPE.name());
-                String tableAlias = getAlias(tableName);
+                String tableAlias = AliasGenerator.getAlias(tableName);
                 MetaDataTable metaDataTable =
                         new MetaDataTable(tableName, catalog, schema, tableType, tableAlias);
 

@@ -74,8 +74,9 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
 
             processTypes(dbId, dbTable, insertableColumns, dataList);
 
-            CreateContext context = new CreateContext(dbId, dbTable, insertableColumns, insertableColumnList);
-            String sql = sqlCreatorTemplate.create(context);
+            CreateContext createContext =
+                    new CreateContext(dbId, dbTable, insertableColumns, insertableColumnList);
+            String sql = sqlCreatorTemplate.create(createContext);
 
             log.debug("SQL - {}", sql);
             log.debug("Data - {}", dataList);

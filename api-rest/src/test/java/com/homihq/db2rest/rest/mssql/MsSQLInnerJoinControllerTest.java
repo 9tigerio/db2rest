@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MsSQLInnerJoinControllerTest extends MsSQLBaseIntegrationTest {
 
     @GivenJsonResource(TEST_JSON_FOLDER + "/INNER_JOIN.json")
-    List<Map<String, Object>> INNER_JOIN;
+    List<Map<String, Object>> innerJoin;
 
     @Test
     @DisplayName("Test inner Join")
@@ -31,7 +31,7 @@ class MsSQLInnerJoinControllerTest extends MsSQLBaseIntegrationTest {
         mockMvc.perform(post(getPrefixApiUrl() + "/review/_expand")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(INNER_JOIN))
+                        .content(objectMapper.writeValueAsString(innerJoin))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

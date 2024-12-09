@@ -7,8 +7,10 @@ import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.jdbc.config.model.DbWhere;
 import com.homihq.db2rest.jdbc.dto.JoinDetail;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
+import com.homihq.db2rest.jdbc.rsql.operator.OperatorMap;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
+import com.homihq.db2rest.jdbc.util.AliasGenerator;
 import cz.jirutka.rsql.parser.ast.Node;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static com.homihq.db2rest.jdbc.rsql.operator.OperatorMap.getRSQLOperator;
-import static com.homihq.db2rest.jdbc.rsql.operator.OperatorMap.getSQLOperator;
-import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
-
 
 @Slf4j
 @Order(6)
@@ -54,7 +51,7 @@ public class JoinProcessor implements ReadProcessor {
                     .getTable(readContext.getDbId(), readContext.getSchemaName(), tableName);
 
 
-            table = table.copyWithAlias(getAlias(tableName));
+            table = table.copyWithAlias(AliasGenerator.getAlias(tableName));
 
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
             readContext.addColumns(columnList);
@@ -132,8 +129,8 @@ public class JoinProcessor implements ReadProcessor {
     }
 
     private void processOn(String onExpression, int onIdx, DbTable table, DbTable rootTable, DbJoin dbJoin) {
-        String rSqlOperator = getRSQLOperator(onExpression);
-        String operator = getSQLOperator(rSqlOperator);
+        String rSqlOperator = OperatorMap.getRSQLOperator(onExpression);
+        String operator = OperatorMap.getSQLOperator(rSqlOperator);
 
         String left = onExpression.substring(0, onExpression.indexOf(rSqlOperator)).trim();
         String right = onExpression.substring(

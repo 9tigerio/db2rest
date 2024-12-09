@@ -1,20 +1,20 @@
 package com.homihq.db2rest.jdbc.util;
 
-
+import lombok.experimental.UtilityClass;
 
 import java.util.Random;
 
+@UtilityClass
+public class AliasGenerator {
 
-public class
-AliasGenerator {
+    private static final int MAX_ALIAS_LENGTH = 4;
+
     private static final Random random = new Random();
 
-    public static String getAlias(String sqlIdentifier) {
-        int LENGTH = 4;
-        return
-                sqlIdentifier.length() > LENGTH ?
-                        sqlIdentifier.substring(0, LENGTH) + "_" + random.nextInt(100)
-                        : sqlIdentifier + "_" + random.nextInt(1000);
+    public String getAlias(String sqlIdentifier) {
+        return sqlIdentifier.length() > MAX_ALIAS_LENGTH
+                ? sqlIdentifier.substring(0, MAX_ALIAS_LENGTH) + "_" + random.nextInt(100)
+                : sqlIdentifier + "_" + random.nextInt(1000);
 
     }
 }

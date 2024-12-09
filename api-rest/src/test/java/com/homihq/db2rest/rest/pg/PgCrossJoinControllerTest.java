@@ -35,17 +35,17 @@ class PgCrossJoinControllerTest extends PostgreSQLBaseIntegrationTest {
             .registerModule(new JavaTimeModule());
 
     @GivenJsonResource("/testdata/CROSS_JOIN_USERS_PG.json")
-    List<Map<String, Object>> CROSS_JOIN;
+    List<Map<String, Object>> crossJoinUsers;
 
     @GivenJsonResource("/testdata/CROSS_JOIN_TOPS_PG.json")
-    List<Map<String, Object>> CROSS_JOIN_TOPS;
+    List<Map<String, Object>> crossJoinTops;
 
     @Test
     @DisplayName("Test cross Join - Users")
     void testCrossJoinUsers() throws Exception {
         mockMvc.perform(post(VERSION + "/pgsqldb/users/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CROSS_JOIN))
+                        .content(objectMapper.writeValueAsString(crossJoinUsers))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -68,7 +68,7 @@ class PgCrossJoinControllerTest extends PostgreSQLBaseIntegrationTest {
     void testCrossJoinTops() throws Exception {
         mockMvc.perform(post(VERSION + "/pgsqldb/tops/_expand")
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(CROSS_JOIN_TOPS))
+                        .content(objectMapper.writeValueAsString(crossJoinTops))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

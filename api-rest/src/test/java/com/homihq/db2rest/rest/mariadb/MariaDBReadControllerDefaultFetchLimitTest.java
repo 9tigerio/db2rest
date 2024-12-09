@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(305)
 @TestPropertySource(properties = {"db2rest.defaultFetchLimit=5"})
-public class MariaDBReadControllerDefaultFetchLimitTest extends MariaDBBaseIntegrationTest {
+class MariaDBReadControllerDefaultFetchLimitTest extends MariaDBBaseIntegrationTest {
 
 
     @Test

@@ -12,16 +12,10 @@ public class IsNullOperatorHandler implements OperatorHandler {
     private static final String OPERATOR = " is null ";
 
     @Override
-    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
-        //Object vo = dialect.processValue(value, type, null);
-
-        if (dialect.supportAlias()) {
-            //String key = reviewAndSetParam(dialect.getAliasedNameParam(column, dbWhere.isDelete()), null, paramMap);
-            return dialect.getAliasedName(column, dbWhere.isDelete()) + OPERATOR;
-        } else {
-            //String key = reviewAndSetParam(column.name(), null, paramMap);
-            return column.name() + OPERATOR;
-        }
+    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class<?> type, Map<String, Object> paramMap) {
+        return dialect.supportAlias()
+                ? dialect.getAliasedName(column, dbWhere.isDelete()) + OPERATOR
+                : column.name() + OPERATOR;
     }
 
 }

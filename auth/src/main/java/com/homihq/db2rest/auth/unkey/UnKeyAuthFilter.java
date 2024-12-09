@@ -22,9 +22,10 @@ import java.util.Optional;
 @Slf4j
 public class UnKeyAuthFilter extends OncePerRequestFilter {
 
+    private static final String API_KEY_HEADER = "X-API-KEY";
+
     private final UnKeyAuthService unKeyAuthService;
     private final ObjectMapper objectMapper;
-    String API_KEY_HEADER = "X-API-KEY";
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,

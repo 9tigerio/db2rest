@@ -16,12 +16,12 @@ public class NotInOperatorHandler implements OperatorHandler {
     private static final String OPERATOR = " not in ";
 
     @Override
-    public String handle(Dialect dialect, DbColumn columnName, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
+    public String handle(Dialect dialect, DbColumn columnName, DbWhere dbWhere, String value, Class<?> type, Map<String, Object> paramMap) {
         return handle(dialect, columnName, dbWhere, Collections.singletonList(value), type, paramMap);
     }
 
     @Override
-    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, List<String> values, Class type, Map<String, Object> paramMap) {
+    public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, List<String> values, Class<?> type, Map<String, Object> paramMap) {
 
         List<Object> vo = dialect.parseListValues(values, type);
 
