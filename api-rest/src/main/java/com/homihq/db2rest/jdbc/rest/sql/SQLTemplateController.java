@@ -40,7 +40,7 @@ public class SQLTemplateController {
     ) {
         final Map<String, Object> context = createContext(userPathVariable, requestParams, requestHeaders, matrixVariables);
 
-        log.info("context - {}", context);
+        log.debug("context - {}", context);
 
         return sqlTemplateExecutorService.execute(dbId, fileName, context);
 

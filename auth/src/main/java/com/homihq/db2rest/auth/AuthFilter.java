@@ -33,19 +33,19 @@ public class AuthFilter extends OncePerRequestFilter {
             final FilterChain filterChain
     ) throws ServletException, IOException {
 
-        log.info("Handling Auth");
+        log.debug("Handling Auth");
 
         String requestUri = urlPathHelper.getRequestUri(request);
         String method = request.getMethod();
 
-        log.info("Request URI - {}", requestUri);
+        log.debug("Request URI - {}", requestUri);
 
         if (!authProvider.isExcluded(requestUri, method)) {
 
             //authenticate
             UserDetail userDetail = authProvider.authenticate(request);
 
-            log.info("user detail - {}", userDetail);
+            log.debug("user detail - {}", userDetail);
 
             if (Objects.isNull(userDetail)) {
                 String errorMessage = "Authentication failure.";
@@ -63,12 +63,12 @@ public class AuthFilter extends OncePerRequestFilter {
                 return;
             }
         } else {
-            log.info("URI in whitelist. Security checks not applied.");
+            log.debug("URI in whitelist. Security checks not applied.");
         }
 
         filterChain.doFilter(request, response);
 
-        logger.info("Completed Auth Filter");
+        logger.debug("Completed Auth Filter");
     }
 
     private void addError(

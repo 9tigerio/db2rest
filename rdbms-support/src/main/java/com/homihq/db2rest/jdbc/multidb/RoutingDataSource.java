@@ -13,7 +13,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
     protected Object determineCurrentLookupKey() {
 
         final String dbId = DatabaseContextHolder.getCurrentDbId();
-        log.info("Datasource Id - {}", dbId);
+        log.debug("Datasource Id - {}", dbId);
 
 
         return dbId;

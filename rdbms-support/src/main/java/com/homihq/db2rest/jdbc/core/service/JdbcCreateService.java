@@ -51,7 +51,7 @@ public class JdbcCreateService implements CreateService {
                 List<DbColumn> pkColumns = dbTable.buildPkColumns();
 
                 for (DbColumn pkColumn : pkColumns) {
-                    log.info("Adding primary key columns - {}", pkColumn.name());
+                    log.debug("Adding primary key columns - {}", pkColumn.name());
                     insertableColumns.add(pkColumn.name());
                 }
 
@@ -65,7 +65,7 @@ public class JdbcCreateService implements CreateService {
                 insertableColumnList.add(new InsertableColumn(colName, null));
             }
 
-            log.info("Sequences - {}", sequences);
+            log.debug("Sequences - {}", sequences);
             if (Objects.nonNull(sequences)) { //handle oracle sequence
                 for (String sequence : sequences) {
                     String[] colSeq = sequence.split(":");
@@ -81,8 +81,8 @@ public class JdbcCreateService implements CreateService {
             CreateContext context = new CreateContext(dbId, dbTable, insertableColumns, insertableColumnList);
             String sql = sqlCreatorTemplate.create(context);
 
-            log.info("SQL - {}", sql);
-            log.info("Data - {}", data);
+            log.debug("SQL - {}", sql);
+            log.debug("Data - {}", data);
 
 
             CreateResponse createResponse =

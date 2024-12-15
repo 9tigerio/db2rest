@@ -216,7 +216,7 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
             insertableColumnList.add(new InsertableColumn(colName, null));
         }
 
-        log.info("Sequences - {}", sequences);
+        log.debug("Sequences - {}", sequences);
         if (Objects.nonNull(sequences)) {
             for (String sequence : sequences) {
                 String[] colSeq = sequence.split(":");

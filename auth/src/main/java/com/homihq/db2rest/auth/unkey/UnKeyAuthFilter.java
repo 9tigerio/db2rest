@@ -29,7 +29,7 @@ public class UnKeyAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
-        logger.info(" *** Apply UnKeyAuth Filter ***");
+        logger.debug(" *** Apply UnKeyAuth Filter ***");
 
         // Check the header and return authentication failed if header not present
 
@@ -43,7 +43,7 @@ public class UnKeyAuthFilter extends OncePerRequestFilter {
 
         if (verifyResponse.isPresent()) {
             //TODO convert and add to request attributes
-            log.info("Unkey response - {}", verifyResponse.get());
+            log.debug("Unkey response - {}", verifyResponse.get());
             if (!verifyResponse.get().isValidKey()) {
                 addAuthenticationError(request, response);
                 return;
@@ -55,7 +55,7 @@ public class UnKeyAuthFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-        logger.info("Completed UnKey Auth Filter");
+        logger.debug("Completed UnKey Auth Filter");
     }
 
     private void addAuthenticationError(HttpServletRequest request, HttpServletResponse response) throws IOException {
