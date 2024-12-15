@@ -32,11 +32,11 @@ public class SchemaController implements SchemaRestApi {
     @Override
     public List<? extends TableObject> getObjects(String dbId, String filter, Boolean columns) {
 
-        log.info("Filter - {}", filter);
+        log.debug("Filter - {}", filter);
 
         DbMeta dbMeta = jdbcManager.getDbMetaByDbId(dbId);
 
-        log.info("dbMeta - {}", dbMeta);
+
 
         if (Objects.isNull(dbMeta)) {
             return List.of();

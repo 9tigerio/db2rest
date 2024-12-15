@@ -37,7 +37,7 @@ public class PostGreSQLDialect extends Dialect {
 
             String columnDataTypeName = table.getColumnDataTypeName(columnName);
 
-            log.info("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
+            log.debug("columnName : {} || columnDataTypeName - {}", columnName, columnDataTypeName);
             if (Objects.isNull(value)) {
                 continue;
             }
@@ -64,7 +64,7 @@ public class PostGreSQLDialect extends Dialect {
                 data.put(columnName, Integer.valueOf(value.toString().trim()));
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "_varchar")) {
 
-                log.info("Array type found");
+                log.debug("Array type found");
 
                 data.put(columnName, new ArrayTypeValueHolder("java.sql.Array", "varchar", ((ArrayList) value).toArray()));
             }

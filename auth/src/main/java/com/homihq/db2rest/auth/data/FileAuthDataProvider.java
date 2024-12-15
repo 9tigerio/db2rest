@@ -28,7 +28,7 @@ public class FileAuthDataProvider implements AuthDataProvider {
 
             authDataSource = objectMapper.readValue(inputStream, AuthDataSource.class);
 
-            log.info("authDataSource - {}", authDataSource);
+            log.debug("authDataSource - {}", authDataSource);
 
 
         } catch (Exception e) {

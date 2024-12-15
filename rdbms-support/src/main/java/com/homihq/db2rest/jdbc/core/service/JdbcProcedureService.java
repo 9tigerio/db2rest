@@ -24,8 +24,8 @@ public class JdbcProcedureService implements ProcedureService {
         JdbcTemplate jdbcTemplate = jdbcManager.getNamedParameterJdbcTemplate(dbId).getJdbcTemplate();
         Dialect dialect = jdbcManager.getDialect(dbId);
 
-        log.info("Dialect selected: {}", dialect);
-        log.info("inParams: {}", inParams);
+        log.debug("Dialect selected: {}", dialect);
+        log.debug("inParams: {}", inParams);
 
         return doExecuteInternal(jdbcTemplate, subRoutineName, inParams);
     }

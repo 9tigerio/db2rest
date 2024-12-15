@@ -31,7 +31,7 @@ public class ApiAuthDataProvider implements AuthDataProvider {
                         .retrieve()
                         .body(AuthDataSource.class);
 
-        log.info("Auth data - {}", authDataSource);
+        log.debug("Auth data - {}", authDataSource);
     }
 
     @Override

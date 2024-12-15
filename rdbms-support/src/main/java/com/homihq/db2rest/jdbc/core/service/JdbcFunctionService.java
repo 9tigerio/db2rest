@@ -16,14 +16,14 @@ public class JdbcFunctionService implements FunctionService {
 
     @Override
     public SimpleJdbcCall getSimpleJdbcCall(String dbId, String subRoutineName) {
-        log.info("dbId - {}", dbId);
+
         JdbcTemplate jdbcTemplate = jdbcManager.getNamedParameterJdbcTemplate(dbId).getJdbcTemplate();
         return new SimpleJdbcCall(jdbcTemplate).withFunctionName(subRoutineName);
     }
 
     @Override
     public Map<String, Object> execute(String dbId, String subRoutineName, Map<String, Object> inParams) {
-        log.info("dbId - {}", dbId);
+
         JdbcTemplate jdbcTemplate = jdbcManager.getNamedParameterJdbcTemplate(dbId).getJdbcTemplate();
         return doExecute(jdbcTemplate, dbId, subRoutineName, inParams);
     }
