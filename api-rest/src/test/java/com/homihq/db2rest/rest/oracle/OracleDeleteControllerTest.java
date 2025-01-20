@@ -56,7 +56,7 @@ class OracleDeleteControllerTest extends OracleBaseIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andDo(print())
                 .andExpect(jsonPath("$.detail",
-                        containsString("Missing column DIRECTOR._name")))
+                        containsString("Column not found director._name")))
                 .andDo(document("oracle-delete-a-director"));
     }
 
