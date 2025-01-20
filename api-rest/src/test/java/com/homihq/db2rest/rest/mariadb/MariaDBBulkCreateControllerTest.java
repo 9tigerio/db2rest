@@ -1,12 +1,13 @@
 package com.homihq.db2rest.rest.mariadb;
 
-import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
-import com.adelean.inject.resources.junit.jupiter.GivenTextResource;
-import com.adelean.inject.resources.junit.jupiter.TestWithResources;
-import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.MariaDBBaseIntegrationTest;
+import io.hosuaby.inject.resources.junit.jupiter.GivenJsonResource;
+import io.hosuaby.inject.resources.junit.jupiter.GivenTextResource;
+import io.hosuaby.inject.resources.junit.jupiter.TestWithResources;
+import io.hosuaby.inject.resources.junit.jupiter.WithJacksonMapper;
 import org.junit.jupiter.api.*;
 
 import java.util.List;

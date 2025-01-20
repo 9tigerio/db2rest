@@ -52,7 +52,7 @@ class PgDeleteControllerTest extends PostgreSQLBaseIntegrationTest {
                         .param("filter", "_name==\"Alex\""))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.detail",
-                        containsString("Missing column director._name")))
+                        containsString("Column not found director._name")))
                 //.andDo(print())
                 .andDo(document("pg-delete-a-director"));
     }

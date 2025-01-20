@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,6 +38,7 @@ class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
     void delete_all_records_with_allow_safe_delete_true() throws Exception {
         mockMvc.perform(delete(VERSION + "/mariadb/director")
                         .accept(APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail",
                         containsString("Invalid delete operation , safe set to true")))
@@ -49,10 +51,10 @@ class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
     void column_does_not_exist() throws Exception {
         mockMvc.perform(delete(VERSION + "/mariadb/director")
                         .accept(APPLICATION_JSON)
-                        .param("filter", "_name==\"Alex\""))
+                        .param("filter", "_name==\"Alex\"")).andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.detail",
-                        containsString("Missing column director._name")))
+                        containsString("Column not found director._name")))
                 //.andDo(print())
                 .andDo(document("mariadb-column-not-exists"));
     }

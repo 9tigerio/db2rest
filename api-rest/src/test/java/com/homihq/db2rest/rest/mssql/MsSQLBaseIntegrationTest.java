@@ -1,10 +1,11 @@
 package com.homihq.db2rest.rest.mssql;
 
-import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.BaseIntegrationTest;
 import com.homihq.db2rest.MsSQLServerContainerConfiguration;
+import io.hosuaby.inject.resources.junit.jupiter.WithJacksonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;

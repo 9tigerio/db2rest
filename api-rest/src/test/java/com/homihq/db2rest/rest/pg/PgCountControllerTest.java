@@ -1,7 +1,8 @@
 package com.homihq.db2rest.rest.pg;
 
-import com.adelean.inject.resources.junit.jupiter.TestWithResources;
+
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
+import io.hosuaby.inject.resources.junit.jupiter.TestWithResources;
 import org.junit.jupiter.api.ClassOrderer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
