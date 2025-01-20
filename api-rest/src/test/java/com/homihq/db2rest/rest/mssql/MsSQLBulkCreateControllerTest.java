@@ -1,8 +1,9 @@
 package com.homihq.db2rest.rest.mssql;
 
-import com.adelean.inject.resources.junit.jupiter.GivenJsonResource;
-import com.adelean.inject.resources.junit.jupiter.GivenTextResource;
-import com.adelean.inject.resources.junit.jupiter.TestWithResources;
+
+import io.hosuaby.inject.resources.junit.jupiter.GivenJsonResource;
+import io.hosuaby.inject.resources.junit.jupiter.GivenTextResource;
+import io.hosuaby.inject.resources.junit.jupiter.TestWithResources;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

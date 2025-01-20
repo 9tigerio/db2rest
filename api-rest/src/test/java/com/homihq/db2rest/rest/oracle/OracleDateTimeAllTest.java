@@ -1,11 +1,12 @@
 package com.homihq.db2rest.rest.oracle;
 
-import com.adelean.inject.resources.junit.jupiter.WithJacksonMapper;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.homihq.db2rest.OracleBaseIntegrationTest;
 import com.homihq.db2rest.rest.DateTimeUtil;
 import com.jayway.jsonpath.JsonPath;
+import io.hosuaby.inject.resources.junit.jupiter.WithJacksonMapper;
 import org.junit.jupiter.api.ClassOrderer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -14,11 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestClassOrder;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
