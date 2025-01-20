@@ -1,7 +1,8 @@
 package com.homihq.db2rest.rest.mariadb;
 
-import com.adelean.inject.resources.junit.jupiter.TestWithResources;
+
 import com.homihq.db2rest.MariaDBBaseIntegrationTest;
+import io.hosuaby.inject.resources.junit.jupiter.TestWithResources;
 import org.junit.jupiter.api.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
