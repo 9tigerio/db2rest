@@ -5,35 +5,36 @@ services:
     ports:
       - 80:8080
     environment:
-      DB_URL: "jdbc:postgresql://employee-postgres:5432/empdb"
+      DB_URL: "jdbc:mysql://employee-mysql:3306/empdb"
       DB_USER: "db2rest"
       DB_PASSWORD: "db2rest"
       INCLUDED_SCHEMAS: public,emp
     depends_on:
-      - employee-postgres
+      - employee-mysql
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 3
 
-  employee-postgres:
-    image: "postgres:14.4"
-    container_name: "employee-postgres"
+  employee-mysql:
+    image: "mysql:8.0"
+    container_name: "employee-mysql"
     ports:
-      - 5432:5432
+      - 3306:3306
     environment:
-      - POSTGRES_USER=db2rest
-      - POSTGRES_PASSWORD=db2rest
-      - POSTGRES_DB=empdb
+      - MYSQL_USER=db2rest
+      - MYSQL_PASSWORD=db2rest
+      - MYSQL_DATABASE=empdb
+      - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
       - ./init:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U db2rest"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 20s
       timeout: 10s
       retries: 5
 
 volumes:
-  postgres-data:
+  mysql-data:
