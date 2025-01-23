@@ -19,7 +19,7 @@ import java.util.Map;
 public class PostgreSQLContainerConfiguration {
 
     private static final List<String> postgresScripts = List.of("pg/postgres-sakila.sql",
-            "pg/postgres-sakila-data.sql");
+            "pg/postgres-sakila-data.sql", "pg/pg-sakila-functions.sql");
 
     private static final PostgreSQLContainer testPostgres =
             (PostgreSQLContainer) new PostgreSQLContainer("postgres:15.2-alpine")
