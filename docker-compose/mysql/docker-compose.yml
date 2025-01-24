@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   db2rest-service:
     image: kdhrubo/db2rest:latest
