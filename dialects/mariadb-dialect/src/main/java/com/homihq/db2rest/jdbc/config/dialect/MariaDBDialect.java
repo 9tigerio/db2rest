@@ -85,4 +85,9 @@ public class MariaDBDialect extends Dialect {
             throw new GenericDataAccessException("Error converting to LocalDateTime type - " + e.getLocalizedMessage());
         }
     }
+
+    @Override
+    public LocalDateTime convertTimestamp (String value){
+        return convertToLocalDateTime(value);
+    }
 }

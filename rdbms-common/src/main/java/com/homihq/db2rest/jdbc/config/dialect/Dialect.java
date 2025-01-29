@@ -82,7 +82,7 @@ public abstract class Dialect {
         } else if (java.sql.Date.class == type) {
             return LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
         } else if (java.sql.Timestamp.class == type) {
-            return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            return convertTimestamp(value);
         } else {
             return value;
         }
@@ -123,5 +123,9 @@ public abstract class Dialect {
 
     public String getUpdateSqlTemplate() {
         return "update";
+    }
+
+    public Object convertTimestamp(String value){
+        return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 }
