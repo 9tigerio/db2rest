@@ -1,0 +1,38 @@
+services:
+  db2rest-service:
+    image: kdhrubo/db2rest:latest
+    ports:
+      - 80:8080
+    environment:
+      DB_URL: "jdbc:oracle:thin:@employee-oracle:1521/XE"
+      DB_USER: "system"
+      DB_PASSWORD: "oracle"
+      INCLUDED_SCHEMAS: system
+    depends_on:
+      - employee-oracle
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  employee-oracle:
+    image: "gvenzl/oracle-xe:latest"
+    container_name: "employee-oracle"
+    ports:
+      - 1521:1521
+    environment:
+      - ORACLE_PASSWORD=oracle
+      - APP_USER=system
+      - APP_USER_PASSWORD=oracle
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./init:/container-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "/bin/bash", "-c", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s system/oracle@localhost/XE"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  oracle-data:

@@ -2,3 +2,7 @@ src/test/resources/mysql/mysql-sakila.sql linguist-generated=true
 src/test/resources/mysql/mysql-sakila-insert-data.sql linguist-generated=true
 
 src/test/resources/pg/postgres-sakila.sql linguist-generated=true
+
+# Always keep shell files with LF endings to avoid issues with runnning scripts in Windows WSL
+# that need them to stay with LF endings and not CRLF.  WSL is a Linux environment so needs LF endings.
+.sh text eol=lf

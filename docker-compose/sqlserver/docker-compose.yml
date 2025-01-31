@@ -1,0 +1,37 @@
+services:
+  db2rest-service:
+    image: kdhrubo/db2rest:latest
+    ports:
+      - 80:8080
+    environment:
+      DB_URL: "jdbc:sqlserver://employee-sqlserver:1433;databaseName=empdb"
+      DB_USER: "sa"
+      DB_PASSWORD: "Strong@Password123"
+      INCLUDED_SCHEMAS: dbo
+    depends_on:
+      - employee-sqlserver
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  employee-sqlserver:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    container_name: "employee-sqlserver"
+    ports:
+      - 1433:1433
+    environment:
+      - SA_PASSWORD=Strong@Password123
+      - ACCEPT_EULA=Y
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+      - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Strong@Password123 -Q 'SELECT 1'"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  sqlserver-data:
