@@ -70,4 +70,9 @@ public class MySQLDialect extends Dialect {
             throw new GenericDataAccessException("Error converting to LocalDateTime type - " + e.getLocalizedMessage());
         }
     }
+
+    @Override
+    public LocalDateTime convertTimestamp (String value){
+        return convertToLocalDateTime(value);
+    }
 }

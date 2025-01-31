@@ -164,4 +164,9 @@ public class PostGreSQLDialect extends Dialect {
 
         return convertToStringArray(object);
     }
+
+    @Override
+    public LocalDateTime convertTimestamp (String value){
+        return convertToLocalDateTime(value);
+    }
 }
