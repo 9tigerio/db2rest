@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.2</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -75,12 +75,13 @@
     <!-- BEGIN MODULE LAYOUT -->
 
     <properties>
-        <revision>1.5.0</revision>
+        <revision>1.5.1-SNAPSHOT</revision>
         <java.version>21</java.version>
+
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
         <jackson.version>2.17.2</jackson.version>
-
-        <jte.version>3.1.12</jte.version>
+        <calcite.version>1.38.0</calcite.version>
+        <jte.version>3.1.16</jte.version>
 
     </properties>
 
@@ -163,25 +164,14 @@
         </dependency>
 
         <!-- Apache Calcite -->
+        <!--
         <dependency>
             <groupId>org.apache.calcite</groupId>
             <artifactId>calcite-core</artifactId>
-            <version>1.32.0</version>
+            <version>${calcite.version}</version>
         </dependency>
-        
-        <!-- MySQL Connector -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.27</version>
-        </dependency>
-        
-        <!-- PostgreSQL Connector -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.3.1</version>
-        </dependency>
+        -->
+
 
     </dependencies>
     <profiles>
