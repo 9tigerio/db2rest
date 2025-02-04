@@ -10,7 +10,6 @@
         <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>io.9tiger</groupId>
     <artifactId>mysql-dialect</artifactId>
     <name>mysql-dialect</name>
     <description>mysql-dialect</description>
