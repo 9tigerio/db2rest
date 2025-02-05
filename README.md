@@ -44,9 +44,9 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 # Use Cases 
 
-## Accelerate Application Delivery with Instant REST DATA API
+## Accelerate Application Delivery
 
-DB2Rest provides instant REST API(no code generation) to boost development by 30x. Low code and best practices are built-in saving engineering teams
+DB2Rest provides instant REST API(no code generation) to boost development by 30x. No need to write any code and best practices are built-in saving engineering teams
 months of effort and cost. 
 
 ## Faster innovation with Gen AI
@@ -57,9 +57,14 @@ DB2Rest works hand in glove with modern vector databases and LLM implementations
 
 DB2Rest works as a secure database gateway. This helps enterprises to open up data to internal developers and partners in a safe and agile way which was not possible earlier.
 
-## Simplify Integration
+## Simplify Integration, Secure data exchange
 
-Complex, error-prone maintenance-heavy file-based data exchange can be replaced with DB2Rest. Integrations can be loosely coupled by reducing direct database based integration.
+Often enterprises export data from databases and share large files using SFTP, S3 etc. This process is slow, complex, error-prone and often very costly.
+It requires heavy maintenance cost and it is not possible to share data in realtime. 
+
+Using DB2Rest, it is possible to simplify the process and allow secure data exchange with other parts of the organization without 
+writing a single line of code. There is no direct database based point to point integration and data is available to query anytime. 
+
 
 # Supported Databases
 
