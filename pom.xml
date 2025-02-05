@@ -79,7 +79,7 @@
         <java.version>21</java.version>
 
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
-
+        <rsql-parser.version>2.3.3</rsql-parser.version>
         <calcite.version>1.38.0</calcite.version>
         <jte.version>3.1.16</jte.version>
 
@@ -157,7 +157,7 @@
         <dependency>
             <groupId>io.github.nstdio</groupId>
             <artifactId>rsql-parser</artifactId>
-            <version>2.3.2</version>
+            <version>${rsql-parser.version}</version>
         </dependency>
 
         <!-- Apache Calcite -->
