@@ -54,6 +54,7 @@ db2rest:
   defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
 
   allowSafeDelete : ${ALLOW_SAFE_DELETE:true}
+  allowedCorsList : ${CORS_ENABLED_URL:}
 
   multiTenancy:
     enabled: ${MULTI_TENANCY_ENABLED:false}
