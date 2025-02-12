@@ -9,7 +9,7 @@ public class CorsConfig {
     public String allowedCorsOrigin;
     public String allowedCorsHeader;
     public String allowedCorsMethods;
-    
+
     public String getAllowedCorsOrigin() {
         return allowedCorsOrigin;
     }
@@ -27,8 +27,5 @@ public class CorsConfig {
     }
     public void setAllowedCorsMethods(String allowedCorsMethods) {
         this.allowedCorsMethods = allowedCorsMethods;
-    }
-
-    
-   
+    }   
 }

@@ -35,8 +35,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         String[] headers = Arrays.stream(props.allowedCorsHeader.split(",")).map(String::trim).toArray(String[]::new);
         String[] methods = Arrays.stream(props.allowedCorsMethods.split(",")).map(String::trim).toArray(String[]::new);
 
+        System.out.println( "Allowed Headers : " + props.allowedCorsHeader + " Allowed Methods : " +props.allowedCorsMethods + " Allowed Origins : " +props.allowedCorsOrigin);
 
-        System.out.println("================================== " + origins[0] + headers[0] + methods[0] + " ==============================");
         registry.addMapping("/**").allowedMethods(methods).allowedHeaders(headers).allowedOrigins(origins);
     }
 }
