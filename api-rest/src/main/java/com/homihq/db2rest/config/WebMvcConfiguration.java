@@ -1,7 +1,7 @@
 package com.homihq.db2rest.config;
 
 import com.homihq.db2rest.interceptor.DatabaseContextRequestInterceptor;
-import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.config.CorsConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
-    Db2RestConfigProperties props;
+    CorsConfig props;
 
 
     private final DatabaseContextRequestInterceptor databaseContextRequestInterceptor;
@@ -31,13 +31,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        String[] origins = Arrays.stream(props.getAllowedCorsList().split(","))
-                         .map(String::trim)
-                         .toArray(String[]::new);
-        for(String origin : origins){
-            System.out.println("*******************************************" + origin.toString() + "*****************************************************");
+        String[] origins = Arrays.stream(props.allowedCorsOrigin.split(",")).map(String::trim).toArray(String[]::new);
+        String[] headers = Arrays.stream(props.allowedCorsHeader.split(",")).map(String::trim).toArray(String[]::new);
+        String[] methods = Arrays.stream(props.allowedCorsMethods.split(",")).map(String::trim).toArray(String[]::new);
 
-        }
-        registry.addMapping("/**").allowedMethods("GET", "POST").allowedHeaders("*").allowedOrigins(origins);
+
+        System.out.println("================================== " + origins[0] + headers[0] + methods[0] + " ==============================");
+        registry.addMapping("/**").allowedMethods(methods).allowedHeaders(headers).allowedOrigins(origins);
     }
 }

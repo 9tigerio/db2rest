@@ -31,12 +31,6 @@ public class Db2RestConfigProperties {
 
     private String templates;
 
-    private String allowedCorsList;
-    
-    public String getAllowedCorsList() {
-        return allowedCorsList;
-    }
-
     public boolean isAllSchema() {
 
         if (Objects.isNull(includeSchemas)) {

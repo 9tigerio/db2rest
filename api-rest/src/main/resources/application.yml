@@ -35,6 +35,10 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
+corsconfig:
+  allowedCorsOrigin : ${CORS_ORIGIN_URL:*}
+  allowedCorsHeader : ${CORS_HEADERS_ALLOWED:*}
+  allowedCorsMethods : ${CORS_METHODS_ALLOWED:GET,POST}
 
 db2rest:
 
@@ -54,7 +58,6 @@ db2rest:
   defaultFetchLimit: ${DEFAULT_FETCH_LIMIT:100}
 
   allowSafeDelete : ${ALLOW_SAFE_DELETE:true}
-  allowedCorsList : ${CORS_ENABLED_URL:}
 
   multiTenancy:
     enabled: ${MULTI_TENANCY_ENABLED:false}
