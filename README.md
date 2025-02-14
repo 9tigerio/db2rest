@@ -1,4 +1,6 @@
-DB2Rest is a modern low code REST DATA API platform that makes it easy to build intelligent applications 30x faster. 
+DB2Rest is a modern low code REST DATA API platform that automatically creates a secure REST API endpoint
+for your databases making it easy to build intelligent applications 30x faster.  No ORM, no code generation = FAST!
+ 
 It combines existing/new databases and data-sources with language models (LM/LLMs) and vector stores to rapidly 
 deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
