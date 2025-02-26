@@ -11,7 +11,6 @@
         <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>io.9tiger</groupId>
     <artifactId>db2rest</artifactId>
     <packaging>jar</packaging>
     <name>db2rest</name>
@@ -40,11 +39,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.9tiger</groupId>
-            <artifactId>mongo-support</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
@@ -87,11 +81,6 @@
             <version>2.15.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.github.nstdio</groupId>
-            <artifactId>rsql-parser</artifactId>
-            <version>2.2.1</version>
-        </dependency>
 
         <dependency>
             <groupId>com.hubspot.jinjava</groupId>
