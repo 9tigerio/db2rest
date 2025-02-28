@@ -79,7 +79,7 @@ public class JdbcDeleteService implements DeleteService {
                     context.getParamMap(),
                     "delete"
             );
-
+            System.out.println("Filter : " + filter);
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(filter);
 
             String where = rootNode

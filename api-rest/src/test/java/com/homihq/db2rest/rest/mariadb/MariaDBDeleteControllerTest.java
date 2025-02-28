@@ -29,7 +29,7 @@ class MariaDBDeleteControllerTest extends MariaDBBaseIntegrationTest {
                         .param("filter", "first_name==\"Alex\""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rows", equalTo(1)))
-                //.andDo(print())
+                .andDo(print())
                 .andDo(document("mariadb-delete-a-director"));
     }
 

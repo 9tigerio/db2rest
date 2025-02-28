@@ -24,7 +24,7 @@ public class RSQLOperatorHandlers {
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.START_WITH.getSymbol(), new StartWithOperatorHandler());
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.END_WITH.getSymbol(), new EndWithOperatorHandler());
 
-        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.IS_NULL.getSymbol(), new IsNullOperatorHandler());
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.IS_NULL_2.getSymbol(), new IsNullOperatorHandler());
 
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSONB_CONTAIN.getSymbol(), new JsonbContainOperatorHandler());
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSON_CONTAIN.getSymbol(), new JsonContainOperatorHandler());
@@ -34,7 +34,7 @@ public class RSQLOperatorHandlers {
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.JSON_CONTAINS_IN_ARRAY.getSymbol(), new JsonContainInArrayOperatorHandler());
 
         OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.NOT_LIKE.getSymbol(), new NotLikeOperatorHandler());
-        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.IS_NOT_NULL.getSymbol(), new IsNotNullOperatorHandler());
+        OPERATOR_HANDLER_MAP.put(CustomRSQLOperators.NOT_NULL_2.getSymbol(), new IsNotNullOperatorHandler());
 
     }
 

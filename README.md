@@ -79,7 +79,6 @@ writing a single line of code. There is no direct database based point to point 
 - **DigitalOcean MySQL** 
 - **AWS RDS Postgres** 
 - **AWS RDS MySQL**
-- **MongoDB**
 - **MariaDB**  
 - **CockroachDB**
 - **Neon**
