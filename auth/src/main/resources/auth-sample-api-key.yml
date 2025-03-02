@@ -1,0 +1,44 @@
+name: db2rest-security
+
+resourceRoles:
+  - resource: "/v1/rdbms/db/actor/**"
+    method: post
+    roles:
+      - admin
+      - role3
+      - role4
+  - resource: "/v1/rdbms/db/actor/**"
+    method: get
+    roles:
+      - admin
+      - role3
+      - role4
+  - resource: "/api/v2/host"
+    method: get
+    roles:
+      - role2
+      - role3
+      - role4
+
+
+excludedResources:
+  - resource: "/v1/rdbms/db/actor2"
+    method: get
+  - resource: "/v1/rdbms/db/actor2"
+    method: post
+  - resource: "/v1/rdbms/db/actor2"
+    method: put
+  - resource: "/v1/rdbms/db/actor2"
+    method: delete
+
+
+
+apiKeys:
+  - key: apikey1
+    roles: [admin]
+    active: true
+  - key: apikey2
+    roles: [admin]
+  - key: apiKey3
+    roles: [user]
+    active: true
