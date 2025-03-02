@@ -28,7 +28,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
     @Override
     public DbMeta processMetaData(DatabaseMetaData databaseMetaData) throws SQLException {
 
-        log.info("Preparing database meta-data - {}", databaseMetaData);
+        log.debug("Preparing database meta-data - {}", databaseMetaData);
 
         String productName = databaseMetaData.getDatabaseProductName();
         int majorVersion = databaseMetaData.getDatabaseMajorVersion();
