@@ -8,7 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -29,14 +35,21 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(databaseContextRequestInterceptor);
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        String[] origins = Arrays.stream(props.allowedCorsOrigin.split(",")).map(String::trim).toArray(String[]::new);
-        String[] headers = Arrays.stream(props.allowedCorsHeader.split(",")).map(String::trim).toArray(String[]::new);
-        String[] methods = Arrays.stream(props.allowedCorsMethods.split(",")).map(String::trim).toArray(String[]::new);
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public CorsFilter corsFilter()  {
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList(props.allowedCorsOrigin.split(",")));
+        config.setAllowedHeaders(Arrays.asList(props.allowedCorsHeader.split(",")));
+        config.setAllowedMethods(Arrays.asList(props.allowedCorsMethods.split(",")));
+
 
         System.out.println( "Allowed Headers : " + props.allowedCorsHeader + " Allowed Methods : " +props.allowedCorsMethods + " Allowed Origins : " +props.allowedCorsOrigin);
 
-        registry.addMapping("/**").allowedMethods(methods).allowedHeaders(headers).allowedOrigins(origins);
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }
