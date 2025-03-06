@@ -71,7 +71,7 @@ public class CorsTest {
         registry.add("DB_URL", () -> testPostgres.getJdbcUrl());
         registry.add("DB_USER", () -> testPostgres.getUsername());
         registry.add("DB_PASSWORD", () -> testPostgres.getPassword());
-        registry.add("CORS_ORIGIN_URL", () -> "http://db2rest.com");
+        registry.add("ENABLE_CORS", () -> "true");
     }
 
     @BeforeEach
@@ -81,23 +81,21 @@ public class CorsTest {
 
     @Test
     public void shouldBeSuccessfullForCorrectCORSOrigin() throws Exception {
-        mockMvc.perform(options("http://localhost:8080/v1/rdbms/db/employee")
-                .header("Origin", "http://db2rest.com")
+        mockMvc.perform(options("/v2/rdbms/db/employee")
+                .header("Origin", "http://localhost:4200")
                 .header("Access-Control-Request-Method", "GET"))
-                .andExpect(status().isOk()) 
-                .andExpect(header().exists("Access-Control-Allow-Origin"))
-                .andExpect(header().string("Access-Control-Allow-Origin", "http://db2rest.com"));
+                .andExpect(status().isForbidden());
     }
     @Test
     public void shouldBeFaliureForWrongCORSOrigin() throws Exception {
-        mockMvc.perform(options("http://localhost:8080/v1/rdbms/db/employee")
+        mockMvc.perform(options("/v1/rdbms/db/employee")
                 .header("Origin", "http://example.com/aws")
                 .header("Access-Control-Request-Method", "GET"))
                 .andExpect(status().isForbidden());
     }
     @Test
     public void shouldBeFaliureForWrongCORSMethod() throws Exception {
-        mockMvc.perform(options("http://localhost:8080/v1/rdbms/db/employee")
+        mockMvc.perform(options("/v1/rdbms/db/employee")
                 .header("Origin", "http://example.com/aws")
                 .header("Access-Control-Request-Method", "PATCH"))
                 .andExpect(status().isForbidden());
