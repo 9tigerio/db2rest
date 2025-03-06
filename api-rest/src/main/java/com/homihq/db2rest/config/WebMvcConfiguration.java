@@ -6,8 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -25,7 +28,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
-    CorsConfig props;
+    CorsConfigProperties properties;
+
 
 
     private final DatabaseContextRequestInterceptor databaseContextRequestInterceptor;
@@ -37,19 +41,42 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
-    public CorsFilter corsFilter()  {
-
+    @ConditionalOnProperty(name = "cors.enabled", havingValue = "true")
+    public CorsFilter corsFilter(CorsConfigProperties properties) {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList(props.allowedCorsOrigin.split(",")));
-        config.setAllowedHeaders(Arrays.asList(props.allowedCorsHeader.split(",")));
-        config.setAllowedMethods(Arrays.asList(props.allowedCorsMethods.split(",")));
+        for (CorsConfigProperties.CorsMapping mapping : properties.getMappings()) {
+            CorsConfiguration config = new CorsConfiguration();
 
+            // Process allowed origins (trim, remove duplicates)
+            List<String> allowedOrigins = Arrays.stream(mapping.getAllowedOrigin().split(","))
+                    .map(String::trim)
+                    .distinct()
+                    .collect(Collectors.toList());
+            config.setAllowedOrigins(allowedOrigins);
 
-        System.out.println( "Allowed Headers : " + props.allowedCorsHeader + " Allowed Methods : " +props.allowedCorsMethods + " Allowed Origins : " +props.allowedCorsOrigin);
+            // Process allowed headers (trim, remove duplicates)
+            List<String> allowedHeaders = Arrays.stream(mapping.getAllowedHeader().split(","))
+                    .map(String::trim)
+                    .distinct()
+                    .collect(Collectors.toList());
+            config.setAllowedHeaders(allowedHeaders);
 
-        source.registerCorsConfiguration("/**", config);
+            // Process allowed methods (trim, remove duplicates)
+            List<String> allowedMethods = Arrays.stream(mapping.getAllowedMethod().split(","))
+                    .map(String::trim)
+                    .distinct()
+                    .collect(Collectors.toList());
+            config.setAllowedMethods(allowedMethods);
+
+            System.out.println("CORS Config -> Path: " + mapping.getMapping() +
+                    ", Origins: " + allowedOrigins +
+                    ", Headers: " + allowedHeaders +
+                    ", Methods: " + allowedMethods);
+
+            source.registerCorsConfiguration(mapping.getMapping(), config);
+        }
+
         return new CorsFilter(source);
     }
 }
