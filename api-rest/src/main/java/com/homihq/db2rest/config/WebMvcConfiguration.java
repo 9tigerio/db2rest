@@ -1,7 +1,6 @@
 package com.homihq.db2rest.config;
 
 import com.homihq.db2rest.interceptor.DatabaseContextRequestInterceptor;
-import com.homihq.db2rest.config.CorsConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
