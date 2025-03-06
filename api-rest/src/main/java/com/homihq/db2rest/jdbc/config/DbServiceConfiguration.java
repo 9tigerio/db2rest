@@ -53,7 +53,7 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class JdbcConfiguration {
+public class DbServiceConfiguration {
 
     private final DatabaseProperties databaseProperties;
     private final ObjectMapper objectMapper;
@@ -295,95 +295,5 @@ public class JdbcConfiguration {
 
     //END ::: Services
 
-    //START ::: API
-
-    //CREATE API
-
-
-    @Bean
-    @ConditionalOnBean(BulkCreateService.class)
-    public BulkCreateController bulkCreateController(BulkCreateService bulkCreateService, List<DataProcessor> dataProcessors) {
-        return new BulkCreateController(bulkCreateService, dataProcessors);
-    }
-
-
-    @Bean
-    @ConditionalOnBean(CreateService.class)
-    public CreateController createController(CreateService createService) {
-        return new CreateController(createService);
-    }
-
-    //READ API
-    @Bean
-    @ConditionalOnBean(CountQueryService.class)
-    public CountQueryController countQueryController(CountQueryService countQueryService) {
-        return new CountQueryController(countQueryService);
-    }
-
-    @Bean
-    @ConditionalOnBean(ExistsQueryService.class)
-    public ExistsQueryController existsQueryController(ExistsQueryService existsQueryService) {
-        return new ExistsQueryController(existsQueryService);
-    }
-
-    @Bean
-    @ConditionalOnBean(FindOneService.class)
-    public FindOneController findOneController(FindOneService findOneService) {
-        return new FindOneController(findOneService);
-    }
-
-    @Bean
-    @ConditionalOnBean(ReadService.class)
-    public ReadController readController(ReadService readService, Db2RestConfigProperties configProperties) {
-        return new ReadController(readService, configProperties);
-    }
-
-
-    //UPDATE API
-    @Bean
-    @ConditionalOnBean(UpdateService.class)
-    public UpdateController updateController(UpdateService updateService) {
-        return new UpdateController(updateService);
-    }
-
-    //DELETE API
-    @Bean
-    @ConditionalOnBean(DeleteService.class)
-    public DeleteController deleteController(DeleteService deleteService, Db2RestConfigProperties configProperties) {
-        return new DeleteController(deleteService, configProperties);
-    }
-
-    //RPC
-    @Bean
-    @ConditionalOnBean(FunctionService.class)
-    public FunctionController functionController(FunctionService functionService) {
-        return new FunctionController(functionService);
-    }
-
-    @Bean
-    @ConditionalOnBean(ProcedureService.class)
-    public ProcedureController procedureController(ProcedureService procedureService) {
-        return new ProcedureController(procedureService);
-    }
-
-    @Bean
-    @ConditionalOnBean(JdbcManager.class)
-    public SchemaController schemaController(JdbcManager jdbcManager) {
-        return new SchemaController(jdbcManager);
-    }
-
-    @Bean
-    @ConditionalOnBean(SQLTemplateExecutorService.class)
-    public SQLTemplateController sqlTemplateController(
-            SQLTemplateExecutorService sqlTemplateExecutorService
-    ) {
-        return new SQLTemplateController(sqlTemplateExecutorService);
-    }
-
-    @ConditionalOnBean(JdbcManager.class)
-    public DbInfoController dbInfoController(JdbcManager jdbcManager) {
-        return new DbInfoController(jdbcManager);
-    }
-    //END ::: API
 
 }
