@@ -35,10 +35,17 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
-corsconfig:
-  allowedCorsOrigin : ${CORS_ORIGIN_URL:*}
-  allowedCorsHeader : ${CORS_HEADERS_ALLOWED:*}
-  allowedCorsMethods : ${CORS_METHODS_ALLOWED:GET,POST}
+cors:
+  enabled: ${ENABLE_CORS:false}
+  mappings:
+    - mapping: "/actor/**"
+      allowedOrigin: "http://localhost:3000"
+      allowedHeader: "*"
+      allowedMethod: "*"
+    - mapping: "/v1/rdbms/db/**"
+      allowedOrigin: "http://localhost:4200, http://localhost:3000"
+      allowedHeader: "*"
+      allowedMethod: "GET,POST"
 
 db2rest:
 
