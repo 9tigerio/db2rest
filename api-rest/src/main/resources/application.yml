@@ -37,15 +37,8 @@ spring:
 
 cors:
   enabled: ${ENABLE_CORS:false}
-  mappings:
-    - mapping: "/actor/**"
-      allowedOrigin: "http://localhost:3000"
-      allowedHeader: "*"
-      allowedMethod: "*"
-    - mapping: "/v1/rdbms/db/**"
-      allowedOrigin: "http://localhost:4200, http://localhost:3000"
-      allowedHeader: "*"
-      allowedMethod: "GET,POST"
+  mappings: ${CORS_MAPPING:[{}]}
+
 
 db2rest:
 

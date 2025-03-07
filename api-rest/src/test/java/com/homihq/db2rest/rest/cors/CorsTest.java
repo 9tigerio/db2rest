@@ -72,6 +72,30 @@ public class CorsTest {
         registry.add("DB_USER", () -> testPostgres.getUsername());
         registry.add("DB_PASSWORD", () -> testPostgres.getPassword());
         registry.add("ENABLE_CORS", () -> "true");
+
+        /*
+
+            - mapping: "/actor/**"
+              allowedOrigin: "http://localhost:3000"
+              allowedHeader: "*"
+              allowedMethod: "*"
+            - mapping: "/v1/rdbms/db/**"
+              allowedOrigin: "http://localhost:4200, http://localhost:3000"
+              allowedHeader: "*"
+              allowedMethod: "GET,POST"
+
+         */
+
+        registry.add("cors.mappings[0].mapping", () -> "/actor/**");
+        registry.add("cors.mappings[0].allowedOrigins", () -> "http://localhost:3000");
+        registry.add("cors.mappings[0].allowedHeaders", () -> "*");
+        registry.add("cors.mappings[0].allowedMethods", () -> "*");
+
+
+        registry.add("cors.mappings[1].mapping", () -> "/v1/rdbms/db/**");
+        registry.add("cors.mappings[1].allowedOrigins", () -> "http://localhost:4200, http://localhost:3000");
+        registry.add("cors.mappings[1].allowedHeaders", () -> "*");
+        registry.add("cors.mappings[1].allowedMethods", () -> "GET,POST");
     }
 
     @BeforeEach
