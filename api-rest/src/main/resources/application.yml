@@ -37,7 +37,7 @@ spring:
 
 cors:
   enabled: ${ENABLE_CORS:false}
-  mappings: ${CORS_MAPPING}
+  mappings: ${CORS_MAPPING:[{}]}
 
 
 db2rest:
