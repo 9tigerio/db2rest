@@ -23,8 +23,15 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 [https://db2rest.com](https://db2rest.com)
 
+# Upcoming Release
 
-# Stable Releases
+| Release              | Download/Docker Pull                                                             |
+|----------------------|----------------------------------------------------------------------------------|
+| 1.6.0                | [DB2Rest-1.6.1](https://download.db2rest.com/db2rest-1.6.1.jar)                  |
+| 1.6.0 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.0 ` or ` docker pull kdhrubo/db2rest:latest ` |
+
+
+# Stable Release
 
 | Release                                    | Download/Docker Pull                                                              |
 |--------------------------------------------|-----------------------------------------------------------------------------------|
