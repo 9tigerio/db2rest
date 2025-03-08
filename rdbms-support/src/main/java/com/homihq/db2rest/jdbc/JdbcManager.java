@@ -39,9 +39,10 @@ public final class JdbcManager {
     private final Map<String, DbDetailHolder> dbDetailHolderMap = new ConcurrentHashMap<>();
     private final Map<String, NamedParameterJdbcTemplate> namedParameterJdbcTemplateMap =
             new ConcurrentHashMap<>();
+    /*
     private final Map<String, JdbcTransactionManager> jdbcTransactionManagerMap =
             new ConcurrentHashMap<>();
-
+    */
     private final Map<String, TransactionTemplate> transactionTemplateMap =
             new ConcurrentHashMap<>();
 
@@ -101,7 +102,7 @@ public final class JdbcManager {
 
                 JdbcTransactionManager jdbcTransactionManager = new JdbcTransactionManager(ds);
 
-                this.jdbcTransactionManagerMap.put((String) dbId, jdbcTransactionManager);
+                //this.jdbcTransactionManagerMap.put((String) dbId, jdbcTransactionManager);
                 this.transactionTemplateMap.put((String) dbId, new TransactionTemplate(jdbcTransactionManager));
 
             }

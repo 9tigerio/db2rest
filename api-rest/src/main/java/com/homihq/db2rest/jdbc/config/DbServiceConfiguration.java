@@ -97,6 +97,7 @@ public class DbServiceConfiguration {
         config.setJdbcUrl(connectionDetail.url());
         config.setUsername(connectionDetail.username());
         config.setPassword(connectionDetail.password());
+        config.setMaximumPoolSize(connectionDetail.maxConnections());
 
         config.setAutoCommit(false);
         return new HikariDataSource(config);
