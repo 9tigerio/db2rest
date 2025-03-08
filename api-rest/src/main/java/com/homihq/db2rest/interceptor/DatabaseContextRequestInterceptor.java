@@ -30,7 +30,8 @@ public class DatabaseContextRequestInterceptor implements AsyncHandlerIntercepto
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.debug("Pre handle - {}", request.getRequestURI());
+        log.info("Pre handle - {}", request.getRequestURI());
+        log.info("White listed : {}", isWhileListed(request.getRequestURI()));
 
         if (!isWhileListed(request.getRequestURI())) {
             final Map<String, String> pathVariables = (Map<String, String>) request
@@ -53,6 +54,7 @@ public class DatabaseContextRequestInterceptor implements AsyncHandlerIntercepto
                 throw new GenericDataAccessException("Database ID not found.");
             }
         }
+
 
         return true;
     }

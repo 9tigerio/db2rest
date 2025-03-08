@@ -14,7 +14,7 @@ public abstract class AbstractAuthProvider {
 
     private static final String AUTH_HEADER = "Authorization";
 
-    private final String[] DEFAULT_WHITELIST = {"/actuator/**"};
+    private final String[] DEFAULT_WHITELIST = {"/swagger-ui/**", "/v3/api-docs/**", "/actuator/**"};
 
     public abstract boolean canHandle(HttpServletRequest request);
 

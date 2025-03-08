@@ -33,12 +33,12 @@ public class AuthFilter extends OncePerRequestFilter {
             final FilterChain filterChain
     ) throws ServletException, IOException {
 
-        log.debug("Handling Auth");
+        log.info("Handling Auth - {}", authProvider);
 
         String requestUri = urlPathHelper.getRequestUri(request);
         String method = request.getMethod();
 
-        log.debug("Request URI - {}", requestUri);
+        log.info("Request URI - {}", requestUri);
 
         if (!authProvider.isExcluded(requestUri, method)) {
 
