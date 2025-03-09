@@ -10,16 +10,13 @@ public record DatabaseConnectionDetail(String id, String type, String url, Strin
                                        String password, String database
         , List<String> catalog, List<String> schemas, List<String> tables,
                                        Map<String, String> connectionProperties,
-                                       EnvironmentProperties envProperties) {
+                                       EnvironmentProperties envProperties, int maxConnections) {
     public boolean isMongo() {
         return StringUtils.equalsIgnoreCase(type, "MONGO");
     }
 
     public boolean isJdbcPresent() {
-
         return StringUtils.isNotBlank(url);
-
-        // && !StringUtils.equalsIgnoreCase(url, "${DB_URL}");
     }
 
     public boolean includeAllSchemas() {
