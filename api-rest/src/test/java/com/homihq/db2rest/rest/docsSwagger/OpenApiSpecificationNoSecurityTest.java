@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
 @Slf4j
-public class docsWOAuth {
+public class OpenApiSpecificationNoSecurityTest {
 
     @Autowired
     private MockMvc mockMvc;
