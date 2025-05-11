@@ -23,7 +23,7 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 [https://db2rest.com](https://db2rest.com)
 
-# Upcoming Release
+# Latest Release
 
 | Release              | Download/Docker Pull                                                             |
 |----------------------|----------------------------------------------------------------------------------|
@@ -31,14 +31,14 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 | 1.6.0 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.0 ` or ` docker pull kdhrubo/db2rest:latest ` |
 
 
-# Stable Release
+# Previous Release
 
 | Release                                    | Download/Docker Pull                                                              |
 |--------------------------------------------|-----------------------------------------------------------------------------------|
 | 1.5.1                                      | [DB2Rest-1.5.1](https://download.db2rest.com/db2rest-1.5.1.jar)                   |
 | 1.5.1 (Docker Image)                       | ` docker pull kdhrubo/db2rest:v1.5.1 ` or ` docker pull kdhrubo/db2rest:latest `  |
 
-# Legacy Stable Releases
+# Last Stable Oracle 9i Release
 
 | Release                                    | Download/Docker Pull                                                              |
 |--------------------------------------------|-----------------------------------------------------------------------------------|
