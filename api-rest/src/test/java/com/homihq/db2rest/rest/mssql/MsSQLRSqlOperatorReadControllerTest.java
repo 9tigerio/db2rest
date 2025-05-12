@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-@Order(504)
+@Order(501)
 @TestWithResources
 class MsSQLRSqlOperatorReadControllerTest extends MsSQLBaseIntegrationTest {
 
