@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 
+import java.util.UUID;
+
 @Slf4j
 @Order(8)
 @RequiredArgsConstructor
@@ -37,6 +39,19 @@ public class RootWhereProcessor implements ReadProcessor {
 
             log.debug("Where - {}", where);
             log.debug("param map - {}", readContext.getParamMap());
+
+            for(String key : readContext.getParamMap().keySet()){
+                Object val = readContext.getParamMap().get(key);
+                try{
+                    if(!(val instanceof String))
+                        continue;
+                    UUID value = UUID.fromString((String)val);
+                    readContext.getParamMap().put(key, value);
+                }
+                catch (IllegalArgumentException e){
+                    continue;
+                }
+            }
 
             readContext.setRootWhere(where);
 
