@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class Dialect {
     private final ObjectMapper objectMapper;
@@ -56,16 +57,16 @@ public abstract class Dialect {
         return dbColumn.tableAlias() + "_" + dbColumn.name();
     }
 
-    public List<Object> parseListValues(List<String> values, Class type) {
+    public List<Object> parseListValues(List<String> values, Class type, String columnDatatypeName) {
         return
                 values.stream()
-                        .map(v -> processValue(v, type, null))
+                        .map(v -> processValue(v, type, null,columnDatatypeName))
                         .toList();
     }
 
     //TODO use Spring converter
     @Deprecated
-    public Object processValue(String value, Class<?> type, String format) {
+    public Object processValue(String value, Class<?> type, String format, String columnTypeName) {
         //System.out.println("type " + type);
         if (String.class == type) {
             //return "'" + value + "'";
@@ -83,7 +84,12 @@ public abstract class Dialect {
             return LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
         } else if (java.sql.Timestamp.class == type) {
             return convertTimestamp(value);
-        } else {
+
+        }
+        else if (Object.class == type && "uuid".equals(columnTypeName)) {
+            return UUID.fromString(value);
+        }
+        else {
             return value;
         }
 

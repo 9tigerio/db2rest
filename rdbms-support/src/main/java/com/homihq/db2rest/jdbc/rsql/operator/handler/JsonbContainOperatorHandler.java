@@ -14,7 +14,7 @@ public class JsonbContainOperatorHandler implements OperatorHandler {
     @Override
     public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap) {
 
-        Object vo = dialect.processValue(value, type, null);
+        Object vo = dialect.processValue(value, type, null, column.columnDataTypeName());
 
         if (dialect.supportAlias()) {
             String key =
