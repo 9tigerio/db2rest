@@ -23,7 +23,7 @@ public class InOperatorHandler implements OperatorHandler {
     @Override
     public String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, List<String> values, Class type, Map<String, Object> paramMap) {
 
-        List<Object> vo = dialect.parseListValues(values, type);
+        List<Object> vo = dialect.parseListValues(values, type,column.columnDataTypeName());
 
         if (dialect.supportAlias()) {
             String key =

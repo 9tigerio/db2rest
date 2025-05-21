@@ -19,7 +19,7 @@ public class GreaterThanOperatorHandler implements OperatorHandler {
         log.debug("value - {}", value);
         log.debug("type - {}", type);
 
-        Object vo = dialect.processValue(value, type, null);
+        Object vo = dialect.processValue(value, type, null, column.columnDataTypeName());
 
         if (dialect.supportAlias()) {
             String key =
