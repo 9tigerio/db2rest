@@ -23,14 +23,14 @@ import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
 public class DatabaseContextRequestInterceptor implements AsyncHandlerInterceptor {
 
     private final List<String> whiteList = List.of(
-            "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**",
+            "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**", "/admin/**",
             VERSION + "/$dbs");
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.debug("Pre handle - {}", request.getRequestURI());
+        log.info("Pre handle - {}", request.getRequestURI());
 
 
         if (!isWhileListed(request.getRequestURI())) {
