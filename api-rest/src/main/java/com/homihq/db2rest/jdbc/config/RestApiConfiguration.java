@@ -4,6 +4,7 @@ import com.homihq.db2rest.bulk.DataProcessor;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.service.*;
+import com.homihq.db2rest.jdbc.rest.admin.AdminController;
 import com.homihq.db2rest.jdbc.rest.create.BulkCreateController;
 import com.homihq.db2rest.jdbc.rest.create.CreateController;
 import com.homihq.db2rest.jdbc.rest.delete.DeleteController;
@@ -117,9 +118,17 @@ public class RestApiConfiguration {
         return new SQLTemplateController(sqlTemplateExecutorService);
     }
 
+    @Bean
     @ConditionalOnBean(JdbcManager.class)
     public DbInfoController dbInfoController(JdbcManager jdbcManager) {
         return new DbInfoController(jdbcManager);
+    }
+
+
+    @Bean
+    @ConditionalOnBean(JdbcManager.class)
+    public AdminController adminController(JdbcManager jdbcManager) {
+        return new AdminController(jdbcManager);
     }
     //END ::: API
 

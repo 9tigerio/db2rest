@@ -39,16 +39,13 @@ public final class JdbcManager {
     private final Map<String, DbDetailHolder> dbDetailHolderMap = new ConcurrentHashMap<>();
     private final Map<String, NamedParameterJdbcTemplate> namedParameterJdbcTemplateMap =
             new ConcurrentHashMap<>();
-    /*
-    private final Map<String, JdbcTransactionManager> jdbcTransactionManagerMap =
-            new ConcurrentHashMap<>();
-    */
+
     private final Map<String, TransactionTemplate> transactionTemplateMap =
             new ConcurrentHashMap<>();
 
     @PostConstruct
-    private void reload() {
-
+    public void reload() {
+        log.info("Reloading JDBC meta data.");
         loadAllMetaData();
 
     }
@@ -74,7 +71,7 @@ public final class JdbcManager {
 
     }
 
-    private void loadAllMetaData() {
+    public void loadAllMetaData() {
         log.info("Attempting to load meta-data for all relational data-sources.");
 
         if (dataSource instanceof RoutingDataSource) {
