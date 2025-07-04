@@ -35,7 +35,7 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 | Release              | Download/Docker Pull                                            |
 |----------------------|-----------------------------------------------------------------|
-| 1.6.0                | [DB2Rest-1.6.0](https://download.db2rest.com/db2rest-1.6.1.jar) |
+| 1.6.0                | [DB2Rest-1.6.0](https://download.db2rest.com/db2rest-1.6.0.jar) |
 | 1.6.0 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.0 `                          |
 | 1.5.1                | [DB2Rest-1.5.1](https://download.db2rest.com/db2rest-1.5.1.jar) |
 | 1.5.1 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.5.1 `                          |
@@ -82,7 +82,6 @@ writing a single line of code. There is no direct database based point to point 
 - **PostgreSQL** 
 - **MySQL**
 - **MS SQL Server**
-- **Tembo PostgreSQL** 
 - **Oracle**  (Including 9i, 10g)
 - **DigitalOcean PostgreSQL** 
 - **DigitalOcean MySQL** 
@@ -91,6 +90,8 @@ writing a single line of code. There is no direct database based point to point 
 - **MariaDB**  
 - **CockroachDB**
 - **Neon**
+- **Amazon Lightsail PostgreSQL**
+- **Amazon Lightsail MySQL**
 
 # Planned Database Support
 
@@ -100,14 +101,11 @@ writing a single line of code. There is no direct database based point to point 
 - **PlanetScale**
 - **CrunchyData**
 - **Singlestore**
-- **Nile** (Planned)
+- **Nile** 
 - **MindsDB**
-- [KDB](https://kdb.ai/)
-- [Zilliz](https://zilliz.com/)
-- [AstraDB](https://www.datastax.com/products/datastax-astra)
-- [Vespa](https://vespa.ai/)
-- Amazon Lightsail PostgreSQL
-- Amazon Lightsail MySQL
+- DuckDB
+- SQLLite
+
 
 # Contributing
 Feel like contributing? That's awesome! We have a [contributing guide](https://github.com/9tigerio/db2rest/blob/master/CONTRIBUTING.md) to help guide you.
