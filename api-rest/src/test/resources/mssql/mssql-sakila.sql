@@ -145,9 +145,9 @@ CREATE TABLE country
 
 CREATE TABLE person
 (
-  person_id BIGINT      NOT NULL IDENTITY PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  age TINYINT,
+    person_id BIGINT      NOT NULL IDENTITY PRIMARY KEY,
+    name      VARCHAR(50) NOT NULL,
+    age       TINYINT,
 );
 
 
@@ -155,14 +155,16 @@ CREATE FUNCTION GetMovieRentalRateFunc(@movieTitle VARCHAR(100))
     RETURNS DECIMAL(4, 2)
 AS
 BEGIN
-    DECLARE @rentalRate DECIMAL(4, 2);
-    SET @rentalRate = 0.00;
+    DECLARE
+@rentalRate DECIMAL(4, 2);
+    SET
+@rentalRate = 0.00;
 
-    SELECT @rentalRate = rental_rate
-    FROM film
-    WHERE title = @movieTitle;
+SELECT @rentalRate = rental_rate
+FROM film
+WHERE title = @movieTitle;
 
-    RETURN (@rentalRate);
+RETURN (@rentalRate);
 END;
 
 CREATE PROCEDURE GetMovieRentalRateProc(
@@ -170,7 +172,30 @@ CREATE PROCEDURE GetMovieRentalRateProc(
     @rentalRate DECIMAL(4, 2) OUTPUT
 ) AS
 BEGIN
-    SELECT @rentalRate = rental_rate
-    FROM film
-    WHERE title = @movieTitle;
+SELECT @rentalRate = rental_rate
+FROM film
+WHERE title = @movieTitle;
+END;
+
+
+CREATE
+OR
+ALTER PROCEDURE GetActorByIdProc
+    @actorId BIGINT
+    AS
+BEGIN
+    SET
+NOCOUNT ON;
+SELECT actor_id, first_name, last_name, last_update
+FROM actor
+WHERE actor_id = @actorId;
+END;
+
+
+CREATE OR ALTER PROCEDURE GetActorsAndFilmsProc
+    AS
+BEGIN
+    SET NOCOUNT ON;
+SELECT actor_id, first_name, last_name FROM actor;
+SELECT film_id, title, release_year FROM film;
 END;
