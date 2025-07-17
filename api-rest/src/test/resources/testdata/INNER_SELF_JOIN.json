@@ -1,9 +1,0 @@
-[
-  {
-    "table": "film",
-
-    "fields" : ["title", "release_year:releaseYear"],
-
-    "on" : ["film_id==prequel_film_id"]
-  }
-]

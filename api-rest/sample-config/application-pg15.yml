@@ -1,7 +1,0 @@
-app:
-  databases:
-    - id: ${DB_NAME:pgdb}
-      type: POSTGRESQL
-      url: jdbc:postgresql://localhost:5432/postgres
-      username: postgres
-      password:

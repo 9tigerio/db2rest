@@ -11,8 +11,8 @@
     </parent>
 
     <groupId>io.9tiger</groupId>
-    <artifactId>db2rest-parent</artifactId>
-    <name>db2rest-parent</name>
+    <artifactId>db2rest</artifactId>
+    <name>db2rest</name>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
@@ -86,18 +86,10 @@
     </properties>
 
     <modules>
-        <module>api-rest</module>
-        <module>auth</module>
-        <module>rest-common</module>
-        <module>dialects/pg-dialect</module>
-        <module>dialects/mssql-dialect</module>
-        <module>dialects/mysql-dialect</module>
-        <module>dialects/mariadb-dialect</module>
-        <module>dialects/oracle-dialect</module>
-        <module>dialects/oracle9i-dialect</module>
-        <module>rdbms-common</module>
-        <module>db2rest-common</module>
-        <module>rdbms-support</module>
+        <module>db2rest-api</module>
+        <module>db2rest-core</module>
+        <module>db2rest-dialects</module>
+        <module>db2rest-auth</module>
     </modules>
 
     <dependencies>
