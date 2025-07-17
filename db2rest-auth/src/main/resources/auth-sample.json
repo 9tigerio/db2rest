@@ -1,0 +1,107 @@
+{
+  "name": "db2rest-security",
+  "resourceRoles": [
+    {
+      "resource": "/api/v2/host",
+      "method": "post",
+      "roles": [
+        "role2",
+        "role3",
+        "role4"
+      ]
+    },
+    {
+      "resource": "/api/v2/host",
+      "method": "get",
+      "roles": [
+        "role2",
+        "role3",
+        "role4"
+      ]
+    },
+    {
+      "resource": "/api/v2/host",
+      "method": "delete",
+      "roles": [
+        "role2",
+        "role3",
+        "role4"
+      ]
+    },
+    {
+      "resource": "/api/v2/source3/*",
+      "method": "get",
+      "roles": [
+        "role1",
+        "role2"
+      ]
+    },
+    {
+      "resource": "/api/mi/**",
+      "method": "*",
+      "roles": [
+        "role2"
+      ]
+    }
+  ],
+  "excludedResources": [
+    {
+      "resource": "/api/v1/source3",
+      "method": "get"
+    },
+    {
+      "resource": "/api/v3/host",
+      "method": "post"
+    },
+    {
+      "resource": "/api/v3/book",
+      "method": "*"
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "password": "0192023A7BBD73250516F069DF18B500",
+      "roles": [
+        "role1",
+        "role2"
+      ]
+    },
+    {
+      "username": "root",
+      "password": 23456,
+      "roles": [
+        "role1"
+      ]
+    },
+    {
+      "username": "tom",
+      "password": 32113,
+      "roles": [
+        "role3"
+      ]
+    }
+  ],
+  "apiKeys": [
+    {
+      "key": "apikey1",
+      "roles": [
+        "admin"
+      ],
+      "active": true
+    },
+    {
+      "key": "apikey2",
+      "roles": [
+        "admin"
+      ]
+    },
+    {
+      "key": "apiKey3",
+      "roles": [
+        "user"
+      ],
+      "active": true
+    }
+  ]
+}

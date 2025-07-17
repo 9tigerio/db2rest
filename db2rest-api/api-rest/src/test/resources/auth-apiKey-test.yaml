@@ -1,0 +1,16 @@
+name: db2rest-security
+
+resourceRoles:
+  - resource: "/v1/rdbms/db/**"
+    method: get
+    roles:
+      - admin
+  - resource: "/v1/rdbms/db/**"
+    method: post
+    roles:
+      - admin
+
+apiKeys:
+  - key: 123456
+    roles: [admin]
+    active: true

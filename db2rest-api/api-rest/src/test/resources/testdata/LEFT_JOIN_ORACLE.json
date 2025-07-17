@@ -1,0 +1,11 @@
+[
+  {
+    "table": "USERPROFILE",
+
+    "fields" : ["apid","auid","firstname","lastname","email","phone"],
+    "joinType" : "LEFT",
+
+    "on" : ["auid==auid"]
+  }
+]
+

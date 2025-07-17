@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.9tiger</groupId>
+        <artifactId>db2rest-dialects</artifactId>
+        <version>${revision}</version>
+        <relativePath>../</relativePath>
+    </parent>
+
+    <groupId>io.9tiger</groupId>
+    <artifactId>mssql-dialect</artifactId>
+    <name>mssql-dialect</name>
+    <description>Microsoft SQL server dialect</description>
+
+    <properties>
+        <mssqljdbc.version>12.8.1.jre11</mssqljdbc.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.9tiger</groupId>
+            <artifactId>rdbms-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>${mssqljdbc.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

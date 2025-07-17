@@ -1,0 +1,16 @@
+[
+  {
+    "table": "film_actor",
+
+    "fields" : ["film_id"],
+
+    "on" : ["film_id==film_id"]
+  },
+  {
+    "table": "actor",
+
+    "fields" : ["actor_id","first_name", "last_name"],
+
+    "on" : ["actor_id==actor_id"]
+  }
+]

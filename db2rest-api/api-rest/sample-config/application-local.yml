@@ -1,0 +1,18 @@
+app:
+  databases:
+    - id: DB1
+      type: POSTGRESQL
+      url: jdbc:postgresql://localhost:5432/homidb
+      username: homi2022
+      password: homi2022
+
+    - id: DB2
+      type: MYSQL
+      url: jdbc:mysql://localhost:3306/sakila
+      username: root
+      password: "@Kolkata84"
+
+
+
+
+
