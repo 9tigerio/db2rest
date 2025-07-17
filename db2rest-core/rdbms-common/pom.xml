@@ -4,26 +4,23 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.9tiger</groupId>
-        <artifactId>db2rest-parent</artifactId>
+        <artifactId>db2rest-core</artifactId>
         <version>${revision}</version>
-        <relativePath>../../pom.xml</relativePath>
-        <!-- lookup parent from repository -->
+        <relativePath>../</relativePath>
     </parent>
 
-    <artifactId>mysql-dialect</artifactId>
-    <name>mysql-dialect</name>
-    <description>mysql-dialect</description>
+    <artifactId>rdbms-common</artifactId>
+    <name>rdbms-common</name>
+    <description>rdbms-common</description>
     <dependencies>
-        <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
-            <artifactId>rdbms-common</artifactId>
+            <artifactId>db2rest-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+
     </dependencies>
+
 
 </project>

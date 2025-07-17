@@ -4,11 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.9tiger</groupId>
-        <artifactId>db2rest-parent</artifactId>
+        <artifactId>db2rest-core</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
-
-        <!-- lookup parent from repository -->
+        <relativePath>../</relativePath>
     </parent>
 
     <artifactId>rdbms-support</artifactId>

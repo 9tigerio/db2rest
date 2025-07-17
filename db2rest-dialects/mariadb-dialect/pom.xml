@@ -4,25 +4,27 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.9tiger</groupId>
-        <artifactId>db2rest-parent</artifactId>
+        <artifactId>db2rest-dialects</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
-
-        <!-- lookup parent from repository -->
+        <relativePath>../</relativePath>
     </parent>
 
-    <artifactId>rdbms-common</artifactId>
-    <name>rdbms-common</name>
-    <description>rdbms-common</description>
+    <groupId>io.9tiger</groupId>
+    <artifactId>mariadb-dialect</artifactId>
+    <name>mariadb-dialect</name>
+    <description>mariadb-dialect</description>
     <dependencies>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>io.9tiger</groupId>
-            <artifactId>db2rest-common</artifactId>
+            <artifactId>rdbms-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-
     </dependencies>
-
 
 </project>

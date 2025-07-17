@@ -4,14 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.9tiger</groupId>
-        <artifactId>db2rest-parent</artifactId>
+        <artifactId>db2rest-api</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
-
-        <!-- lookup parent from repository -->
+        <relativePath>../</relativePath>
     </parent>
 
-    <artifactId>db2rest</artifactId>
+    <artifactId>api-rest</artifactId>
     <packaging>jar</packaging>
     <name>db2rest</name>
     <description>db2rest</description>
@@ -21,7 +19,7 @@
 
         <dependency>
             <groupId>io.9tiger</groupId>
-            <artifactId>auth</artifactId>
+            <artifactId>db2rest-auth</artifactId>
             <version>${project.version}</version>
         </dependency>
 

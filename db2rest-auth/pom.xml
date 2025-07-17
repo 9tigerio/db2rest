@@ -4,15 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.9tiger</groupId>
-        <artifactId>db2rest-parent</artifactId>
+        <artifactId>db2rest</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
-
-        <!-- lookup parent from repository -->
+        <relativePath>../</relativePath>
     </parent>
 
-    <artifactId>auth</artifactId>
-    <name>auth</name>
+    <artifactId>db2rest-auth</artifactId>
+    <name>db2rest-auth</name>
     <description>auth</description>
     <dependencies>
         <dependency>
