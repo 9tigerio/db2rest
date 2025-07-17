@@ -53,7 +53,7 @@ jobs:
         mkdir staging
         cp target/central-publishing/central-bundle.zip staging
         unzip staging/central-bundle.zip -d staging
-        echo "JAR_FILE=staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}/db2rest-${{ github.event.release.tag_name}}.jar" >> $GITHUB_ENV
+        echo "JAR_FILE=staging/io/9tiger/api-rest/${{ github.event.release.tag_name }}/api-rest-${{ github.event.release.tag_name}}.jar" >> $GITHUB_ENV
 
     - run: ls staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}    
     - run: ls ${{ env.JAR_FILE }}
