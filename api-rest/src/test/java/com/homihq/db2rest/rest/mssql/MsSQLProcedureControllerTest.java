@@ -39,4 +39,76 @@ class MsSQLProcedureControllerTest extends MsSQLBaseIntegrationTest {
                 .andDo(print())
                 .andDo(document(DB_NAME + "-execute-procedure"));
     }
+
+    @Test
+    @DisplayName("Execute GetActorByIdProc on MSSQL")
+    void executeGetActorByIdProc() throws Exception {
+        var json = """
+                   {
+                       "actorId": 1
+                   }
+            """;
+
+        mockMvc.perform(post(getPrefixApiUrl() + "/procedure/GetActorByIdProc")
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON)
+        .content(json))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$['#result-set-1']", hasSize(1)))
+        .andExpect(jsonPath("$['#result-set-1'][0].actor_id", equalTo(1)))
+        .andExpect(jsonPath("$['#result-set-1'][0].first_name").exists())
+        .andExpect(jsonPath("$['#result-set-1'][0].last_name").exists());
+    }
+
+    @Test
+    @DisplayName("Execute GetActorByIdProc on MSSQL with resultSetKeys")
+    void executeGetActorByIdProcWithResultSetKeys() throws Exception {
+        var json = """
+        {
+            "actorId": 1
+        }
+    """;
+
+        mockMvc.perform(post(getPrefixApiUrl() + "/procedure/GetActorByIdProc?resultSetKeys=actors")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.actors", hasSize(1)))
+                .andExpect(jsonPath("$.actors[0].actor_id", equalTo(1)))
+                .andExpect(jsonPath("$.actors[0].first_name").exists())
+                .andExpect(jsonPath("$.actors[0].last_name").exists());
+    }
+
+    @Test
+    @DisplayName("Execute GetActorsAndFilmsProc on MSSQL without resultSetKeys")
+    void executeGetActorsAndFilmsProcWithoutResultSetKeys() throws Exception {
+        mockMvc.perform(post(getPrefixApiUrl() + "/procedure/GetActorsAndFilmsProc")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$['#result-set-1']").isArray())
+                .andExpect(jsonPath("$['#result-set-2']").isArray())
+                .andExpect(jsonPath("$['#result-set-1'][0].actor_id").exists())
+                .andExpect(jsonPath("$['#result-set-2'][0].film_id").exists());
+    }
+
+    @Test
+    @DisplayName("Execute GetActorsAndFilmsProc on MSSQL with resultSetKeys")
+    void executeGetActorsAndFilmsProcWithResultSetKeys() throws Exception {
+        mockMvc.perform(post(getPrefixApiUrl() + "/procedure/GetActorsAndFilmsProc?resultSetKeys=actors,films")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.actors").isArray())
+                .andExpect(jsonPath("$.films").isArray())
+                .andExpect(jsonPath("$.actors[0].actor_id").exists())
+                .andExpect(jsonPath("$.films[0].film_id").exists());
+    }
 }

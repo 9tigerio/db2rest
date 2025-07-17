@@ -50,6 +50,7 @@ public class JdbcProcedureService implements ProcedureService {
         try {
             return simpleJdbcCall.execute(inParams);
         } catch (InvalidDataAccessApiUsageException ex) {
+            ex.printStackTrace();
             throw new RpcException(subRoutineName, inParams);
         }
     }

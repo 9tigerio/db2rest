@@ -26,6 +26,7 @@ public class ProcedureController {
             @RequestBody Map<String, Object> inParams,
             @RequestParam(name = "resultSetKeys", required = false) List<String> resultSetKeys) {
         log.debug("Execute stored procedure {} with IN params {}", procName, inParams.entrySet());
+        log.info("ResultSetKeys: {}", resultSetKeys);
         return ResponseEntity.ok(procedureService.execute(dbId, procName, inParams,resultSetKeys));
     }
 }
