@@ -77,12 +77,13 @@
     <properties>
         <revision>1.6.5-SNAPSHOT</revision>
         <java.version>21</java.version>
-
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
         <rsql-parser.version>2.3.3</rsql-parser.version>
         <calcite.version>1.38.0</calcite.version>
         <jte.version>3.1.16</jte.version>
+        <!--
         <hibernate.version>7.0.6.Final</hibernate.version>
+        -->
     </properties>
 
     <modules>
@@ -94,11 +95,13 @@
 
     <dependencies>
 
+        <!--
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>

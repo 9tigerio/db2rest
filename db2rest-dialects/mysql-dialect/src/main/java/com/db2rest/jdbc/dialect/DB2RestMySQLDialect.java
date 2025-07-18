@@ -7,7 +7,7 @@ import com.homihq.db2rest.jdbc.config.model.Database;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.dialect.MySQLDialect;
+
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,12 +17,10 @@ import java.util.Map;
 @Slf4j
 public class DB2RestMySQLDialect extends Dialect {
 
-    private MySQLDialect mysqlDialect;
 
     public DB2RestMySQLDialect(ObjectMapper objectMapper) {
         super(objectMapper, "`");
 
-        mysqlDialect = new MySQLDialect();
     }
 
     @Override
