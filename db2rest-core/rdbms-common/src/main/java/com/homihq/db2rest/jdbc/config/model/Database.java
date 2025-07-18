@@ -11,7 +11,8 @@ public enum Database {
     MSSQL("Microsoft SQL Server"),
     MYSQL("MySQL"),
     POSTGRESQL("PostgreSQL"),
-    MARIADB("MariaDB");
+    MARIADB("MariaDB"),
+    SQLITE("SQLite");
 
     private final String productName;
 
