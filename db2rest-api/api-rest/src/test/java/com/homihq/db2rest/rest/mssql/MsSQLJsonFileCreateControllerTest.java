@@ -16,7 +16,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;

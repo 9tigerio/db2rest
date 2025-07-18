@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestClassOrder;
 
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;

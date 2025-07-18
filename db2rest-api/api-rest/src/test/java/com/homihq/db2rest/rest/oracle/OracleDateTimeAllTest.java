@@ -20,7 +20,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

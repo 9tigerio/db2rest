@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 
 @Slf4j
 @Component

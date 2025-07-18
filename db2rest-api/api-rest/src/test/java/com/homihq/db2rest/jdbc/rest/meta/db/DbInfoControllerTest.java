@@ -4,6 +4,8 @@ import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.config.model.DbColumn;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
+import com.homihq.db2rest.rest.meta.db.DbInfoController;
+import com.homihq.db2rest.rest.meta.db.DbInfoObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

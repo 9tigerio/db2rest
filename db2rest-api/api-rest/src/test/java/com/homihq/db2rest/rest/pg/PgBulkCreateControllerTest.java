@@ -16,7 +16,7 @@ import org.junit.jupiter.api.TestClassOrder;
 import java.util.List;
 import java.util.Map;
 
-import static com.homihq.db2rest.jdbc.rest.RdbmsRestApi.VERSION;
+import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
