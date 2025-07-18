@@ -2,7 +2,7 @@ package com.homihq.db2rest.jdbc.core.service;
 
 import com.homihq.db2rest.core.exception.RpcException;
 import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.config.dialect.Dialect;
+import com.db2rest.jdbc.dialect.Dialect;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
