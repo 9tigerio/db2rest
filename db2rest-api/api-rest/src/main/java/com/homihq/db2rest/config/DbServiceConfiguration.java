@@ -1,11 +1,11 @@
 package com.homihq.db2rest.config;
 
+import com.db2rest.jdbc.dialect.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.bulk.DataProcessor;
 import com.homihq.db2rest.bulk.FileSubject;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
-import com.homihq.db2rest.jdbc.config.dialect.*;
 import com.homihq.db2rest.config.jinjava.DisabledExpressionTokenScannerSymbols;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.core.service.*;
@@ -93,7 +93,7 @@ public class DbServiceConfiguration {
 
         List<Dialect> dialects = List.of(
                 new PostGreSQLDialect(objectMapper),
-                new MySQLDialect(objectMapper),
+                new DB2RestMySQLDialect(objectMapper),
                 new MariaDBDialect(objectMapper),
                 new OracleDialect(objectMapper),
                 new MsSQLServerDialect(objectMapper)

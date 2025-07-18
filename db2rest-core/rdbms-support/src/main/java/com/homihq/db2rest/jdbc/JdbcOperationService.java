@@ -5,7 +5,7 @@ import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.config.dialect.Dialect;
+import com.db2rest.jdbc.dialect.Dialect;
 import com.homihq.db2rest.jdbc.config.model.ArrayTypeValueHolder;
 import com.homihq.db2rest.jdbc.config.model.DbTable;
 import com.homihq.db2rest.jdbc.core.DbOperationService;

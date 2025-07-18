@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.core;
 
-import com.homihq.db2rest.jdbc.config.dialect.Dialect;
+import com.db2rest.jdbc.dialect.Dialect;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
