@@ -85,6 +85,7 @@ writing a single line of code. There is no direct database based point to point 
 
 - **PostgreSQL** 
 - **MySQL**
+- **SQLLite**
 - **MS SQL Server**
 - **Oracle**  (Including 9i, 10g)
 - **DigitalOcean PostgreSQL** 
@@ -107,7 +108,6 @@ writing a single line of code. There is no direct database based point to point 
 - **Nile** 
 - **MindsDB**
 - DuckDB
-- SQLLite
 
 
 # Contributing
