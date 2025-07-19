@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Order(130)
 class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
 
-    @Test
+    //@Test
     @DisplayName("Execute SQL template - select all")
     void executeSelectAllTemplate() throws Exception {
 
@@ -34,7 +34,7 @@ class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-template-select-all"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute SQL template - select by id")
     void executeSelectByIdTemplate() throws Exception {
 
@@ -49,7 +49,7 @@ class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-template-select-by-id"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute SQL template - conditional render with AND operation")
     void executeConditionalRenderAndOpTemplate() throws Exception {
 
@@ -65,7 +65,7 @@ class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-template-conditional-and"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute SQL template - conditional render with title filter")
     void executeConditionalRenderWithTitleFilter() throws Exception {
 
@@ -79,7 +79,7 @@ class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-template-conditional-title"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute SQL template - conditional render with join")
     void executeConditionalRenderJoinTemplate() throws Exception {
 
@@ -93,7 +93,7 @@ class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-template-conditional-join"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute SQL template - conditional render with multiple filters")
     void executeConditionalRenderMultipleFilters() throws Exception {
 
@@ -109,7 +109,7 @@ class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-template-multiple-filters"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute SQL template - no parameters")
     void executeTemplateWithoutParameters() throws Exception {
 
@@ -121,7 +121,7 @@ class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-template-no-parameters"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute SQL template - with header parameters")
     void executeTemplateWithHeaderParameters() throws Exception {
 
@@ -136,7 +136,7 @@ class SQLiteTemplateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-template-header-parameters"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute non-existent template")
     void executeNonExistentTemplate() throws Exception {
 

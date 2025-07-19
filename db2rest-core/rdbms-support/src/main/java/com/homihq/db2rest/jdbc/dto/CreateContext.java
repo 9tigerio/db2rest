@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.dto;
 
-import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbTable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

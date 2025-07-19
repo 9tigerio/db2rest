@@ -1,6 +1,6 @@
 package com.homihq.db2rest.jdbc.sql;
 
-import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.support.DatabaseMetaDataCallback;

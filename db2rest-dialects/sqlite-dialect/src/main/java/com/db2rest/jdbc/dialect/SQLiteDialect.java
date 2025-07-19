@@ -2,10 +2,10 @@ package com.db2rest.jdbc.dialect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.config.model.Database;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.db2rest.jdbc.dialect.model.Database;
+import com.db2rest.jdbc.dialect.model.DbTable;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +21,12 @@ public class SQLiteDialect extends Dialect {
 
     @Override
     public boolean isSupportedDb(String productName, int majorVersion) {
-        return StringUtils.equalsIgnoreCase(productName, Database.SQLITE.getProductName());
+        return Strings.CI.equalsAny(productName, Database.SQLITE.getProductName());
+    }
+
+    @Override
+    public boolean supportAlias() {
+        return false;
     }
 
     @Override
@@ -32,9 +37,9 @@ public class SQLiteDialect extends Dialect {
 
                 String columnDataTypeName = table.getColumnDataTypeName(columnName);
 
-                if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "json")) {
+                if (Strings.CI.equalsAny(columnDataTypeName, "json")) {
                     data.put(columnName, getObjectMapper().writeValueAsString(value));
-                } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "TIMESTAMP", "DATETIME")) {
+                } else if (Strings.CI.equalsAny(columnDataTypeName, "TIMESTAMP", "DATETIME")) {
                     LocalDateTime v = convertToLocalDateTime((String) value);
                     data.put(columnName, v);
                 }

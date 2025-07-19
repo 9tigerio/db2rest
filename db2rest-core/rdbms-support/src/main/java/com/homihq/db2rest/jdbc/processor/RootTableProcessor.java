@@ -2,7 +2,7 @@ package com.homihq.db2rest.jdbc.processor;
 
 
 import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbTable;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

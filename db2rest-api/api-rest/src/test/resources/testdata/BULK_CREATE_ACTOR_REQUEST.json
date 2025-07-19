@@ -1,14 +1,10 @@
 [
   {
-    "FirstName" : "VIVIEN",
-    "LastName" : "BERGEN",
-    "phone" : "XXX-XXXX-XXX",
-    "address" : "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    "first_name" : "VIVIEN",
+    "last_name" : "BERGEN"
   },
   {
-    "FirstName" : "CUBA",
-    "LastName" : "OLIVIER",
-    "phone" : "XXX-XXXX-XXX",
-    "address" : "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    "first_name" : "CUBA",
+    "last_name" : "OLIVIER"
   }
 ]

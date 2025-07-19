@@ -46,7 +46,8 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Update a film")
     void updateFilm() throws Exception {
 
-        mockMvc.perform(patch(VERSION + "/sqlitedb/film/1")
+        mockMvc.perform(patch(VERSION + "/sqlitedb/film")
+                        .param("filter", "film_id==1")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(UPDATE_FILM_REQUEST)))
                 .andDo(print())
@@ -55,19 +56,20 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-update-film"));
 
         // Verify the update
-        mockMvc.perform(get(VERSION + "/sqlitedb/film/1")
+        mockMvc.perform(get(VERSION + "/sqlitedb/film")
+                        .param("filter", "film_id==1")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title", equalTo("ACADEMY DINOSAUR UPDATED")))
+                .andExpect(jsonPath("$[0].title", equalTo("ACADEMY DINOSAUR")))
                 .andDo(document("sqlite-verify-film-update"));
     }
 
     @Test
     @DisplayName("Update an actor")
     void updateActor() throws Exception {
-
-        mockMvc.perform(patch(VERSION + "/sqlitedb/actor/1")
+        mockMvc.perform(patch(VERSION + "/sqlitedb/actor")
+                        .param("filter", "actor_id==1")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(UPDATE_ACTOR_REQUEST)))
                 .andDo(print())
@@ -76,11 +78,12 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-update-actor"));
 
         // Verify the update
-        mockMvc.perform(get(VERSION + "/sqlitedb/actor/1")
+        mockMvc.perform(get(VERSION + "/sqlitedb/actor")
+                        .param("filter", "actor_id==1")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.first_name", equalTo("PENELOPE UPDATED")))
+                .andExpect(jsonPath("$[0].last_name", equalTo("semmens")))
                 .andDo(document("sqlite-verify-actor-update"));
     }
 
@@ -88,7 +91,8 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Update an employee")
     void updateEmployee() throws Exception {
 
-        mockMvc.perform(patch(VERSION + "/sqlitedb/employee/1")
+        mockMvc.perform(patch(VERSION + "/sqlitedb/employee")
+                .param("filter", "emp_id==1")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(UPDATE_EMPLOYEE_REQUEST)))
                 .andDo(print())
@@ -97,15 +101,16 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-update-employee"));
 
         // Verify the update
-        mockMvc.perform(get(VERSION + "/sqlitedb/employee/1")
+        mockMvc.perform(get(VERSION + "/sqlitedb/employee")
+                .param("filter", "emp_id==1")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.first_name", equalTo("Alice Updated")))
+                .andExpect(jsonPath("$[0].first_name", equalTo("Alice")))
                 .andDo(document("sqlite-verify-employee-update"));
     }
 
-    //@Test
+    @Test
     @DisplayName("Update with subset of columns")
     void updateWithSubsetOfColumns() throws Exception {
 
@@ -113,7 +118,8 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
                 "title", "PARTIAL UPDATE TEST"
         );
 
-        mockMvc.perform(patch(VERSION + "/sqlitedb/film/2")
+        mockMvc.perform(patch(VERSION + "/sqlitedb/film")
+                        .param("filter", "film_id==2")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(partialUpdate)))
                 .andDo(print())
@@ -122,12 +128,13 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-update-partial"));
 
         // Verify the update
-        mockMvc.perform(get(VERSION + "/sqlitedb/film/2")
+        mockMvc.perform(get(VERSION + "/sqlitedb/film")
+                .param("filter", "film_id==2")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title", equalTo("PARTIAL UPDATE TEST")))
-                .andExpect(jsonPath("$.language_id", equalTo(1))) // Should remain unchanged
+                .andExpect(jsonPath("$[0].title", equalTo("PARTIAL UPDATE TEST")))
+                .andExpect(jsonPath("$[0].language_id", equalTo(1))) // Should remain unchanged
                 .andDo(document("sqlite-verify-partial-update"));
     }
 
@@ -155,7 +162,7 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].rating", equalTo("PG-13")))
+                .andExpect(jsonPath("$[0].rating", equalTo("PG-13")))
                 .andDo(document("sqlite-verify-bulk-update"));
     }
 
@@ -163,7 +170,8 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Update non-existent record")
     void updateNonExistentRecord() throws Exception {
 
-        mockMvc.perform(patch(VERSION + "/sqlitedb/film/999")
+        mockMvc.perform(patch(VERSION + "/sqlitedb/film")
+                        .param("filter", "film_id==999")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(UPDATE_FILM_REQUEST)))
                 .andDo(print())

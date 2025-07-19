@@ -1,10 +1,10 @@
 package com.homihq.db2rest.jdbc.dto;
 
 
-import com.homihq.db2rest.jdbc.config.model.DbColumn;
-import com.homihq.db2rest.jdbc.config.model.DbJoin;
-import com.homihq.db2rest.jdbc.config.model.DbSort;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbColumn;
+import com.db2rest.jdbc.dialect.model.DbJoin;
+import com.db2rest.jdbc.dialect.model.DbSort;
+import com.db2rest.jdbc.dialect.model.DbTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,6 +44,7 @@ public class ReadContext {
     Map<String, Object> paramMap;
     List<DbJoin> dbJoins;
     List<DbSort> dbSortList;
+    List<DbTable> allTables; // All tables involved in the query (root + joined tables)
 
     public void createParamMap() {
         if (Objects.isNull(paramMap)) {
@@ -59,5 +60,11 @@ public class ReadContext {
         if (Objects.isNull(dbJoins))
             dbJoins = new ArrayList<>();
         dbJoins.add(join);
+    }
+
+    public void addTable(DbTable table) {
+        if (Objects.isNull(allTables))
+            allTables = new ArrayList<>();
+        allTables.add(table);
     }
 }

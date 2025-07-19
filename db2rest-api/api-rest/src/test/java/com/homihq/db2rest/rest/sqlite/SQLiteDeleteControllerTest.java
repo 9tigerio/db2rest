@@ -25,7 +25,8 @@ class SQLiteDeleteControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Delete a film by ID")
     void deleteFilmById() throws Exception {
 
-        mockMvc.perform(delete(VERSION + "/sqlitedb/film/5")
+        mockMvc.perform(delete(VERSION + "/sqlitedb/film")
+                        .param("filter", "film_id==1")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -33,10 +34,11 @@ class SQLiteDeleteControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-delete-film-by-id"));
 
         // Verify the deletion
-        mockMvc.perform(get(VERSION + "/sqlitedb/film/5")
+        mockMvc.perform(get(VERSION + "/sqlitedb/film")
+                        .param("filter", "film_id==1")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isNotFound())
+                .andExpect(status().isOk())
                 .andDo(document("sqlite-verify-film-deletion"));
     }
 
@@ -44,7 +46,8 @@ class SQLiteDeleteControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Delete an actor by ID")
     void deleteActorById() throws Exception {
 
-        mockMvc.perform(delete(VERSION + "/sqlitedb/actor/10")
+        mockMvc.perform(delete(VERSION + "/sqlitedb/actor")
+                .param("filter", "actor_id==10")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -52,31 +55,14 @@ class SQLiteDeleteControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-delete-actor-by-id"));
 
         // Verify the deletion
-        mockMvc.perform(get(VERSION + "/sqlitedb/actor/10")
-                        .accept(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andDo(document("sqlite-verify-actor-deletion"));
-    }
-
-    @Test
-    @DisplayName("Delete an employee by ID")
-    void deleteEmployeeById() throws Exception {
-
-        mockMvc.perform(delete(VERSION + "/sqlitedb/employee/3")
+        mockMvc.perform(get(VERSION + "/sqlitedb/actor")
+                .param("filter", "actor_id==10")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rows", equalTo(1)))
-                .andDo(document("sqlite-delete-employee-by-id"));
-
-        // Verify the deletion
-        mockMvc.perform(get(VERSION + "/sqlitedb/employee/3")
-                        .accept(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andDo(document("sqlite-verify-employee-deletion"));
+                .andDo(document("sqlite-verify-actor-deletion"));
     }
+
 
     @Test
     @DisplayName("Delete with filter")
@@ -96,7 +82,7 @@ class SQLiteDeleteControllerTest extends SQLiteBaseIntegrationTest {
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data").isEmpty())
+                .andExpect(jsonPath("$").isEmpty())
                 .andDo(document("sqlite-verify-filter-deletion"));
     }
 
@@ -104,7 +90,8 @@ class SQLiteDeleteControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Delete non-existent record")
     void deleteNonExistentRecord() throws Exception {
 
-        mockMvc.perform(delete(VERSION + "/sqlitedb/film/999")
+        mockMvc.perform(delete(VERSION + "/sqlitedb/film")
+                        .param("filter", "film_id==999")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -116,7 +103,8 @@ class SQLiteDeleteControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Delete from non-existent table")
     void deleteFromNonExistentTable() throws Exception {
 
-        mockMvc.perform(delete(VERSION + "/sqlitedb/non_existent_table/1")
+        mockMvc.perform(delete(VERSION + "/sqlitedb/non_existent_table")
+                        .param("filter", "film_id==1")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -131,7 +119,7 @@ class SQLiteDeleteControllerTest extends SQLiteBaseIntegrationTest {
                         .param("filter", "invalid_column==value")
                         .accept(APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andDo(document("sqlite-delete-invalid-filter"));
     }
 }

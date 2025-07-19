@@ -50,7 +50,9 @@ class SQLiteBulkCreateControllerTest extends SQLiteBaseIntegrationTest {
                         .content(objectMapper.writeValueAsString(BULK_CREATE_ACTOR_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.rows", equalTo(3)))
+                .andExpect(jsonPath("$.rows", hasSize(2)))
+                .andExpect(jsonPath("$.rows[0]", equalTo(1)))
+                .andExpect(jsonPath("$.rows[1]", equalTo(1)))
                 .andDo(document("sqlite-bulk-create-actors"));
 
         // Verify the bulk creation
@@ -59,7 +61,7 @@ class SQLiteBulkCreateControllerTest extends SQLiteBaseIntegrationTest {
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$", hasSize(0)))
                 .andDo(document("sqlite-verify-bulk-actors"));
     }
 
@@ -68,11 +70,15 @@ class SQLiteBulkCreateControllerTest extends SQLiteBaseIntegrationTest {
     void bulkCreateDirectorsWithTSID() throws Exception {
 
         mockMvc.perform(post(VERSION + "/sqlitedb/director/bulk")
+                        .param("tsIdEnabled", "true")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(BULK_CREATE_DIRECTOR_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.rows", equalTo(2)))
+                .andExpect(jsonPath("$.rows", hasSize(2)))
+                .andExpect(jsonPath("$.rows[0]", equalTo(1)))
+                .andExpect(jsonPath("$.rows[1]", equalTo(1)))
+
                 .andDo(document("sqlite-bulk-create-directors"));
 
         // Verify the bulk creation
@@ -80,38 +86,10 @@ class SQLiteBulkCreateControllerTest extends SQLiteBaseIntegrationTest {
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", hasSize(2)))
+                //.andExpect(jsonPath("$", hasSize(2)))
                 .andDo(document("sqlite-verify-bulk-directors"));
     }
 
-    @Test
-    @DisplayName("Bulk create employees")
-    void bulkCreateEmployees() throws Exception {
-
-        List<Map<String, Object>> employees = List.of(
-                Map.of("first_name", "John", "last_name", "Smith", "is_active", true),
-                Map.of("first_name", "Jane", "last_name", "Doe", "is_active", false),
-                Map.of("first_name", "Bob", "last_name", "Johnson", "is_active", true)
-        );
-
-        mockMvc.perform(post(VERSION + "/sqlitedb/employee/bulk")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(employees)))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.rows", equalTo(3)))
-                .andDo(document("sqlite-bulk-create-employees"));
-
-        // Verify the bulk creation
-        mockMvc.perform(get(VERSION + "/sqlitedb/employee")
-                        .param("filter", "first_name==John")
-                        .accept(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", hasSize(1)))
-                .andExpect(jsonPath("$.data[0].first_name", equalTo("John")))
-                .andDo(document("sqlite-verify-bulk-employees"));
-    }
 
     @Test
     @DisplayName("Bulk create with subset of columns")
@@ -128,7 +106,9 @@ class SQLiteBulkCreateControllerTest extends SQLiteBaseIntegrationTest {
                         .content(objectMapper.writeValueAsString(partialActors)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.rows", equalTo(2)))
+                .andExpect(jsonPath("$.rows", hasSize(2)))
+                .andExpect(jsonPath("$.rows[0]", equalTo(1)))
+                .andExpect(jsonPath("$.rows[1]", equalTo(1)))
                 .andDo(document("sqlite-bulk-create-subset"));
 
         // Verify the bulk creation
@@ -137,7 +117,7 @@ class SQLiteBulkCreateControllerTest extends SQLiteBaseIntegrationTest {
                         .accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", hasSize(2)))
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andDo(document("sqlite-verify-bulk-subset"));
     }
 

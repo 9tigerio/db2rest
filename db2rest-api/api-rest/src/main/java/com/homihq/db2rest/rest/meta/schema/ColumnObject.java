@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.meta.schema;
 
-import com.homihq.db2rest.jdbc.config.model.DbColumn;
+import com.db2rest.jdbc.dialect.model.DbColumn;
 
 public record ColumnObject(String name, Boolean pk, String dataType) {
     public ColumnObject(DbColumn dbColumn) {

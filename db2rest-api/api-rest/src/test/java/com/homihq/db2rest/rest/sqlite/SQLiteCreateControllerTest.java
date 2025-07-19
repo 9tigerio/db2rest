@@ -52,7 +52,7 @@ class SQLiteCreateControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Create a new film")
     void createFilm() throws Exception {
 
-        mockMvc.perform(post(VERSION + "/sqlitedb/film")
+        mockMvc.perform(post(VERSION + "/{dbId}/film", "sqlitedb")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST)))
                 .andDo(print())
@@ -62,14 +62,15 @@ class SQLiteCreateControllerTest extends SQLiteBaseIntegrationTest {
                 .andDo(document("sqlite-create-film"));
 
         //Verify
-        String response = mockMvc.perform(get(VERSION + "/sqlitedb/film")
+        String response = mockMvc.perform(get(VERSION + "/{dbId}/film", "sqlitedb")
                         .accept(APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
-        Integer filmId = JsonPath.read(response, "$.data[?(@.title == 'ACADEMY DINOSAUR')].film_id");
+        Integer filmId = JsonPath.read(response, "$[0].film_id");
         assertTrue(filmId != null);
     }
 
@@ -92,12 +93,12 @@ class SQLiteCreateControllerTest extends SQLiteBaseIntegrationTest {
     @DisplayName("Create a new film - invalid payload")
     void createFilmInvalidPayload() throws Exception {
 
-        mockMvc.perform(post(VERSION + "/sqlitedb/film")
+        mockMvc.perform(post(VERSION + "/{dbId}/film", "sqlitedb")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CREATE_FILM_REQUEST_ERROR)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.detail", containsString("NOT NULL constraint failed")))
+                .andExpect(jsonPath("$.detail", containsString("Column not found film.country")))
                 .andDo(document("sqlite-create-film-error"));
     }
 
