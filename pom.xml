@@ -75,7 +75,7 @@
     <!-- BEGIN MODULE LAYOUT -->
 
     <properties>
-        <revision>1.6.5-SNAPSHOT</revision>
+        <revision>1.6.5</revision>
         <java.version>21</java.version>
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
         <rsql-parser.version>2.3.3</rsql-parser.version>
