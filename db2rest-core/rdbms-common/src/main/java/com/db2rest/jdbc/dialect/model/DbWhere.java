@@ -1,7 +1,6 @@
-package com.homihq.db2rest.jdbc.config.model;
+package com.db2rest.jdbc.dialect.model;
 
-
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.List;
 import java.util.Map;
@@ -11,10 +10,11 @@ public record DbWhere(
         DbTable table,
         List<DbColumn> columns,
         Map<String, Object> paramMap,
-        String op
+        String op,
+        List<DbTable> allTables
 ) {
 
     public boolean isDelete() {
-        return StringUtils.equalsIgnoreCase(op, "delete");
+        return Strings.CI.equalsAny(op, "delete");
     }
 }

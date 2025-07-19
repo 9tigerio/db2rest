@@ -1,10 +1,10 @@
 package com.homihq.db2rest.jdbc.processor;
 
 import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.config.model.DbColumn;
-import com.homihq.db2rest.jdbc.config.model.DbJoin;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
-import com.homihq.db2rest.jdbc.config.model.DbWhere;
+import com.db2rest.jdbc.dialect.model.DbColumn;
+import com.db2rest.jdbc.dialect.model.DbJoin;
+import com.db2rest.jdbc.dialect.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbWhere;
 import com.homihq.db2rest.jdbc.dto.JoinDetail;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
@@ -44,6 +44,9 @@ public class JoinProcessor implements ReadProcessor {
 
         List<DbTable> allJoinTables = new ArrayList<>();
         allJoinTables.add(rootTable);
+        
+        // Store root table in ReadContext for cross-table column resolution
+        readContext.addTable(rootTable);
 
         for (JoinDetail joinDetail : joins) {
 
@@ -59,6 +62,9 @@ public class JoinProcessor implements ReadProcessor {
             List<DbColumn> columnList = addColumns(table, joinDetail.fields());
             readContext.addColumns(columnList);
             addJoin(table, rootTable, joinDetail, readContext);
+            
+            // Store joined table in ReadContext for cross-table column resolution
+            readContext.addTable(table);
 
             allJoinTables.add(rootTable);
 
@@ -104,8 +110,9 @@ public class JoinProcessor implements ReadProcessor {
             readContext.createParamMap();
 
             DbWhere dbWhere = new DbWhere(
-                    table.name(),
-                    table, table.buildColumns(), readContext.getParamMap(), "read");
+                table.name(),
+                table, table.buildColumns(), readContext.getParamMap(), "read",
+                readContext.getAllTables());
 
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(joinDetail.filter());

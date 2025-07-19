@@ -1,4 +1,4 @@
-package com.homihq.db2rest.jdbc.config.model;
+package com.db2rest.jdbc.dialect.model;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

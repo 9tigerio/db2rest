@@ -1,8 +1,9 @@
-package com.homihq.db2rest.jdbc.config.model;
+package com.db2rest.jdbc.dialect.model;
 
 import com.homihq.db2rest.core.exception.InvalidColumnException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.List;
 
@@ -24,24 +25,19 @@ public record DbTable(String schema, String name, String fullName, String alias,
     }
 
     public DbColumn buildColumn(String columnName) {
-        log.info("columnName - {}", columnName);
         DbAlias dbAlias = getAlias(columnName);
-
-        log.info("Db alias - {}", dbAlias);
-
         return getDbColumn(dbAlias);
     }
 
     private DbColumn getDbColumn(DbAlias dbAlias) {
         return
                 this.dbColumns.stream()
-                        .filter(dbColumn -> StringUtils.equalsAnyIgnoreCase(dbAlias.name(), dbColumn.name()))
+                        .filter(dbColumn -> Strings.CI.equalsAny(dbAlias.name(), dbColumn.name()))
                         .map(dbColumn -> dbColumn.copyWithAlias(dbAlias))
                         .findFirst().orElseThrow(() -> new InvalidColumnException(name, dbAlias.name()));
     }
 
     private DbAlias getAlias(String name) {
-        log.info("Name - {}", name);
         String[] aliasParts = name.split(":");
 
         String columnName = aliasParts[0];

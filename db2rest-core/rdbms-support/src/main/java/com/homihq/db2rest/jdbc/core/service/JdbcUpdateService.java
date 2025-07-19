@@ -2,8 +2,8 @@ package com.homihq.db2rest.jdbc.core.service;
 
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
-import com.homihq.db2rest.jdbc.config.model.DbWhere;
+import com.db2rest.jdbc.dialect.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbWhere;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.UpdateContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
@@ -88,7 +88,8 @@ public class JdbcUpdateService implements UpdateService {
                     table,
                     null,
                     context.getParamMap(),
-                    "update"
+                    "update",
+                    null // No joins in update operations
             );
 
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(filter);

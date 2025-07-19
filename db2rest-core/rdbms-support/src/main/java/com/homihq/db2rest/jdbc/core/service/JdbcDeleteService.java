@@ -2,8 +2,8 @@ package com.homihq.db2rest.jdbc.core.service;
 
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
-import com.homihq.db2rest.jdbc.config.model.DbWhere;
+import com.db2rest.jdbc.dialect.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbWhere;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.DeleteContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
@@ -77,7 +77,8 @@ public class JdbcDeleteService implements DeleteService {
                     table,
                     null,
                     context.getParamMap(),
-                    "delete"
+                    "delete",
+                    null // No joins in delete operations
             );
             System.out.println("Filter : " + filter);
             Node rootNode = RSQLParserBuilder.newRSQLParser().parse(filter);

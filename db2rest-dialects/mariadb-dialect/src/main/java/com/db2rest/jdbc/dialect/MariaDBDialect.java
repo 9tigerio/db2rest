@@ -3,9 +3,9 @@ package com.db2rest.jdbc.dialect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
-import com.homihq.db2rest.jdbc.config.model.Database;
-import com.homihq.db2rest.jdbc.config.model.DbColumn;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.db2rest.jdbc.dialect.model.Database;
+import com.db2rest.jdbc.dialect.model.DbColumn;
+import com.db2rest.jdbc.dialect.model.DbTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

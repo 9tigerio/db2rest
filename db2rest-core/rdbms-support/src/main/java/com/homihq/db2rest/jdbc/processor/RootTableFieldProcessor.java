@@ -1,7 +1,7 @@
 package com.homihq.db2rest.jdbc.processor;
 
 
-import com.homihq.db2rest.jdbc.config.model.DbColumn;
+import com.db2rest.jdbc.dialect.model.DbColumn;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

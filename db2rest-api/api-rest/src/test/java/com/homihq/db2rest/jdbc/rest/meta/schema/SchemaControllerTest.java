@@ -2,8 +2,8 @@ package com.homihq.db2rest.jdbc.rest.meta.schema;
 
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.config.model.DbColumn;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbColumn;
+import com.db2rest.jdbc.dialect.model.DbTable;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.rest.meta.schema.SchemaController;
 import com.homihq.db2rest.rest.meta.schema.TableObject;

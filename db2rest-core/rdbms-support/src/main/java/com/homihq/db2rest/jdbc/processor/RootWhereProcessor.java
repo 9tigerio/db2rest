@@ -2,7 +2,7 @@ package com.homihq.db2rest.jdbc.processor;
 
 
 import com.homihq.db2rest.jdbc.JdbcManager;
-import com.homihq.db2rest.jdbc.config.model.DbWhere;
+import com.db2rest.jdbc.dialect.model.DbWhere;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import com.homihq.db2rest.jdbc.rsql.parser.RSQLParserBuilder;
 import com.homihq.db2rest.jdbc.rsql.visitor.BaseRSQLVisitor;
@@ -26,7 +26,8 @@ public class RootWhereProcessor implements ReadProcessor {
 
             DbWhere dbWhere = new DbWhere(
                     readContext.getTableName(),
-                    readContext.getRoot(), readContext.getCols(), readContext.getParamMap(), "read");
+                    readContext.getRoot(), readContext.getCols(), readContext.getParamMap(), "read",
+                    readContext.getAllTables());
 
             log.debug("-Creating root where condition -");
 

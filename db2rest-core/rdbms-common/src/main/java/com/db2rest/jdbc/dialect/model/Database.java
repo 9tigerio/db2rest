@@ -1,4 +1,4 @@
-package com.homihq.db2rest.jdbc.config.model;
+package com.db2rest.jdbc.dialect.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,8 @@ public enum Database {
     MSSQL("Microsoft SQL Server"),
     MYSQL("MySQL"),
     POSTGRESQL("PostgreSQL"),
-    MARIADB("MariaDB");
+    MARIADB("MariaDB"),
+    SQLITE("SQLite");
 
     private final String productName;
 

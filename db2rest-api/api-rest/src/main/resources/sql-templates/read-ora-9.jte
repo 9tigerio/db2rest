@@ -1,4 +1,4 @@
-@import com.homihq.db2rest.jdbc.config.model.DbJoin
+@import com.db2rest.jdbc.dialect.model.DbJoin
 @import java.util.List
 
 @param List<DbJoin> joins

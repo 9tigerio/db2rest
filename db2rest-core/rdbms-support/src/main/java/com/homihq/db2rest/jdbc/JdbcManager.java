@@ -3,7 +3,7 @@ package com.homihq.db2rest.jdbc;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.homihq.db2rest.core.exception.InvalidTableException;
 import com.db2rest.jdbc.dialect.Dialect;
-import com.homihq.db2rest.jdbc.config.model.DbTable;
+import com.db2rest.jdbc.dialect.model.DbTable;
 import com.homihq.db2rest.jdbc.multidb.DbDetailHolder;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
