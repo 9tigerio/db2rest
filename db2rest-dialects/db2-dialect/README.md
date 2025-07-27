@@ -144,18 +144,13 @@ Run the unit tests to verify dialect functionality:
 mvn test -pl db2rest-dialects/db2-dialect -am
 ```
 
-### Integration Tests
-Integration tests require Docker to be running:
-
-```bash
-mvn verify -pl db2rest-dialects/db2-dialect -am
-```
-
-The integration tests will:
-- Start a DB2 testcontainer
-- Test database connectivity
-- Verify dialect configuration
-- Test basic CRUD operations
+### Unit Tests
+The DB2 dialect includes comprehensive unit tests that verify:
+- Database type detection
+- SQL identifier quoting
+- Table name rendering
+- Data type processing
+- Dialect configuration
 
 ## Development
 
@@ -178,8 +173,8 @@ mvn test
 # Run only DB2 dialect tests
 mvn test -pl db2rest-dialects/db2-dialect -am
 
-# Skip integration tests (if Docker not available)
-mvn test -DskipITs
+# Run with specific revision
+mvn test -Drevision=1.6.5
 ```
 
 ## Troubleshooting
