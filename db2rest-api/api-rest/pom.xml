@@ -80,6 +80,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.9tiger</groupId>
+            <artifactId>db2-dialect</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.15.1</version>
