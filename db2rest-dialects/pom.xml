@@ -15,6 +15,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>db2-dialect</module>
         <module>mariadb-dialect</module>
         <module>mssql-dialect</module>
         <module>mysql-dialect</module>

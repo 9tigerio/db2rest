@@ -12,7 +12,8 @@ public enum Database {
     MYSQL("MySQL"),
     POSTGRESQL("PostgreSQL"),
     MARIADB("MariaDB"),
-    SQLITE("SQLite");
+    SQLITE("SQLite"),
+    DB2("DB2/UDB");
 
     private final String productName;
 

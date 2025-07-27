@@ -97,7 +97,8 @@ public class DbServiceConfiguration {
                 new MariaDBDialect(objectMapper),
                 new OracleDialect(objectMapper),
                 new MsSQLServerDialect(objectMapper),
-                new SQLiteDialect(objectMapper)
+                new SQLiteDialect(objectMapper),
+                new DB2RestDB2Dialect(objectMapper)
         );
 
         return new JdbcManager(dataSource(), dialects, databaseProperties);

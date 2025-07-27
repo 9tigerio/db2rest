@@ -83,16 +83,17 @@ writing a single line of code. There is no direct database based point to point 
 
 # Supported Databases
 
-- **PostgreSQL** 
+- **PostgreSQL**
 - **MySQL**
 - **SQLLite**
 - **MS SQL Server**
 - **Oracle**  (Including 9i, 10g)
-- **DigitalOcean PostgreSQL** 
-- **DigitalOcean MySQL** 
-- **AWS RDS Postgres** 
+- **IBM DB2** (11.5.8.0+)
+- **DigitalOcean PostgreSQL**
+- **DigitalOcean MySQL**
+- **AWS RDS Postgres**
 - **AWS RDS MySQL**
-- **MariaDB**  
+- **MariaDB**
 - **CockroachDB**
 - **Neon**
 - **Amazon Lightsail PostgreSQL**
