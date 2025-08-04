@@ -128,6 +128,8 @@ Running tests simply requires a Docker daemon running, where the build will auto
 
 *Connect on Discord*
 
+https://discord.gg/kqeDatPGwU
+
 [![](https://dcbadge.vercel.app/api/server/kqeDatPGwU?theme=discord)](https://discord.gg/kqeDatPGwU)
 
 # Contact
