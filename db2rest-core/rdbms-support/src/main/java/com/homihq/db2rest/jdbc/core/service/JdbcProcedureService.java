@@ -23,8 +23,10 @@ public class JdbcProcedureService implements ProcedureService {
 
     private final JdbcManager jdbcManager;
 
+    
     @Override
-    public Map<String, Object> execute(String dbId, String subRoutineName, Map<String, Object> inParams) {
+    public Map<String, Object> execute(String dbId, String subRoutineName, Map<String, Object> inParams,
+            List<String> resultSetKeys) {
         TransactionTemplate transactionTemplate = jdbcManager.getTxnTemplate(dbId);
         
         return transactionTemplate.execute(status -> {
@@ -35,7 +37,7 @@ public class JdbcProcedureService implements ProcedureService {
                 log.debug("Dialect selected: {}", dialect);
                 log.debug("inParams: {}", inParams);
 
-                Map<String, Object> res = doExecuteInternal(jdbcTemplate, subRoutineName, inParams);
+                Map<String, Object> res = doExecuteInternal(jdbcTemplate, subRoutineName, inParams, resultSetKeys);
                 
                 return res;
             } catch (Exception e) {
