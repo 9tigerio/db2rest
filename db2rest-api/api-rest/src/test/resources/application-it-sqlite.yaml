@@ -1,0 +1,2 @@
+db2rest:
+  sql-template-path: sqlite

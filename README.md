@@ -23,22 +23,28 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 [https://db2rest.com](https://db2rest.com)
 
-# Upcoming Release
+# Latest Release
 
 | Release              | Download/Docker Pull                                                             |
 |----------------------|----------------------------------------------------------------------------------|
-| 1.6.0                | [DB2Rest-1.6.0](https://download.db2rest.com/db2rest-1.6.1.jar)                  |
-| 1.6.0 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.0 ` or ` docker pull kdhrubo/db2rest:latest ` |
+| 1.6.5                | [DB2Rest-1.6.5](https://download.db2rest.com/db2rest-1.6.5.jar)                  |
+| 1.6.5 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.5 ` or ` docker pull kdhrubo/db2rest:latest ` |
 
 
-# Stable Release
+# Previous Release
 
-| Release                                    | Download/Docker Pull                                                              |
-|--------------------------------------------|-----------------------------------------------------------------------------------|
-| 1.5.1                                      | [DB2Rest-1.5.1](https://download.db2rest.com/db2rest-1.5.1.jar)                   |
-| 1.5.1 (Docker Image)                       | ` docker pull kdhrubo/db2rest:v1.5.1 ` or ` docker pull kdhrubo/db2rest:latest `  |
+| Release              | Download/Docker Pull                                                             |
+|----------------------|----------------------------------------------------------------------------------|
+| 1.6.4                | [DB2Rest-1.6.4](https://download.db2rest.com/db2rest-1.6.4.jar)                  |
+| 1.6.4 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.4 ` or ` docker pull kdhrubo/db2rest:latest ` |
+| 1.6.1                | [DB2Rest-1.6.1](https://download.db2rest.com/db2rest-1.6.1.jar)                  |
+| 1.6.1 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.1 ` or ` docker pull kdhrubo/db2rest:latest ` |
+| 1.6.0                | [DB2Rest-1.6.0](https://download.db2rest.com/db2rest-1.6.0.jar)                  |
+| 1.6.0 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.0 `                                           |
+| 1.5.1                | [DB2Rest-1.5.1](https://download.db2rest.com/db2rest-1.5.1.jar)                  |
+| 1.5.1 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.5.1 `                                           |
 
-# Legacy Stable Releases
+# Last Stable Oracle 9i Release
 
 | Release                                    | Download/Docker Pull                                                              |
 |--------------------------------------------|-----------------------------------------------------------------------------------|
@@ -77,35 +83,33 @@ writing a single line of code. There is no direct database based point to point 
 
 # Supported Databases
 
-- **PostgreSQL** 
+- **PostgreSQL**
 - **MySQL**
+- **SQLLite**
 - **MS SQL Server**
-- **Tembo PostgreSQL** 
 - **Oracle**  (Including 9i, 10g)
-- **DigitalOcean PostgreSQL** 
-- **DigitalOcean MySQL** 
-- **AWS RDS Postgres** 
+- **IBM DB2** (11.5.8.0+)
+- **DigitalOcean PostgreSQL**
+- **DigitalOcean MySQL**
+- **AWS RDS Postgres**
 - **AWS RDS MySQL**
-- **MariaDB**  
+- **MariaDB**
 - **CockroachDB**
 - **Neon**
+- **Amazon Lightsail PostgreSQL**
+- **Amazon Lightsail MySQL**
 
 # Planned Database Support
 
-- [PostgresML](https://postgresml.org/)
 - TursoDB
 - **Yugabyte**
 - **PlanetScale**
 - **CrunchyData**
 - **Singlestore**
-- **Nile** (Planned)
+- **Nile** 
 - **MindsDB**
-- [KDB](https://kdb.ai/)
-- [Zilliz](https://zilliz.com/)
-- [AstraDB](https://www.datastax.com/products/datastax-astra)
-- [Vespa](https://vespa.ai/)
-- Amazon Lightsail PostgreSQL
-- Amazon Lightsail MySQL
+- DuckDB
+
 
 # Contributing
 Feel like contributing? That's awesome! We have a [contributing guide](https://github.com/9tigerio/db2rest/blob/master/CONTRIBUTING.md) to help guide you.
@@ -123,6 +127,8 @@ Running tests simply requires a Docker daemon running, where the build will auto
 # Support
 
 *Connect on Discord*
+
+https://discord.gg/kqeDatPGwU
 
 [![](https://dcbadge.vercel.app/api/server/kqeDatPGwU?theme=discord)](https://discord.gg/kqeDatPGwU)
 

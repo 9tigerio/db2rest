@@ -13,6 +13,7 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .flattened-pom.xml
+db2rest.jar
 
 ### STS ###
 .apt_generated

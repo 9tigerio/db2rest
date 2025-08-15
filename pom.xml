@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.2</version>
+        <version>3.4.5</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>io.9tiger</groupId>
-    <artifactId>db2rest-parent</artifactId>
-    <name>db2rest-parent</name>
+    <artifactId>db2rest</artifactId>
+    <name>db2rest</name>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
@@ -75,37 +75,37 @@
     <!-- BEGIN MODULE LAYOUT -->
 
     <properties>
-        <revision>1.6.0</revision>
+        <revision>1.6.5</revision>
         <java.version>21</java.version>
-
         <spring-restdocs.version>3.0.1</spring-restdocs.version>
         <rsql-parser.version>2.3.3</rsql-parser.version>
         <calcite.version>1.38.0</calcite.version>
         <jte.version>3.1.16</jte.version>
-
+        <!--
+        <hibernate.version>7.0.6.Final</hibernate.version>
+        -->
     </properties>
 
     <modules>
-        <module>api-rest</module>
-        <module>auth</module>
-        <module>rest-common</module>
-        <module>dialects/pg-dialect</module>
-        <module>dialects/mssql-dialect</module>
-        <module>dialects/mysql-dialect</module>
-        <module>dialects/mariadb-dialect</module>
-        <module>dialects/oracle-dialect</module>
-        <module>dialects/oracle9i-dialect</module>
-        <module>rdbms-common</module>
-        <module>db2rest-common</module>
-        <module>rdbms-support</module>
+        <module>db2rest-api</module>
+        <module>db2rest-core</module>
+        <module>db2rest-dialects</module>
+        <module>db2rest-auth</module>
     </modules>
 
     <dependencies>
 
+        <!--
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        -->
+
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-csv</artifactId>
-
         </dependency>
 
         <dependency>
@@ -129,7 +129,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.17.0</version>
+            <version>3.18.0</version>
         </dependency>
 
         <dependency>
@@ -160,14 +160,7 @@
             <version>${rsql-parser.version}</version>
         </dependency>
 
-        <!-- Apache Calcite -->
-        <!--
-        <dependency>
-            <groupId>org.apache.calcite</groupId>
-            <artifactId>calcite-core</artifactId>
-            <version>${calcite.version}</version>
-        </dependency>
-        -->
+
 
 
     </dependencies>
