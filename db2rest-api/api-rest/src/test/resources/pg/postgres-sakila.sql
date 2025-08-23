@@ -552,3 +552,25 @@ AS $$
 	END;
 $$;
 -- select GetMovieRentalRateFunc('ACADEMY DINOSAUR');
+
+CREATE OR REPLACE PROCEDURE UpdateUserProc(user_id IN INT, row_affected OUT INT)
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE users SET isActive = FALSE WHERE auid = user_id;
+    GET DIAGNOSTICS row_affected = ROW_COUNT;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION UpdateUserFunc(user_id int)
+    RETURNS int
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    row_affected int;
+BEGIN
+    UPDATE users SET isActive = FALSE WHERE auid = user_id;
+    GET DIAGNOSTICS row_affected = ROW_COUNT;
+    return row_affected;
+END;
+$$;
