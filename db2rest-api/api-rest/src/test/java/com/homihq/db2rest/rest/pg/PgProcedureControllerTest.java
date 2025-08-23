@@ -19,6 +19,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(150)
@@ -46,4 +47,24 @@ class PgProcedureControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andDo(document("pgsql-execute-procedure"));
     }
 
+    @Test
+    @DisplayName("Execute UpdateUserProc stored procedure on postgres db")
+    void executeUpdateUserProc() throws Exception {
+        var json = """
+                          {
+                            "user_id": 1
+                            }
+                                    """;
+        mockMvc.perform(post(VERSION + "/pgsqldb/procedure/UpdateUserProc")
+                        .characterEncoding(UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$", instanceOf(Map.class)))
+                .andExpect(jsonPath("$.*", hasSize(1)))
+                .andDo(document("pgsql-execute-update-user-procedure"));
+                            
+    }
 }

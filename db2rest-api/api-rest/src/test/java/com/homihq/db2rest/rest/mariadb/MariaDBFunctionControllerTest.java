@@ -19,6 +19,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(351)
@@ -43,5 +44,23 @@ class MariaDBFunctionControllerTest extends MariaDBBaseIntegrationTest {
                 .andExpect(jsonPath("$.return", equalTo(0.99)))
                 //.andDo(print())
                 .andDo(document("mariadb-execute-function"));
+    }
+
+    @Test
+    @DisplayName("Execute UpdateUserFunc on MariaDB")
+    void updateUser() throws Exception {
+        var json = """ 
+                       {
+                           "user_id": "2"
+                       }
+                """;
+        mockMvc.perform(post(VERSION + "/mariadb/function/UpdateUserFunc")
+                        .characterEncoding(UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$['return']", equalTo(1)));
     }
 }

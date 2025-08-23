@@ -19,6 +19,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(250)
@@ -44,5 +45,26 @@ class OracleProcedureControllerTest extends OracleBaseIntegrationTest {
                 .andExpect(jsonPath("$.P_RENTAL_RATE", equalTo(0.99)))
                 //.andDo(print())
                 .andDo(document("oracle-execute-procedure"));
+    }
+
+    @Test
+    @DisplayName("Execute stored procedure UpdateUserProc on oracle db ")
+    void executeUpdateUserProc() throws Exception {
+        var json = """ 
+                       {
+                           "userId": 1
+                    }
+                """;
+
+        mockMvc.perform(post(VERSION + "/oradb/procedure/UpdateUserProc")
+                        .characterEncoding(UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$", instanceOf(Map.class)))
+                .andExpect(jsonPath("$.*", hasSize(1)))
+                .andDo(document("oracle-execute-update-user-proc"));
     }
 }

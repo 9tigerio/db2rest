@@ -19,6 +19,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(151)
@@ -44,5 +45,27 @@ class PgFunctionControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.returnvalue", equalTo(0.99)))
                 //.andDo(print())
                 .andDo(document("pg-execute-function"));
+    }
+
+    @Test
+    @DisplayName("Execute UpdateUserFunc function on postgres db")
+    void executeUpdateUserFunc() throws Exception {
+        var json = """
+                          {
+                            "user_id": 1
+                            }
+                                    
+                                    """;
+        mockMvc.perform(post(VERSION + "/pgsqldb/function/UpdateUserFunc")
+                        .characterEncoding(UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$", instanceOf(Map.class)))
+                .andExpect(jsonPath("$.*", hasSize(1)))
+                .andDo(document("pg-execute-update-user-function"));
+
     }
 }
