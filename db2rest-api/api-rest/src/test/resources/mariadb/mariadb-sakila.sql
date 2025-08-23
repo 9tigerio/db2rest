@@ -232,6 +232,12 @@ CREATE PROCEDURE GetMovieRentalRateProc(IN movieTitle varchar(100), OUT rentalRa
         SELECT rental_rate INTO rentalRate FROM film WHERE title = movieTitle;
     END;
 
+CREATE PROCEDURE UpdateUserProc(IN user_id INT, OUT ROW_COUNT INT)
+    BEGIN
+        UPDATE users SET isActive = 0 WHERE auid = user_id;
+        SET ROW_COUNT = ROW_COUNT();
+    END;
+
 --
 -- Function
 --
@@ -244,4 +250,15 @@ BEGIN
         SET rentalRate = 0.00;
         SELECT rental_rate INTO rentalRate FROM film WHERE title = movieTitle;
         RETURN (rentalRate);
+END;
+
+CREATE FUNCTION UpdateUserFunc(user_id INT)
+    RETURNS INTEGER
+    DETERMINISTIC
+BEGIN
+        DECLARE ROW_COUNT INTEGER;
+        SET ROW_COUNT = 0;
+        UPDATE users SET isActive = 0 WHERE auid = user_id;
+        SET ROW_COUNT = ROW_COUNT();
+        RETURN (ROW_COUNT);
 END;
