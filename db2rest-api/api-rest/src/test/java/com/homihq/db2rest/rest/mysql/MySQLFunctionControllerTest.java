@@ -46,4 +46,22 @@ class MySQLFunctionControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.return", equalTo(0.99)))
                 .andDo(document("mysql-execute-function"));
     }
+
+    @Test
+    @DisplayName("Execute UpdateUserFunc on MySQL")
+    void updateUser() throws Exception {
+        var json = """ 
+                       {
+                           "user_id": "2"
+                      }
+                """;
+        mockMvc.perform(post(VERSION + "/mysqldb/function/UpdateUserFunc")
+                        .characterEncoding(UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$['return']", equalTo(1)));
+    }
 }

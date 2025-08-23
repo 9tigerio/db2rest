@@ -19,6 +19,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Order(50)
@@ -44,5 +45,23 @@ class MySQLProcedureControllerTest extends MySQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.rentalRate", equalTo(0.99)))
                 //.andDo(print())
                 .andDo(document("mysql-execute-procedure"));
+    }
+
+    @Test
+    @DisplayName("Execute UpdateUser on MySQL")
+    void updateUser() throws Exception {
+        var json = """ 
+                       {
+                           "user_id": "1"
+                        }
+                """;
+        mockMvc.perform(post(VERSION + "/mysqldb/procedure/UpdateUserProc")
+                        .characterEncoding(UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$['#update-count-1']", equalTo(1)));
     }
 }
