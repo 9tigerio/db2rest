@@ -199,3 +199,14 @@ BEGIN
 SELECT actor_id, first_name, last_name FROM actor;
 SELECT film_id, title, release_year FROM film;
 END;
+
+CREATE PROCEDURE UpdateUserProc(
+    @user_id BIGINT,
+    @ROW_COUNT INT OUTPUT
+) AS
+BEGIN
+UPDATE users
+SET isActive = 0
+WHERE auid = @user_id;
+SET @ROW_COUNT = @@ROWCOUNT;
+END;
