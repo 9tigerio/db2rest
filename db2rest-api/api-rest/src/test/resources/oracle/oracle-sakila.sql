@@ -780,3 +780,31 @@ WHEN OTHERS THEN
             'Error getting rental rate: ' || SQLERRM);
 END GetMovieRentalRateProc;
 
+CREATE OR REPLACE PROCEDURE UpdateUserProc (user_id IN INT, rows_affected OUT INT) IS
+    /*
+    * Purpose: Updates the username of a user with the given ID
+    * Parameters:
+    *   p_user_id - Input parameter for the user ID
+    *   p_rows_affected - Output parameter for the number of rows updated
+    * Returns: Number of rows updated via OUT parameter, -1 if user not found
+    */
+BEGIN
+    -- Input parameter validation
+    IF user_id IS NULL THEN     
+        RAISE_APPLICATION_ERROR(-20001, 'User ID cannot be null');
+    END IF;
+    -- Update username for the user
+    UPDATE users
+    SET is_active =  'N'
+    WHERE auid = user_id;
+    rows_affected := SQL%ROWCOUNT;
+    IF rows_affected = 0 THEN
+        rows_affected := -1; -- Indicate user not found
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Log error and re-raise
+        rows_affected := NULL;
+        RAISE_APPLICATION_ERROR(-20002,
+            'Error updating user: ' || SQLERRM);
+END UpdateUserProc;

@@ -111,4 +111,20 @@ class MsSQLProcedureControllerTest extends MsSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.actors[0].actor_id").exists())
                 .andExpect(jsonPath("$.films[0].film_id").exists());
     }
+
+    @Test
+    @DisplayName("Execute UpdateUserProc on MSSQL")
+    void updateUser() throws Exception {
+        var json = """ 
+                       {
+                           "user_id": 2
+    }                """;
+        mockMvc.perform(post(getPrefixApiUrl() + "/procedure/UpdateUserProc")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$['#update-count-1']", equalTo(1)));
+    }
 }
