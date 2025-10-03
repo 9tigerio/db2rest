@@ -39,6 +39,16 @@ CREATE TABLE userprofile
     email     VARCHAR(100) NOT NULL,
     phone     VARCHAR(45)  NOT NULL
 );
+CREATE TABLE user
+(
+    id          BIGINT IDENTITY(1,1) PRIMARY KEY,
+    first_name  VARCHAR(100) NOT NULL,
+    last_name   VARCHAR(100) NOT NULL,
+    email       VARCHAR(255) NOT NULL,
+    phone       VARCHAR(32)  NOT NULL,
+    is_active   BIT          NOT NULL DEFAULT 1,
+    test_date   VARCHAR(8)   NOT NULL
+);
 
 CREATE TABLE actor
 (

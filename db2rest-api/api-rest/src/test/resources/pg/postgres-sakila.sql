@@ -228,6 +228,17 @@ CREATE TABLE users (
            isActive boolean NOT NULL default true
 );
 
+CREATE TABLE student (
+           first_name varchar(100) NOT NULL,
+           last_name varchar(100) NOT NULL,
+           email varchar(150) NOT NULL,
+           phone varchar(20) NOT NULL,
+           is_active integer NOT NULL,
+           test_date varchar(20) NOT NULl
+);
+
+
+
 ALTER TABLE public.users OWNER TO postgres;
 
 
@@ -331,6 +342,7 @@ CREATE TABLE person (
                           age SMALLINT
 
 );
+
 
 
 ALTER TABLE public.country OWNER TO postgres;
