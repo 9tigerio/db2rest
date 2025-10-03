@@ -290,3 +290,15 @@ BEGIN
         SET ROW_COUNT = ROW_COUNT();
         RETURN (ROW_COUNT);
 END;
+
+
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+  first_name  VARCHAR(100) NOT NULL,
+  last_name   VARCHAR(100) NOT NULL,
+  email       VARCHAR(255) NOT NULL,
+  phone       VARCHAR(32)  NOT NULL,
+  is_active   TINYINT(1)   NOT NULL DEFAULT 1,
+  test_date   VARCHAR(8)   NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

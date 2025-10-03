@@ -66,12 +66,22 @@ public class JdbcCreateService implements CreateService {
             }
 
             log.debug("Sequences - {}", sequences);
-            if (Objects.nonNull(sequences)) { //handle oracle sequence
+            if (Objects.nonNull(sequences)) { //handle sequences and field functions
                 for (String sequence : sequences) {
                     String[] colSeq = sequence.split(":");
                     //Check if size = 2, else ignore, fall at insert
                     if (colSeq.length == 2) {
-                        insertableColumnList.add(new InsertableColumn(colSeq[0], dbTable.schema() + "." + colSeq[1] + ".nextval"));
+                        String columnName = colSeq[0];
+                        String sequenceValue = colSeq[1];
+                        
+                        // Check if it's a field function (contains fn[)
+                        if (sequenceValue.contains("fn[")) {
+                            // Use the field function as-is
+                            updateOrAddInsertableColumn(insertableColumnList, columnName, sequenceValue);
+                        } else {
+                            // Handle Oracle sequences with .nextval
+                            updateOrAddInsertableColumn(insertableColumnList, columnName, dbTable.schema() + "." + sequenceValue + ".nextval");
+                        }
                     }
                 }
             }
@@ -110,8 +120,21 @@ public class JdbcCreateService implements CreateService {
             return createResponse;
         } catch (DataAccessException e) {
             log.error("Error", e);
-            throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
+            throw new GenericDataAccessException("Error insert - " + e.getMessage());
         }
     }
 
+    private void updateOrAddInsertableColumn(List<InsertableColumn> insertableColumnList, String columnName, String sequenceValue) {
+        // Try to update existing column
+        for (int i = 0; i < insertableColumnList.size(); i++) {
+            InsertableColumn column = insertableColumnList.get(i);
+            if (columnName.equals(column.getColumnName())) {
+                // Update the existing column's sequence value
+                insertableColumnList.set(i, new InsertableColumn(columnName, sequenceValue));
+                return;
+            }
+        }
+        // If not found, add new column
+        insertableColumnList.add(new InsertableColumn(columnName, sequenceValue));
+    }
 }
