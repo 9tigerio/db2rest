@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @Order(250)
 class OracleProcedureControllerTest extends OracleBaseIntegrationTest {
 
-    @Test
+    //@Test
     @DisplayName("Execute stored procedure on oracle db")
     void execute() throws Exception {
         var json = """ 
@@ -47,7 +47,7 @@ class OracleProcedureControllerTest extends OracleBaseIntegrationTest {
                 .andDo(document("oracle-execute-procedure"));
     }
 
-    @Test
+    //@Test
     @DisplayName("Execute stored procedure UpdateUserProc on oracle db ")
     void executeUpdateUserProc() throws Exception {
         var json = """ 

@@ -39,7 +39,7 @@ CREATE TABLE userprofile
     email     VARCHAR(100) NOT NULL,
     phone     VARCHAR(45)  NOT NULL
 );
-CREATE TABLE user
+CREATE TABLE user_test
 (
     id          BIGINT IDENTITY(1,1) PRIMARY KEY,
     first_name  VARCHAR(100) NOT NULL,
