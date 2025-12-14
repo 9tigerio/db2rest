@@ -22,7 +22,8 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
             new MySQLDataExtraction(),
             new MariaDBDataExtraction(),
             new MsSQLServerMetaDataExtraction(),
-            new SQLiteDataExtraction()
+            new SQLiteDataExtraction(),
+            new DB2DataExtraction()
     );
 
     //TODO include schemas , tables , view,  filters filters
