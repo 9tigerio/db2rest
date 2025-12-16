@@ -96,36 +96,36 @@ public class DB2RestDB2Dialect extends Dialect {
 
     @Override
     public String getReadSqlTemplate() {
-        return "read-db2";
+        return "read";
     }
 
     @Override
     public String getDeleteSqlTemplate() {
-        return "delete-db2";
+        return "delete";
     }
 
     @Override
     public String getUpdateSqlTemplate() {
-        return "update-db2";
+        return "update";
     }
 
     @Override
     public String getInsertSqlTemplate() {
-        return "insert-db2";
+        return "insert";
     }
 
     @Override
     public String getCountSqlTemplate() {
-        return "count-db2";
+        return "count";
     }
 
     @Override
     public String getExistSqlTemplate() {
-        return "exists-db2";
+        return "exists";
     }
 
     @Override
     public String getFindOneSqlTemplate() {
-        return "find-one-db2";
+        return "find-one";
     }
 }

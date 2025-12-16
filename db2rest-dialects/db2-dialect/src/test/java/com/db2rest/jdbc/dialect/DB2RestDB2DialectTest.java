@@ -127,12 +127,12 @@ class DB2RestDB2DialectTest {
     @Test
     @DisplayName("Should return correct SQL templates")
     void testSqlTemplates() {
-        assertEquals("read-db2", db2Dialect.getReadSqlTemplate());
-        assertEquals("delete-db2", db2Dialect.getDeleteSqlTemplate());
-        assertEquals("update-db2", db2Dialect.getUpdateSqlTemplate());
-        assertEquals("insert-db2", db2Dialect.getInsertSqlTemplate());
-        assertEquals("count-db2", db2Dialect.getCountSqlTemplate());
-        assertEquals("exists-db2", db2Dialect.getExistSqlTemplate());
-        assertEquals("find-one-db2", db2Dialect.getFindOneSqlTemplate());
+        assertEquals("read", db2Dialect.getReadSqlTemplate());
+        assertEquals("delete", db2Dialect.getDeleteSqlTemplate());
+        assertEquals("update", db2Dialect.getUpdateSqlTemplate());
+        assertEquals("insert", db2Dialect.getInsertSqlTemplate());
+        assertEquals("count", db2Dialect.getCountSqlTemplate());
+        assertEquals("exists", db2Dialect.getExistSqlTemplate());
+        assertEquals("find-one", db2Dialect.getFindOneSqlTemplate());
     }
 }
