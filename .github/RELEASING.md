@@ -11,6 +11,9 @@ We publish a **release** version to [Maven Central Portal](https://central.sonat
 
 After a release, we can also build and publish a Docker container image to our DockerHub (working account for now: [kdhrubo](https://hub.docker.com/r/kdhrubo/db2rest)) via the corresponding GitHub Action.
 
+# GPG Key signing steps
+Follow the guide at [Maven Central Portal distributing your public key](https://central.sonatype.org/publish/requirements/gpg/#distributing-your-public-key)
+
 # Snapshots
 
 Using GitHub workflow `.github/workflows/snapshot.yml`
