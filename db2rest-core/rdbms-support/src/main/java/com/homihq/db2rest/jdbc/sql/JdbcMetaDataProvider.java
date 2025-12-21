@@ -16,6 +16,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
     private final boolean includeAllSchemas;
     private final List<String> includedSchemas;
+    private final List<String> includedTables;
     List<MetaDataExtraction> exclusions = List.of(
             new OracleMetaDataExtraction(),
             new PostgreSQLDataExclusion(),
@@ -55,7 +56,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         log.info("Fetching meta data for selected schemas.");
 
         List<DbTable> dbTables = metaDataExclusion.get().getTables(databaseMetaData,
-                includeAllSchemas, includedSchemas);
+            includeAllSchemas, includedSchemas, includedTables);
 
 
         log.info("Completed loading database meta-data : {} tables", dbTables.size());

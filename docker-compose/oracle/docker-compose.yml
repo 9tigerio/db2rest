@@ -7,7 +7,11 @@ services:
       DB_URL: "jdbc:oracle:thin:@employee-oracle:1521/XE"
       DB_USER: "system"
       DB_PASSWORD: "oracle"
+      # Comma-separated schemas to include (existing)
       INCLUDED_SCHEMAS: system
+      # OPTIONAL: comma-separated ant-style table patterns to include
+      # Examples: "HR.EMPLOYEES,system.AUDIT*,MYSCHEMA.*"
+      INCLUDED_TABLES: ""
     depends_on:
       - employee-oracle
     healthcheck:

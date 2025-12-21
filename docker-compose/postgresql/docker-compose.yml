@@ -7,7 +7,11 @@ services:
       DB_URL: "jdbc:postgresql://employee-postgres:5432/empdb"
       DB_USER: "db2rest"
       DB_PASSWORD: "db2rest"
+      # Comma-separated schemas to include (existing)
       INCLUDED_SCHEMAS: public,emp
+      # OPTIONAL: comma-separated ant-style table patterns to include
+      # Examples: "orders,public.sales*,hr.employee?"
+      INCLUDED_TABLES: ""
     depends_on:
       - employee-postgres
     healthcheck:

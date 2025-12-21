@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.util.AntPathMatcher;
 
 import static com.homihq.db2rest.jdbc.util.AliasGenerator.getAlias;
 
@@ -82,6 +83,36 @@ public interface MetaDataExtraction {
             }
         }
         return tables;
+    }
+
+    default List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllSchemas,
+                                    List<String> includedSchemas, List<String> includedTablePatterns) {
+        try {
+            List<DbTable> dbTables = getTables(databaseMetaData, includeAllSchemas, includedSchemas);
+
+            if (includedTablePatterns == null || includedTablePatterns.isEmpty()) {
+                return dbTables;
+            }
+
+            AntPathMatcher matcher = new AntPathMatcher();
+
+            List<DbTable> filtered = new ArrayList<>();
+
+            for (DbTable table : dbTables) {
+                String fullName = table.schema() + "." + table.name();
+                boolean matched = includedTablePatterns.stream().anyMatch(pattern ->
+                        matcher.match(pattern, table.name()) || matcher.match(pattern, fullName)
+                );
+                if (matched) {
+                    filtered.add(table);
+                }
+            }
+
+            return filtered;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     default List<String> getAllPrimaryKeys(DatabaseMetaData databaseMetaData, String catalog, String schema, String tableName) throws SQLException {

@@ -7,7 +7,11 @@ services:
       DB_URL: "jdbc:sqlserver://employee-sqlserver:1433;databaseName=empdb"
       DB_USER: "sa"
       DB_PASSWORD: "Strong@Password123"
+      # Comma-separated schemas to include (existing)
       INCLUDED_SCHEMAS: dbo
+      # OPTIONAL: comma-separated ant-style table patterns to include
+      # Examples: "orders,dbo.Audit*,sales.order?"
+      INCLUDED_TABLES: ""
     depends_on:
       - employee-sqlserver
     healthcheck:

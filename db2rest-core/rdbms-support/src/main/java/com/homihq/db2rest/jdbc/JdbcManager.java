@@ -116,18 +116,21 @@ public final class JdbcManager {
             // assume database connection detail as null
             boolean includeAllSchemas = true;
             List<String> schemas = null;
+            List<String> tables = null;
 
-            if (Objects.nonNull(databaseConnectionDetail)) {
-                includeAllSchemas = databaseConnectionDetail.includeAllSchemas();
-                schemas = databaseConnectionDetail.schemas();
+                if (Objects.nonNull(databaseConnectionDetail)) {
+                    includeAllSchemas = databaseConnectionDetail.includeAllSchemas();
+                    schemas = databaseConnectionDetail.schemas();
+                    tables = databaseConnectionDetail.tables();
 
-                log.info("Include all schemas - {}", includeAllSchemas);
-                log.info("Schemas - {}", schemas);
-            }
+                    log.info("Include all schemas - {}", includeAllSchemas);
+                    log.info("Schemas - {}", schemas);
+                    log.info("Included tables (patterns) - {}", tables);
+                }
 
             //TODO Get from db config
             DbMeta dbMeta = JdbcUtils.extractDatabaseMetaData(ds,
-                    new JdbcMetaDataProvider(includeAllSchemas, schemas));
+                    new JdbcMetaDataProvider(includeAllSchemas, schemas, tables));
 
             for (final DbTable dbTable : dbMeta.dbTables()) {
                 dbTableMap.put(dbTable.name(), dbTable);

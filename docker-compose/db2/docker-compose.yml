@@ -9,7 +9,11 @@ services:
       DB_URL: "jdbc:db2://employee-db2:50000/empdb"
       DB_USER: "db2inst1"
       DB_PASSWORD: "db2inst1"
+      # Comma-separated schemas to include (existing)
       INCLUDED_SCHEMAS: "DB2INST1,EMP"
+      # OPTIONAL: comma-separated ant-style table patterns to include
+      # Examples: "EMPLOYEE,DB2INST1.SALES*,EMP.AUDIT?"
+      INCLUDED_TABLES: ""
     depends_on:
       - employee-db2
     healthcheck:
