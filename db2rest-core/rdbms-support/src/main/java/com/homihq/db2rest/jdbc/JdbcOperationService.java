@@ -100,7 +100,7 @@ public class JdbcOperationService implements DbOperationService {
         }
 
         int row = namedParameterJdbcTemplate.update(sql, parameterSource,
-                keyHolder, dbTable.getKeyColumnNames()
+                keyHolder, dbTable != null ? dbTable.getKeyColumnNames() : null
         );
 
         log.info("*** update fired returning ***");
@@ -109,10 +109,12 @@ public class JdbcOperationService implements DbOperationService {
         Map<String, Object> keys = keyHolder.getKeys();
         if (keys != null && keys.containsKey("last_insert_rowid()")) {
             // SQLite returns last_insert_rowid() - map to actual column name
-            String[] keyColumns = dbTable.getKeyColumnNames();
-            if (keyColumns.length == 1) {
-                Object keyValue = keys.get("last_insert_rowid()");
-                keys = Map.of(keyColumns[0], keyValue);
+            if (dbTable != null) {
+                String[] keyColumns = dbTable.getKeyColumnNames();
+                if (keyColumns.length == 1) {
+                    Object keyValue = keys.get("last_insert_rowid()");
+                    keys = Map.of(keyColumns[0], keyValue);
+                }
             }
         }
         

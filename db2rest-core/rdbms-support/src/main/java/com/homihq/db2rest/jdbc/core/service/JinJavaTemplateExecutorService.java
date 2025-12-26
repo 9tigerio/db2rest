@@ -1,6 +1,8 @@
 package com.homihq.db2rest.jdbc.core.service;
 
 import com.homihq.db2rest.config.Db2RestConfigProperties;
+import com.homihq.db2rest.core.dto.DeleteResponse;
+import com.homihq.db2rest.core.dto.UpdateResponse;
 import com.homihq.db2rest.core.exception.SqlTemplateNotFoundException;
 import com.homihq.db2rest.core.exception.SqlTemplateReadException;
 import com.homihq.db2rest.core.exception.UnsupportedConstraintException;
@@ -73,16 +75,59 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
                 executeInternal(templateFile, context);
         final String namedParamsSQL = queryParamPair.getLeft();
         final Map<String, Object> paramMap = queryParamPair.getRight();
-        return executeQuery(dbId, paramMap, namedParamsSQL);
+        return execute(dbId, paramMap, namedParamsSQL);
+    }
+
+    private Object execute(String dbId, Map<String, Object> paramMap, String sql) {
+        if (sql.toLowerCase().startsWith("delete ")) {
+            return executeDelete(dbId, paramMap, sql);
+        }
+        else if (sql.toLowerCase().startsWith("insert ")) {
+            return executeCreate(dbId, paramMap, sql);
+        }
+        else if (sql.toLowerCase().startsWith("update ")) {
+            return executeUpdate(dbId, paramMap, sql);
+        }
+        else {
+            return executeQuery(dbId, paramMap, sql);
+        }
     }
 
     private Object executeQuery(String dbId, Map<String, Object> paramMap, String sql) {
-        log.debug("Execute: {}", sql);
+        log.debug("Execute query: {}", sql);
         return dbOperationService.read(
                 jdbcManager.getNamedParameterJdbcTemplate(dbId),
                 paramMap,
                 sql,
                 jdbcManager.getDialect(dbId)
+        );
+    }
+
+    private UpdateResponse executeUpdate(String dbId, Map<String, Object> paramMap, String sql) {
+        log.debug("Execute update: {}", sql);
+        return new UpdateResponse(dbOperationService.update(
+                jdbcManager.getNamedParameterJdbcTemplate(dbId),
+                paramMap,
+                sql
+        ));
+    }
+
+    private DeleteResponse executeDelete(String dbId, Map<String, Object> paramMap, String sql) {
+        log.debug("Execute delete: {}", sql);
+        return new DeleteResponse(dbOperationService.delete(
+                jdbcManager.getNamedParameterJdbcTemplate(dbId),
+                paramMap,
+                sql
+        ));
+    }
+
+    private Object executeCreate(String dbId, Map<String, Object> paramMap, String sql) {
+        log.debug("Execute create: {}", sql);
+        return dbOperationService.create(
+                jdbcManager.getNamedParameterJdbcTemplate(dbId),
+                paramMap,
+                sql,
+                null
         );
     }
 

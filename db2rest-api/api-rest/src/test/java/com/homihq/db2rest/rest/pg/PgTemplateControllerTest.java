@@ -2,11 +2,9 @@ package com.homihq.db2rest.rest.pg;
 
 import com.homihq.db2rest.PostgreSQLBaseIntegrationTest;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.ClassOrderer;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestClassOrder;
+import org.junit.jupiter.api.*;
+
+import java.nio.charset.StandardCharsets;
 
 import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.hasSize;
@@ -14,6 +12,7 @@ import static org.hamcrest.core.AnyOf.anyOf;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,6 +73,61 @@ class PgTemplateControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
                 .andDo(document("pgsql-template-get-film-by-id-with-user-path"));
+    }
+
+    @Test
+    @DisplayName("Find film by id from content")
+    void findFilmByIDFromContent() throws Exception {
+        mockMvc.perform(post(VERSION + "/pgsqldb/sql/select_by_id_from_content")
+                        .content("{ \"film_id\": "+ID+" }")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
+                .andExpect(jsonPath("$[0].*", hasSize(15)))
+                .andDo(document("pgsql-template-select-film-by-id-from-content"));
+    }
+
+    @Test
+    @DisplayName("Update film by id from content")
+    void updateFilmByIDFromContent() throws Exception {
+        mockMvc.perform(post(VERSION + "/pgsqldb/sql/update_by_id_from_content")
+                        .content("{ \"film_id\": 4, \"release_year\": 2005 }")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
+                .andExpect(jsonPath("$.rows").value(1))
+                .andDo(document("pgsql-template-update-film-by-id-from-content"));
+    }
+
+    @Test
+    @DisplayName("insert and delete category from content")
+    void insertAndDeleteCategoryFromContent() throws Exception {
+        mockMvc.perform(post(VERSION + "/pgsqldb/sql/insert_from_content")
+                        .content("{ \"name\": \"new-category\" }")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(2))))
+                .andExpect(jsonPath("$.keys.category_id").value(17))
+                .andDo(document("pgsql-template-insert-category-from-content"));
+
+        mockMvc.perform(post(VERSION + "/pgsqldb/sql/delete_from_content")
+                        .content("{ \"category_id\": 17 }")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
+                .andDo(document("pgsql-template-delete-category-from-content"));
     }
 
     @Test
