@@ -86,6 +86,7 @@ class PgTemplateControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
+                .andExpect(jsonPath("$[0].*", hasSize(15)))
                 .andDo(document("pgsql-template-select-film-by-id-from-content"));
     }
 
@@ -93,19 +94,20 @@ class PgTemplateControllerTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Update film by id from content")
     void updateFilmByIDFromContent() throws Exception {
         mockMvc.perform(post(VERSION + "/pgsqldb/sql/update_by_id_from_content")
-                        .content("{ \"film_id\": "+ID+", \"title\": \"new_title\" }")
+                        .content("{ \"film_id\": 4, \"release_year\": 2005 }")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", anyOf(hasSize(1))))
+                .andExpect(jsonPath("$.rows").value(1))
                 .andDo(document("pgsql-template-update-film-by-id-from-content"));
     }
 
     @Test
-    @DisplayName("insert category from content")
-    void insertCategoryFromContent() throws Exception {
+    @DisplayName("insert and delete category from content")
+    void insertAndDeleteCategoryFromContent() throws Exception {
         mockMvc.perform(post(VERSION + "/pgsqldb/sql/insert_from_content")
                         .content("{ \"name\": \"new-category\" }")
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -114,14 +116,11 @@ class PgTemplateControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", anyOf(hasSize(2))))
+                .andExpect(jsonPath("$.keys.category_id").value(17))
                 .andDo(document("pgsql-template-insert-category-from-content"));
-    }
 
-    @Test
-    @DisplayName("delete category from content")
-    void deleteCategoryFromContent() throws Exception {
         mockMvc.perform(post(VERSION + "/pgsqldb/sql/delete_from_content")
-                        .content("{ \"category_id\": 1 }")
+                        .content("{ \"category_id\": 17 }")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
                 .andDo(print())
