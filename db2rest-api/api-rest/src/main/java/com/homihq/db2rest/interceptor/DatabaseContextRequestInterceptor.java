@@ -23,7 +23,7 @@ import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 public class DatabaseContextRequestInterceptor implements AsyncHandlerInterceptor {
 
     private final List<String> whiteList = List.of(
-            "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**", "/admin/**",
+            "/error", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**", "/admin/**",
             VERSION + "/$dbs");
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
