@@ -1,0 +1,1 @@
+DELETE FROM category WHERE category_id = {{ content.category_id }}
