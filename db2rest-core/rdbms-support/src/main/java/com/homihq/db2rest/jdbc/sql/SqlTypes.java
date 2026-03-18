@@ -2,6 +2,7 @@ package com.homihq.db2rest.jdbc.sql;
 
 
 import java.sql.Types;
+import java.util.Set;
 
 
 public class SqlTypes {
@@ -315,6 +316,23 @@ public class SqlTypes {
 
     public static final int VECTOR = 10_000;
 
+    private static final Set<Integer> NUMERIC_TYPE_CODES = Set.of(
+    Types.BIT, Types.SMALLINT, Types.TINYINT, Types.INTEGER,
+    Types.BIGINT, Types.DOUBLE, Types.REAL, Types.FLOAT,
+    Types.NUMERIC, Types.DECIMAL
+    );
+
+    private static final Set<Integer> CHARACTER_TYPE_CODES = Set.of(
+        Types.CHAR, Types.VARCHAR, Types.LONGVARCHAR,
+        Types.NCHAR, Types.NVARCHAR, Types.LONGNVARCHAR
+    );
+
+    private static final Set<Integer> CHARACTER_OR_CLOB_TYPE_CODES = Set.of(
+        Types.CHAR, Types.VARCHAR, Types.LONGVARCHAR,
+        Types.NCHAR, Types.NVARCHAR, Types.LONGNVARCHAR,
+        Types.CLOB, Types.NCLOB
+    );
+
     private SqlTypes() {
     }
 
@@ -325,21 +343,7 @@ public class SqlTypes {
      * @param typeCode a JDBC type code from {@link Types}
      */
     public static boolean isNumericType(int typeCode) {
-        switch (typeCode) {
-            case Types.BIT:
-            case Types.SMALLINT:
-            case Types.TINYINT:
-            case Types.INTEGER:
-            case Types.BIGINT:
-            case Types.DOUBLE:
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-                return true;
-            default:
-                return false;
-        }
+        return NUMERIC_TYPE_CODES.contains(typeCode);
     }
 
     /**
@@ -371,19 +375,7 @@ public class SqlTypes {
      * @param typeCode a JDBC type code from {@link Types}
      */
     public static boolean isCharacterOrClobType(int typeCode) {
-        switch (typeCode) {
-            case Types.CHAR:
-            case Types.VARCHAR:
-            case Types.LONGVARCHAR:
-            case Types.NCHAR:
-            case Types.NVARCHAR:
-            case Types.LONGNVARCHAR:
-            case Types.CLOB:
-            case Types.NCLOB:
-                return true;
-            default:
-                return false;
-        }
+        return CHARACTER_OR_CLOB_TYPE_CODES.contains(typeCode);
     }
 
     /**
@@ -393,17 +385,7 @@ public class SqlTypes {
      * @param typeCode a JDBC type code from {@link Types}
      */
     public static boolean isCharacterType(int typeCode) {
-        switch (typeCode) {
-            case Types.CHAR:
-            case Types.VARCHAR:
-            case Types.LONGVARCHAR:
-            case Types.NCHAR:
-            case Types.NVARCHAR:
-            case Types.LONGNVARCHAR:
-                return true;
-            default:
-                return false;
-        }
+        return CHARACTER_TYPE_CODES.contains(typeCode);
     }
 
     /**
