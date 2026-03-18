@@ -12,7 +12,7 @@ import java.util.Random;
 public interface OperatorHandler {
 
     String PREFIX = ":";
-    int MAX_PARAM_SUFFIX =20;
+
 
     String handle(Dialect dialect, DbColumn column, DbWhere dbWhere, String value, Class type, Map<String, Object> paramMap);
 
@@ -20,7 +20,7 @@ public interface OperatorHandler {
         Random random = new Random();
 
         if (paramMap.containsKey(key)) {
-            String newKey = key + "_" + random.nextInt(MAX_PARAM_SUFFIX);
+            String newKey = key + "_" + random.nextInt(20);
             paramMap.put(newKey, value);
 
             return newKey;
