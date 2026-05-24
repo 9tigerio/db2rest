@@ -34,7 +34,7 @@ class PostgreSQLDataExclusionTest {
 
     @Test
     void shouldQuoteSchemaAndTableNameInFullName() throws SQLException {
-        PostgreSQLDataExclusion dataExtraction = new PostgreSQLDataExclusion();
+        PostgreSQLDataExclusion dataExclusion = new PostgreSQLDataExclusion();
         String schemaName = "0HEM8B0GQNB5M";
         String tableName = "t_region";
 
@@ -58,7 +58,7 @@ class PostgreSQLDataExclusionTest {
         when(columnsResultSet.getString(ColumnLabel.IS_AUTOINCREMENT.name())).thenReturn("NO");
         when(columnsResultSet.getString(ColumnLabel.TYPE_NAME.name())).thenReturn("int4");
 
-        List<DbTable> dbTables = dataExtraction.getTables(databaseMetaData, false, List.of(schemaName));
+        List<DbTable> dbTables = dataExclusion.getTables(databaseMetaData, false, List.of(schemaName));
 
         assertThat(dbTables).singleElement()
                 .extracting(DbTable::fullName)
