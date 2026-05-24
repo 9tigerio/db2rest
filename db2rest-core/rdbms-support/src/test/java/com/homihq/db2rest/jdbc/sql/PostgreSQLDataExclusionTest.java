@@ -64,4 +64,37 @@ class PostgreSQLDataExclusionTest {
                 .extracting(DbTable::fullName)
                 .isEqualTo("\"0HEM8B0GQNB5M\".\"t_region\"");
     }
+
+    @Test
+    void shouldQuoteUnicodeSchemaAndTableNameInFullName() throws SQLException {
+        PostgreSQLDataExclusion dataExclusion = new PostgreSQLDataExclusion();
+        String schemaName = "dátá_数据";
+        String tableName = "dátá";
+
+        when(databaseMetaData.getTables(isNull(), eq(schemaName), isNull(), any(String[].class)))
+                .thenReturn(tablesResultSet);
+        when(tablesResultSet.next()).thenReturn(true, false);
+        when(tablesResultSet.getString(ColumnLabel.TABLE_NAME.name())).thenReturn(tableName);
+        when(tablesResultSet.getString(ColumnLabel.TABLE_CAT.name())).thenReturn(null);
+        when(tablesResultSet.getString(ColumnLabel.TABLE_SCHEM.name())).thenReturn(schemaName);
+        when(tablesResultSet.getString(ColumnLabel.TABLE_TYPE.name())).thenReturn("TABLE");
+
+        when(databaseMetaData.getPrimaryKeys(isNull(), eq(schemaName), eq(tableName)))
+                .thenReturn(primaryKeysResultSet);
+        when(primaryKeysResultSet.next()).thenReturn(false);
+
+        when(databaseMetaData.getColumns(isNull(), eq(schemaName), eq(tableName), isNull()))
+                .thenReturn(columnsResultSet);
+        when(columnsResultSet.next()).thenReturn(true, false);
+        when(columnsResultSet.getString(ColumnLabel.COLUMN_NAME.name())).thenReturn("id");
+        when(columnsResultSet.getInt(ColumnLabel.DATA_TYPE.name())).thenReturn(4);
+        when(columnsResultSet.getString(ColumnLabel.IS_AUTOINCREMENT.name())).thenReturn("NO");
+        when(columnsResultSet.getString(ColumnLabel.TYPE_NAME.name())).thenReturn("int4");
+
+        List<DbTable> dbTables = dataExclusion.getTables(databaseMetaData, false, List.of(schemaName));
+
+        assertThat(dbTables).singleElement()
+                .extracting(DbTable::fullName)
+                .isEqualTo("\"dátá_数据\".\"dátá\"");
+    }
 }
