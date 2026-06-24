@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.AntPathMatcher;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public abstract class AbstractAuthProvider {
 
     private static final String AUTH_HEADER = "Authorization";
 
-    private final String[] DEFAULT_WHITELIST = {"/swagger-ui/**", "/v3/api-docs/**", "/actuator/**"};
+    private final String[] DEFAULT_WHITELIST = { "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**" };
 
     public abstract boolean canHandle(HttpServletRequest request);
 
@@ -43,17 +42,14 @@ public abstract class AbstractAuthProvider {
 
         //check in default whitelist first
 
-        boolean match =
-                Arrays.stream(DEFAULT_WHITELIST)
-                        .anyMatch(r -> antPathMatcher.match(r, requestUri));
+        boolean match = Arrays.stream(DEFAULT_WHITELIST)
+                .anyMatch(r -> antPathMatcher.match(r, requestUri));
 
         if (!match) {
 
-            return
-                    excludedResources
-                            .stream()
-                            .anyMatch(r ->
-                                    (antPathMatcher.match(r.resource(), requestUri)
+            return excludedResources
+                    .stream()
+                    .anyMatch(r -> (antPathMatcher.match(r.resource(), requestUri)
                                             && StringUtils.equalsIgnoreCase(r.method(), method))
                             );
         }
@@ -76,18 +72,17 @@ public abstract class AbstractAuthProvider {
         //resource mapping
         Optional<ResourceRole> resourceRole =
                 resourceRoleList
-                        .stream()
-                        .filter(r -> antPathMatcher.match(r.resource(), requestUri))
-                        .filter(r -> StringUtils.equalsIgnoreCase(r.method(), method))
-                        .findFirst();
+                .stream()
+                .filter(r -> antPathMatcher.match(r.resource(), requestUri))
+                .filter(r -> StringUtils.equalsIgnoreCase(r.method(), method))
+                .findFirst();
 
         //resource to role mapping
         if (resourceRole.isPresent()) {
             ResourceRole rr = resourceRole.get();
-            boolean roleMatch =
-                    rr.roles()
-                            .stream()
-                            .anyMatch(role -> StringUtils.equalsAnyIgnoreCase(role, userDetail.getRoles()));
+            boolean roleMatch = rr.roles()
+                    .stream()
+                    .anyMatch(role -> StringUtils.equalsAnyIgnoreCase(role, userDetail.getRoles()));
 
             log.debug("Role match result - {}", roleMatch);
 
@@ -100,11 +95,7 @@ public abstract class AbstractAuthProvider {
         return false;
     }
 
-    public List<RoleDataFilter> getRoleBasedDataFilters(UserDetail userDetail) {
-        List<RoleDataFilter> retval = new ArrayList<>();
-        for (String role : userDetail.getRoles()) {
-            retval.addAll(authDataLookup.getRoleDataFilters(role));
-        }
-        return retval;
+    public List<RoleDataFilter> getRoleDataFilters() {
+        return authDataLookup.getRoleDataFilters();
     }
 }
