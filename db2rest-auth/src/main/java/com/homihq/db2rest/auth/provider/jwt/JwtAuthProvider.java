@@ -20,11 +20,13 @@ import java.util.List;
 public class JwtAuthProvider extends AbstractAuthProvider {
     private static final String BEARER_AUTH = "Bearer";
     private final ConfigurableJWTProcessor<SecurityContext> jwtProcessor;
+    private final String rolesNamespace;
 
     public JwtAuthProvider(AuthDataLookup authDataLookup, AntPathMatcher antPathMatcher,
-                           ConfigurableJWTProcessor<SecurityContext> jwtProcessor) {
+                           ConfigurableJWTProcessor<SecurityContext> jwtProcessor, String rolesNamespace) {
         super(authDataLookup, antPathMatcher);
         this.jwtProcessor = jwtProcessor;
+        this.rolesNamespace = rolesNamespace;
     }
 
     @Override
@@ -40,7 +42,14 @@ public class JwtAuthProvider extends AbstractAuthProvider {
 
         try {
             JWTClaimsSet claimsSet = jwtProcessor.process(token, null);
-            return new UserDetail(claimsSet.getSubject(), List.of());
+            List<String> roles = List.of();
+            if (rolesNamespace != null) {
+                List<String> claimsRoles = claimsSet.getStringListClaim(rolesNamespace);
+                if (claimsRoles != null) {
+                    roles = claimsRoles;
+                }
+            }
+            return new UserDetail(claimsSet.getSubject(), roles);
         } catch (ParseException | BadJOSEException | JOSEException e) {
             log.error("Error in JWT validation - ", e);
         }

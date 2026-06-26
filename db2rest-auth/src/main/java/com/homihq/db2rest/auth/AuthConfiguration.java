@@ -68,9 +68,11 @@ public class AuthConfiguration {
     @ConditionalOnProperty(prefix = "db2rest.auth", name = "provider", havingValue = "jwt")
     public AbstractAuthProvider jwtAuthProvider(
             ConfigurableJWTProcessor<SecurityContext> jwtProcessor,
-            AuthDataProperties authDataProperties
+            AuthDataProperties authDataProperties,
+            JwtProperties jwtProperties
     ) {
-        return new JwtAuthProvider(authDataProvider(authDataProperties), authAntPathMatcher(), jwtProcessor);
+        return new JwtAuthProvider(authDataProvider(authDataProperties), authAntPathMatcher(),
+                jwtProcessor, jwtProperties.getRolesNamespace());
     }
 
     @Bean
