@@ -50,7 +50,8 @@ public class MultiTenancy {
         }
         List<RoleDataFilter> retval = new ArrayList<>();
         for (String role : userRoles) {
-            retval.addAll(roleDataFilters.stream().filter(rd -> role.equalsIgnoreCase(rd.role())).toList());
+            retval.addAll(roleDataFilters.stream().filter(rd -> role.equalsIgnoreCase(rd.role())
+                    && rd.dbId().equals(dbId) && rd.table().equals(table)).toList());
         }
         if (retval.isEmpty() && filterTenantColumn != null) {
             // when a tenant column is defined for the table, but the user has no roles, we add a filter to only see null value rows
