@@ -154,7 +154,7 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
 
     @Test
     @Order(6)
-    @DisplayName("Query users without roleDataFilter - can only see rows without tenant_id")
+    @DisplayName("Query users without a TenantRole using roleDataFilter - MUST only return rows without any tenant_id")
     void userWithNoTenantRoleShouldSeeRowsWithoutTenantId() throws Exception {
         mockMvc.perform(get(VERSION + "/pgsqldb/users")
                 .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
