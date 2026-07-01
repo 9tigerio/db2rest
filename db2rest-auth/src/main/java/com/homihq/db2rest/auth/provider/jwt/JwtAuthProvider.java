@@ -64,6 +64,6 @@ public class JwtAuthProvider extends AbstractAuthProvider {
 
     @Override
     public boolean isExcluded(String requestUri, String method) {
-        return false;
+        return super.isExcludedInternal(requestUri, method, authDataLookup.getExcludedResources(), antPathMatcher);
     }
 }
