@@ -88,7 +88,9 @@ public class AuthConfiguration {
         ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
 
         jwtProcessor.setJWSTypeVerifier(
-                new DefaultJOSEObjectTypeVerifier<>(new JOSEObjectType("at+jwt")));
+                new DefaultJOSEObjectTypeVerifier<>(
+                        new JOSEObjectType("at+jwt"),
+                        new JOSEObjectType("JWT")));
 
         JWSKeySelector<SecurityContext> keySelector = new JWSVerificationKeySelector<>(
                 jwtProperties.getAlgorithm(),
