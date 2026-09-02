@@ -22,104 +22,102 @@ import java.util.List;
 
 import static com.homihq.db2rest.config.MultiTenancy.ROLEBASEDDATAFILTERS;
 import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
+import org.apache.commons.lang3.tuple.Pair;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 public class ReadController {
 
-    private final ReadService readService;
-    private final Db2RestConfigProperties db2RestConfigProperties;
+        private final ReadService readService;
+        private final Db2RestConfigProperties db2RestConfigProperties;
 
-    @GetMapping(value = VERSION + "/{dbId}/{tableName}", produces = "application/json")
-    public Object findAll(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) List<RoleDataFilter> roleBasedDataFilters,
-            @PathVariable String dbId,
-            @PathVariable String tableName,
-            @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
-            @RequestParam(required = false, defaultValue = "*") String fields,
-            @RequestParam(required = false, defaultValue = "") String filter,
-            @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
-            @RequestParam(required = false, defaultValue = "-1") int limit,
-            @RequestParam(required = false, defaultValue = "-1") long offset) {
+        @GetMapping(value = VERSION + "/{dbId}/{tableName}", produces = "application/json")
+        public Object findAll(
+                        @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+                        @PathVariable String dbId,
+                        @PathVariable String tableName,
+                        @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
+                        @RequestParam(required = false, defaultValue = "*") String fields,
+                        @RequestParam(required = false, defaultValue = "") String filter,
+                        @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
+                        @RequestParam(required = false, defaultValue = "-1") int limit,
+                        @RequestParam(required = false, defaultValue = "-1") long offset) {
 
-        log.debug("filter - {}", filter);
+                log.debug("filter - {}", filter);
 
-        PaginationValidator.validate(limit, offset);
+                PaginationValidator.validate(limit, offset);
 
-        ReadContext readContext = ReadContext.builder()
-                .dbId(dbId)
-                .schemaName(schemaName)
-                .tableName(tableName)
-                .fields(fields)
-                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters))
-                .sorts(sorts)
-                .limit(limit)
-                .defaultFetchLimit(db2RestConfigProperties.getDefaultFetchLimit())
-                .offset(offset)
-                .build();
+                ReadContext readContext = ReadContext.builder()
+                                .dbId(dbId)
+                                .schemaName(schemaName)
+                                .tableName(tableName)
+                                .fields(fields)
+                                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters))
+                                .sorts(sorts)
+                                .limit(limit)
+                                .defaultFetchLimit(db2RestConfigProperties.getDefaultFetchLimit())
+                                .offset(offset)
+                                .build();
 
+                return readService.findAll(readContext);
+        }
 
-        return readService.findAll(readContext);
-    }
-
-    @PostMapping(value = VERSION + "/{dbId}/{tableName}/_expand", produces = "application/json")
-    public Object find(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) List<RoleDataFilter> roleBasedDataFilters,
-            @PathVariable String dbId,
-            @PathVariable String tableName,
-            @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
-            @RequestParam(required = false, defaultValue = "*") String fields,
-            @RequestParam(required = false, defaultValue = "") String filter,
-            @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
-            @RequestParam(required = false, defaultValue = "-1") int limit,
-            @RequestParam(required = false, defaultValue = "-1") long offset,
+        @PostMapping(value = VERSION + "/{dbId}/{tableName}/_expand", produces = "application/json")
+        public Object find(
+                        @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+                        @PathVariable String dbId,
+                        @PathVariable String tableName,
+                        @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
+                        @RequestParam(required = false, defaultValue = "*") String fields,
+                        @RequestParam(required = false, defaultValue = "") String filter,
+                        @RequestParam(name = "sort", required = false, defaultValue = "") List<String> sorts,
+                        @RequestParam(required = false, defaultValue = "-1") int limit,
+                        @RequestParam(required = false, defaultValue = "-1") long offset,
             @RequestBody List<JoinDetail> joins
     ) {
-        PaginationValidator.validate(limit, offset);
+                PaginationValidator.validate(limit, offset);
 
-        ReadContext readContext = ReadContext.builder()
-                .dbId(dbId)
-                .schemaName(schemaName)
-                .tableName(tableName)
-                .fields(fields)
-                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters))
-                .sorts(sorts)
-                .limit(limit)
-                .defaultFetchLimit(db2RestConfigProperties.getDefaultFetchLimit())
-                .offset(offset)
-                .joins(joins)
-                .build();
+                ReadContext readContext = ReadContext.builder()
+                                .dbId(dbId)
+                                .schemaName(schemaName)
+                                .tableName(tableName)
+                                .fields(fields)
+                                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters))
+                                .sorts(sorts)
+                                .limit(limit)
+                                .defaultFetchLimit(db2RestConfigProperties.getDefaultFetchLimit())
+                                .offset(offset)
+                                .joins(joins)
+                                .build();
 
-        return readService.findAll(readContext);
-    }
+                return readService.findAll(readContext);
+        }
 
-    @GetMapping(value = VERSION + "/{dbId}/{tableName}/{primaryKey}", produces = "application/json")
-    public Object findByPrimaryKey(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) List<RoleDataFilter> roleBasedDataFilters,
-            @PathVariable String dbId,
-            @PathVariable String tableName,
-            @PathVariable String primaryKey,
-            @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
-            @RequestParam(required = false, defaultValue = "*") String fields,
-            @RequestParam(required = false, defaultValue = "") String filter
-    ) {
+        @GetMapping(value = VERSION + "/{dbId}/{tableName}/{primaryKey}", produces = "application/json")
+        public Object findByPrimaryKey(
+                        @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+                        @PathVariable String dbId,
+                        @PathVariable String tableName,
+                        @PathVariable String primaryKey,
+                        @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
+                        @RequestParam(required = false, defaultValue = "*") String fields,
+                        @RequestParam(required = false, defaultValue = "") String filter) {
 
-        log.debug("primaryKey - {}", primaryKey);
+                log.debug("primaryKey - {}", primaryKey);
 
-        ReadContext readContext = ReadContext.builder()
-                .dbId(dbId)
-                .schemaName(schemaName)
-                .tableName(tableName)
-                .PrimaryKey(primaryKey)
-                .filter(filter)
-                .fields(fields)
-                .limit(1)
-                .defaultFetchLimit(db2RestConfigProperties.getDefaultFetchLimit())
-                .build();
+                ReadContext readContext = ReadContext.builder()
+                                .dbId(dbId)
+                                .schemaName(schemaName)
+                                .tableName(tableName)
+                                .PrimaryKey(primaryKey)
+                                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters))
+                                .fields(fields)
+                                .limit(1)
+                                .defaultFetchLimit(db2RestConfigProperties.getDefaultFetchLimit())
+                                .build();
 
-
-        return readService.findByPrimaryKey(readContext);
-    }
+                return readService.findByPrimaryKey(readContext);
+        }
 
 }

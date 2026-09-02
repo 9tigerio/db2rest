@@ -6,6 +6,8 @@ import com.homihq.db2rest.core.dto.UpdateResponse;
 import com.homihq.db2rest.jdbc.core.service.UpdateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -29,7 +31,7 @@ public class UpdateController {
 
     @PatchMapping(VERSION + "/{dbId}/{tableName}")
     public UpdateResponse save(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) List<RoleDataFilter> roleBasedDataFilters,
+            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
             @PathVariable String dbId,
             @PathVariable String tableName,
             @RequestHeader(name = "Content-Profile", required = false) String schemaName,
