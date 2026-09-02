@@ -164,6 +164,11 @@ public class DbServiceConfiguration {
         return new RootWhereProcessor(jdbcManager);
     }
 
+    @Bean
+    public PrimaryKeyProcessor primaryKeyProcessor() {
+        return new PrimaryKeyProcessor();
+    }
+
     //END ::: Processors
 
     //START ::: Validator

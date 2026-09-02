@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestClassOrder;
 import org.springframework.http.MediaType;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.Map;
 
@@ -102,5 +103,17 @@ class PgReadControllerTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isOk())
                 //.andDo(print())
                 .andDo(document("pg-get-one-film"));
+    }
+
+    @Test
+    @DisplayName("Test PostgreSQL boolean type casting in filter")
+    void testBooleanFilterCasting() throws Exception {
+        mockMvc.perform(get(VERSION + "/pgsqldb/users?filter=isActive==true")
+                        .header("Accept-Profile", "public"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*]").isArray())
+                // Verify the first item actually parsed the boolean correctly
+                .andExpect(jsonPath("$.[0].isactive").value(true))
+                .andDo(print());
     }
 }

@@ -139,6 +139,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @ExceptionHandler(InvalidPaginationParameterException.class)
+    ProblemDetail handleInvalidPaginationParameterException(InvalidPaginationParameterException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("Invalid Pagination Parameter");
+        problemDetail.setType(URI.create("https://db2rest.com/error/invalid-pagination"));
+        problemDetail.setProperty("errorCategory", "Invalid-Pagination");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+    }
+
     @ExceptionHandler({GenericDataAccessException.class, RuntimeException.class})
     ProblemDetail handleGenericDataAccessException(GenericDataAccessException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());

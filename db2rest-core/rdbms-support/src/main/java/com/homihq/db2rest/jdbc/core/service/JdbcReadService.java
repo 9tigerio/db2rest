@@ -46,6 +46,26 @@ public class JdbcReadService implements ReadService {
         }
     }
 
+    @Override
+    public Object findByPrimaryKey(ReadContext readContext) {
+        try {
+            for (ReadProcessor processor : processorList) {
+                processor.process(readContext);
+            }
+
+            String sql = sqlCreatorTemplate.query(readContext);
+
+            return dbOperationService.read(
+                    jdbcManager.getNamedParameterJdbcTemplate(readContext.getDbId()),
+                    readContext.getParamMap(), sql, jdbcManager.getDialect(readContext.getDbId()));
+        } catch (DataAccessException e) {
+            log.error("Error in read with primaryKey : ", e);
+            throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
+        } catch (Exception e) {
+            log.error("Error in read with primaryKey : ", e);
+            throw new GenericDataAccessException("Failed to parse RQL - " + e.getMessage());
+        }
+    }
 
 
 }

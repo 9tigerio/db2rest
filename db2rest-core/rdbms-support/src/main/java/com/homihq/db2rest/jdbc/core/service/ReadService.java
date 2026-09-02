@@ -4,4 +4,5 @@ import com.homihq.db2rest.jdbc.dto.ReadContext;
 
 public interface ReadService {
     Object findAll(ReadContext readContext);
+    Object findByPrimaryKey(ReadContext readContext);
 }

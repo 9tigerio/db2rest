@@ -72,8 +72,7 @@ public abstract class Dialect {
             //return "'" + value + "'";
             return value;
         } else if (Boolean.class == type || boolean.class == type) {
-            Boolean aBoolean = Boolean.valueOf(value);
-            return aBoolean ? "1" : "0";
+            return Boolean.valueOf(value);
         } else if (Integer.class == type || int.class == type) {
             return Integer.valueOf(value);
         } else if (Long.class == type || long.class == type) {

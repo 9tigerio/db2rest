@@ -28,6 +28,7 @@ public class ReadContext {
     String dbId;
     String schemaName;
     String tableName;
+    String PrimaryKey;
     String fields;
     String filter;
     List<String> sorts;
