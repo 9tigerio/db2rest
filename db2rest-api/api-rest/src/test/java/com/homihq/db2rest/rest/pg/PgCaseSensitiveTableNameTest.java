@@ -35,4 +35,16 @@ class PgCaseSensitiveTableNameTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$[0].film_id").value(916))
                 .andExpect(jsonPath("$[0].title").value("Case-sensitive table names"));
     }
+
+    @Test
+    @DisplayName("Read a PostgreSQL table with a Unicode name")
+    void readUnicodeTableNameUsingSchemaHeader() throws Exception {
+        mockMvc.perform(get(VERSION + "/pgsqldb/überall")
+                        .header("Accept-Profile", "stg")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].film_id").value(917))
+                .andExpect(jsonPath("$[0].title").value("Unicode table names"));
+    }
 }
