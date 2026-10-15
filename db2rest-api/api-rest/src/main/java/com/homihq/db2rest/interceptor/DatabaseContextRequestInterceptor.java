@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
@@ -30,27 +29,25 @@ public class DatabaseContextRequestInterceptor implements AsyncHandlerIntercepto
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.info("Pre handle - {}", request.getRequestURI());
-
+        // A failed preHandle does not receive an afterCompletion callback.
+        // Clear first, including for whitelist routes and invalid database IDs.
+        DatabaseContextHolder.clear();
 
         if (!isWhileListed(request.getRequestURI())) {
             final Map<String, String> pathVariables = (Map<String, String>) request
                     .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
-            log.info("pathVariables - {}", pathVariables);
-
             if (Objects.isNull(pathVariables)) {
+                log.debug("Database route unavailable: missing path variables.");
                 throw new GenericDataAccessException("Database ID not found.");
             }
 
             String dbId = pathVariables.get("dbId");
 
-            log.debug("Db identifier : {}", dbId);
-
             if (StringUtils.isNotBlank(dbId)) {
                 this.setTenantContext(dbId);
             } else {
-                log.info("DB could not be determined.");
+                log.debug("Database route unavailable: missing database ID.");
                 throw new GenericDataAccessException("Database ID not found.");
             }
         }
@@ -64,7 +61,14 @@ public class DatabaseContextRequestInterceptor implements AsyncHandlerIntercepto
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        DatabaseContextHolder.clear();
+    }
+
+    @Override
+    public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // The servlet thread is released before async work completes. Redispatch
+        // restores its own route via preHandle; worker tasks use explicit dbId.
         DatabaseContextHolder.clear();
     }
 
