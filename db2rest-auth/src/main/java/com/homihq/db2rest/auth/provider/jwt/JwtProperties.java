@@ -23,6 +23,7 @@ public class JwtProperties {
     private JWSAlgorithm algorithm;
     private SecretKey key;
     private String jwksUrl;
+    private String rolesNamespace;
 
     @AssertTrue(message = "Key or jwksUrl must be present!")
     public boolean isKeyOrJwksUrlPresent() {
