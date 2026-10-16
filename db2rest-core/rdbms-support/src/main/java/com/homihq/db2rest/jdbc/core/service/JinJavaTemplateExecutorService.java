@@ -19,6 +19,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ import java.util.stream.Collectors;
 public class JinJavaTemplateExecutorService implements SQLTemplateExecutorService {
 
     private static final String SQL_TEMPLATE_EXTENSION = ".sql";
+    private static final Pattern SQL_TEMPLATE_NAME_PATTERN =
+            Pattern.compile("[A-Za-z0-9][A-Za-z0-9._-]*");
     private static final String PLACEHOLDER_REGEX =
             "\\{\\{\\s*([^|}]+?)\\s*(?:\\|\\s*([^}]+?))*\\s*}}";
     private final Jinjava jinjava;
@@ -143,6 +146,7 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
 
     private String renderJinJavaTemplate(String templateFile, Map<String, Object> context) {
         log.debug("Rendering query from template {}", templateFile);
+        validateTemplateName(templateFile);
 
         synchronized (templateCache) {
             if (templateCache.containsKey(templateFile)) {
@@ -150,8 +154,12 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
                 return jinjava.render(templateContent, context);
             } else {
                 final String userTemplateLocation = db2RestConfigProperties.getTemplates();
-                final Path templatePath = Paths.get(userTemplateLocation, templateFile + SQL_TEMPLATE_EXTENSION);
-                if (!Files.exists(templatePath)) {
+                final Path templateDirectory = Paths.get(userTemplateLocation).toAbsolutePath().normalize();
+                final Path templatePath = templateDirectory
+                        .resolve(templateFile + SQL_TEMPLATE_EXTENSION)
+                        .normalize();
+                if (!templatePath.startsWith(templateDirectory)
+                        || !Files.isRegularFile(templatePath, LinkOption.NOFOLLOW_LINKS)) {
                     throw new SqlTemplateNotFoundException(templateFile);
                 }
                 try {
@@ -163,6 +171,16 @@ public class JinJavaTemplateExecutorService implements SQLTemplateExecutorServic
                     throw new SqlTemplateReadException(templateFile);
                 }
             }
+        }
+    }
+
+    private void validateTemplateName(String templateFile) {
+        if (templateFile == null
+                || templateFile.contains("..")
+                || templateFile.contains("/")
+                || templateFile.contains("\\")
+                || !SQL_TEMPLATE_NAME_PATTERN.matcher(templateFile).matches()) {
+            throw new SqlTemplateNotFoundException(templateFile);
         }
     }
 
