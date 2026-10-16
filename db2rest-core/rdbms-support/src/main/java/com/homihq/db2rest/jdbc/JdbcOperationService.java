@@ -4,7 +4,6 @@ import com.homihq.db2rest.core.dto.CountResponse;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.core.dto.ExistsResponse;
-import com.homihq.db2rest.core.exception.GenericDataAccessException;
 import com.db2rest.jdbc.dialect.Dialect;
 import com.db2rest.jdbc.dialect.model.ArrayTypeValueHolder;
 import com.db2rest.jdbc.dialect.model.DbTable;
@@ -19,9 +18,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -93,7 +89,7 @@ public class JdbcOperationService implements DbOperationService {
             Object value = data.get(key);
 
             if (value instanceof ArrayTypeValueHolder val) {
-                value = processArrayValue(namedParameterJdbcTemplate, val);
+                value = new JdbcArrayValue(val);
             }
 
             parameterSource.addValue(key, value);
@@ -119,21 +115,6 @@ public class JdbcOperationService implements DbOperationService {
         }
         
         return new CreateResponse(row, keys);
-    }
-
-    private Array processArrayValue(NamedParameterJdbcTemplate namedParameterJdbcTemplate, ArrayTypeValueHolder val) {
-
-        try {
-            Connection connection =
-                    namedParameterJdbcTemplate.getJdbcTemplate().getDataSource().getConnection();
-
-            log.info("connection - {}", connection);
-
-            return connection.createArrayOf(val.sqlType(), val.values());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new GenericDataAccessException("Unable to convert Array field");
-        }
     }
 
     @Override
