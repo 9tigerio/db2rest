@@ -14,4 +14,9 @@ public record AuthData(
     public List<ApiExcludedResource> excludedResources() {
         return excludedResources == null ? List.of() : excludedResources;
     }
+
+    @Override
+    public List<RoleDataFilter> roleDataFilters() {
+        return roleDataFilters == null ? List.of() : roleDataFilters;
+    }
 }

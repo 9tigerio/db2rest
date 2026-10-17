@@ -8,6 +8,8 @@ import com.homihq.db2rest.jdbc.dto.JoinDetail;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +33,7 @@ public class ExistsQueryController {
 
     @GetMapping(value = VERSION + "/{dbId}/{tableName}/exists", produces = "application/json")
     public ExistsResponse exists(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) List<RoleDataFilter> roleBasedDataFilters,
+            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
             @PathVariable String dbId,
             @PathVariable String tableName,
             @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
@@ -50,15 +52,14 @@ public class ExistsQueryController {
         return existsQueryService.exists(readContext);
     }
 
-	@PostMapping(value = VERSION + "/{dbId}/{tableName}/exists/_expand", produces = "application/json")
-	public ExistsResponse exists(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) List<RoleDataFilter> roleBasedDataFilters,
+    @PostMapping(value = VERSION + "/{dbId}/{tableName}/exists/_expand", produces = "application/json")
+    public ExistsResponse exists(
+            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
             @PathVariable String dbId,
             @PathVariable String tableName,
-            @RequestHeader(name="Accept-Profile", required = false) String schemaName,
+            @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
             @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
-            @RequestBody List<JoinDetail> joins
-	) {
+            @RequestBody List<JoinDetail> joins) {
 
         ReadContext readContext = ReadContext.builder()
                 .dbId(dbId)

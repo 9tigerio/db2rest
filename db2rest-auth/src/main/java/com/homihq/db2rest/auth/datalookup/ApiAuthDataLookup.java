@@ -55,7 +55,7 @@ public class ApiAuthDataLookup implements AuthDataLookup {
     }
 
     @Override
-    public List<RoleDataFilter> getRoleDataFilters(String role) {
-        return authData.roleDataFilters().stream().filter(df -> role.equalsIgnoreCase(df.role())).toList();
+    public List<RoleDataFilter> getRoleDataFilters() {
+        return authData.roleDataFilters();
     }
 }

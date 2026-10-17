@@ -7,6 +7,8 @@ import com.homihq.db2rest.jdbc.core.service.CountQueryService;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -28,7 +30,7 @@ public class CountQueryController {
 
     @GetMapping(VERSION + "/{dbId}/{tableName}/count")
     public CountResponse count(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) List<RoleDataFilter> roleBasedDataFilters,
+            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
             @PathVariable String dbId,
             @PathVariable String tableName,
             @RequestHeader(name = "Accept-Profile", required = false) String schemaName,

@@ -58,3 +58,8 @@ roleDataFilters:
     table: users
     column: tenant_id
     value: 13
+  - role: role1
+    dbId: pgsqldb
+    table: student
+    column: tenant_id
+    value: 1
