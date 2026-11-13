@@ -25,7 +25,6 @@ public class FileAuthDataLookup implements AuthDataLookup {
 
             log.debug("authDataSource - {}", authData);
 
-
         } catch (Exception e) {
 
             log.error("Unable to load auth data: ", e);
@@ -59,7 +58,7 @@ public class FileAuthDataLookup implements AuthDataLookup {
     }
 
     @Override
-    public List<RoleDataFilter> getRoleDataFilters(String role) {
-        return authData.roleDataFilters().stream().filter(df -> role.equalsIgnoreCase(df.role())).toList();
+    public List<RoleDataFilter> getRoleDataFilters() {
+        return authData.roleDataFilters();
     }
 }

@@ -9,6 +9,8 @@ import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.jdbc.core.service.DeleteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,12 +23,11 @@ public class DeleteController implements DeleteRestApi {
 
     @Override
     public DeleteResponse delete(
-            List<RoleDataFilter> roleBasedDataFilters,
+            Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
             String dbId,
             String schemaName,
             String tableName,
-            String filter
-    ) {
+            String filter) {
 
         db2RestConfigProperties.checkDeleteAllowed(filter);
 

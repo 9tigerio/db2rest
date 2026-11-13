@@ -17,5 +17,5 @@ public interface AuthDataLookup {
 
     Optional<User> getUserByUsername(String username);
 
-    List<RoleDataFilter> getRoleDataFilters(String role);
+    List<RoleDataFilter> getRoleDataFilters();
 }

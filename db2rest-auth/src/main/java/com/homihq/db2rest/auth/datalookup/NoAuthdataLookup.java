@@ -1,6 +1,5 @@
 package com.homihq.db2rest.auth.datalookup;
 
-
 import com.homihq.db2rest.auth.data.*;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class NoAuthdataLookup implements AuthDataLookup {
     }
 
     @Override
-    public List<RoleDataFilter> getRoleDataFilters(String role) {
+    public List<RoleDataFilter> getRoleDataFilters() {
         return List.of();
     }
 

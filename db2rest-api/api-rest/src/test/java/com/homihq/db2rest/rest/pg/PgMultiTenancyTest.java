@@ -41,7 +41,10 @@ import io.hosuaby.inject.resources.junit.jupiter.TestWithResources;
 @TestWithResources
 public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
 
-    private static final String BASIC_AUTH_VALUE = "Basic " + Base64.getEncoder().encodeToString("tom:32113".getBytes());
+    private static final String USER_TOM_BASIC_AUTH_VALUE = "Basic "
+            + Base64.getEncoder().encodeToString("tom:32113".getBytes());
+    private static final String USER_ROOT_BASIC_AUTH_VALUE = "Basic "
+            + Base64.getEncoder().encodeToString("root:23456".getBytes());
 
     @Autowired
     private AuthFilter authFilter;
@@ -49,10 +52,12 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
     @GivenTextResource("/testdata/CREATE_USER_REQUEST.json")
     String CREATE_USER_REQUEST;
 
-    protected void createMockMvc(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
+    protected void createMockMvc(WebApplicationContext webApplicationContext,
+            RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation).snippets().withTemplateFormat(TemplateFormats.markdown()))
+                .apply(documentationConfiguration(restDocumentation).snippets()
+                        .withTemplateFormat(TemplateFormats.markdown()))
                 .addFilter(authFilter)
                 .build();
     }
@@ -62,10 +67,9 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Create users expect tenant_id to be filled")
     void create() throws Exception {
         mockMvc.perform(post(VERSION + "/pgsqldb/users/bulk")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .content(CREATE_USER_REQUEST)
-                        .header("Authorization", BASIC_AUTH_VALUE)
-                )
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .content(CREATE_USER_REQUEST)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rows").isArray())
@@ -78,9 +82,8 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Query all users for tenant_id, validate tenant_id")
     void findAllUsers() throws Exception {
         mockMvc.perform(get(VERSION + "/pgsqldb/users")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .header("Authorization", BASIC_AUTH_VALUE)
-                )
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
@@ -95,10 +98,9 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Query all users for tenant_id")
     void countAllUsers() throws Exception {
         mockMvc.perform(get(VERSION + "/pgsqldb/users/count")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .header("Authorization", BASIC_AUTH_VALUE)
-                )
-//                .andDo(print())
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*").isArray())
                 .andExpect(jsonPath("$.*", hasSize(1)))
@@ -111,9 +113,9 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("update a user, tenant_id is ignored")
     void updateUsers() throws Exception {
         mockMvc.perform(patch(VERSION + "/pgsqldb/users?filter=auid==10")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .header("Authorization", BASIC_AUTH_VALUE)
-                        .content("""
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE)
+                .content("""
                                 {
                                   "password": "blah",
                                   "tenant_id": 999
@@ -125,12 +127,11 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(jsonPath("$.rows", equalTo(1)))
                 .andDo(document("pg-count-update-users-but-tenant-is-ignored"));
 
-        //validate tenant_id is not changed
+        // validate tenant_id is not changed
         mockMvc.perform(get(VERSION + "/pgsqldb/users?filter=auid==10")
                 .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                .header("Authorization", BASIC_AUTH_VALUE)
-                )
-//                .andDo(print())
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(1)))
                 .andExpect(jsonPath("$[0].tenant_id", not(equalTo(999))))
@@ -142,13 +143,24 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
     @DisplayName("Delete all users for tenant_id")
     void deleteAllUsersFromTenant() throws Exception {
         mockMvc.perform(delete(VERSION + "/pgsqldb/users")
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
-                        .header("Authorization", BASIC_AUTH_VALUE)
-                )
-//                .andDo(print())
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                // .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(1)))
                 .andExpect(jsonPath("$.rows", equalTo(2)))
                 .andDo(document("pg-delete-all-users-from-tenant"));
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("Query users without a TenantRole using roleDataFilter - MUST only return rows without any tenant_id")
+    void userWithNoTenantRoleShouldSeeRowsWithoutTenantId() throws Exception {
+        mockMvc.perform(get(VERSION + "/pgsqldb/users")
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .header("Authorization", USER_ROOT_BASIC_AUTH_VALUE))
+                // .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(0)));
     }
 }

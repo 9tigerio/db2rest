@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UrlPathHelper;
@@ -21,7 +23,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
-
+    public static final String ROLEBASEDDATAFILTERS = "roleBasedDataFilters";
     private final AbstractAuthProvider authProvider;
     private final ObjectMapper objectMapper;
     private final UrlPathHelper urlPathHelper = new UrlPathHelper();
@@ -30,8 +32,7 @@ public class AuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             final HttpServletRequest request,
             final HttpServletResponse response,
-            final FilterChain filterChain
-    ) throws ServletException, IOException {
+            final FilterChain filterChain) throws ServletException, IOException {
 
         log.debug("Handling Auth");
 
@@ -42,7 +43,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
         if (!authProvider.isExcluded(requestUri, method)) {
 
-            //authenticate
+            // authenticate
             UserDetail userDetail = authProvider.authenticate(request);
 
             log.debug("user detail - {}", userDetail);
@@ -53,14 +54,15 @@ public class AuthFilter extends OncePerRequestFilter {
                 return;
             }
 
-            //authorize
+            // authorize
             boolean authorized = authProvider.authorize(userDetail, requestUri, method);
             if (!authorized) {
                 String errorMessage = "Authorization failure.";
                 addError(errorMessage, request, response);
                 return;
             }
-            request.setAttribute("roleBasedDataFilters", authProvider.getRoleBasedDataFilters(userDetail));
+            request.setAttribute(ROLEBASEDDATAFILTERS,
+                    new ImmutablePair<>(authProvider.getRoleDataFilters(), userDetail.getRoles()));
         } else {
             log.debug("URI in whitelist. Security checks not applied.");
         }

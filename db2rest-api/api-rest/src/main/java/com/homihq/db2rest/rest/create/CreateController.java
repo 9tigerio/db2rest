@@ -3,6 +3,7 @@ package com.homihq.db2rest.rest.create;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.homihq.db2rest.auth.data.RoleDataFilter;
@@ -22,7 +23,7 @@ public class CreateController implements CreateRestApi {
 
     @Override
     public CreateResponse save(
-            List<RoleDataFilter> roleBasedDataFilters,
+            Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
             String dbId, String schemaName,
             String tableName,
             List<String> includeColumns,

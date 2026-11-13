@@ -234,6 +234,7 @@ CREATE TABLE student (
            last_name varchar(100) NOT NULL,
            email varchar(150) NOT NULL,
            phone varchar(20) NOT NULL,
+           tenant_id integer NOT NULL default 0,
            is_active integer NOT NULL,
            test_date varchar(20) NOT NULl
 );
