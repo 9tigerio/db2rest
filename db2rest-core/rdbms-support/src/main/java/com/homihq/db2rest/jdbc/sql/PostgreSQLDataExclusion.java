@@ -110,12 +110,18 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
             String schemaName = StringUtils.isNotBlank(metaDataTable.schema())
                     ? metaDataTable.schema() : metaDataTable.catalog();
 
+            String quotedFullName = getQuotedName(schemaName) + "." + getQuotedName(metaDataTable.tableName());
+
             return new DbTable(
                     schemaName, metaDataTable.tableName(),
-                    schemaName + "." + metaDataTable.tableName(),
+                    quotedFullName,
                     metaDataTable.tableAlias(), columns, metaDataTable.tableType(), "\"");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getQuotedName(String name) {
+        return "\"" + name.replace("\"", "\"\"") + "\"";
     }
 }

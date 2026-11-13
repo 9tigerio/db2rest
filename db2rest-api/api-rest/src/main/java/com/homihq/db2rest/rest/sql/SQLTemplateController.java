@@ -24,6 +24,16 @@ import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 public class SQLTemplateController {
     private final SQLTemplateExecutorService sqlTemplateExecutorService;
 
+    @GetMapping("/{fileName}")
+    public Object sqlTemplate(@PathVariable String dbId,
+                              @PathVariable String fileName,
+                              @RequestParam Map<String, String> requestParams,
+                              @RequestHeader Map<String, String> requestHeaders,
+                              @MatrixVariable Map<String, String> matrixVariables
+    ) {
+        return executeGetTemplate(dbId, fileName, "", requestParams, requestHeaders, matrixVariables);
+    }
+
     @GetMapping("/{fileName}/{*userPathVariable}")
     public Object sqlTemplate(@PathVariable String dbId,
                               @PathVariable String fileName,
@@ -32,6 +42,15 @@ public class SQLTemplateController {
                               @RequestHeader Map<String, String> requestHeaders,
                               @MatrixVariable Map<String, String> matrixVariables
     ) {
+        return executeGetTemplate(dbId, fileName, userPathVariable, requestParams, requestHeaders, matrixVariables);
+    }
+
+    private Object executeGetTemplate(String dbId,
+                                      String fileName,
+                                      String userPathVariable,
+                                      Map<String, String> requestParams,
+                                      Map<String, String> requestHeaders,
+                                      Map<String, String> matrixVariables) {
         final Map<String, Object> context = createContext(requestParams, requestHeaders, matrixVariables);
         Map<String, Object> paths = createPaths(userPathVariable, requestHeaders);
         context.put("paths", paths);

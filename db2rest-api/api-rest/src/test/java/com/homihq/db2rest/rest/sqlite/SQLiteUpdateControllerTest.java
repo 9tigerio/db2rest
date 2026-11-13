@@ -185,14 +185,17 @@ class SQLiteUpdateControllerTest extends SQLiteBaseIntegrationTest {
     void updateWithInvalidPayload() throws Exception {
 
         Map<String, Object> invalidUpdate = Map.of(
-                "language_id", "invalid_value"
+                "unknown_column", "invalid_value"
         );
 
-        mockMvc.perform(patch(VERSION + "/sqlitedb/film/1")
+        mockMvc.perform(patch(VERSION + "/sqlitedb/film")
+                        .param("filter", "film_id==1")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidUpdate)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorCategory", equalTo("Data-access-error")))
+                .andExpect(jsonPath("$.detail", equalTo("Column not found film.unknown_column")))
                 .andDo(document("sqlite-update-invalid-payload"));
     }
 }
