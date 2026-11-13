@@ -6,6 +6,14 @@ name: Maven Default Publish
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to build and publish (e.g. 1.6.9)'
+        required: true
+
+env:
+  RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
 
 jobs:
   build_and_test:
@@ -20,9 +28,9 @@ jobs:
     - uses: actions/checkout@v4
       name: Checkout code for Tag
       with:
-        ref: ${{ github.event.release.tag_name }}
+        ref: ${{ env.RELEASE_TAG }}
     - name: Echo Tag
-      run: "echo 'CHECKED OUT TAG: ${{ github.event.release.tag_name }}'"
+      run: "echo 'CHECKED OUT TAG: ${{ env.RELEASE_TAG }}'"
     - name: Set up JDK 21 and maven settings.xml
       uses: actions/setup-java@v4
       with:
@@ -33,10 +41,17 @@ jobs:
         server-password: MAVEN_PASSWORD
         server-id: central
       
+      # Use the Maven wrapper so the release build runs the Maven version pinned in the repo,
+      # not whatever the runner image ships. The runner's newer Maven together with
+      # central-publishing-maven-plugin 0.4.0 put files outside the version folders in the bundle,
+      # which Central rejected ("Bundle has content that does NOT have a .pom file").
+    - name: Show Maven version
+      run: ./mvnw -v
+
       # TROUBLESHOOTING: We can temporarily skip upload & publishing to Maven Central in here
-      # by setting the `run: mvn` line's last -DskipPublishing property to true
+      # by setting the `run: ./mvnw` line's last -DskipPublishing property to true
     - name: Build & Publish package DB2Rest to Central
-      run: mvn --quiet -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release -DskipTests -DskipPublishing=false
+      run: ./mvnw --quiet -Drevision=${{ env.RELEASE_TAG }} --no-transfer-progress -B deploy -P release -DskipTests -DskipPublishing=false
       # below we use env for passing GPG stuff since the signing type is bouncy castle (bc)
       # set in parent pom's maven-gpg-plugin configuration and doesn't need gpg agent.
       env:
@@ -53,9 +68,9 @@ jobs:
         mkdir staging
         cp target/central-publishing/central-bundle.zip staging
         unzip staging/central-bundle.zip -d staging
-        echo "JAR_FILE=staging/io/9tiger/api-rest/${{ github.event.release.tag_name }}/api-rest-${{ github.event.release.tag_name}}.jar" >> $GITHUB_ENV
+        echo "JAR_FILE=staging/io/9tiger/api-rest/${{ env.RELEASE_TAG }}/api-rest-${{ env.RELEASE_TAG }}.jar" >> $GITHUB_ENV
 
-    - run: ls staging/io/9tiger/db2rest/${{ github.event.release.tag_name }}    
+    - run: ls staging/io/9tiger/db2rest/${{ env.RELEASE_TAG }}    
     - run: ls ${{ env.JAR_FILE }}
 
     - name: Archive central-bundle JAR artifacts
@@ -64,7 +79,7 @@ jobs:
         path: staging/central-bundle.zip
 
     # - name: Build & Publish package Oracle9i to Central
-    #   run: mvn -Drevision=${{ github.event.release.tag_name }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
+    #   run: mvn -Drevision=${{ env.RELEASE_TAG }} --no-transfer-progress -B deploy -P release --file api-rest/pom-oracle9i.xml -DskipTests
     #   env:
     #     MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
     #     MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
@@ -82,6 +97,6 @@ jobs:
       with:
         context: "${{ github.workspace }}"
         push: true
-        tags: kdhrubo/db2rest:v${{ github.event.release.tag_name }}, kdhrubo/db2rest:latest
+        tags: kdhrubo/db2rest:v${{ env.RELEASE_TAG }}, kdhrubo/db2rest:latest
         build-args: |
           JAR_FILE=${{ env.JAR_FILE }}
