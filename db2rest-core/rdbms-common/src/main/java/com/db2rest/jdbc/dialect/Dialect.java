@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.db2rest.jdbc.dialect.model.DbColumn;
 import com.db2rest.jdbc.dialect.model.DbTable;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -79,6 +80,12 @@ public abstract class Dialect {
             return Long.valueOf(value);
         } else if (Short.class == type || short.class == type) {
             return Short.valueOf(value);
+        } else if (BigDecimal.class == type) {
+            return new BigDecimal(value);
+        } else if (Double.class == type || double.class == type) {
+            return Double.valueOf(value);
+        } else if (Float.class == type || float.class == type) {
+            return Float.valueOf(value);
         } else if (java.sql.Date.class == type) {
             return LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
         } else if (java.sql.Timestamp.class == type) {

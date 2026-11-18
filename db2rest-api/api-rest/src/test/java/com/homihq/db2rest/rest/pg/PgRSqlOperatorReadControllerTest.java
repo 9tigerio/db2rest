@@ -63,6 +63,21 @@ class PgRSqlOperatorReadControllerTest extends PostgreSQLBaseIntegrationTest {
     }
 
     @Test
+    @DisplayName("Test find with Greater than Operator on a numeric column")
+    void findWithGreaterThanOperatorOnNumeric() throws Exception {
+        mockMvc.perform(get(VERSION + "/pgsqldb/film")
+                        .accept(APPLICATION_JSON)
+                        .param("fields", "film_id")
+                        .param("filter", "rental_rate=gt=1.5")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(3)))
+                .andExpect(jsonPath("$[0].film_id").value(2))
+                .andExpect(jsonPath("$[1].film_id").value(3))
+                .andExpect(jsonPath("$[2].film_id").value(4));
+    }
+
+    @Test
     @DisplayName("Test find with Greater than Operator")
     void findWithGreaterThanOperator() throws Exception {
         mockMvc.perform(get(VERSION + "/pgsqldb/film;desc")
