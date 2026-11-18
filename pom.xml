@@ -159,10 +159,6 @@
             <artifactId>rsql-parser</artifactId>
             <version>${rsql-parser.version}</version>
         </dependency>
-
-
-
-
     </dependencies>
     <build>
         <plugins>
