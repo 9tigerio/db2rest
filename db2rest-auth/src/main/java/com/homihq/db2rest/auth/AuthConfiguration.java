@@ -68,9 +68,11 @@ public class AuthConfiguration {
     @ConditionalOnProperty(prefix = "db2rest.auth", name = "provider", havingValue = "jwt")
     public AbstractAuthProvider jwtAuthProvider(
             ConfigurableJWTProcessor<SecurityContext> jwtProcessor,
-            AuthDataProperties authDataProperties
+            AuthDataProperties authDataProperties,
+            JwtProperties jwtProperties
     ) {
-        return new JwtAuthProvider(authDataProvider(authDataProperties), authAntPathMatcher(), jwtProcessor);
+        return new JwtAuthProvider(authDataProvider(authDataProperties), authAntPathMatcher(),
+                jwtProcessor, jwtProperties.getRolesNamespace());
     }
 
     @Bean
@@ -85,8 +87,11 @@ public class AuthConfiguration {
 
         ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
 
-        jwtProcessor.setJWSTypeVerifier(
-                new DefaultJOSEObjectTypeVerifier<>(new JOSEObjectType("at+jwt")));
+        JOSEObjectType[] allowedTypes = jwtProperties.getTokenTypes()
+                .stream()
+                .map(JOSEObjectType::new)
+                .toArray(JOSEObjectType[]::new);
+        jwtProcessor.setJWSTypeVerifier(new DefaultJOSEObjectTypeVerifier<>(allowedTypes));
 
         JWSKeySelector<SecurityContext> keySelector = new JWSVerificationKeySelector<>(
                 jwtProperties.getAlgorithm(),

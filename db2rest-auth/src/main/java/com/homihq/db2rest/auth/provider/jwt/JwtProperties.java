@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
 import javax.crypto.SecretKey;
+import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "db2rest.auth.jwt")
@@ -23,6 +24,17 @@ public class JwtProperties {
     private JWSAlgorithm algorithm;
     private SecretKey key;
     private String jwksUrl;
+    /**
+     * Name of the claim that carries the user's roles, e.g. {@code roles} or a namespaced
+     * claim such as {@code https://example.com/roles}. The claim may be a string or an
+     * array of strings. When unset, JWT users have no roles.
+     */
+    private String rolesNamespace;
+    /**
+     * Accepted values of the JWT {@code typ} header. Defaults to {@code at+jwt} (RFC 9068).
+     * Add {@code JWT} for identity providers that issue access tokens with that type.
+     */
+    private List<String> tokenTypes = List.of("at+jwt");
 
     @AssertTrue(message = "Key or jwksUrl must be present!")
     public boolean isKeyOrJwksUrlPresent() {
