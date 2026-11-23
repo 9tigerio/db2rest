@@ -163,4 +163,53 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(0)));
     }
+
+    @Test
+    @Order(7)
+    @DisplayName("An OR in the user filter must not escape the tenant filter")
+    void orFilterCannotReadOtherTenants() throws Exception {
+        // auid 1 belongs to tenant 0, tom is tenant 15
+        mockMvc.perform(get(VERSION + "/pgsqldb/users?filter=auid==1,auid==999")
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(0)));
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("An OR in the filter must not let a tenant count, update or delete other tenants' rows")
+    void orFilterCannotCountUpdateOrDeleteOtherTenants() throws Exception {
+        mockMvc.perform(get(VERSION + "/pgsqldb/users/count?filter=auid==2,auid==999")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", equalTo(0)));
+
+        mockMvc.perform(patch(VERSION + "/pgsqldb/users?filter=auid==2,auid==999")
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE)
+                .content("""
+                        { "password": "changed" }
+                        """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", equalTo(0)));
+
+        mockMvc.perform(delete(VERSION + "/pgsqldb/users?filter=auid==2,auid==999")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", equalTo(0)));
+    }
+
+    @Test
+    @Order(9)
+    @DisplayName("A filter with unbalanced parentheses is rejected for tenant users")
+    void unbalancedFilterIsRejected() throws Exception {
+        mockMvc.perform(get(VERSION + "/pgsqldb/users?filter=auid==1),(auid==2")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                .andExpect(status().isBadRequest());
+    }
 }
