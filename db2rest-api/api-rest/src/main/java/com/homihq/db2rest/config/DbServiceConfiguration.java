@@ -12,6 +12,7 @@ import com.homihq.db2rest.jdbc.core.service.*;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import com.homihq.db2rest.jdbc.processor.*;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
+import com.homihq.db2rest.jdbc.template.SqlTemplateLimits;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 import com.homihq.db2rest.jdbc.validator.CustomPlaceholderValidators;
 import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
@@ -19,6 +20,9 @@ import com.homihq.db2rest.multidb.DatabaseProperties;
 import com.hubspot.jinjava.Jinjava;
 import com.hubspot.jinjava.JinjavaConfig;
 import com.zaxxer.hikari.HikariConfig;
+import io.micrometer.core.instrument.FunctionCounter;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.binder.MeterBinder;
 import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.CodeResolver;
 import gg.jte.ContentType;
@@ -128,6 +132,7 @@ public class DbServiceConfiguration {
         JinjavaConfig config = JinjavaConfig
                 .newBuilder()
                 .withTokenScannerSymbols(new DisabledExpressionTokenScannerSymbols())
+                .withMaxOutputSize(SqlTemplateLimits.DEFAULTS.maxRenderedChars())
                 .build();
 
         return new Jinjava(config);
@@ -284,6 +289,31 @@ public class DbServiceConfiguration {
                 jdbcManager,
                 customPlaceholderValidators
         );
+    }
+
+    /**
+     * Publishes the SQL template cache counters: db2rest.sql.template.cache.size (gauge) and
+     * db2rest.sql.template.cache.lookups tagged result=hit|miss|reload, plus
+     * db2rest.sql.template.cache.evictions.
+     */
+    @Bean
+    public MeterBinder sqlTemplateCacheMetrics(SQLTemplateExecutorService templateService) {
+        return registry -> {
+            if (!(templateService instanceof JinJavaTemplateExecutorService service)) {
+                return;
+            }
+            Gauge.builder("db2rest.sql.template.cache.size", service, s -> s.templateCacheStats().size())
+                    .description("SQL templates held in the cache")
+                    .register(registry);
+            FunctionCounter.builder("db2rest.sql.template.cache.lookups", service, s -> s.templateCacheStats().hits())
+                    .tag("result", "hit").register(registry);
+            FunctionCounter.builder("db2rest.sql.template.cache.lookups", service, s -> s.templateCacheStats().misses())
+                    .tag("result", "miss").register(registry);
+            FunctionCounter.builder("db2rest.sql.template.cache.lookups", service, s -> s.templateCacheStats().reloads())
+                    .tag("result", "reload").register(registry);
+            FunctionCounter.builder("db2rest.sql.template.cache.evictions", service,
+                    s -> s.templateCacheStats().evictions()).register(registry);
+        };
     }
 
     //END ::: Services
