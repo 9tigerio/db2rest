@@ -35,7 +35,7 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
 
     @Override
     public List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllSchemas,
-                                   List<String> includeSchemas) {
+                                   List<String> includeSchemas, TableFilter tableFilter) {
         try {
             List<String> includedSchemas = includeSchemas;
 
@@ -51,7 +51,7 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
                 String[] tableTypes = include(schema, excludedSchemas)
                         ? DEFAULT_TABLE_TYPES : SYSTEM_SCHEMA_TABLE_TYPES;
 
-                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema, tableTypes);
+                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema, tableTypes, tableFilter);
 
                 List<DbTable> tables =
                         metaDataTables.stream()

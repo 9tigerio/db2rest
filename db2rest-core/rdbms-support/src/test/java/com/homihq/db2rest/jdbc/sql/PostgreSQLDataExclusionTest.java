@@ -156,4 +156,31 @@ class PostgreSQLDataExclusionTest {
         verify(databaseMetaData, never()).getTables(isNull(), eq("pg_catalog"), isNull(), any(String[].class));
         verify(databaseMetaData, never()).getTables(isNull(), eq("information_schema"), isNull(), any(String[].class));
     }
+
+    @Test
+    void shouldSkipTablesOutsideTheTableFilterWithoutReadingTheirColumns() throws SQLException {
+        PostgreSQLDataExclusion dataExclusion = new PostgreSQLDataExclusion();
+
+        when(databaseMetaData.getTables(isNull(), eq("public"), isNull(), any(String[].class)))
+                .thenReturn(tablesResultSet);
+        when(tablesResultSet.next()).thenReturn(true, true, false);
+        when(tablesResultSet.getString(ColumnLabel.TABLE_NAME.name())).thenReturn("film", "customer");
+        when(tablesResultSet.getString(ColumnLabel.TABLE_CAT.name())).thenReturn(null);
+        when(tablesResultSet.getString(ColumnLabel.TABLE_SCHEM.name())).thenReturn("public");
+        when(tablesResultSet.getString(ColumnLabel.TABLE_TYPE.name())).thenReturn("TABLE");
+
+        when(databaseMetaData.getPrimaryKeys(isNull(), eq("public"), eq("film")))
+                .thenReturn(primaryKeysResultSet);
+        when(primaryKeysResultSet.next()).thenReturn(false);
+        when(databaseMetaData.getColumns(isNull(), eq("public"), eq("film"), isNull()))
+                .thenReturn(columnsResultSet);
+        when(columnsResultSet.next()).thenReturn(false);
+
+        List<DbTable> dbTables = dataExclusion.getTables(databaseMetaData, false, List.of("public"),
+                TableFilter.of(List.of("film*")));
+
+        assertThat(dbTables).extracting(DbTable::name).containsExactly("film");
+        verify(databaseMetaData, never()).getColumns(any(), any(), eq("customer"), any());
+        verify(databaseMetaData, never()).getPrimaryKeys(any(), any(), eq("customer"));
+    }
 }

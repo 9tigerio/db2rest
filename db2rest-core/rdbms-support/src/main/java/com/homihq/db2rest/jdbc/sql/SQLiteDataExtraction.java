@@ -25,7 +25,7 @@ public class SQLiteDataExtraction implements MetaDataExtraction {
 
     @Override
     public List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllSchemas,
-                                   List<String> includeSchemas) {
+                                   List<String> includeSchemas, TableFilter tableFilter) {
         try {
             List<String> includedSchemas = includeSchemas;
 
@@ -39,7 +39,7 @@ public class SQLiteDataExtraction implements MetaDataExtraction {
             for (String schema : includedSchemas) {
                 log.info("Loading meta tables for schema - {}", schema);
 
-                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema);
+                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema, tableFilter);
 
                 List<DbTable> tables = metaDataTables.parallelStream()
                         .map(metaDataTable -> getDbTable(databaseMetaData, metaDataTable))
@@ -51,7 +51,7 @@ public class SQLiteDataExtraction implements MetaDataExtraction {
             // If no schema-specific tables found, try without schema
             if (dbTables.isEmpty()) {
                 log.info("No tables found with schema, trying without schema");
-                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, null);
+                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, null, tableFilter);
 
                 List<DbTable> tables = metaDataTables.parallelStream()
                         .map(metaDataTable -> getDbTable(databaseMetaData, metaDataTable))
