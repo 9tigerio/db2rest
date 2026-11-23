@@ -9,9 +9,6 @@ on:
       - 'feature/**'
   workflow_dispatch:
 
-env: 
-  VERSION: '1.6.6-SNAPSHOT'
-
 permissions: read-all
 
 jobs:
@@ -28,7 +25,7 @@ jobs:
           cache: 'maven'
 
       - name: Build & Test
-        run: ./mvnw --quiet -Drevision=$VERSION --no-transfer-progress -B verify --file pom.xml
+        run: ./mvnw --quiet --no-transfer-progress -B verify --file pom.xml
       
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       #- name: Update dependency graph
