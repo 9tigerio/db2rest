@@ -27,7 +27,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
 
     @Override
     public List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllCatalogs,
-                                   List<String> includeCatalogs) {
+                                   List<String> includeCatalogs, TableFilter tableFilter) {
         try {
             List<String> includedCatalogs = includeCatalogs;
 
@@ -42,7 +42,7 @@ public class MySQLDataExtraction implements MetaDataExtraction {
                 log.info("Loading meta tables for catalog - {}", catalog);
 
                 List<MetaDataTable> metaDataTables =
-                        getMetaTables(databaseMetaData, catalog, null);
+                        getMetaTables(databaseMetaData, catalog, null, tableFilter);
 
                 List<DbTable> tables =
                         metaDataTables.parallelStream()

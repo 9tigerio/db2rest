@@ -50,7 +50,8 @@ public class MsSQLServerMetaDataExtraction implements MetaDataExtraction {
     public List<DbTable> getTables(
             DatabaseMetaData databaseMetaData,
             boolean includeAllSchemas,
-            List<String> includeSchemas
+            List<String> includeSchemas,
+            TableFilter tableFilter
     ) {
         try {
             List<String> includedSchemas = includeAllSchemas
@@ -62,7 +63,7 @@ public class MsSQLServerMetaDataExtraction implements MetaDataExtraction {
             for (String schema : includedSchemas) {
                 log.info("Loading meta tables for schema - {}", schema);
 
-                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema);
+                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema, tableFilter);
 
                 List<DbTable> tables =
                         metaDataTables

@@ -39,7 +39,7 @@ public class OracleMetaDataExtraction implements MetaDataExtraction {
 
     @Override
     public List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllSchemas,
-                                   List<String> includeSchemas) {
+                                   List<String> includeSchemas, TableFilter tableFilter) {
         try {
             List<String> includedSchemas = includeSchemas;
 
@@ -52,7 +52,7 @@ public class OracleMetaDataExtraction implements MetaDataExtraction {
 
                 log.info("Loading meta tables for schema - {}", schema);
 
-                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema);
+                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema, tableFilter);
 
                 List<DbTable> tables =
                         metaDataTables.stream()
