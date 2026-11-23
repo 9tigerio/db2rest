@@ -39,7 +39,11 @@ public class JwtAuthProvider extends AbstractAuthProvider {
     @Override
     public UserDetail authenticate(HttpServletRequest request) {
         String authHeader = this.getAuthHeader(request);
-        String token = StringUtils.replace(authHeader, String.format("%s ", BEARER_AUTH), "", 1);
+        if (StringUtils.isBlank(authHeader) || !authHeader.startsWith(BEARER_AUTH + " ")) {
+            log.debug("Missing or non-Bearer Authorization header");
+            return null;
+        }
+        String token = authHeader.substring(BEARER_AUTH.length() + 1).trim();
 
         try {
             JWTClaimsSet claimsSet = jwtProcessor.process(token, null);
