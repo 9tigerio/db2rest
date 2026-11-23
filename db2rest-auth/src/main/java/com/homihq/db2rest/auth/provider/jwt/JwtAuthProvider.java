@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.AntPathMatcher;
 
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -42,19 +43,35 @@ public class JwtAuthProvider extends AbstractAuthProvider {
 
         try {
             JWTClaimsSet claimsSet = jwtProcessor.process(token, null);
-            List<String> roles = List.of();
-            if (rolesNamespace != null) {
-                List<String> claimsRoles = claimsSet.getStringListClaim(rolesNamespace);
-                if (claimsRoles != null) {
-                    roles = claimsRoles;
-                }
-            }
-            return new UserDetail(claimsSet.getSubject(), roles);
+            return new UserDetail(claimsSet.getSubject(), extractRoles(claimsSet));
         } catch (ParseException | BadJOSEException | JOSEException e) {
             log.error("Error in JWT validation - ", e);
         }
 
         return null;
+    }
+
+    private List<String> extractRoles(JWTClaimsSet claimsSet) {
+        if (StringUtils.isBlank(rolesNamespace)) {
+            return List.of();
+        }
+
+        Object claim = claimsSet.getClaim(rolesNamespace);
+        if (claim == null) {
+            return List.of();
+        }
+        if (claim instanceof String role) {
+            return List.of(role);
+        }
+        if (claim instanceof Collection<?> values) {
+            return values.stream()
+                    .filter(String.class::isInstance)
+                    .map(String.class::cast)
+                    .toList();
+        }
+
+        log.warn("JWT claim '{}' is not a string or array of strings; ignoring roles", rolesNamespace);
+        return List.of();
     }
 
     @Override
