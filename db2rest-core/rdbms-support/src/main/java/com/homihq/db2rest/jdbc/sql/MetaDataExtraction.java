@@ -16,7 +16,17 @@ public interface MetaDataExtraction {
     boolean canHandle(String database);
 
 
-    List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllSchemas, List<String> includedSchemas);
+    /**
+     * Loads metadata for the tables and views in the included schemas (or catalogs) that pass the
+     * table filter. Columns and keys are only read for tables that pass the filter.
+     */
+    List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllSchemas, List<String> includedSchemas,
+                            TableFilter tableFilter);
+
+    default List<DbTable> getTables(DatabaseMetaData databaseMetaData, boolean includeAllSchemas,
+                                    List<String> includedSchemas) {
+        return getTables(databaseMetaData, includeAllSchemas, includedSchemas, TableFilter.ALL);
+    }
 
     default boolean include(String schemaOrCatalog, List<String> excludedSchemasOrCatalogs) {
         return excludedSchemasOrCatalogs.stream().noneMatch(i -> StringUtils.equalsIgnoreCase(schemaOrCatalog, i));
@@ -61,13 +71,14 @@ public interface MetaDataExtraction {
     String[] DEFAULT_TABLE_TYPES = {"TABLE", "VIEW"};
 
     default List<MetaDataTable>
-    getMetaTables(DatabaseMetaData databaseMetaData, String catalogPattern, String schemaPattern) throws SQLException {
-        return getMetaTables(databaseMetaData, catalogPattern, schemaPattern, DEFAULT_TABLE_TYPES);
+    getMetaTables(DatabaseMetaData databaseMetaData, String catalogPattern, String schemaPattern,
+                  TableFilter tableFilter) throws SQLException {
+        return getMetaTables(databaseMetaData, catalogPattern, schemaPattern, DEFAULT_TABLE_TYPES, tableFilter);
     }
 
     default List<MetaDataTable>
     getMetaTables(DatabaseMetaData databaseMetaData, String catalogPattern, String schemaPattern,
-                  String[] tableTypes) throws SQLException {
+                  String[] tableTypes, TableFilter tableFilter) throws SQLException {
 
         List<MetaDataTable> tables = new ArrayList<>();
 
@@ -81,6 +92,9 @@ public interface MetaDataExtraction {
                 String catalog = resultSet.getString(ColumnLabel.TABLE_CAT.name());
                 String schema = resultSet.getString(ColumnLabel.TABLE_SCHEM.name());
                 String tableType = resultSet.getString(ColumnLabel.TABLE_TYPE.name());
+                if (!tableFilter.includes(schema != null ? schema : catalog, tableName)) {
+                    continue;
+                }
                 String tableAlias = getAlias(tableName);
                 MetaDataTable metaDataTable =
                         new MetaDataTable(tableName, catalog, schema, tableType, tableAlias);
