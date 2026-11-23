@@ -19,6 +19,13 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
 
     List<String> excludedSchemas = Arrays.asList("pg_catalog", "information_schema");
 
+    /**
+     * The PostgreSQL driver reports tables and views in the system schemas as
+     * SYSTEM TABLE / SYSTEM VIEW, so they must be requested explicitly when a
+     * system schema is listed in the configured schemas.
+     */
+    private static final String[] SYSTEM_SCHEMA_TABLE_TYPES = {"TABLE", "VIEW", "SYSTEM TABLE", "SYSTEM VIEW"};
+
 
     @Override
     public boolean canHandle(String database) {
@@ -41,7 +48,10 @@ public class PostgreSQLDataExclusion implements MetaDataExtraction {
 
                 log.info("Loading meta tables for schema - {}", schema);
 
-                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema);
+                String[] tableTypes = include(schema, excludedSchemas)
+                        ? DEFAULT_TABLE_TYPES : SYSTEM_SCHEMA_TABLE_TYPES;
+
+                List<MetaDataTable> metaDataTables = getMetaTables(databaseMetaData, null, schema, tableTypes);
 
                 List<DbTable> tables =
                         metaDataTables.stream()

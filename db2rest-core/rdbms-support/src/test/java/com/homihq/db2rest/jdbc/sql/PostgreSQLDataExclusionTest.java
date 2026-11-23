@@ -15,6 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -96,5 +98,62 @@ class PostgreSQLDataExclusionTest {
         assertThat(dbTables).singleElement()
                 .extracting(DbTable::fullName)
                 .isEqualTo("\"dátá_数据\".\"dátá\"");
+    }
+
+    @Test
+    void shouldRequestSystemTableTypesForExplicitlyIncludedSystemSchema() throws SQLException {
+        PostgreSQLDataExclusion dataExclusion = new PostgreSQLDataExclusion();
+        String[] systemTypes = {"TABLE", "VIEW", "SYSTEM TABLE", "SYSTEM VIEW"};
+
+        when(databaseMetaData.getTables(isNull(), eq("pg_catalog"), isNull(), eq(systemTypes)))
+                .thenReturn(tablesResultSet);
+        when(tablesResultSet.next()).thenReturn(true, false);
+        when(tablesResultSet.getString(ColumnLabel.TABLE_NAME.name())).thenReturn("pg_class");
+        when(tablesResultSet.getString(ColumnLabel.TABLE_CAT.name())).thenReturn(null);
+        when(tablesResultSet.getString(ColumnLabel.TABLE_SCHEM.name())).thenReturn("pg_catalog");
+        when(tablesResultSet.getString(ColumnLabel.TABLE_TYPE.name())).thenReturn("SYSTEM TABLE");
+
+        when(databaseMetaData.getPrimaryKeys(isNull(), eq("pg_catalog"), eq("pg_class")))
+                .thenReturn(primaryKeysResultSet);
+        when(primaryKeysResultSet.next()).thenReturn(false);
+        when(databaseMetaData.getColumns(isNull(), eq("pg_catalog"), eq("pg_class"), isNull()))
+                .thenReturn(columnsResultSet);
+        when(columnsResultSet.next()).thenReturn(false);
+
+        List<DbTable> dbTables = dataExclusion.getTables(databaseMetaData, false, List.of("pg_catalog"));
+
+        assertThat(dbTables).singleElement()
+                .extracting(DbTable::fullName)
+                .isEqualTo("\"pg_catalog\".\"pg_class\"");
+    }
+
+    @Test
+    void shouldRequestOnlyRegularTableTypesForUserSchema() throws SQLException {
+        PostgreSQLDataExclusion dataExclusion = new PostgreSQLDataExclusion();
+
+        when(databaseMetaData.getTables(isNull(), eq("public"), isNull(), eq(new String[] {"TABLE", "VIEW"})))
+                .thenReturn(tablesResultSet);
+        when(tablesResultSet.next()).thenReturn(false);
+
+        assertThat(dataExclusion.getTables(databaseMetaData, false, List.of("public"))).isEmpty();
+    }
+
+    @Test
+    void shouldStillSkipSystemSchemasWhenLoadingAllSchemas() throws SQLException {
+        PostgreSQLDataExclusion dataExclusion = new PostgreSQLDataExclusion();
+        ResultSet schemas = org.mockito.Mockito.mock(ResultSet.class);
+
+        when(databaseMetaData.getSchemas()).thenReturn(schemas);
+        when(schemas.next()).thenReturn(true, true, true, false);
+        when(schemas.getString(ColumnLabel.TABLE_SCHEM.name()))
+                .thenReturn("pg_catalog", "information_schema", "public");
+        when(databaseMetaData.getTables(isNull(), eq("public"), isNull(), any(String[].class)))
+                .thenReturn(tablesResultSet);
+        when(tablesResultSet.next()).thenReturn(false);
+
+        dataExclusion.getTables(databaseMetaData, true, List.of());
+
+        verify(databaseMetaData, never()).getTables(isNull(), eq("pg_catalog"), isNull(), any(String[].class));
+        verify(databaseMetaData, never()).getTables(isNull(), eq("information_schema"), isNull(), any(String[].class));
     }
 }

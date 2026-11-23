@@ -20,6 +20,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Needed for databases using non-Unicode character sets, e.g. TH8TISASCII (ORA-17056) -->
+        <dependency>
+            <groupId>com.oracle.database.nls</groupId>
+            <artifactId>orai18n</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>io.9tiger</groupId>

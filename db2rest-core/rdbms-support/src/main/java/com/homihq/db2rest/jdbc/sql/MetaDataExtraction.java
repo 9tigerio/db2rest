@@ -58,8 +58,16 @@ public interface MetaDataExtraction {
     }
 
 
+    String[] DEFAULT_TABLE_TYPES = {"TABLE", "VIEW"};
+
     default List<MetaDataTable>
     getMetaTables(DatabaseMetaData databaseMetaData, String catalogPattern, String schemaPattern) throws SQLException {
+        return getMetaTables(databaseMetaData, catalogPattern, schemaPattern, DEFAULT_TABLE_TYPES);
+    }
+
+    default List<MetaDataTable>
+    getMetaTables(DatabaseMetaData databaseMetaData, String catalogPattern, String schemaPattern,
+                  String[] tableTypes) throws SQLException {
 
         List<MetaDataTable> tables = new ArrayList<>();
 
@@ -67,7 +75,7 @@ public interface MetaDataExtraction {
                 catalogPattern,
                 schemaPattern,
                 null,
-                new String[] {"TABLE", "VIEW"})) {
+                tableTypes)) {
             while (resultSet.next()) {
                 String tableName = resultSet.getString(ColumnLabel.TABLE_NAME.name());
                 String catalog = resultSet.getString(ColumnLabel.TABLE_CAT.name());
