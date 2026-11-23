@@ -4,6 +4,7 @@ import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -211,5 +212,75 @@ public class PgMultiTenancyTest extends PostgreSQLBaseIntegrationTest {
                 .accept(APPLICATION_JSON)
                 .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Order(10)
+    @DisplayName("A user without a tenant role sees exactly the rows whose tenant column is null")
+    void userWithoutTenantRoleSeesNullTenantRows() throws Exception {
+        mockMvc.perform(get(VERSION + "/pgsqldb/tenant_notes")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", USER_ROOT_BASIC_AUTH_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", equalTo(1)))
+                .andExpect(jsonPath("$[0].tenant_id", nullValue()));
+
+        mockMvc.perform(get(VERSION + "/pgsqldb/tenant_notes/count")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", USER_ROOT_BASIC_AUTH_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", equalTo(1)));
+    }
+
+    @Test
+    @Order(11)
+    @DisplayName("A tenant user sees only their own rows, not null-tenant or other tenants' rows")
+    void tenantUserSeesOnlyOwnRows() throws Exception {
+        mockMvc.perform(get(VERSION + "/pgsqldb/tenant_notes")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", equalTo(2)))
+                .andExpect(jsonPath("$[0].tenant_id", equalTo(15)));
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Tenant filters apply when the table name in the URL uses a different case")
+    void tenantFilterAppliesToTableNameCaseVariants() throws Exception {
+        // Before the fix, the role lookup was case-sensitive: the write got a null tenant_id
+        // (rejected by the NOT NULL column) and reads fell back to null-tenant rows only.
+        mockMvc.perform(post(VERSION + "/pgsqldb/Users")
+                .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                .header("Content-Profile", "public")
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE)
+                .content("""
+                        { "auid": 30, "username": "CASE", "password": "VARIANT" }
+                        """))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get(VERSION + "/pgsqldb/Users?filter=auid==30")
+                .accept(APPLICATION_JSON)
+                .header("Accept-Profile", "public")
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].tenant_id", equalTo(15)));
+
+        mockMvc.perform(get(VERSION + "/pgsqldb/TENANT_NOTES")
+                .accept(APPLICATION_JSON)
+                .header("Accept-Profile", "public")
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", equalTo(2)));
+
+        mockMvc.perform(delete(VERSION + "/pgsqldb/users?filter=auid==30")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", USER_TOM_BASIC_AUTH_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rows", equalTo(1)));
     }
 }

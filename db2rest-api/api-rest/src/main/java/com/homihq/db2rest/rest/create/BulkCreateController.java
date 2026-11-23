@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.create;
 
-import com.homihq.db2rest.auth.data.RoleDataFilter;
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 import com.homihq.db2rest.bulk.DataProcessor;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +28,7 @@ public class BulkCreateController implements BulkCreateRestApi {
     private final List<DataProcessor> dataProcessors;
 
     public CreateBulkResponse save(
-            Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+            RoleFilterContext roleFilterContext,
             String dbId,
             String tableName,
             String schemaName,
@@ -46,13 +45,13 @@ public class BulkCreateController implements BulkCreateRestApi {
         List<Map<String, Object>> data = dataProcessor.getData(request.getInputStream());
 
         BulkContext context = new BulkContext(dbId, schemaName, tableName, includeColumns, tsIdEnabled, sequences, 0,
-                roleBasedDataFilters);
+                roleFilterContext);
         return bulkCreateService.saveBulk(context, data);
     }
 
     @Override
     public CompletableFuture<CreateResponse> saveMultipartFile(
-            Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+            RoleFilterContext roleFilterContext,
             String dbId,
             String tableName,
             String schemaName,
@@ -62,7 +61,7 @@ public class BulkCreateController implements BulkCreateRestApi {
             MultipartFile file) {
 
         BulkContext context = new BulkContext(dbId, schemaName, tableName, includeColumns, tsIdEnabled, sequences, 0,
-                roleBasedDataFilters);
+                roleFilterContext);
         return bulkCreateService.saveMultipartFile(context, file);
     }
 }
