@@ -3,10 +3,9 @@ package com.homihq.db2rest.rest.create;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.homihq.db2rest.auth.data.RoleDataFilter;
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 import com.homihq.db2rest.config.MultiTenancy;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.jdbc.core.service.CreateService;
@@ -23,7 +22,7 @@ public class CreateController implements CreateRestApi {
 
     @Override
     public CreateResponse save(
-            Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+            RoleFilterContext roleFilterContext,
             String dbId, String schemaName,
             String tableName,
             List<String> includeColumns,
@@ -31,7 +30,7 @@ public class CreateController implements CreateRestApi {
             Map<String, Object> data,
             boolean tsIdEnabled) {
 
-        MultiTenancy.addTenantColumns(data, dbId, tableName, roleBasedDataFilters);
+        MultiTenancy.addTenantColumns(data, dbId, tableName, roleFilterContext);
         return createService.save(dbId, schemaName, tableName, includeColumns, data, tsIdEnabled, sequences);
     }
 }

@@ -2,9 +2,7 @@ package com.homihq.db2rest.dtos;
 
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.homihq.db2rest.auth.data.RoleDataFilter;
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 
 public record BulkContext(
                 String dbId,
@@ -14,5 +12,5 @@ public record BulkContext(
                 boolean tsIdEnabled,
                 List<String> sequences,
                 int rows,
-                Pair<List<RoleDataFilter>, String[]> roleDataFilters) {
+                RoleFilterContext roleFilterContext) {
 }

@@ -1,13 +1,12 @@
 package com.homihq.db2rest.rest.read;
 
-import com.homihq.db2rest.auth.data.RoleDataFilter;
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 import com.homihq.db2rest.config.MultiTenancy;
 import com.homihq.db2rest.jdbc.core.service.FindOneService;
 import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-import static com.homihq.db2rest.config.MultiTenancy.ROLEBASEDDATAFILTERS;
+import static com.homihq.db2rest.auth.data.RoleFilterContext.REQUEST_ATTRIBUTE;
 import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 
 @RestController
@@ -30,7 +29,7 @@ public class FindOneController {
 
     @GetMapping(VERSION + "/{dbId}/{tableName}/one")
     public Map<String, Object> findOne(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+            @RequestAttribute(name = REQUEST_ATTRIBUTE, required = false) RoleFilterContext roleFilterContext,
             @PathVariable String dbId,
             @PathVariable String tableName,
             @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
@@ -46,7 +45,7 @@ public class FindOneController {
                 .defaultFetchLimit(100) // todo update with config
                 .schemaName(schemaName)
                 .tableName(tableName)
-                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters))
+                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleFilterContext))
                 .fields(fields)
                 .build();
 

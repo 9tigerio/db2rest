@@ -1,6 +1,6 @@
 package com.homihq.db2rest.rest.read;
 
-import com.homihq.db2rest.auth.data.RoleDataFilter;
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 import com.homihq.db2rest.config.MultiTenancy;
 import com.homihq.db2rest.core.dto.ExistsResponse;
 import com.homihq.db2rest.jdbc.core.service.ExistsQueryService;
@@ -9,7 +9,6 @@ import com.homihq.db2rest.jdbc.dto.ReadContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.homihq.db2rest.config.MultiTenancy.ROLEBASEDDATAFILTERS;
+import static com.homihq.db2rest.auth.data.RoleFilterContext.REQUEST_ATTRIBUTE;
 import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 
 @Slf4j
@@ -33,7 +32,7 @@ public class ExistsQueryController {
 
     @GetMapping(value = VERSION + "/{dbId}/{tableName}/exists", produces = "application/json")
     public ExistsResponse exists(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+            @RequestAttribute(name = REQUEST_ATTRIBUTE, required = false) RoleFilterContext roleFilterContext,
             @PathVariable String dbId,
             @PathVariable String tableName,
             @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
@@ -46,7 +45,7 @@ public class ExistsQueryController {
                 .dbId(dbId)
                 .schemaName(schemaName)
                 .tableName(tableName)
-                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters))
+                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleFilterContext))
                 .build();
 
         return existsQueryService.exists(readContext);
@@ -54,7 +53,7 @@ public class ExistsQueryController {
 
     @PostMapping(value = VERSION + "/{dbId}/{tableName}/exists/_expand", produces = "application/json")
     public ExistsResponse exists(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+            @RequestAttribute(name = REQUEST_ATTRIBUTE, required = false) RoleFilterContext roleFilterContext,
             @PathVariable String dbId,
             @PathVariable String tableName,
             @RequestHeader(name = "Accept-Profile", required = false) String schemaName,
@@ -66,7 +65,7 @@ public class ExistsQueryController {
                 .schemaName(schemaName)
                 .tableName(tableName)
                 .fields("*")
-                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters))
+                .filter(MultiTenancy.joinFilters(filter, dbId, tableName, roleFilterContext))
                 .joins(joins)
                 .build();
 
