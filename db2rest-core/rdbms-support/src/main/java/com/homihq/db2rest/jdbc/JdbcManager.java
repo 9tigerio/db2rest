@@ -8,6 +8,7 @@ import com.homihq.db2rest.jdbc.multidb.DbDetailHolder;
 import com.homihq.db2rest.jdbc.multidb.RoutingDataSource;
 import com.homihq.db2rest.jdbc.sql.DbMeta;
 import com.homihq.db2rest.jdbc.sql.JdbcMetaDataProvider;
+import com.homihq.db2rest.jdbc.sql.TableFilter;
 import com.homihq.db2rest.multidb.DatabaseConnectionDetail;
 import com.homihq.db2rest.multidb.DatabaseProperties;
 import jakarta.annotation.PostConstruct;
@@ -116,18 +117,19 @@ public final class JdbcManager {
             // assume database connection detail as null
             boolean includeAllSchemas = true;
             List<String> schemas = null;
+            TableFilter tableFilter = TableFilter.ALL;
 
             if (Objects.nonNull(databaseConnectionDetail)) {
                 includeAllSchemas = databaseConnectionDetail.includeAllSchemas();
                 schemas = databaseConnectionDetail.schemas();
+                tableFilter = TableFilter.of(databaseConnectionDetail.tables());
 
                 log.info("Include all schemas - {}", includeAllSchemas);
                 log.info("Schemas - {}", schemas);
             }
 
-            //TODO Get from db config
             DbMeta dbMeta = JdbcUtils.extractDatabaseMetaData(ds,
-                    new JdbcMetaDataProvider(includeAllSchemas, schemas));
+                    new JdbcMetaDataProvider(includeAllSchemas, schemas, tableFilter));
 
             for (final DbTable dbTable : dbMeta.dbTables()) {
                 dbTableMap.put(dbTable.name(), dbTable);

@@ -16,6 +16,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
     private final boolean includeAllSchemas;
     private final List<String> includedSchemas;
+    private final TableFilter tableFilter;
     List<MetaDataExtraction> exclusions = List.of(
             new OracleMetaDataExtraction(),
             new PostgreSQLDataExclusion(),
@@ -26,7 +27,6 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
             new DB2DataExtraction()
     );
 
-    //TODO include schemas , tables , view,  filters filters
     @Override
     public DbMeta processMetaData(DatabaseMetaData databaseMetaData) throws SQLException {
 
@@ -46,6 +46,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
 
         log.info("IncludedSchemas - {}", includedSchemas);
         log.info("All schema/catalog - {}", includeAllSchemas);
+        log.info("Included tables - {}", tableFilter);
         Optional<MetaDataExtraction> metaDataExclusion = getMetaDataExtraction(productName);
 
         if (metaDataExclusion.isEmpty()) {
@@ -55,7 +56,7 @@ public class JdbcMetaDataProvider implements DatabaseMetaDataCallback<DbMeta> {
         log.info("Fetching meta data for selected schemas.");
 
         List<DbTable> dbTables = metaDataExclusion.get().getTables(databaseMetaData,
-                includeAllSchemas, includedSchemas);
+                includeAllSchemas, includedSchemas, tableFilter);
 
 
         log.info("Completed loading database meta-data : {} tables", dbTables.size());
