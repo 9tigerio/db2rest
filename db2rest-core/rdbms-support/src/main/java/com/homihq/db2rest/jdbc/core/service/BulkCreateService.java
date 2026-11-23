@@ -3,7 +3,6 @@ package com.homihq.db2rest.jdbc.core.service;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import com.homihq.db2rest.dtos.BulkContext;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -15,7 +14,10 @@ public interface BulkCreateService {
             BulkContext bulkContext,
             List<Map<String, Object>> dataList);
 
-    @Async
+    /**
+     * Imports a JSON array file into one table. All rows are committed together or
+     * none are. The returned future is complete when this method returns.
+     */
     CompletableFuture<CreateResponse> saveMultipartFile(
             BulkContext bulkContext,
             MultipartFile file);
