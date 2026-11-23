@@ -588,3 +588,26 @@ BEGIN
     return row_affected;
 END;
 $$;
+
+--
+-- JSONB tables used by PgJsonbJoinControllerTest (#629)
+--
+
+CREATE TABLE tbl_jsonb (
+    id integer PRIMARY KEY,
+    data jsonb NOT NULL
+);
+
+CREATE TABLE tbl_translation (
+    key varchar(50) PRIMARY KEY,
+    value varchar(100) NOT NULL
+);
+
+INSERT INTO tbl_jsonb (id, data) VALUES
+    (1, '{"key_1": "greeting", "brand": "Apple"}'),
+    (2, '{"key_1": "farewell", "brand": "Samsung"}'),
+    (3, '{"key_1": "untranslated", "brand": "Apple"}');
+
+INSERT INTO tbl_translation (key, value) VALUES
+    ('greeting', 'Hello'),
+    ('farewell', 'Goodbye');
