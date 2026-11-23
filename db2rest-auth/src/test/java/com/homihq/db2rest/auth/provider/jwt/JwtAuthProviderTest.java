@@ -100,6 +100,17 @@ class JwtAuthProviderTest {
         assertThat(provider.isExcluded("/v1/rdbms/db/film", "GET")).isFalse();
     }
 
+    @Test
+    void returnsNullWhenAuthorizationHeaderMissingOrNotBearer() throws Exception {
+        JwtAuthProvider provider = provider("roles", List.of("at+jwt"));
+
+        assertThat(provider.authenticate(new MockHttpServletRequest())).isNull();
+
+        MockHttpServletRequest basic = new MockHttpServletRequest();
+        basic.addHeader("Authorization", "Basic YWxpY2U6c2VjcmV0");
+        assertThat(provider.authenticate(basic)).isNull();
+    }
+
     private static JwtAuthProvider provider(String rolesClaim, List<String> tokenTypes) throws Exception {
         JwtProperties properties = new JwtProperties();
         properties.setAlgorithm("HS256");

@@ -50,7 +50,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
             if (Objects.isNull(userDetail)) {
                 String errorMessage = "Authentication failure.";
-                addError(errorMessage, request, response);
+                addError(HttpServletResponse.SC_UNAUTHORIZED, errorMessage, request, response);
                 return;
             }
 
@@ -58,7 +58,7 @@ public class AuthFilter extends OncePerRequestFilter {
             boolean authorized = authProvider.authorize(userDetail, requestUri, method);
             if (!authorized) {
                 String errorMessage = "Authorization failure.";
-                addError(errorMessage, request, response);
+                addError(HttpServletResponse.SC_FORBIDDEN, errorMessage, request, response);
                 return;
             }
             request.setAttribute(ROLEBASEDDATAFILTERS,
@@ -73,19 +73,21 @@ public class AuthFilter extends OncePerRequestFilter {
     }
 
     private void addError(
+            int status,
             String errorMessage,
             HttpServletRequest request, HttpServletResponse response) throws IOException {
         var body = new LinkedHashMap<>();
-        body.put("type", "https://db2rest/unauthorized");
+        body.put("type", status == HttpServletResponse.SC_FORBIDDEN
+                ? "https://db2rest/forbidden" : "https://db2rest/unauthorized");
         body.put("title", "Auth Error");
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+        body.put("status", status);
 
         body.put("detail", errorMessage);
         body.put("instance", request.getRequestURI());
         body.put("errorCategory", "Invalid-Auth");
         body.put("timestamp", Instant.now());
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(status);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         objectMapper.writeValue(response.getWriter(), body);
