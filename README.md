@@ -25,10 +25,10 @@ deliver context-aware, reasoning applications without any vendor lock-in. :bulb:
 
 # Latest Release
 
-| Release              | Download/Docker Pull                                                             |
-|----------------------|----------------------------------------------------------------------------------|
-| 1.6.9                | [DB2Rest-1.6.9](https://download.db2rest.com/db2rest-1.6.9.jar)                  |
-| 1.6.9 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.9 ` or ` docker pull kdhrubo/db2rest:latest ` |
+| Release               | Download/Docker Pull                                                               |
+|-----------------------|------------------------------------------------------------------------------------|
+| 1.6.10                | [DB2Rest-1.6.10](https://download.db2rest.com/db2rest-1.6.10.jar)                  |
+| 1.6.10 (Docker Image) | ` docker pull kdhrubo/db2rest:v1.6.10 ` or ` docker pull kdhrubo/db2rest:latest ` |
 
 
 
