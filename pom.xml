@@ -81,6 +81,8 @@
         <rsql-parser.version>2.3.3</rsql-parser.version>
         <calcite.version>1.38.0</calcite.version>
         <jte.version>3.1.16</jte.version>
+        <!-- 1.21.4+ is required for Docker Engine 29 (minimum API 1.40+) on GitHub runners -->
+        <testcontainers.version>1.21.4</testcontainers.version>
         <!--
         <hibernate.version>7.0.6.Final</hibernate.version>
         -->
