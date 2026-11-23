@@ -1,11 +1,10 @@
 package com.homihq.db2rest.rest.create;
 
-import com.homihq.db2rest.auth.data.RoleDataFilter;
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,14 +17,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static com.homihq.db2rest.config.MultiTenancy.ROLEBASEDDATAFILTERS;
+import static com.homihq.db2rest.auth.data.RoleFilterContext.REQUEST_ATTRIBUTE;
 import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 
 public interface BulkCreateRestApi {
         @ResponseStatus(HttpStatus.CREATED)
         @PostMapping(value = VERSION + "/{dbId}/{tableName}/bulk", consumes = { "application/json", "text/csv" })
         CreateBulkResponse save(
-                        @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+                        @RequestAttribute(name = REQUEST_ATTRIBUTE, required = false) RoleFilterContext roleFilterContext,
                         @PathVariable String dbId,
                         @PathVariable String tableName,
                         @RequestHeader(name = "Content-Profile", required = false) String schemaName,
@@ -38,7 +37,7 @@ public interface BulkCreateRestApi {
         @PostMapping(value = VERSION + "/{dbId}/{tableName}/upload", consumes = { "multipart/form-data",
                         "application/json" })
         CompletableFuture<CreateResponse> saveMultipartFile(
-                        @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+                        @RequestAttribute(name = REQUEST_ATTRIBUTE, required = false) RoleFilterContext roleFilterContext,
                         @PathVariable String dbId,
                         @PathVariable String tableName,
                         @RequestHeader(name = "Content-Profile", required = false) String schemaName,

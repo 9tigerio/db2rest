@@ -5,17 +5,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.homihq.db2rest.auth.data.RoleDataFilter;
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Applies role data filters (tenant filters) to reads and writes.
+ * <p>
+ * A role data filter ties a role to a {@code dbId}, a table and a tenant column value. The
+ * {@code dbId} and table name are matched case-insensitively everywhere, so {@code /Users} and
+ * {@code /users} get the same filters.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MultiTenancy {
-    public static final String ROLEBASEDDATAFILTERS = "roleBasedDataFilters";
 
     /**
      * Combines the request filter with the tenant filters that apply to the current user.
@@ -26,19 +32,16 @@ public class MultiTenancy {
      * and match rows from other tenants.
      */
     public static String joinFilters(String filter, String dbId, String table,
-            Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters) {
-        if (roleBasedDataFilters == null) {
+            RoleFilterContext roleFilterContext) {
+        if (roleFilterContext == null) {
             return filter;
         }
 
         List<String> tenantConditions = new ArrayList<>();
-        for (RoleDataFilter roleDataFilter : getUserRoleBasedDataFilters(dbId, table,
-                roleBasedDataFilters.getLeft(), roleBasedDataFilters.getRight())) {
-            if (dbId.equalsIgnoreCase(roleDataFilter.dbId()) && table.equalsIgnoreCase(roleDataFilter.table())) {
-                tenantConditions.add(roleDataFilter.value() == null
-                        ? roleDataFilter.column() + "=isnull=" + roleDataFilter.value()
-                        : roleDataFilter.column() + "==" + roleDataFilter.value());
-            }
+        for (RoleDataFilter roleDataFilter : getUserRoleBasedDataFilters(dbId, table, roleFilterContext)) {
+            tenantConditions.add(roleDataFilter.value() == null
+                    ? roleDataFilter.column() + "=isnull=true"
+                    : roleDataFilter.column() + "==" + roleDataFilter.value());
         }
 
         if (tenantConditions.isEmpty()) {
@@ -82,40 +85,48 @@ public class MultiTenancy {
         }
     }
 
+    /**
+     * Returns the filters for this table that belong to the user's roles. When the table has a
+     * tenant column but none of the user's roles match, returns a single filter that limits the
+     * user to rows where the tenant column is null.
+     */
     private static List<RoleDataFilter> getUserRoleBasedDataFilters(String dbId, String table,
-            List<RoleDataFilter> roleDataFilters,
-            String[] userRoles) {
-        String filterTenantColumn = null;
-        for (RoleDataFilter roleDataFilter : roleDataFilters) {
-            if (dbId.equalsIgnoreCase(roleDataFilter.dbId()) && table.equalsIgnoreCase(roleDataFilter.table())) {
-                filterTenantColumn = roleDataFilter.column();
-                break;
-            }
+            RoleFilterContext roleFilterContext) {
+        List<RoleDataFilter> tableFilters = roleFilterContext.roleDataFilters().stream()
+                .filter(rd -> appliesTo(rd, dbId, table))
+                .toList();
+        if (tableFilters.isEmpty()) {
+            return List.of();
         }
+        String filterTenantColumn = tableFilters.get(0).column();
+
         List<RoleDataFilter> retval = new ArrayList<>();
-        for (String role : userRoles) {
-            retval.addAll(roleDataFilters.stream().filter(rd -> role.equalsIgnoreCase(rd.role())
-                    && rd.dbId().equals(dbId) && rd.table().equals(table)).toList());
+        for (String role : roleFilterContext.userRoles()) {
+            retval.addAll(tableFilters.stream().filter(rd -> role.equalsIgnoreCase(rd.role())).toList());
         }
-        if (retval.isEmpty() && filterTenantColumn != null) {
+        if (retval.isEmpty()) {
             // when a tenant column is defined for the table, but the user has no roles, we add a filter to only see null value rows
             retval.add(new RoleDataFilter("see_null_values_only", dbId, table, filterTenantColumn, null));
         }
         return retval;
     }
 
+    private static boolean appliesTo(RoleDataFilter roleDataFilter, String dbId, String table) {
+        return StringUtils.equalsIgnoreCase(dbId, roleDataFilter.dbId())
+                && StringUtils.equalsIgnoreCase(table, roleDataFilter.table());
+    }
+
     public static void addTenantColumns(List<Map<String, Object>> data, String dbId, String table,
-            Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters) {
+            RoleFilterContext roleFilterContext) {
         for (Map<String, Object> dataItem : data) {
-            addTenantColumns(dataItem, dbId, table, roleBasedDataFilters);
+            addTenantColumns(dataItem, dbId, table, roleFilterContext);
         }
     }
 
     public static void addTenantColumns(Map<String, Object> data, String dbId, String table,
-            Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters) {
-        if (roleBasedDataFilters != null) {
-            for (RoleDataFilter roleDataFilter : getUserRoleBasedDataFilters(dbId, table,
-                    roleBasedDataFilters.getLeft(), roleBasedDataFilters.getRight())) {
+            RoleFilterContext roleFilterContext) {
+        if (roleFilterContext != null) {
+            for (RoleDataFilter roleDataFilter : getUserRoleBasedDataFilters(dbId, table, roleFilterContext)) {
                 data.put(roleDataFilter.column(), roleDataFilter.value());
             }
         }

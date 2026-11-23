@@ -1,13 +1,12 @@
 package com.homihq.db2rest.rest.update;
 
-import com.homihq.db2rest.auth.data.RoleDataFilter;
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 import com.homihq.db2rest.config.MultiTenancy;
 import com.homihq.db2rest.core.dto.UpdateResponse;
 import com.homihq.db2rest.jdbc.core.service.UpdateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-import static com.homihq.db2rest.config.MultiTenancy.ROLEBASEDDATAFILTERS;
+import static com.homihq.db2rest.auth.data.RoleFilterContext.REQUEST_ATTRIBUTE;
 import static com.homihq.db2rest.rest.RdbmsRestApi.VERSION;
 
 @RestController
@@ -31,16 +30,16 @@ public class UpdateController {
 
     @PatchMapping(VERSION + "/{dbId}/{tableName}")
     public UpdateResponse save(
-            @RequestAttribute(name = ROLEBASEDDATAFILTERS, required = false) Pair<List<RoleDataFilter>, String[]> roleBasedDataFilters,
+            @RequestAttribute(name = REQUEST_ATTRIBUTE, required = false) RoleFilterContext roleFilterContext,
             @PathVariable String dbId,
             @PathVariable String tableName,
             @RequestHeader(name = "Content-Profile", required = false) String schemaName,
             @RequestBody Map<String, Object> data,
             @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
 
-        MultiTenancy.addTenantColumns(data, dbId, tableName, roleBasedDataFilters);
+        MultiTenancy.addTenantColumns(data, dbId, tableName, roleFilterContext);
         int rows = updateService.patch(dbId, schemaName, tableName, data,
-                MultiTenancy.joinFilters(filter, dbId, tableName, roleBasedDataFilters));
+                MultiTenancy.joinFilters(filter, dbId, tableName, roleFilterContext));
         return new UpdateResponse(rows);
     }
 }
