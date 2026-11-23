@@ -1,5 +1,6 @@
 package com.homihq.db2rest.auth;
 
+import com.homihq.db2rest.auth.data.RoleFilterContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homihq.db2rest.auth.provider.AbstractAuthProvider;
 import com.homihq.db2rest.auth.data.UserDetail;
@@ -10,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UrlPathHelper;
@@ -23,7 +23,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
-    public static final String ROLEBASEDDATAFILTERS = "roleBasedDataFilters";
     private final AbstractAuthProvider authProvider;
     private final ObjectMapper objectMapper;
     private final UrlPathHelper urlPathHelper = new UrlPathHelper();
@@ -61,8 +60,8 @@ public class AuthFilter extends OncePerRequestFilter {
                 addError(HttpServletResponse.SC_FORBIDDEN, errorMessage, request, response);
                 return;
             }
-            request.setAttribute(ROLEBASEDDATAFILTERS,
-                    new ImmutablePair<>(authProvider.getRoleDataFilters(), userDetail.getRoles()));
+            request.setAttribute(RoleFilterContext.REQUEST_ATTRIBUTE,
+                    new RoleFilterContext(authProvider.getRoleDataFilters(), userDetail.getRoles()));
         } else {
             log.debug("URI in whitelist. Security checks not applied.");
         }
