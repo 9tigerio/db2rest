@@ -3,230 +3,192 @@ package com.homihq.db2rest.jdbc.core.service;
 import com.homihq.db2rest.config.Db2RestConfigProperties;
 import com.homihq.db2rest.core.dto.DeleteResponse;
 import com.homihq.db2rest.core.dto.UpdateResponse;
-import com.homihq.db2rest.core.exception.SqlTemplateNotFoundException;
-import com.homihq.db2rest.core.exception.SqlTemplateReadException;
+import com.homihq.db2rest.core.exception.SqlTemplateExecutionException;
+import com.homihq.db2rest.core.exception.SqlTemplateValidationException;
 import com.homihq.db2rest.core.exception.UnsupportedConstraintException;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
 import com.homihq.db2rest.jdbc.dto.Placeholder;
+import com.homihq.db2rest.jdbc.template.PlaceholderScanner;
+import com.homihq.db2rest.jdbc.template.SqlTemplateLimits;
+import com.homihq.db2rest.jdbc.template.SqlTemplateOperation;
+import com.homihq.db2rest.jdbc.template.SqlTemplateStore;
 import com.homihq.db2rest.jdbc.validator.ConstraintValidator;
 import com.homihq.db2rest.jdbc.validator.CustomPlaceholderValidators;
 import com.hubspot.jinjava.Jinjava;
-import lombok.RequiredArgsConstructor;
+import com.hubspot.jinjava.interpret.FatalTemplateErrorsException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.transaction.TransactionException;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
+/**
+ * Executes SQL templates stored as files in the configured template directory.
+ * <p>
+ * A request goes through these steps:
+ * <ol>
+ *   <li>the template is loaded through {@link SqlTemplateStore}, which validates the
+ *       name, keeps the file inside the template directory and caches its contents;</li>
+ *   <li>Jinjava renders the source (only tags such as {@code {% if %}}; expression output
+ *       is disabled, so request values never become SQL text);</li>
+ *   <li>{@link PlaceholderScanner} turns {@code {{ name | filter }}} placeholders into
+ *       named parameters and the filters are checked against the request values;</li>
+ *   <li>the statement type is taken from the template declaration or the first keyword
+ *       ({@link SqlTemplateOperation}); insert, update and delete statements run in the
+ *       database's transaction template, so they commit on success and roll back on
+ *       failure, like the CRUD endpoints.</li>
+ * </ol>
+ * All sizes and counts are bounded by {@link SqlTemplateLimits}. The service holds no
+ * lock while rendering or executing.
+ */
 @Slf4j
-@RequiredArgsConstructor
 public class JinJavaTemplateExecutorService implements SQLTemplateExecutorService {
 
-    private static final String SQL_TEMPLATE_EXTENSION = ".sql";
-    private static final Pattern SQL_TEMPLATE_NAME_PATTERN =
-            Pattern.compile("[A-Za-z0-9][A-Za-z0-9._-]*");
-    private static final String PLACEHOLDER_REGEX =
-            "\\{\\{\\s*([^|}]+?)\\s*(?:\\|\\s*([^}]+?))*\\s*}}";
     private final Jinjava jinjava;
-    private final Db2RestConfigProperties db2RestConfigProperties;
     private final DbOperationService dbOperationService;
     private final JdbcManager jdbcManager;
     private final CustomPlaceholderValidators validators;
-    private final Map<String, String> templateCache = new ConcurrentHashMap<>();
+    private final SqlTemplateLimits limits;
+    private final SqlTemplateStore store;
 
-    private static String buildNamedParameterQuery(String template) {
-        String replacement = ":$1";
-        Pattern pattern = Pattern.compile(PLACEHOLDER_REGEX);
-        Matcher matcher = pattern.matcher(template);
-        return matcher.replaceAll(replacement);
+    public JinJavaTemplateExecutorService(Jinjava jinjava,
+                                          Db2RestConfigProperties db2RestConfigProperties,
+                                          DbOperationService dbOperationService,
+                                          JdbcManager jdbcManager,
+                                          CustomPlaceholderValidators validators) {
+        this(jinjava, db2RestConfigProperties, dbOperationService, jdbcManager, validators,
+                SqlTemplateLimits.DEFAULTS);
     }
 
-    private static Map<String, Object> buildParamMap(Map<String, Object> context, String parentKey) {
-        log.debug("Building parameters map");
-
-        return context.entrySet().stream()
-                .flatMap(entry -> {
-                    String key = entry.getKey();
-                    Object value = entry.getValue();
-                    String newKey = StringUtils.isEmpty(parentKey) ? key : parentKey + "." + key;
-
-                    if (value instanceof Map) {
-                        return buildParamMap((Map<String, Object>) value, newKey).entrySet().stream();
-                    } else {
-                        return java.util.stream.Stream.of(Map.entry(newKey, value));
-                    }
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    public JinJavaTemplateExecutorService(Jinjava jinjava,
+                                          Db2RestConfigProperties db2RestConfigProperties,
+                                          DbOperationService dbOperationService,
+                                          JdbcManager jdbcManager,
+                                          CustomPlaceholderValidators validators,
+                                          SqlTemplateLimits limits) {
+        this.jinjava = jinjava;
+        this.dbOperationService = dbOperationService;
+        this.jdbcManager = jdbcManager;
+        this.validators = validators;
+        this.limits = limits;
+        this.store = new SqlTemplateStore(() -> db2RestConfigProperties.getTemplates(), limits);
     }
 
     @Override
-    public Object execute(String dbId, String templateFile, Map<String, Object> context) {
-        final Pair<String, Map<String, Object>> queryParamPair =
-                executeInternal(templateFile, context);
-        final String namedParamsSQL = queryParamPair.getLeft();
-        final Map<String, Object> paramMap = queryParamPair.getRight();
-        return execute(dbId, paramMap, namedParamsSQL);
+    public Object execute(String dbId, String templateName, Map<String, Object> context) {
+        SqlTemplateStore.Template template = store.load(templateName);
+
+        String rendered = render(template, context);
+        PlaceholderScanner.Result scanned =
+                PlaceholderScanner.scan(templateName, rendered, limits.maxPlaceholders());
+        Map<String, Object> paramMap = buildParamMap(templateName, context);
+        validatePlaceholders(scanned, paramMap);
+
+        SqlTemplateOperation operation =
+                SqlTemplateOperation.resolve(templateName, template.declaredOperation(), scanned.sql());
+        log.debug("Template {} resolved to {}: {}", templateName, operation, scanned.sql());
+
+        return run(dbId, templateName, operation, paramMap, scanned.sql());
     }
 
-    private Object execute(String dbId, Map<String, Object> paramMap, String sql) {
-        if (sql.toLowerCase().startsWith("delete ")) {
-            return executeDelete(dbId, paramMap, sql);
+    /** Cache counters, for metrics. */
+    public SqlTemplateStore.CacheStats templateCacheStats() {
+        return store.stats();
+    }
+
+    /** Clears the template cache; templates are read again on next use. */
+    public void invalidateTemplateCache() {
+        store.invalidateAll();
+    }
+
+    private String render(SqlTemplateStore.Template template, Map<String, Object> context) {
+        String rendered;
+        try {
+            rendered = jinjava.render(template.source(), context);
+        } catch (FatalTemplateErrorsException e) {
+            log.error("Template {} could not be rendered: {}", template.name(), e.getMessage());
+            throw new SqlTemplateValidationException(template.name(), "template could not be rendered");
         }
-        else if (sql.toLowerCase().startsWith("insert ")) {
-            return executeCreate(dbId, paramMap, sql);
+        if (rendered.length() > limits.maxRenderedChars()) {
+            throw new SqlTemplateValidationException(template.name(),
+                    "rendered SQL is longer than " + limits.maxRenderedChars() + " characters");
         }
-        else if (sql.toLowerCase().startsWith("update ")) {
-            return executeUpdate(dbId, paramMap, sql);
+        return rendered;
+    }
+
+    private Object run(String dbId, String templateName, SqlTemplateOperation operation,
+                       Map<String, Object> paramMap, String sql) {
+        var dialect = jdbcManager.getDialect(dbId);
+        NamedParameterJdbcTemplate jdbc = jdbcManager.getNamedParameterJdbcTemplate(dbId);
+
+        if (!operation.isWrite()) {
+            try {
+                return dbOperationService.read(jdbc, paramMap, sql, dialect);
+            } catch (DataAccessException e) {
+                log.error("Template {} query failed", templateName, e);
+                throw new SqlTemplateExecutionException(templateName, false);
+            }
         }
-        else {
-            return executeQuery(dbId, paramMap, sql);
-        }
-    }
 
-    private Object executeQuery(String dbId, Map<String, Object> paramMap, String sql) {
-        log.debug("Execute query: {}", sql);
-        return dbOperationService.read(
-                jdbcManager.getNamedParameterJdbcTemplate(dbId),
-                paramMap,
-                sql,
-                jdbcManager.getDialect(dbId)
-        );
-    }
-
-    private UpdateResponse executeUpdate(String dbId, Map<String, Object> paramMap, String sql) {
-        log.debug("Execute update: {}", sql);
-        return new UpdateResponse(dbOperationService.update(
-                jdbcManager.getNamedParameterJdbcTemplate(dbId),
-                paramMap,
-                sql
-        ));
-    }
-
-    private DeleteResponse executeDelete(String dbId, Map<String, Object> paramMap, String sql) {
-        log.debug("Execute delete: {}", sql);
-        return new DeleteResponse(dbOperationService.delete(
-                jdbcManager.getNamedParameterJdbcTemplate(dbId),
-                paramMap,
-                sql
-        ));
-    }
-
-    private Object executeCreate(String dbId, Map<String, Object> paramMap, String sql) {
-        log.debug("Execute create: {}", sql);
-        return dbOperationService.create(
-                jdbcManager.getNamedParameterJdbcTemplate(dbId),
-                paramMap,
-                sql,
-                null
-        );
-    }
-
-    private Pair<String, Map<String, Object>> executeInternal(String templateFile, Map<String, Object> context) {
-        final String renderedTemplate = renderJinJavaTemplate(templateFile, context);
-        final Map<String, Placeholder> placeholders = extractPlaceHolder(renderedTemplate);
-        final Map<String, Object> paramMap = buildParamMap(context, "");
-
-        validatePlaceholder(placeholders, paramMap);
-        final String namedParamsSQL = buildNamedParameterQuery(renderedTemplate);
-        return Pair.of(namedParamsSQL, paramMap);
-    }
-
-    private String renderJinJavaTemplate(String templateFile, Map<String, Object> context) {
-        log.debug("Rendering query from template {}", templateFile);
-        validateTemplateName(templateFile);
-
-        synchronized (templateCache) {
-            if (templateCache.containsKey(templateFile)) {
-                final String templateContent = templateCache.get(templateFile);
-                return jinjava.render(templateContent, context);
-            } else {
-                final String userTemplateLocation = db2RestConfigProperties.getTemplates();
-                final Path templateDirectory = Paths.get(userTemplateLocation).toAbsolutePath().normalize();
-                final Path templatePath = templateDirectory
-                        .resolve(templateFile + SQL_TEMPLATE_EXTENSION)
-                        .normalize();
-                if (!templatePath.startsWith(templateDirectory)
-                        || !Files.isRegularFile(templatePath, LinkOption.NOFOLLOW_LINKS)) {
-                    throw new SqlTemplateNotFoundException(templateFile);
-                }
+        try {
+            return jdbcManager.getTxnTemplate(dbId).execute(status -> {
                 try {
-                    final String templateContent = Files.readString(templatePath);
-                    templateCache.put(templateFile, templateContent);
-                    return jinjava.render(templateContent, context);
-                } catch (IOException ioe) {
-                    log.error("Error reading template file {}: {}", templatePath, ioe.getMessage());
-                    throw new SqlTemplateReadException(templateFile);
+                    return switch (operation) {
+                        case INSERT -> dbOperationService.create(jdbc, paramMap, sql, null);
+                        case UPDATE -> new UpdateResponse(dbOperationService.update(jdbc, paramMap, sql));
+                        case DELETE -> new DeleteResponse(dbOperationService.delete(jdbc, paramMap, sql));
+                        case QUERY -> throw new IllegalStateException("not a write");
+                    };
+                } catch (DataAccessException e) {
+                    status.setRollbackOnly();
+                    log.error("Template {} {} failed, rolling back", templateName, operation, e);
+                    throw new SqlTemplateExecutionException(templateName, true);
                 }
+            });
+        } catch (TransactionException e) {
+            log.error("Template {} {} could not be committed", templateName, operation, e);
+            throw new SqlTemplateExecutionException(templateName, true);
+        }
+    }
+
+    private Map<String, Object> buildParamMap(String templateName, Map<String, Object> context) {
+        Map<String, Object> params = new HashMap<>();
+        flatten(templateName, context, "", 1, params);
+        return params;
+    }
+
+    private void flatten(String templateName, Map<?, ?> values, String prefix, int depth,
+                         Map<String, Object> into) {
+        if (depth > limits.maxParamDepth()) {
+            throw new SqlTemplateValidationException(templateName,
+                    "request values are nested deeper than " + limits.maxParamDepth() + " levels");
+        }
+        for (Map.Entry<?, ?> entry : values.entrySet()) {
+            String key = prefix.isEmpty() ? String.valueOf(entry.getKey()) : prefix + "." + entry.getKey();
+            if (entry.getValue() instanceof Map<?, ?> nested) {
+                flatten(templateName, nested, key, depth + 1, into);
+            } else {
+                into.put(key, entry.getValue());
             }
         }
     }
 
-    private void validateTemplateName(String templateFile) {
-        if (templateFile == null
-                || templateFile.contains("..")
-                || templateFile.contains("/")
-                || templateFile.contains("\\")
-                || !SQL_TEMPLATE_NAME_PATTERN.matcher(templateFile).matches()) {
-            throw new SqlTemplateNotFoundException(templateFile);
-        }
-    }
-
-    private Map<String, Placeholder> extractPlaceHolder(final String renderedSqlTemplate) {
-        log.debug("Extracting placeholder from sql template");
-
-        Map<String, Placeholder> placeholders = new HashMap<>();
-        if (StringUtils.isEmpty(renderedSqlTemplate)) {
-            return placeholders;
-        }
-
-        Pattern pattern = Pattern.compile(PLACEHOLDER_REGEX);
-        Matcher matcher = pattern.matcher(renderedSqlTemplate);
-        while (matcher.find()) {
-            String placeholder = matcher.group();
-            String namedParam = matcher.group(1).trim();
-            List<String> filters = new ArrayList<>();
-            for (int i = 2; i <= matcher.groupCount(); i++) {
-                String filter = matcher.group(i);
-                if (filter != null) {
-                    filters.add(filter.trim());
-                }
-            }
-            placeholders.put(placeholder, new Placeholder(namedParam, filters));
-        }
-
-        return placeholders;
-    }
-
-    private void validatePlaceholder(final Map<String, Placeholder> placeholders, Map<String, Object> paramMap) {
-        log.debug("Validating placeholders");
-
-        placeholders.forEach((placeholderKey, placeholder) -> {
-            List<String> constraints = placeholder.filters();
+    private void validatePlaceholders(PlaceholderScanner.Result scanned, Map<String, Object> paramMap) {
+        for (Placeholder placeholder : scanned.placeholders()) {
             Object value = paramMap.get(placeholder.namedParam());
             if (value == null) {
                 log.warn("Placeholder {} is missing a value in paramMap", placeholder.namedParam());
             }
-            constraints.forEach(constraint -> {
+            for (String constraint : placeholder.filters()) {
                 ConstraintValidator validator = validators.getValidator(constraint);
-                if (validator != null) {
-                    validator.validate(value, placeholder.namedParam());
-                } else {
+                if (validator == null) {
                     throw new UnsupportedConstraintException(constraint);
                 }
-            });
-        });
+                validator.validate(value, placeholder.namedParam());
+            }
+        }
     }
 }
