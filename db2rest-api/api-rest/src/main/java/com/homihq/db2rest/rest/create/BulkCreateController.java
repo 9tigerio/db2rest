@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +21,6 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@EnableAsync
 public class BulkCreateController implements BulkCreateRestApi {
     private final BulkCreateService bulkCreateService;
     private final List<DataProcessor> dataProcessors;

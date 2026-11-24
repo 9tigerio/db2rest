@@ -5,99 +5,101 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.core.exception.BulkUploadException;
 
-import lombok.extern.slf4j.Slf4j;
-
+/**
+ * Streams a JSON array of objects and hands the rows to a callback in chunks.
+ * <p>
+ * The processor keeps no per-upload state: the parser and the chunk buffer live
+ * on the stack of {@link #stream}, so one instance can serve concurrent uploads.
+ * The parser, and with it the input stream, is closed when {@code stream}
+ * returns or throws, including when the callback throws.
+ */
 @Component
-@Slf4j
-public class JsonFileDataProcessor implements FileSubject {
-    private static final int CHUNK_OBJECTS = 500;
+public class JsonFileDataProcessor {
+
+    public static final int DEFAULT_CHUNK_SIZE = 500;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final JsonFactory jsonFactory = new JsonFactory();
-    private JsonParser jsonParser;
-    private FileStreamObserver observer;
-    private boolean isInitialized = false;
+    private final JavaType rowType = objectMapper.getTypeFactory()
+            .constructMapType(Map.class, String.class, Object.class);
 
-    @Override
-    public void register(FileStreamObserver observer) {
-        this.observer = observer;
-    }
+    /**
+     * Reads {@code inputStream} as a JSON array of objects.
+     *
+     * @return the number of rows passed to the handler
+     * @throws BulkUploadException if the input is empty, is not an array of objects,
+     *                             contains no rows or is not valid JSON
+     */
+    public long stream(InputStream inputStream, int chunkSize, JsonChunkHandler handler) throws IOException {
+        Objects.requireNonNull(inputStream, "inputStream");
+        Objects.requireNonNull(handler, "handler");
+        if (chunkSize < 1) {
+            throw new IllegalArgumentException("chunkSize must be positive");
+        }
 
-    @Override
-    public void unregister() {
-        this.observer = null;
-        if (jsonParser != null) {
-            try {
-                jsonParser.close();
-            } catch (IOException e) {
-                log.error("Error closing JsonParser: {}", e.getMessage(), e);
-            } finally {
-                jsonParser = null;
-                isInitialized = false;
-            }
+        try (JsonParser parser = objectMapper.getFactory().createParser(inputStream)) {
+            return readArray(parser, chunkSize, handler);
+        } catch (JsonProcessingException e) {
+            JsonLocation location = e.getLocation();
+            long line = location == null ? -1 : location.getLineNr();
+            long column = location == null ? -1 : location.getColumnNr();
+            throw BulkUploadException.malformed(line, column, e);
         }
     }
 
-    @Override
-    public void startStreaming(InputStream inputStream) {
-        try {
-            initializeParser(inputStream);
-            List<Map<String, Object>> dataChunk;
-            while (inputStream.available() >= 0 && !((dataChunk = getData()).isEmpty())) {
-                notifyObserver(dataChunk);
-            }
-        } catch (Exception e) {
-            log.error("Error during JSON streaming: {}", e.getMessage(), e);
-            throw new GenericDataAccessException(e.getMessage());
-        } finally {
-            unregister();
+    private long readArray(JsonParser parser, int chunkSize, JsonChunkHandler handler) throws IOException {
+        JsonToken first = parser.nextToken();
+        if (first == null) {
+            throw BulkUploadException.emptyFile();
         }
-    }
-
-    private List<Map<String, Object>> getData() throws IOException {
-        List<Map<String, Object>> result = new ArrayList<>();
-        int count = 0;
-        try {
-            while (jsonParser.nextToken() != JsonToken.END_ARRAY && count < CHUNK_OBJECTS) {
-                Map<String, Object> item = objectMapper.readValue(jsonParser, new TypeReference<>() {});
-                result.add(item);
-                count++;
-            }
-        } catch (MismatchedInputException e) {
-            log.error("Error reading JSON data: {}", e.getLocalizedMessage());
+        if (first != JsonToken.START_ARRAY) {
+            throw BulkUploadException.notAnArray();
         }
-        return result;
-    }
 
-    private void notifyObserver(List<Map<String, Object>> dataChunk) {
-        if (observer != null) {
-            observer.update(dataChunk);
-        } else {
-            log.warn("No observer registered for file streaming.");
-        }
-    }
+        List<Map<String, Object>> chunk = new ArrayList<>(chunkSize);
+        long index = 0;
+        long chunkStart = 0;
 
-    private void initializeParser(InputStream inputStream) throws IOException {
-        if (!isInitialized) {
-            if (inputStream == null || inputStream.available() == 0) {
-                throw new IllegalArgumentException("Input stream is empty or null");
+        JsonToken token;
+        while ((token = parser.nextToken()) != JsonToken.END_ARRAY) {
+            if (token == null) {
+                JsonLocation location = parser.currentLocation();
+                throw BulkUploadException.malformed(location.getLineNr(), location.getColumnNr(), null);
             }
-            jsonParser = jsonFactory.createParser(inputStream);
-
-            if (jsonParser.nextToken() != JsonToken.START_ARRAY) {
-                throw new GenericDataAccessException("Expected a JSON array");
+            if (token != JsonToken.START_OBJECT) {
+                throw BulkUploadException.notAnObject(index);
             }
-            isInitialized = true;
+            Map<String, Object> row = objectMapper.readValue(parser, rowType);
+            chunk.add(row);
+            index++;
+
+            if (chunk.size() == chunkSize) {
+                handler.onChunk(chunk, chunkStart);
+                chunk = new ArrayList<>(chunkSize);
+                chunkStart = index;
+            }
         }
+
+        if (parser.nextToken() != null) {
+            throw BulkUploadException.trailingContent();
+        }
+        if (index == 0) {
+            throw BulkUploadException.noRows();
+        }
+        if (!chunk.isEmpty()) {
+            handler.onChunk(chunk, chunkStart);
+        }
+        return index;
     }
 }

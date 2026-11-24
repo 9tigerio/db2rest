@@ -5,4 +5,8 @@ public class GenericDataAccessException extends RuntimeException {
     public GenericDataAccessException(String msg) {
         super(msg);
     }
+
+    public GenericDataAccessException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

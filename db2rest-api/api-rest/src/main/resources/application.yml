@@ -62,6 +62,10 @@ db2rest:
 
   templates: ${SQL_TEMPLATE_PATH}
 
+  # A JSON file upload runs in one transaction; it is rolled back if it takes longer than this.
+  upload:
+    timeoutSeconds: ${UPLOAD_TIMEOUT_SECONDS:300}
+
 logging:
   level:
     com: 

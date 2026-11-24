@@ -2,8 +2,7 @@ package com.homihq.db2rest.config;
 
 import com.db2rest.jdbc.dialect.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homihq.db2rest.bulk.DataProcessor;
-import com.homihq.db2rest.bulk.FileSubject;
+import com.homihq.db2rest.bulk.JsonFileDataProcessor;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.JdbcOperationService;
 import com.homihq.db2rest.config.jinjava.DisabledExpressionTokenScannerSymbols;
@@ -26,6 +25,7 @@ import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -187,9 +187,12 @@ public class DbServiceConfiguration {
                                                SqlCreatorTemplate sqlCreatorTemplate,
                                                JdbcManager jdbcManager,
                                                DbOperationService dbOperationService,
-                                               List<DataProcessor> dataProcessors,
-                                               FileSubject fileSubject) {
-        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService, fileSubject);
+                                               JsonFileDataProcessor jsonFileDataProcessor,
+                                               @Value("${db2rest.upload.timeoutSeconds:"
+                                                       + JdbcBulkCreateService.DEFAULT_UPLOAD_TIMEOUT_SECONDS + "}")
+                                               int uploadTimeoutSeconds) {
+        return new JdbcBulkCreateService(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService,
+                jsonFileDataProcessor, uploadTimeoutSeconds, JsonFileDataProcessor.DEFAULT_CHUNK_SIZE);
     }
 
     @Bean

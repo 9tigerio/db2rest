@@ -2,7 +2,7 @@ package com.homihq.db2rest.jdbc.core.service;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,17 +11,23 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionTimedOutException;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.db2rest.jdbc.dialect.model.DbColumn;
 import com.db2rest.jdbc.dialect.model.DbTable;
-import com.homihq.db2rest.bulk.FileStreamObserver;
-import com.homihq.db2rest.bulk.FileSubject;
+import com.homihq.db2rest.bulk.JsonChunkHandler;
+import com.homihq.db2rest.bulk.JsonFileDataProcessor;
 import com.homihq.db2rest.config.MultiTenancy;
 import com.homihq.db2rest.core.dto.CreateBulkResponse;
 import com.homihq.db2rest.core.dto.CreateResponse;
+import com.homihq.db2rest.core.exception.BulkUploadException;
+import com.homihq.db2rest.core.exception.BulkWriteException;
 import com.homihq.db2rest.core.exception.GenericDataAccessException;
+import com.homihq.db2rest.core.exception.InvalidColumnException;
+import com.homihq.db2rest.core.exception.InvalidTableException;
 import com.homihq.db2rest.dtos.BulkContext;
 import com.homihq.db2rest.jdbc.JdbcManager;
 import com.homihq.db2rest.jdbc.core.DbOperationService;
@@ -30,19 +36,53 @@ import com.homihq.db2rest.jdbc.dto.InsertableColumn;
 import com.homihq.db2rest.jdbc.sql.SqlCreatorTemplate;
 import com.homihq.db2rest.jdbc.tsid.TSIDProcessor;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Bulk insert service. The bean is a singleton shared by all requests, so it holds
+ * no request state: everything an insert or an upload needs is passed in or kept
+ * on the stack of the call.
+ */
 @Slf4j
-@RequiredArgsConstructor
-public class JdbcBulkCreateService implements BulkCreateService, FileStreamObserver {
+public class JdbcBulkCreateService implements BulkCreateService {
+
+    public static final int DEFAULT_UPLOAD_TIMEOUT_SECONDS = 300;
 
     private final TSIDProcessor tsidProcessor;
     private final SqlCreatorTemplate sqlCreatorTemplate;
     private final JdbcManager jdbcManager;
     private final DbOperationService dbOperationService;
-    private final FileSubject fileSubject;
-    private BulkContext context;
+    private final JsonFileDataProcessor jsonFileDataProcessor;
+    private final int uploadTimeoutSeconds;
+    private final int chunkSize;
+
+    public JdbcBulkCreateService(TSIDProcessor tsidProcessor,
+                                 SqlCreatorTemplate sqlCreatorTemplate,
+                                 JdbcManager jdbcManager,
+                                 DbOperationService dbOperationService,
+                                 JsonFileDataProcessor jsonFileDataProcessor) {
+        this(tsidProcessor, sqlCreatorTemplate, jdbcManager, dbOperationService, jsonFileDataProcessor,
+                DEFAULT_UPLOAD_TIMEOUT_SECONDS, JsonFileDataProcessor.DEFAULT_CHUNK_SIZE);
+    }
+
+    public JdbcBulkCreateService(TSIDProcessor tsidProcessor,
+                                 SqlCreatorTemplate sqlCreatorTemplate,
+                                 JdbcManager jdbcManager,
+                                 DbOperationService dbOperationService,
+                                 JsonFileDataProcessor jsonFileDataProcessor,
+                                 int uploadTimeoutSeconds,
+                                 int chunkSize) {
+        if (uploadTimeoutSeconds < 1 || chunkSize < 1) {
+            throw new IllegalArgumentException("uploadTimeoutSeconds and chunkSize must be positive");
+        }
+        this.tsidProcessor = tsidProcessor;
+        this.sqlCreatorTemplate = sqlCreatorTemplate;
+        this.jdbcManager = jdbcManager;
+        this.dbOperationService = dbOperationService;
+        this.jsonFileDataProcessor = jsonFileDataProcessor;
+        this.uploadTimeoutSeconds = uploadTimeoutSeconds;
+        this.chunkSize = chunkSize;
+    }
 
     /**
      * Saves bulk data into the specified table.
@@ -81,71 +121,99 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
 
         } catch (DataAccessException e) {
             log.error("Error", e);
-            throw new GenericDataAccessException(e.getMostSpecificCause().getMessage());
+            throw new BulkWriteException(e.getMostSpecificCause().getMessage(), e);
         }
     }
 
     /**
-     * Asynchronously saves a multipart file by streaming its content and performing a bulk insert.
-     *
-     * @param bulkContext the context containing details about the file upload request
-     * @param file              the multipart file to be saved
-     * @return a CompletableFuture containing the response of the create operation
-     */
-    @Async
-    @Override
-    public CompletableFuture<CreateResponse> saveMultipartFile(
-            BulkContext bulkContext,
-            MultipartFile file) {
-
-        context = bulkContext;
-
-        try (InputStream inputStream = new BufferedInputStream(file.getInputStream())) {
-            fileSubject.register(this);
-
-            fileSubject.startStreaming(inputStream);
-
-        } catch (Exception e) {
-            log.error("Error during JSON file insert: {}", e.getMessage(), e);
-            throw new GenericDataAccessException("Error inserting JSON file: " + e.getMessage());
-        }
-
-        return CompletableFuture.completedFuture(new CreateResponse(context.rows(), "Bulk insert completed successfully"));
-    }
-
-    /**
-     * Updates the observer with the provided data.
-     *
-     * @param data a list of maps containing the data to update
+     * Imports a JSON array file in chunks.
+     * <p>
+     * The whole file is imported in one transaction: either every row is committed and the
+     * response count equals the number of rows written, or nothing is committed and a
+     * {@link BulkUploadException} is thrown. The transaction is bounded by the upload
+     * timeout. The upload runs on the calling thread and the returned future is already
+     * complete; an interrupted thread stops the upload at the next chunk.
+     * <p>
+     * The destination, parser and row counter are local to this call, so concurrent
+     * uploads cannot see or change each other's state.
      */
     @Override
-    public void update(List<Map<String, Object>> data) {
-        if (data == null || data.isEmpty()) {
-            log.warn("No data to process.");
-            return;
+    public CompletableFuture<CreateResponse> saveMultipartFile(BulkContext bulkContext, MultipartFile file) {
+        Objects.requireNonNull(bulkContext, "bulkContext");
+        if (file == null || file.isEmpty()) {
+            throw BulkUploadException.emptyFile();
         }
 
+        String dbId = bulkContext.dbId();
+        jdbcManager.getDialect(dbId); // unknown dbId fails here, before any work starts
+        TransactionTemplate uploadTxn = uploadTransaction(dbId);
+
+        Long rows;
         try {
-            CreateBulkResponse response = saveBulk(context, data);
+            rows = uploadTxn.execute(status -> importFile(bulkContext, file));
+        } catch (TransactionTimedOutException e) {
+            throw BulkUploadException.timedOut(uploadTimeoutSeconds, e);
+        } catch (TransactionException e) {
+            log.error("Bulk upload to {}.{} could not be committed", dbId, bulkContext.tableName(), e);
+            throw BulkUploadException.commitFailed(e);
+        }
 
-            context = new BulkContext(
-                    context.dbId(),
-                    context.schemaName(),
-                    context.tableName(),
-                    context.includeColumns(),
-                    context.tsIdEnabled(),
-                    context.sequences(),
-                    context.rows() + response.rows().length,
-                    context.roleFilterContext()
-            );
+        int committed = Math.toIntExact(Objects.requireNonNull(rows));
+        return CompletableFuture.completedFuture(new CreateResponse(committed, "Bulk insert completed successfully"));
+    }
 
-        } catch (Exception e) {
-            fileSubject.unregister();
-            log.error("Error during bulk insert: {}", e.getMessage(), e);
-            throw new GenericDataAccessException("Error inserting chunk: " + e.getMessage());
+    private TransactionTemplate uploadTransaction(String dbId) {
+        TransactionTemplate base = jdbcManager.getTxnTemplate(dbId);
+        TransactionTemplate uploadTxn = new TransactionTemplate(base.getTransactionManager(), base);
+        uploadTxn.setTimeout(uploadTimeoutSeconds);
+        return uploadTxn;
+    }
+
+    private long importFile(BulkContext bulkContext, MultipartFile file) {
+        long[] inserted = {0};
+        JsonChunkHandler handler = (rows, firstIndex) -> {
+            if (Thread.currentThread().isInterrupted()) {
+                throw BulkUploadException.cancelled();
+            }
+            inserted[0] += insertChunk(bulkContext, rows, firstIndex);
+        };
+
+        try (InputStream inputStream = file.getInputStream()) {
+            jsonFileDataProcessor.stream(inputStream, chunkSize, handler);
+        } catch (IOException e) {
+            throw BulkUploadException.unreadable(e);
+        }
+        return inserted[0];
+    }
+
+    private int insertChunk(BulkContext bulkContext, List<Map<String, Object>> rows, long firstIndex) {
+        long lastIndex = firstIndex + rows.size() - 1;
+        try {
+            return saveBulk(bulkContext, rows).rows().length;
+        } catch (InvalidTableException | InvalidColumnException | BulkUploadException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            if (hasCause(e, TransactionTimedOutException.class)) {
+                throw BulkUploadException.timedOut(uploadTimeoutSeconds, e);
+            }
+            if (e instanceof GenericDataAccessException && !(e instanceof BulkWriteException)) {
+                // raised by request validation before anything reached the database
+                throw new BulkUploadException(e.getMessage(), e);
+            }
+            log.error("Bulk upload to {}.{} failed for rows {} to {}",
+                    bulkContext.dbId(), bulkContext.tableName(), firstIndex, lastIndex, e);
+            throw BulkUploadException.rejected(firstIndex, lastIndex, e);
         }
     }
 
+    private static boolean hasCause(Throwable e, Class<? extends Throwable> type) {
+        for (Throwable t = e; t != null; t = t.getCause() == t ? null : t.getCause()) {
+            if (type.isInstance(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Determines the columns that can be inserted.
@@ -235,7 +303,8 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
     }
 
     /**
-     * Executes a batch update for the data.
+     * Executes a batch update for the data. When called inside an upload, the batch joins
+     * the upload's transaction instead of committing on its own.
      *
      * @param dbId     the database ID
      * @param dataList the data to insert
@@ -255,7 +324,7 @@ public class JdbcBulkCreateService implements BulkCreateService, FileStreamObser
                         dbOperationService.batchUpdate(jdbcManager.getNamedParameterJdbcTemplate(dbId), dataList, sql);
             } catch (Exception e) {
                 status.setRollbackOnly();
-                throw new GenericDataAccessException("Error Bulk insert - " + e.getMessage());
+                throw new BulkWriteException("Error Bulk insert - " + e.getMessage(), e);
             }
         });
     }
