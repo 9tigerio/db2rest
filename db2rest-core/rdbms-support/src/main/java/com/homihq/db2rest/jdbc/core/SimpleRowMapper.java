@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +31,10 @@ public class SimpleRowMapper extends ColumnMapRowMapper {
             return dialect.convertJsonToVO(rs.getObject(index));
         }
 
-        return super.getColumnValue(rs, index);
+        Object value = super.getColumnValue(rs, index);
+        if (value instanceof Array array) { //handle other arrays (pg text[], integer[], ...)
+            return Arrays.asList((Object[]) array.getArray());
+        }
+        return value;
     }
 }

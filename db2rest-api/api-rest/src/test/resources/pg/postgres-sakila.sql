@@ -611,3 +611,16 @@ INSERT INTO tbl_jsonb (id, data) VALUES
 INSERT INTO tbl_translation (key, value) VALUES
     ('greeting', 'Hello'),
     ('farewell', 'Goodbye');
+
+--
+-- text[] and integer[] columns read by PgArrayReadTest
+--
+
+CREATE TABLE tbl_tags (
+    id integer PRIMARY KEY,
+    labels text[],
+    scores integer[]
+);
+
+INSERT INTO tbl_tags (id, labels, scores) VALUES
+    (1, '{red,green}', '{1,2}');
