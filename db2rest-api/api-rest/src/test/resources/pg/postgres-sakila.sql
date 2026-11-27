@@ -611,3 +611,16 @@ INSERT INTO tbl_jsonb (id, data) VALUES
 INSERT INTO tbl_translation (key, value) VALUES
     ('greeting', 'Hello'),
     ('farewell', 'Goodbye');
+
+--
+-- varchar[] column with a NULL value, read by PgNullArrayReadTest
+--
+
+CREATE TABLE tbl_aliases (
+    id integer PRIMARY KEY,
+    names varchar(20)[]
+);
+
+INSERT INTO tbl_aliases (id, names) VALUES
+    (1, '{a,b}'),
+    (2, NULL);
