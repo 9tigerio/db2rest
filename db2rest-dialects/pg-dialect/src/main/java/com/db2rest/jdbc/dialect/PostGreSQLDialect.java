@@ -11,7 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.postgresql.jdbc.PgArray;
 import org.postgresql.util.PGobject;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 
 @Slf4j
@@ -56,6 +59,12 @@ public class PostGreSQLDialect extends Dialect {
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "timetz")) {
                 OffsetTime v = convertToOffsetTime((String) value);
                 data.put(columnName, v);
+            } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "date")) {
+                data.put(columnName, convertToLocalDate(value.toString()));
+            } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "time")) {
+                data.put(columnName, convertToLocalTime(value.toString()));
+            } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "uuid")) {
+                data.put(columnName, convertToUuid(value.toString()));
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "int4", "int2", "int8", "int")) {
                 data.put(columnName, Long.valueOf(value.toString().trim()));
             } else if (StringUtils.equalsAnyIgnoreCase(columnDataTypeName, "numeric")) {
@@ -78,6 +87,30 @@ public class PostGreSQLDialect extends Dialect {
             return OffsetTime.parse(value, DateTimeFormatter.ISO_OFFSET_TIME);
         } catch (Exception e) {
             throw new GenericDataAccessException("Error converting to OffsetTime type - " + e.getLocalizedMessage());
+        }
+    }
+
+    private LocalDate convertToLocalDate(String value) {
+        try {
+            return LocalDate.parse(value, DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to LocalDate type - " + e.getLocalizedMessage());
+        }
+    }
+
+    private LocalTime convertToLocalTime(String value) {
+        try {
+            return LocalTime.parse(value, DateTimeFormatter.ISO_LOCAL_TIME);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to LocalTime type - " + e.getLocalizedMessage());
+        }
+    }
+
+    private UUID convertToUuid(String value) {
+        try {
+            return UUID.fromString(value);
+        } catch (Exception e) {
+            throw new GenericDataAccessException("Error converting to UUID type - " + e.getLocalizedMessage());
         }
     }
 

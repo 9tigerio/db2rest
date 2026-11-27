@@ -611,3 +611,14 @@ INSERT INTO tbl_jsonb (id, data) VALUES
 INSERT INTO tbl_translation (key, value) VALUES
     ('greeting', 'Hello'),
     ('farewell', 'Goodbye');
+
+--
+-- date, time and uuid columns written by PgDateTimeUuidWriteTest
+--
+
+CREATE TABLE tbl_schedule (
+    id serial PRIMARY KEY,
+    start_date date,
+    start_time time,
+    ref uuid
+);
