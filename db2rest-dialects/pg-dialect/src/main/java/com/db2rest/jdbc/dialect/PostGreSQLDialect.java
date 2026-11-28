@@ -162,7 +162,7 @@ public class PostGreSQLDialect extends Dialect {
             }
         }
 
-        return convertToStringArray(object);
+        return null;
     }
 
     @Override
